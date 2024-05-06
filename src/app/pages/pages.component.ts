@@ -29,7 +29,6 @@ export class PagesComponent {
 
   sidenavWidth = computed(() => (this.isExpanded() ? '250px' : '66px'));
 
-profilePicSice = computed(()=> this.isExpanded() ? '70' : '32');
 
   // public img: string | null = '';
   // public  cargo: string | null = '';
