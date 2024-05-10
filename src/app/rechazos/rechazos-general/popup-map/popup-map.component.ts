@@ -9,7 +9,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class PopupMapComponent implements OnInit, AfterViewInit, OnDestroy {
   map: Map | undefined;
-  marker: Marker | undefined
+  markers: Marker[] = []; // Array para almacenar los marcadores
 
   constructor(
     public dialogRef: MatDialogRef<PopupMapComponent>,
@@ -21,9 +21,11 @@ export class PopupMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
   }
+
   ngAfterViewInit() {
     if (this.mapContainer) {
-      const initialState = { lng: 139.753, lat: 35.6844};
+      const initialState = { lng: -5.8447, lat: 43.3614 }; // Coordenadas iniciales en el centro de Oviedo
+
       // Crea el mapa de MapTiler en el elemento div
       this.map = new Map({
         container: this.mapContainer.nativeElement,
@@ -32,23 +34,37 @@ export class PopupMapComponent implements OnInit, AfterViewInit, OnDestroy {
         zoom: 14
       });
   
-      // Agrega un marcador gráfico en las coordenadas especificadas
-      this.marker = new Marker()
-        .setLngLat([139.753, 35.6844]) // Coordenadas geográficas (longitud, latitud)
-        .addTo(this.map);
+      // Itera sobre todas las coordenadas de Oviedo y agrega un marcador para cada una
+      const oviedoCoords = [
+        { lng: -5.8447, lat: 43.3614 },
+        { lng: -5.8545, lat: 43.3603 },
+        { lng: -5.8434, lat: 43.3661 },
+        { lng: -5.8457, lat: 43.3608 },
+        { lng: -5.8709, lat: 43.3653 }
+      ];
+
+      oviedoCoords.forEach(coord => {
+        if (this.map) { // Verifica que this.map no sea undefined
+          const marker = new Marker()
+            .setLngLat([coord.lng, coord.lat])
+            .addTo(this.map);
+          this.markers.push(marker); // Agrega el marcador al array
+        }
+      });
     } else {
       console.error('mapElement is undefined.');
     }
   }
 
   ngOnDestroy() {
-    // Elimina el mapa y el marcador cuando el componente se destruye para evitar fugas de memoria
+    // Elimina el mapa y los marcadores cuando el componente se destruye para evitar fugas de memoria
     this.map?.remove();
-    this.marker?.remove();
+    this.markers.forEach(marker => {
+      marker.remove();
+    });
   }
 
-
-  /* logica para cerrar el popup */
+  /* lógica para cerrar el popup */
   close(){
     this.dialogRef.close();
   }

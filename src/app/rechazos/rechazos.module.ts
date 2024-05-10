@@ -12,7 +12,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
-
 import { RechazosRoutingModule } from './rechazos-routing.module';
 
 /* paginas */

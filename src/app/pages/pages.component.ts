@@ -1,10 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ViewChild,
-  computed,
-  signal,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild, computed, signal } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
@@ -36,4 +30,10 @@ export class PagesComponent {
     return this.router.url.includes(route);
   }
 
+  // Método para cambiar el estado de la expansión del menú
+  toggleNavExpansion(): void {
+    this.navExpanded = !this.navExpanded;
+    // Actualizar el estado del menú
+    this.isExpanded.set(!this.isExpanded());
+  }
 }

@@ -1,3 +1,7 @@
+.color-dark {
+  color: #6D6D6D;
+}
+
 table {
     width: 100%;
   }
@@ -87,21 +91,6 @@ table {
   color: gray; /* Color para la opción "No aplica" */
 }
 
-
 .estado-select-container {
-  margin-right: 20%;
-  width: 150px; /* Ajusta el ancho según tus preferencias */
-}
-
-/* Estilo personalizado para el mat-form-field */
-.estado-select-container {
-  /* Agrega tus estilos personalizados aquí */
-  width: 150px; /* Ancho personalizado */
-  margin-left: 10px; /* Margen izquierdo personalizado */
-}
-
-/* Estilo personalizado para el mat-select dentro del mat-form-field */
-.estado-select {
-  /* Agrega tus estilos personalizados aquí */
-  font-size: 14px; /* Tamaño de fuente personalizado */
+  margin-left: 10px;
 }

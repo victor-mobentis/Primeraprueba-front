@@ -42,8 +42,8 @@
   }
   
   .selected-menu-item {
-    border-left-color: blue;
-    background: rgba(0, 0, 0, 0.05);
+    background: rgba(81, 107, 255, 0.199); /* Agregar un fondo sutil para resaltar el elemento seleccionado */
+    border-radius: 10px; /* Agregar bordes redondeados al elemento seleccionado */
   }
   
   mat-sidenav-content {
@@ -56,10 +56,10 @@
   
   }
   
-  mat-sidenav {
-    overflow-wrap: break-word;
+  .mat-sidenav {
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.356); /* Agregar una sombra suave al menú lateral */
   }
-  
+
   a > img {
     margin-right: 18px !important;
   }
@@ -67,3 +67,16 @@
   .screen {
     min-height: 100vh;
   }
+
+  a:hover {
+    background-color: rgba(81, 107, 255, 0.199);
+    border-radius: 10px;
+  }
+
+a:not(:active) .icon-custom {
+  color: inherit;
+}
+
+button {
+  border: none;
+}
