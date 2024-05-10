@@ -106,7 +106,7 @@ export class RechazosGeneralComponent implements AfterViewInit {
     const dialogRef = this.dialog.open(PopupMapComponent, {
       width: '1080px',
       height: 'auto',
-      disableClose: false,
+      disableClose: true,
     });
   }
 

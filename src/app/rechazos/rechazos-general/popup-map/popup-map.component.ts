@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
 import { Map, NavigationControl, Marker } from 'maplibre-gl';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-popup-map',
@@ -9,6 +10,11 @@ import { Map, NavigationControl, Marker } from 'maplibre-gl';
 export class PopupMapComponent implements OnInit, AfterViewInit, OnDestroy {
   map: Map | undefined;
   marker: Marker | undefined
+
+  constructor(
+    public dialogRef: MatDialogRef<PopupMapComponent>,
+    public dialog: MatDialog
+  ){}
 
   @ViewChild('map')
   private mapContainer!: ElementRef<HTMLElement>;
@@ -39,5 +45,11 @@ export class PopupMapComponent implements OnInit, AfterViewInit, OnDestroy {
     // Elimina el mapa y el marcador cuando el componente se destruye para evitar fugas de memoria
     this.map?.remove();
     this.marker?.remove();
+  }
+
+
+  /* logica para cerrar el popup */
+  close(){
+    this.dialogRef.close();
   }
 }

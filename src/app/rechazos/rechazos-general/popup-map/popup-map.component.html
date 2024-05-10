@@ -1,9 +1,14 @@
 <!-- Contenedor de la pagina /rechazos/maps -->
 <div class="p-3 d-flex flex-column gap-4 ">
     <!-- parter superior -->
-    <div class="d-flex align-items-center gap-3">
-        <mat-icon>map</mat-icon>
-        <h2 class="m-0">Mapa</h2>
+    <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-3">
+            <mat-icon>map</mat-icon>
+            <h2 class="m-0">Mapa</h2>
+        </div>
+        <mat-dialog-actions>
+            <button mat-icon-button color="primary" (click)="close()"><mat-icon>close</mat-icon></button>
+        </mat-dialog-actions>
     </div>
     <!-- contenedor el mapa -->
     <div class="d-flex justify-content-center">
