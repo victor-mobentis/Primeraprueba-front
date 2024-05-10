@@ -71,23 +71,74 @@
   </td>
 </ng-container>
 
-        
+<!-- Poblacion Column -->
+<ng-container matColumnDef="poblacion">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> Población </th>
+  <td mat-cell *matCellDef="let row"> {{ row.poblacion }} </td>
+</ng-container>
 
-        <!-- Progress Column -->
-        <ng-container matColumnDef="progress">
-          <th class="" mat-header-cell *matHeaderCellDef mat-sort-header> Progress </th>
-          <td mat-cell *matCellDef="let row"> {{row.progress}}% </td>
-        </ng-container>
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-          <td mat-cell *matCellDef="let row"> {{row.name}} </td>
-        </ng-container>
-        <!-- Fruit Column -->
-        <ng-container matColumnDef="fruit">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Fruit </th>
-          <td mat-cell *matCellDef="let row"> {{row.fruit}} </td>
-        </ng-container>
+<!-- Provincia Column -->
+<ng-container matColumnDef="provincia">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> Provincia </th>
+  <td mat-cell *matCellDef="let row"> {{ row.provincia }} </td>
+</ng-container>
+
+<!-- Cliente Column -->
+<ng-container matColumnDef="cliente">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
+  <td mat-cell *matCellDef="let row"> {{ row.cliente }} </td>
+</ng-container>
+
+<!-- Producto Column -->
+<ng-container matColumnDef="producto">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> Producto </th>
+  <td mat-cell *matCellDef="let row"> {{ row.producto }} </td>
+</ng-container>
+
+<!-- Familia Column -->
+<ng-container matColumnDef="familia">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> Familia </th>
+  <td mat-cell *matCellDef="let row"> {{ row.familia }} </td>
+</ng-container>
+
+<!-- Subfamilia Column -->
+<ng-container matColumnDef="subfamilia">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> Subfamilia </th>
+  <td mat-cell *matCellDef="let row"> {{ row.subfamilia }} </td>
+</ng-container>
+
+<!-- Rechazo Column -->
+<ng-container matColumnDef="rechazo">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> Rechazo </th>
+  <td mat-cell *matCellDef="let row"> {{ row.rechazo }} </td>
+</ng-container>
+
+<!-- PVP Column -->
+<ng-container matColumnDef="pvp">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> PVP </th>
+  <td mat-cell *matCellDef="let row"> {{ row.pvp }} </td>
+</ng-container>
+
+<!-- Comp Column -->
+<ng-container matColumnDef="comp">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> Comp. </th>
+  <td mat-cell *matCellDef="let row"> {{ row.comp }} </td>
+</ng-container>
+
+<!-- Competidor Column -->
+<ng-container matColumnDef="competidor">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> Competidor </th>
+  <td mat-cell *matCellDef="let row"> {{ row.competidor }} </td>
+</ng-container>
+
+<!-- Accion Correctora Column -->
+<ng-container matColumnDef="accionCorrectora">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> Accion Correctora </th>
+  <td mat-cell *matCellDef="let row"> {{ row.accionCorrectora }} </td>
+</ng-container>
+
+
+        
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         <!-- Row shown when there is no matching data. -->
@@ -95,6 +146,7 @@
         </tr>
       </table>
   </div>
-  <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" aria-label="Select page of users"></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+
 </div>
 <!-- END TABLA -->

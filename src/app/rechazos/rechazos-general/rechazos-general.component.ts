@@ -8,23 +8,20 @@ import { MatDialog } from '@angular/material/dialog';
 
 export interface UserData {
   id: string;
-  name: string;
-  progress: string;
-  fruit: string;
   estado: string;
+  poblacion: string;
+  provincia: string;
+  cliente: string;
+  producto: string;
+  familia: string;
+  subfamilia: string;
+  rechazo: string;
+  pvp: string;
+  comp: string;
+  competidor: string;
+  accionCorrectora: string;
 }
 
-// Constants used to fill up our data base.
-const FRUITS: string[] = [
-  'blueberry',
-  'lychee',
-  'kiwi',
-  'mango',
-  'peach',
-  'lime',
-  'pomegranate',
-  'pineapple',
-];
 const NAMES: string[] = [
   'Maia',
   'Asher',
@@ -47,13 +44,15 @@ const NAMES: string[] = [
   'Elizabeth',
 ];
 
+const RECHAZOS: string[] = ['Rechazado', 'En Proceso', 'Vendido', 'No aplica'];
+
 @Component({
   selector: 'app-rechazos-general',
   templateUrl: './rechazos-general.component.html',
   styleUrls: ['./rechazos-general.component.css'],
 })
 export class RechazosGeneralComponent implements AfterViewInit {
-  displayedColumns: string[] = ['select', 'id', 'estado', 'name', 'progress', 'fruit'];
+  displayedColumns: string[] = ['select','estado', 'id' , 'poblacion', 'provincia', 'cliente', 'producto', 'familia', 'subfamilia', 'rechazo', 'pvp', 'comp', 'competidor', 'accionCorrectora'];
   dataSource: MatTableDataSource<UserData>;
   selection = new SelectionModel<UserData>(true, []);
 
@@ -69,9 +68,9 @@ export class RechazosGeneralComponent implements AfterViewInit {
     const users = Array.from({ length: 100 }, (_, k) => createNewUser(k + 1));
     this.dataSource = new MatTableDataSource(users);
   }
-
   ngAfterViewInit() {
-    if (this.dataSource) {
+    if (this.dataSource && this.paginator) {
+      this.dataSource.paginator = this.paginator;
       this.dataSource.data.forEach(row => {
         this.actualizarConteos(row.estado, true);
       });
@@ -80,7 +79,7 @@ export class RechazosGeneralComponent implements AfterViewInit {
       this.dataSource.sort = this.sort;
     }
   }
-
+  
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -130,21 +129,31 @@ export class RechazosGeneralComponent implements AfterViewInit {
 }
 
 function createNewUser(id: number): UserData {
-  const name =
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))] +
-    ' ' +
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) +
-    '.';
-  
-  const estadoOptions = ['Rechazado', 'En Proceso', 'Vendido', 'No aplica'];
-  const randomEstadoIndex = Math.floor(Math.random() * estadoOptions.length);
-  const estado = estadoOptions[randomEstadoIndex];
+  const poblacion = NAMES[Math.floor(Math.random() * NAMES.length)];
+  const provincia = NAMES[Math.floor(Math.random() * NAMES.length)];
+  const cliente = NAMES[Math.floor(Math.random() * NAMES.length)];
+  const producto = NAMES[Math.floor(Math.random() * NAMES.length)];
+  const familia = NAMES[Math.floor(Math.random() * NAMES.length)];
+  const subfamilia = NAMES[Math.floor(Math.random() * NAMES.length)];
+  const rechazo = RECHAZOS[Math.floor(Math.random() * RECHAZOS.length)];
+  const pvp = Math.floor(Math.random() * 100).toString();
+  const comp = Math.floor(Math.random() * 100).toString();
+  const competidor = NAMES[Math.floor(Math.random() * NAMES.length)];
+  const accionCorrectora = NAMES[Math.floor(Math.random() * NAMES.length)];
 
   return {
     id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    fruit: FRUITS[Math.round(Math.random() * (FRUITS.length - 1))],
-    estado: estado,
+    estado: RECHAZOS[Math.floor(Math.random() * RECHAZOS.length)],
+    poblacion: poblacion,
+    provincia: provincia,
+    cliente: cliente,
+    producto: producto,
+    familia: familia,
+    subfamilia: subfamilia,
+    rechazo: rechazo,
+    pvp: pvp,
+    comp: comp,
+    competidor: competidor,
+    accionCorrectora: accionCorrectora
   };
 }
