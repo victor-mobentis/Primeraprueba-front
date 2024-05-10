@@ -102,8 +102,8 @@ export class RechazosGeneralComponent implements AfterViewInit {
 
   verEnMapa() {
     const dialogRef = this.dialog.open(PopupMapComponent, {
-      width: '1400px',
-      height: '800px',
+      width: '1080px',
+      height: 'auto',
       disableClose: false,
     });
   }
