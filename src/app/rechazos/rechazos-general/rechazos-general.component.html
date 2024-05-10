@@ -55,21 +55,30 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
           <td mat-cell *matCellDef="let row"> {{row.id}} </td>
         </ng-container>
-        <!-- Estado Column -->
 <!-- Estado Column -->
 <ng-container matColumnDef="estado">
   <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
   <td mat-cell *matCellDef="let row" class="estado-cell">
-    <mat-form-field appearance="outline">
-      <mat-select [(value)]="row.estado" class="estado-select">
-        <mat-option value="Rechazado" class="rechazado">Rechazado</mat-option>
-        <mat-option value="En Proceso" class="en-proceso">En Proceso</mat-option>
-        <mat-option value="Vendido" class="vendido">Vendido</mat-option>
-        <mat-option value="No aplica" class="no-aplica">No aplica</mat-option>
-      </mat-select>
-    </mat-form-field>
+
+    <div class="d-flex align-items-center justify-content-center gap-2">
+      <img [src]="getOptionImage(row.estado)" alt="Estado Image" class="option-image" style="width: 24px; height: 24px;">
+      <mat-form-field class="estado-select-container" appearance="outline">
+        <mat-select [(value)]="row.estado" class="estado-select">
+          <mat-option value="Rechazado" class="rechazado">Rechazado</mat-option>
+          <mat-option value="En Proceso" class="en-proceso">En Proceso</mat-option>
+          <mat-option value="Vendido" class="vendido">Vendido</mat-option>
+          <mat-option value="No aplica" class="no-aplica">No aplica</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
   </td>
 </ng-container>
+
+
+
+
+
 
 <!-- Poblacion Column -->
 <ng-container matColumnDef="poblacion">

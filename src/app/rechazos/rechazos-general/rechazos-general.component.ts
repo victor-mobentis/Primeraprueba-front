@@ -80,6 +80,8 @@ export class RechazosGeneralComponent implements AfterViewInit {
     }
   }
   
+
+  
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -126,6 +128,27 @@ export class RechazosGeneralComponent implements AfterViewInit {
         break;
     }
   }
+  
+  getOptionImage(estado: string): string {
+    // Ruta base de las imágenes en la carpeta 'src/assets/icon/'
+    const basePath = 'assets/icon/';
+
+    // Construir la URL de la imagen basada en el estado proporcionado
+    switch (estado) {
+      case 'Rechazado':
+        return basePath + 'rechazado.svg';
+      case 'En Proceso':
+        return basePath + 'en_proceso.svg';
+      case 'Vendido':
+        return basePath + 'vendido.svg';
+      case 'No aplica':
+        return basePath + 'no_aplica.svg';
+      default:
+        return ''; // Devuelve una cadena vacía si el estado no coincide con ninguno de los casos anteriores
+    }
+  }
+  
+  
 }
 
 function createNewUser(id: number): UserData {
