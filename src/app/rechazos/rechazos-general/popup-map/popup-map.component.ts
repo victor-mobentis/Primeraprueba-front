@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-popup-map',

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+/* imports angular material */
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatSortModule} from '@angular/material/sort';
@@ -12,18 +13,15 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 
-
-
-
-
-
+import { RechazosRoutingModule } from './rechazos-routing.module';
 
 /* paginas */
 import { RechazosGeneralComponent } from './rechazos-general/rechazos-general.component';
-import { RechazosRoutingModule } from './rechazos-routing.module';
+import { PopupMapComponent } from './rechazos-general/popup-map/popup-map.component';
 @NgModule({
     declarations: [
-        RechazosGeneralComponent
+        RechazosGeneralComponent,
+        PopupMapComponent,
     ],
     imports: [
         CommonModule,
