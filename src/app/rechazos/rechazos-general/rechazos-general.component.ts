@@ -23,6 +23,9 @@ export interface UserData {
   comp: string;
   competidor: string;
   accionCorrectora: string;
+  latitud: number; // Nuevo campo para la latitud
+  longitud: number; // Nuevo campo para la longitud
+
 }
 
 const NAMES: string[] = [
@@ -55,11 +58,11 @@ const RECHAZOS: string[] = ['Rechazado', 'En Proceso', 'Vendido', 'No aplica'];
   styleUrls: ['./rechazos-general.component.css'],
 })
 export class RechazosGeneralComponent implements AfterViewInit {
+  form: FormGroup;
   displayedColumns: string[] = ['select','estado', 'id' , 'poblacion', 'provincia', 'cliente', 'producto', 'familia', 'subfamilia', 'rechazo', 'pvp', 'comp', 'competidor', 'accionCorrectora'];
   dataSource: MatTableDataSource<UserData>;
   selection = new SelectionModel<UserData>(true, []);
 
-  form: FormGroup;
 
   rechazadosCount: number = 0;
   enProcesoCount: number = 0;
@@ -74,10 +77,13 @@ export class RechazosGeneralComponent implements AfterViewInit {
     this.dataSource = new MatTableDataSource(users);
 
     this.form = this.formBuilder.group({
-      Agente: [''],
-      Clientes: [''],
-      RutaFilterControl: [''],
-      DateFilterControl: [[]]
+      EstadoFilterControl: [''],
+      PoblacionFilterControl: [''],
+      ProvinciaFilterControl:[''],
+      ClienteFilterControl: [''],
+      ProductoFilterControl: [''],
+      FamiliaFilterControl: [''],
+      SubFamiliaFilterControl: ['']
     });  
   }
   /* Aplicar filtros */
@@ -122,6 +128,7 @@ export class RechazosGeneralComponent implements AfterViewInit {
       width: '1080px',
       height: 'auto',
       disableClose: true,
+      data:{selectedRows: this.selection.selected}
     });
   }
 
@@ -177,6 +184,10 @@ function createNewUser(id: number): UserData {
   const comp = Math.floor(Math.random() * 100).toString();
   const competidor = NAMES[Math.floor(Math.random() * NAMES.length)];
   const accionCorrectora = NAMES[Math.floor(Math.random() * NAMES.length)];
+  
+  // Generación de coordenadas aleatorias dentro de Asturias
+  const latitud = Math.random() * (43.5 - 42.5) + 42.5; // Latitud aproximada de Asturias
+  const longitud = Math.random() * (-4.0 - (-6.0)) + (-6.0); // Longitud aproximada de Asturias
 
   return {
     id: id.toString(),
@@ -191,6 +202,8 @@ function createNewUser(id: number): UserData {
     pvp: pvp,
     comp: comp,
     competidor: competidor,
-    accionCorrectora: accionCorrectora
+    accionCorrectora: accionCorrectora,
+    latitud: latitud,
+    longitud: longitud
   };
 }

@@ -1,5 +1,5 @@
-<div class="fondoGris screen">
-  <mat-drawer-container class="h-100 p-3">
+<div class="fondoGris">
+  <mat-drawer-container class="screen">
 
       <div class="d-flex align-items-center justify-content-start m-3">
           <mat-icon class="color-dark">broken_image</mat-icon>
@@ -159,52 +159,68 @@
       </div>
 <!-- END TABLA -->
         <!-- menu derecho -->
-  <mat-drawer #drawer class="sidenav" mode="over" position="end">
-    <div class="flex items-center my-4 gap-3">
+  <mat-drawer #drawer class="sidenav px-3" mode="over" position="end">
+    <div class="d-flex align-items-center my-4 gap-3">
       <mat-icon>filter_list_alt</mat-icon>
       <h2 class="my-0">Filtro de Rechazos</h2>
     </div>
-    <form [formGroup]="form" (ngSubmit)="applyFilter()" class="flex flex-col gap-3">
-      <div class="flex flex-col">
-        <div class="mb-2 flex flex-col gap-3">
+    <form [formGroup]="form" (ngSubmit)="applyFilter()" class="d-flex flex-column gap-3">
+      <div class="d-flex flex-column">
+        <div class="mb-2 d-flex flex-column gap-3">
+          <!-- select -->
           <mat-form-field subscriptSizing="dynamic" class="">
-            <mat-label>Agente</mat-label>
-            <input formControlName="Agente" matInput>
-          </mat-form-field>
-  
-          <mat-form-field subscriptSizing="dynamic" class="">
-            <mat-label>Clientes</mat-label>
-            <input formControlName="Clientes" matInput>
-          </mat-form-field>
-  
-          <mat-form-field subscriptSizing="dynamic" class="">
-            <mat-label>Ruta</mat-label>
-            <mat-select formControlName="RutaFilterControl">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="EstadoFilterControl">
               <mat-option>- Todos -</mat-option>
-              <mat-option value="option1">Madrid-Gijón</mat-option>
-              <mat-option value="option2">Barcelona-Gijón</mat-option>
-              <mat-option value="option3">Asturias-Oviedo</mat-option>
-              <mat-option value="option4">Oviedo-Madrid</mat-option>
-              <mat-option value="option5">Santander-Oviedo</mat-option>
-              <mat-option value="option6">Asturias-Galicia</mat-option>
+              <mat-option value="option1">Rechazado</mat-option>
+              <mat-option value="option2">En Proceso</mat-option>
+              <mat-option value="option3">Vendido</mat-option>
+              <mat-option value="option4">No aplica</mat-option>
             </mat-select>
           </mat-form-field>
 
-          <mat-form-field subscriptSizing="dynamic">
-            <mat-label>Enter a date range</mat-label>
-            <mat-date-range-input [rangePicker]="picker" >
-              <input matStartDate placeholder="Start date" formControlName="DateFilterControl">
-              <input matEndDate placeholder="End date" formControlName="DateFilterControl">
-            </mat-date-range-input>
-            <mat-hint >MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matIconSuffix [for]="picker" ></mat-datepicker-toggle>
-            <mat-date-range-picker #picker></mat-date-range-picker>
+          <!-- Autocompletado -->
+          <mat-form-field subscriptSizing="dynamic" class="">
+            <mat-label>Poblacion</mat-label>
+            <input formControlName="PoblacionFilterControl" matInput>
           </mat-form-field>
+          <!-- autocompletado -->
+          <mat-form-field subscriptSizing="dynamic" class="">
+            <mat-label>Provincia</mat-label>
+            <input formControlName="ProvinciaFilterControl" matInput>
+          </mat-form-field>
+          <!-- select -->
+          <mat-form-field subscriptSizing="dynamic" class="">
+            <mat-label>Clientes</mat-label>
+            <mat-select formControlName="ClienteFilterControl">
+              <mat-option>- Todos -</mat-option>
+              <mat-option value="option1">Cliente 1</mat-option>
+              <mat-option value="option2">Cliente 2</mat-option>
+              <mat-option value="option3">Cliente 3</mat-option>
+              <mat-option value="option4">Cliente 4</mat-option>
+              <mat-option value="option5">Cliente 5</mat-option>
+              <mat-option value="option6">Cliente 6</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- autocompletado -->
+          <mat-form-field subscriptSizing="dynamic" class="">
+            <mat-label>Producto</mat-label>
+            <input formControlName="ProductoFilterControl" matInput>
+          </mat-form-field>
+          <!-- autocompletado -->
+          <mat-form-field subscriptSizing="dynamic" class="">
+            <mat-label>Familia</mat-label>
+            <input formControlName="FamiliaFilterControl" matInput>
+          </mat-form-field>
+          <!-- autocompletado -->
+          <mat-form-field subscriptSizing="dynamic" class="">
+            <mat-label>Subfamilia</mat-label>
+            <input formControlName="SubFamiliaFilterControl" matInput>
+          </mat-form-field>
+          
         </div>
-
-
-  
-        <div class="content-end gap-2 flex mt-2">
+        
+        <div class="content-end gap-2 d-flex mt-2">
           <button mat-raised-button type="submit" (click)="drawer.toggle()" class="bg-black text-white" cdkFocusInitial>Filtrar</button>
           <button mat-raised-button (click)="filtroReset()" class="bg-black text-white" mat-button>Limpiar</button>
           <button mat-raised-button (click)="drawer.toggle()" class="bg-black text-white" mat-button>Cancelar</button>
