@@ -24,11 +24,12 @@
           <h3 class="m-0">{{ vendidosCount }}</h3>
           <span class="text-muted custom-bold custom-vendido">Vendido</span>
         </div>
-        <button matTooltip="Ver en Mapa" class="btn btn-primary d-flex justify-content-center align-items-center gap-2" *ngIf="selection.selected.length > 0" (click)="verEnMapa()">
-          <mat-icon (click)="verEnMapa()">map</mat-icon>
-        </button>
       </div>
-        <div class="mt-2 me-3">
+      <div class="mt-2 me-3 d-flex align-items-center gap-2">
+          <button matTooltip="Ver en Mapa" class="btn btn-primary d-flex justify-content-center align-items-center" *ngIf="selection.selected.length > 0" (click)="verEnMapa()">
+            <mat-icon class="p-0 m-0" (click)="verEnMapa()">map</mat-icon>
+            <span class="ms-1">Mapa</span>
+          </button>
           <button class="btn btn-primary d-flex align-items-center" (click)="drawer.toggle()">
             <mat-icon class="p-0 m-0">filter_list_alt</mat-icon>
             <span class="ms-1">Filtros</span>

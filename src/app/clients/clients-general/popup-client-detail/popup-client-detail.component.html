@@ -1,0 +1,18 @@
+<div class="p-3 d-flex flex-column gap-4">
+    <!-- parte superior -->
+    <div class="d-flex align-items-center gap-3">
+        <mat-icon>people</mat-icon>
+        <h2 class="m-0">Detalles de Cliente</h2>
+    </div>
+    <!-- datos del cliente -->
+    <div>
+        <p>Código: {{ user.codigo }}</p>
+        <p>Población: {{ user.poblacion }}</p>
+        <p>Provincia: {{ user.provincia }}</p>
+        <p>C.P.: {{ user.cp }}</p>
+    </div>
+    <!-- Boton de cerrar -->
+    <mat-dialog-actions class="justify-content-end">
+        <button mat-raised-button (click)="close()">Close</button>
+    </mat-dialog-actions>
+</div>
