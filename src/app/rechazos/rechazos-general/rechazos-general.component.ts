@@ -23,6 +23,7 @@ export interface UserData {
   comp: string;
   competidor: string;
   accionCorrectora: string;
+  propuestaAgente: string;
   latitud: number; // Nuevo campo para la latitud
   longitud: number; // Nuevo campo para la longitud
 
@@ -42,6 +43,13 @@ const POBLACIONES: string[] = [
   'Legánes', 'San Sebastián', 'Getafe', 'Burgos', 'Albacete', 'Alcorcón', 'Almería', 'Donostia-San Sebastián', 'Castellón de la Plana', 'Logroño', 'Badajoz',
   'La Laguna', 'Salamanca', 'Huelva', 'Marbella', 'Lérida', 'Tarragona', 'Dos Hermanas', 'Torrejón de Ardoz', 'Parla', 'Mataró'
 ];
+
+const RECHAZO: string[] = [
+  'Mal estado',
+  'Mejor precio competencia',
+  'Producto no trabajado',
+  'Mala calidad',
+]
 
 const NAMES: string[] = [
   'Delicias Ibéricas',
@@ -114,6 +122,11 @@ const SUBFAMILIAS: string[] = [
   'Especias en polvo',
 ];
 
+const PROPUESTA: string[] = [
+  'Mejorar el descuento',
+  'Mejorar la calidad',
+];
+
 const RECHAZOS: string[] = ['Rechazado', 'En Proceso', 'Vendido', 'No aplica'];
 
 
@@ -125,7 +138,7 @@ const RECHAZOS: string[] = ['Rechazado', 'En Proceso', 'Vendido', 'No aplica'];
 })
 export class RechazosGeneralComponent implements AfterViewInit {
   form: FormGroup;
-  displayedColumns: string[] = ['select','estado', 'id' , 'poblacion', 'provincia', 'cliente', 'producto', 'familia', 'subfamilia', 'rechazo', 'pvp', 'comp', 'competidor', 'accionCorrectora'];
+  displayedColumns: string[] = ['select','estado', 'id' , 'poblacion', 'provincia', 'cliente', 'producto', 'familia', 'subfamilia', 'rechazo', 'pvp', 'comp', 'competidor', 'accionCorrectora', 'propuestaAgente'];
   dataSource: MatTableDataSource<UserData>;
   selection = new SelectionModel<UserData>(true, []);
 
@@ -245,11 +258,12 @@ function createNewUser(id: number): UserData {
   const producto = PRODUCTOS[Math.floor(Math.random() * PRODUCTOS.length)];
   const familia = FAMILIAS[Math.floor(Math.random() * FAMILIAS.length)];
   const subfamilia = SUBFAMILIAS[Math.floor(Math.random() * SUBFAMILIAS.length)];
-  const rechazo = RECHAZOS[Math.floor(Math.random() * RECHAZOS.length)];
+  const rechazo = RECHAZO[Math.floor(Math.random() * RECHAZO.length)];
   const pvp = Math.floor(Math.random() * 100).toString();
   const comp = Math.floor(Math.random() * 100).toString();
   const competidor = NAMES[Math.floor(Math.random() * NAMES.length)];
   const accionCorrectora = NAMES[Math.floor(Math.random() * NAMES.length)];
+  const propuestaAgente = PROPUESTA[Math.floor(Math.random() * PROPUESTA.length)];
   
   // Generación de coordenadas aleatorias dentro de Asturias
   const latitud = Math.random() * (43.5 - 42.5) + 42.5; // Latitud aproximada de Asturias
@@ -270,6 +284,7 @@ function createNewUser(id: number): UserData {
     competidor: competidor,
     accionCorrectora: accionCorrectora,
     latitud: latitud,
-    longitud: longitud
+    longitud: longitud,
+    propuestaAgente: propuestaAgente
   };
 }

@@ -125,19 +125,19 @@
         <!-- Rechazo Column -->
         <ng-container matColumnDef="rechazo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Rechazo </th>
-        <td mat-cell *matCellDef="let row"> {{ row.rechazo }} </td>
+        <td class="text-danger" mat-cell *matCellDef="let row"> {{ row.rechazo }} </td>
         </ng-container>
 
         <!-- PVP Column -->
         <ng-container matColumnDef="pvp">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> PVP </th>
-        <td mat-cell *matCellDef="let row"> {{ row.pvp }} </td>
+        <td mat-cell *matCellDef="let row"> {{ row.pvp }}€ </td>
         </ng-container>
 
         <!-- Comp Column -->
         <ng-container matColumnDef="comp">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Comp. </th>
-        <td mat-cell *matCellDef="let row"> {{ row.comp }} </td>
+        <td mat-cell *matCellDef="let row"> {{ row.comp }}€ </td>
         </ng-container>
 
         <!-- Competidor Column -->
@@ -149,11 +149,17 @@
         <!-- Accion Correctora Column -->
         <ng-container matColumnDef="accionCorrectora">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Accion Correctora </th>
-        <td mat-cell *matCellDef="let row"> 
+        <td class="text-success" mat-cell *matCellDef="let row"> 
           <span *ngIf="!row.editando" (click)="row.editando =true">{{ row.accionCorrectora }}</span> 
           <input *ngIf="row.editando" [(ngModel)]="row.accionCorrectora" (blur)="row.editando = false">
         </td>
         </ng-container>
+
+        <!-- Propuesta agente Column -->
+        <ng-container matColumnDef="propuestaAgente">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Propuesta Agente </th>
+          <td mat-cell *matCellDef="let row"> {{ row.propuestaAgente}} </td>
+          </ng-container>
 
 
               
