@@ -5,9 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PopupMapComponent } from './popup-map/popup-map.component';
 import { MatDialog } from '@angular/material/dialog';
-import {MatSidenavModule} from '@angular/material/sidenav';
 import { FormBuilder, FormGroup } from '@angular/forms';
-
 
 export interface UserData {
   id: string;
@@ -19,14 +17,18 @@ export interface UserData {
   familia: string;
   subfamilia: string;
   rechazo: string;
-  pvp: string;
-  comp: string;
+  pvp: number;
+  comp: number;
   competidor: string;
+  accionPrecioPorcentaje: number;
   accionCorrectora: string;
+  editingAccionCorrectora?: boolean;
+  propuestaAgente: string;
   latitud: number; // Nuevo campo para la latitud
   longitud: number; // Nuevo campo para la longitud
-
+  symbol: string; // Nuevo campo para el símbolo
 }
+
 const PROVINCIAS: string[] = [
   'Álava', 'Albacete', 'Alicante', 'Almería', 'Asturias', 'Ávila', 'Badajoz', 'Barcelona', 'Burgos', 'Cáceres',
   'Cádiz', 'Cantabria', 'Castellón', 'Ciudad Real', 'Córdoba', 'La Coruña', 'Cuenca', 'Gerona', 'Granada', 'Guadalajara',
@@ -41,6 +43,27 @@ const POBLACIONES: string[] = [
   'Oviedo', 'Santa Cruz de Tenerife', 'Pamplona', 'Cartagena', 'Sabadell', 'Jerez de la Frontera', 'Móstoles', 'Santander', 'Alcalá de Henares', 'Fuenlabrada',
   'Legánes', 'San Sebastián', 'Getafe', 'Burgos', 'Albacete', 'Alcorcón', 'Almería', 'Donostia-San Sebastián', 'Castellón de la Plana', 'Logroño', 'Badajoz',
   'La Laguna', 'Salamanca', 'Huelva', 'Marbella', 'Lérida', 'Tarragona', 'Dos Hermanas', 'Torrejón de Ardoz', 'Parla', 'Mataró'
+];
+
+const RECHAZO: string[] = [
+  'Mal estado',
+  'Mejor precio competencia',
+  'Producto no trabajado',
+  'Mala calidad',
+];
+const COMPETIDOR: string[] = [
+  'Distribuciones Rico',
+  'Cadea 100 Profesional',
+  'Bazar Hogar',
+];
+
+const ACCIONCORRECTORA: string[] = [
+  'Promoción 2x1',
+  'Aplicar campaña trimestral',
+  'Promoción 1+1',
+  'Promoción 3x2',
+  'Regalo de cartelería de publicidad',
+  'Lanzar promoción 3x2',
 ];
 
 const NAMES: string[] = [
@@ -114,9 +137,12 @@ const SUBFAMILIAS: string[] = [
   'Especias en polvo',
 ];
 
+const PROPUESTA: string[] = [
+  'Mejorar el descuento',
+  'Mejorar la calidad',
+];
+
 const RECHAZOS: string[] = ['Rechazado', 'En Proceso', 'Vendido', 'No aplica'];
-
-
 
 @Component({
   selector: 'app-rechazos-general',
@@ -125,10 +151,9 @@ const RECHAZOS: string[] = ['Rechazado', 'En Proceso', 'Vendido', 'No aplica'];
 })
 export class RechazosGeneralComponent implements AfterViewInit {
   form: FormGroup;
-  displayedColumns: string[] = ['select','estado', 'id' , 'poblacion', 'provincia', 'cliente', 'producto', 'familia', 'subfamilia', 'rechazo', 'pvp', 'comp', 'competidor', 'accionCorrectora'];
+  displayedColumns: string[] = ['select', 'estado', 'id', 'poblacion', 'provincia', 'cliente', 'producto', 'familia', 'subfamilia', 'rechazo', 'pvp', 'comp', 'competidor', 'accionPrecioPorcentaje', 'accionCorrectora', 'propuestaAgente'];
   dataSource: MatTableDataSource<UserData>;
   selection = new SelectionModel<UserData>(true, []);
-
 
   rechazadosCount: number = 0;
   enProcesoCount: number = 0;
@@ -145,23 +170,36 @@ export class RechazosGeneralComponent implements AfterViewInit {
     this.form = this.formBuilder.group({
       EstadoFilterControl: [''],
       PoblacionFilterControl: [''],
-      ProvinciaFilterControl:[''],
+      ProvinciaFilterControl: [''],
       ClienteFilterControl: [''],
       ProductoFilterControl: [''],
       FamiliaFilterControl: [''],
       SubFamiliaFilterControl: ['']
-    });  
+    });
+
+    this.form.valueChanges.subscribe(() => {
+      this.applyFilter();
+    });
   }
-  /* Aplicar filtros */
-  // Implementa el método applyFilter() para aplicar filtros
+
   applyFilter() {
-    console.log('Filtros aplicados:', this.form.value);
+    const filterValues = this.form.value;
+    this.dataSource.filterPredicate = (data: UserData, filter: string): boolean => {
+      const searchTerms = JSON.parse(filter);
+      return (!searchTerms.EstadoFilterControl || data.estado.toLowerCase().indexOf(searchTerms.EstadoFilterControl.toLowerCase()) !== -1) &&
+             (!searchTerms.PoblacionFilterControl || data.poblacion.toLowerCase().indexOf(searchTerms.PoblacionFilterControl.toLowerCase()) !== -1) &&
+             (!searchTerms.ProvinciaFilterControl || data.provincia.toLowerCase().indexOf(searchTerms.ProvinciaFilterControl.toLowerCase()) !== -1) &&
+             (!searchTerms.ClienteFilterControl || data.cliente.toLowerCase().indexOf(searchTerms.ClienteFilterControl.toLowerCase()) !== -1) &&
+             (!searchTerms.ProductoFilterControl || data.producto.toLowerCase().indexOf(searchTerms.ProductoFilterControl.toLowerCase()) !== -1) &&
+             (!searchTerms.FamiliaFilterControl || data.familia.toLowerCase().indexOf(searchTerms.FamiliaFilterControl.toLowerCase()) !== -1) &&
+             (!searchTerms.SubFamiliaFilterControl || data.subfamilia.toLowerCase().indexOf(searchTerms.SubFamiliaFilterControl.toLowerCase()) !== -1);
+    };
+    this.dataSource.filter = JSON.stringify(filterValues);
   }
-  // Implementa el método filtroReset() para restablecer los filtros
+
   filtroReset() {
     this.form.reset();
-    this.form.get('DateFilterControl')?.setValue([]);
-
+    this.dataSource.filter = '';
   }
 
   ngAfterViewInit() {
@@ -175,7 +213,6 @@ export class RechazosGeneralComponent implements AfterViewInit {
       this.dataSource.sort = this.sort;
     }
   }
-  
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -194,7 +231,7 @@ export class RechazosGeneralComponent implements AfterViewInit {
       width: '1550px',
       height: 'auto',
       disableClose: true,
-      data:{selectedRows: this.selection.selected}
+      data: { selectedRows: this.selection.selected }
     });
   }
 
@@ -216,7 +253,7 @@ export class RechazosGeneralComponent implements AfterViewInit {
         break;
     }
   }
-  
+
   getOptionImage(estado: string): string {
     // Ruta base de las imágenes en la carpeta 'src/assets/icon/'
     const basePath = 'assets/icon/';
@@ -236,6 +273,15 @@ export class RechazosGeneralComponent implements AfterViewInit {
     }
   }
 
+  onSave(row: UserData) {
+    // Lógica para guardar el valor editado
+    console.log('Valor guardado:', row.accionPrecioPorcentaje);
+  }
+
+  onSymbolChange(row: UserData) {
+    // Lógica para manejar el cambio de símbolo
+    console.log('Símbolo cambiado a:', row.symbol);
+  }
 }
 
 function createNewUser(id: number): UserData {
@@ -245,11 +291,13 @@ function createNewUser(id: number): UserData {
   const producto = PRODUCTOS[Math.floor(Math.random() * PRODUCTOS.length)];
   const familia = FAMILIAS[Math.floor(Math.random() * FAMILIAS.length)];
   const subfamilia = SUBFAMILIAS[Math.floor(Math.random() * SUBFAMILIAS.length)];
-  const rechazo = RECHAZOS[Math.floor(Math.random() * RECHAZOS.length)];
-  const pvp = Math.floor(Math.random() * 100).toString();
-  const comp = Math.floor(Math.random() * 100).toString();
-  const competidor = NAMES[Math.floor(Math.random() * NAMES.length)];
-  const accionCorrectora = NAMES[Math.floor(Math.random() * NAMES.length)];
+  const rechazo = RECHAZO[Math.floor(Math.random() * RECHAZO.length)];
+  const pvp = Math.floor(Math.random() * 100);
+  const comp = Math.floor(Math.random() * 100);
+  const competidor = COMPETIDOR[Math.floor(Math.random() * COMPETIDOR.length)];
+  const accionPrecioPorcentaje = Math.floor(Math.random() * 100);
+  const accionCorrectora = ACCIONCORRECTORA[Math.floor(Math.random() * ACCIONCORRECTORA.length)];
+  const propuestaAgente = PROPUESTA[Math.floor(Math.random() * PROPUESTA.length)];
   
   // Generación de coordenadas aleatorias dentro de Asturias
   const latitud = Math.random() * (43.5 - 42.5) + 42.5; // Latitud aproximada de Asturias
@@ -268,8 +316,11 @@ function createNewUser(id: number): UserData {
     pvp: pvp,
     comp: comp,
     competidor: competidor,
+    accionPrecioPorcentaje: accionPrecioPorcentaje,
     accionCorrectora: accionCorrectora,
     latitud: latitud,
-    longitud: longitud
+    longitud: longitud,
+    propuestaAgente: propuestaAgente,
+    symbol: '%',
   };
 }
