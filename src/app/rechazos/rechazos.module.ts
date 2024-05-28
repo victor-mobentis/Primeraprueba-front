@@ -25,7 +25,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 
-
 /* paginas */
 import { RechazosGeneralComponent } from './rechazos-general/rechazos-general.component';
 

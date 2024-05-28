@@ -6,6 +6,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { PopupMapComponent } from './popup-map/popup-map.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarConfig } from '@angular/material/snack-bar';
 
 export interface UserData {
   id: string;
@@ -94,7 +96,6 @@ const CLIENTES: string[] = [
   'Consum',
   'HiperDino'
 ];
-
 
 const NAMES: string[] = [
   'Delicias Ibéricas',
@@ -193,7 +194,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
-  constructor(public dialog: MatDialog, private formBuilder: FormBuilder) {
+  constructor(public dialog: MatDialog, private formBuilder: FormBuilder, private snackBar: MatSnackBar) {
     const users = Array.from({ length: 100 }, (_, k) => createNewUser(k + 1));
     this.dataSource = new MatTableDataSource(users);
 
@@ -272,6 +273,13 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   }
 
   verEnMapa() {
+    if (this.selection.selected.length === 0) {
+      const config = new MatSnackBarConfig();
+      config.duration = 3000;
+      config.verticalPosition = 'top';
+      this.snackBar.open('Debe seleccionar al menos un cliente antes de ver en el mapa.', 'Cerrar', config);
+      return;
+    }
     const dialogRef = this.dialog.open(PopupMapComponent, {
       width: '1550px',
       height: 'auto',
@@ -279,7 +287,6 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       data: { selectedRows: this.selection.selected }
     });
   }
-  
 
   actualizarConteos(estado: string, incrementar: boolean) {
     switch (estado) {
@@ -363,7 +370,6 @@ function getRandomCoordinates() {
 const { latitud, longitud } = getRandomCoordinates();
 
 console.log(`Latitud: ${latitud}, Longitud: ${longitud}`);
-
 
   return {
     id: id.toString(),
