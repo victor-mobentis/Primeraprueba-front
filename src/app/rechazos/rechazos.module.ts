@@ -28,7 +28,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 /* paginas */
 import { RechazosGeneralComponent } from './rechazos-general/rechazos-general.component';
 
-import { PopupMapComponent } from './rechazos-general/popup-map/popup-map.component';
+import { PopupMapComponent } from './rechazos-general/popup-map-rechazos/popup-map-rechazos.component';
 @NgModule({
     declarations: [
         RechazosGeneralComponent,

@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { PopupMapComponent } from './popup-map/popup-map.component';
+import { PopupMapComponent } from './popup-map-rechazos/popup-map-rechazos.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -277,13 +277,13 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       const config = new MatSnackBarConfig();
       config.duration = 3000;
       config.verticalPosition = 'top';
-      this.snackBar.open('Debe seleccionar al menos un cliente antes de ver en el mapa.', 'Cerrar', config);
+      this.snackBar.open('Debe seleccionar al menos 1 rechazo antes de ver en el mapa.', '', config);
       return;
     }
 
     const dialogRef = this.dialog.open(PopupMapComponent, {
-      width: '1550px',
-      height: 'auto',
+      width: '80%',
+      height: '80%',
       disableClose: true,
       data: { selectedRows: this.selection.selected }
     });

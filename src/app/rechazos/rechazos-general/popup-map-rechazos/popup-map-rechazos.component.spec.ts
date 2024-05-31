@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PopupMapComponent } from './popup-map.component';
+import { PopupMapComponent } from './popup-map-rechazos.component';
 
 describe('PopupMapComponent', () => {
   let component: PopupMapComponent;

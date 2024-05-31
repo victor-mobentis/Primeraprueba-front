@@ -21,7 +21,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms'; // Importa FormsModule si estás utilizando formularios basados en plantillas
 import { PopupClientDetailComponent } from './clients-general/popup-client-detail/popup-client-detail.component';
-
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
     declarations:[
@@ -47,7 +47,8 @@ import { PopupClientDetailComponent } from './clients-general/popup-client-detai
         MatDatepickerModule,
         MatNativeDateModule,
         MatRadioModule,
-        FormsModule
+        FormsModule,
+        MatSidenavModule
     ],
     providers: [],
     bootstrap: [ClientsGeneralComponent]

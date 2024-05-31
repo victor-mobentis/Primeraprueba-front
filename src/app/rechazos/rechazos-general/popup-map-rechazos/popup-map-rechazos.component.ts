@@ -5,8 +5,8 @@ import { GoogleMap } from '@angular/google-maps';
 
 @Component({
   selector: 'app-popup-map',
-  templateUrl: './popup-map.component.html',
-  styleUrls: ['./popup-map.component.css']
+  templateUrl: './popup-map-rechazos.component.html',
+  styleUrls: ['./popup-map-rechazos.component.css']
 })
 export class PopupMapComponent implements OnInit, AfterViewInit {
   @ViewChild(GoogleMap) map!: GoogleMap;
@@ -27,7 +27,7 @@ export class PopupMapComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     if (this.data.selectedRows.length > 0) {
-      this.center = { 
+      this.center = {
         lat: this.data.selectedRows[0].latitud,
         lng: this.data.selectedRows[0].longitud
       };
@@ -48,7 +48,7 @@ export class PopupMapComponent implements OnInit, AfterViewInit {
         map: this.map?.googleMap,
         icon: {
           url: markerIcon,
-          scaledSize: new google.maps.Size(35, 40) // Ajusta el tamaño del marcador
+          scaledSize: new google.maps.Size(25, 33) // Ajusta el tamaño del marcador (Ancho - Alto)
         }
       });
 
