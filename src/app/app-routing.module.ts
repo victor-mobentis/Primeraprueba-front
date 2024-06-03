@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 /* pages */
 import { AuthComponent } from './auth/auth/auth.component';
-import { PagesComponent } from './pages/pages.component';
+import { PagesComponent } from './sidenav/sidenav.component';
 
 const routes: Routes = [
 

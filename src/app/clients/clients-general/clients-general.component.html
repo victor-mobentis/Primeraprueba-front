@@ -9,7 +9,7 @@
         </div>
         <!-- boton de filtrado -->
         <div class="d-flex align-items-center gap-2">
-          <button matTooltip="Ver en Mapa" class="btn buttons-clients d-flex justify-content-center align-items-center">
+          <button matTooltip="Ver en Mapa" class="btn buttons-clients d-flex justify-content-center align-items-center" (click)="verEnMapa()">
             <mat-icon class="p-0 m-0">map</mat-icon>
             <span class="ms-1">Mapa</span>
           </button>
@@ -24,6 +24,21 @@
           <div class="mat-elevation-z2">
             <div class="table-wrapper">
               <table mat-table [dataSource]="dataSource" matSort>
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
+                                  [checked]="isAllSelected()"
+                                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    </mat-checkbox>
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    <mat-checkbox color="primary" (click)="$event.stopPropagation()"
+                                  (change)="$event ? selection.toggle(row) : null"
+                                  [checked]="selection.isSelected(row)">
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
                 <!-- Código Column -->
                 <ng-container matColumnDef="codigo">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>

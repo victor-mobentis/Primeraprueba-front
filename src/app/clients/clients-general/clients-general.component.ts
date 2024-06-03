@@ -1,10 +1,12 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupClientDetailComponent } from './popup-client-detail/popup-client-detail.component';
+import { PopupMapClientsComponent } from './popup-map-clients/popup-map-clients.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { SelectionModel } from '@angular/cdk/collections';
 
 export interface UserData {
   codigo: string;
@@ -12,6 +14,8 @@ export interface UserData {
   poblacion: string;
   provincia: string;
   cp: string;
+  latitud: number;
+  longitud: number;
 }
 
 const NOMBRE: string[] = [
@@ -39,9 +43,9 @@ const POBLACIONES: string[] = [
 ];
 
 const POSTAL_CODES: string[] = [
-  '33001', '33002', '33003', '33004', '33005', '33006', '33007', '33008', '33009', '33010',
-  '33011', '33012', '33013', '33014', '33015', '33016', '33017', '33018', '33019', '33020',
-  '33021', '33022', '33023', '33024', '33025', '33026', '33027', '33028', '33029', '33030'
+  '08001', '08002', '08003', '08004', '08005', '08006', '08007', '08008', '08009', '08010',
+  '08011', '08012', '08013', '08014', '08015', '08016', '08017', '08018', '08019', '08020',
+  '08021', '08022', '08023', '08024', '08025', '08026', '08027', '08028', '08029', '08030'
 ];
 
 @Component({
@@ -49,9 +53,10 @@ const POSTAL_CODES: string[] = [
   templateUrl: './clients-general.component.html',
   styleUrls: ['./clients-general.component.css']
 })
-export class ClientsGeneralComponent implements AfterViewInit {
-  displayedColumns: string[] = ['codigo', "nombre", 'provincia', 'poblacion', 'cp', 'detalles'];
+export class ClientsGeneralComponent implements AfterViewInit, OnInit {
+  displayedColumns: string[] = ['select', 'codigo', 'nombre', 'provincia', 'poblacion', 'cp', 'detalles'];
   dataSource: MatTableDataSource<UserData>;
+  selection = new SelectionModel<UserData>(true, []);
   form: FormGroup;
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
@@ -70,6 +75,21 @@ export class ClientsGeneralComponent implements AfterViewInit {
     this.form.valueChanges.subscribe(() => {
       this.applyFilter();
     });
+  }
+
+  ngOnInit() {
+    this.loadGoogleMapsScript();
+  }
+
+  private loadGoogleMapsScript() {
+    if (!document.getElementById('google-maps-script')) {
+      const script = document.createElement('script');
+      script.id = 'google-maps-script';
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBcREBnuBayqza1v1W2JbUGJqB0W77mcjI`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
   }
 
   ngAfterViewInit() {
@@ -104,7 +124,33 @@ export class ClientsGeneralComponent implements AfterViewInit {
       height: 'auto',
       disableClose: true,
       data: user
-    })
+    });
+  }
+
+  verEnMapa() {
+    if (this.selection.selected.length === 0) {
+      // Mostrar un mensaje si no hay datos para mostrar en el mapa
+      return;
+    }
+
+    const dialogRef = this.dialog.open(PopupMapClientsComponent, {
+      width: '80%',
+      height: '80%',
+      disableClose: true,
+      data: { selectedRows: this.selection.selected }
+    });
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
   }
 }
 
@@ -114,11 +160,30 @@ function createNewUser(codigo: number): UserData {
   const cp = POSTAL_CODES[Math.floor(Math.random() * POSTAL_CODES.length)];
   const nombre = NOMBRE[Math.floor(Math.random() * NOMBRE.length)];
 
+  // Definición del área de Barcelona
+  const barcelonaArea = {
+    latMin: 41.320, // Límite sur de Barcelona
+    latMax: 41.480, // Límite norte de Barcelona
+    lonMin: 2.069,  // Límite oeste de Barcelona
+    lonMax: 2.228   // Límite este de Barcelona
+  };
+
+  // Función para generar coordenadas aleatorias dentro del área de Barcelona
+  function getRandomCoordinatesInBarcelona() {
+    const latitud = Math.random() * (barcelonaArea.latMax - barcelonaArea.latMin) + barcelonaArea.latMin;
+    const longitud = Math.random() * (barcelonaArea.lonMax - barcelonaArea.lonMin) + barcelonaArea.lonMin;
+    return { latitud, longitud };
+  }
+
+  const { latitud, longitud } = getRandomCoordinatesInBarcelona();
+
   return {
     codigo: codigo.toString(),
     nombre: nombre,
     poblacion: poblacion,
     provincia: provincia,
     cp: cp,
+    latitud: latitud,
+    longitud: longitud,
   };
 }

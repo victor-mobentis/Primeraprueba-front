@@ -1,6 +1,8 @@
+/**
+    * IMPORTS MODULES
+*/
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-/* imports angular material */
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSortModule} from '@angular/material/sort';
@@ -15,20 +17,19 @@ import { MatSelectModule } from '@angular/material/select';
 import { RechazosRoutingModule } from './rechazos-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
-
 import { GoogleMapsModule } from '@angular/google-maps';
-
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-
-/* paginas */
+/**
+    * IMPORTS COMPONENTS
+*/
 import { RechazosGeneralComponent } from './rechazos-general/rechazos-general.component';
-
 import { PopupMapComponent } from './rechazos-general/popup-map-rechazos/popup-map-rechazos.component';
+
 @NgModule({
     declarations: [
         RechazosGeneralComponent,

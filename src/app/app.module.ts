@@ -1,20 +1,22 @@
+/**
+  * IMPORTS MODULES
+*/
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PagesModule } from './pages/pages.module';
+import { PagesModule } from './sidenav/sidenav.module';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from './auth/auth.module';
+/**
+  * IMPORTS COMPONENTS
+*/
+import { AppComponent } from './app.component';
 
 
-/* components */
-
-/* angular material api de components */
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
 
     /* lo unico que se declarara sera los componentes creados en la carpeta componentes paginas no */
 
