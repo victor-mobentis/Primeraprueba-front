@@ -10,7 +10,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 
 export interface UserData {
   codigo: string;
-  nombre: string;
+  cliente: string;
   poblacion: string;
   provincia: string;
   cp: string;
@@ -18,12 +18,10 @@ export interface UserData {
   longitud: number;
 }
 
-const NOMBRE: string[] = [
-  'Juan', 'María', 'José', 'Ana', 'Carlos', 'Laura', 'David', 'Sara', 'Daniel', 'Paula',
-  'Pablo', 'Elena', 'Pedro', 'Lucía', 'Miguel', 'Carmen', 'Manuel', 'Raquel', 'Javier', 'Nerea',
-  'Alejandro', 'Isabel', 'Jorge', 'Sandra', 'Rubén', 'Natalia', 'Sergio', 'Marta', 'Alberto', 'Patricia',
-  'Diego', 'Lorena', 'Rafael', 'Beatriz', 'Fernando', 'Miriam', 'Ignacio', 'Eva', 'Adrián', 'Cristina',
-  'Francisco', 'Teresa', 'Álvaro', 'Luisa', 'Rocío', 'Mario', 'Verónica', 'Gonzalo', 'Silvia', 'Víctor'
+const CLIENTE: string[] = [
+  'Mercadona', 'Alimerka', 'Eroski', 'MasYMas', 'Carrefour', 'Lidl', 'Aldi', 'Dia', 'Supercor', 'Hipercor', 'Ahorramás',
+  'BM Supermercados', 'Bonpreu', 'Caprabo', 'Condis', 'El Corte Inglés', 'Froiz', 'Gadis', 'La Plaza de DIA', 'Lupa',
+  'Simply', 'Superdino', 'SuperSol', 'Ulabox', 'Consum', 'HiperDino'
 ];
 
 const PROVINCIAS: string[] = [
@@ -54,7 +52,7 @@ const POSTAL_CODES: string[] = [
   styleUrls: ['./clients-general.component.css']
 })
 export class ClientsGeneralComponent implements AfterViewInit, OnInit {
-  displayedColumns: string[] = ['select', 'codigo', 'nombre', 'provincia', 'poblacion', 'cp', 'detalles'];
+  displayedColumns: string[] = ['select', 'codigo', 'cliente', 'provincia', 'poblacion', 'cp', 'detalles'];
   dataSource: MatTableDataSource<UserData>;
   selection = new SelectionModel<UserData>(true, []);
   form: FormGroup;
@@ -66,7 +64,7 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
     const users = Array.from({ length: 100 }, (_, k) => createNewUser(k + 1));
     this.dataSource = new MatTableDataSource(users);
     this.form = this.formBuilder.group({
-      NombreFilterControl: [''],
+      ClienteFilterControl: [''],
       PoblacionFilterControl: [''],
       ProvinciaFilterControl: [''],
       CpFilterControl: ['']
@@ -105,7 +103,7 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
     const filterValues = this.form.value;
     this.dataSource.filterPredicate = (data: UserData, filter: string): boolean => {
       const searchTerms = JSON.parse(filter);
-      return (!searchTerms.NombreFilterControl || data.nombre.toLowerCase().indexOf(searchTerms.NombreFilterControl.toLowerCase()) !== -1) &&
+      return (!searchTerms.ClienteFilterControl || data.cliente.toLowerCase().indexOf(searchTerms.ClienteFilterControl.toLowerCase()) !== -1) &&
              (!searchTerms.PoblacionFilterControl || data.poblacion.toLowerCase().indexOf(searchTerms.PoblacionFilterControl.toLowerCase()) !== -1) &&
              (!searchTerms.ProvinciaFilterControl || data.provincia.toLowerCase().indexOf(searchTerms.ProvinciaFilterControl.toLowerCase()) !== -1) &&
              (!searchTerms.CpFilterControl || data.cp.toLowerCase().indexOf(searchTerms.CpFilterControl.toLowerCase()) !== -1);
@@ -158,7 +156,7 @@ function createNewUser(codigo: number): UserData {
   const poblacion = POBLACIONES[Math.floor(Math.random() * POBLACIONES.length)];
   const provincia = PROVINCIAS[Math.floor(Math.random() * PROVINCIAS.length)];
   const cp = POSTAL_CODES[Math.floor(Math.random() * POSTAL_CODES.length)];
-  const nombre = NOMBRE[Math.floor(Math.random() * NOMBRE.length)];
+  const cliente = CLIENTE[Math.floor(Math.random() * CLIENTE.length)];
 
   // Definición del área de Barcelona
   const barcelonaArea = {
@@ -179,7 +177,7 @@ function createNewUser(codigo: number): UserData {
 
   return {
     codigo: codigo.toString(),
-    nombre: nombre,
+    cliente: cliente,
     poblacion: poblacion,
     provincia: provincia,
     cp: cp,
