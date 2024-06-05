@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UserData } from '../clients-general.component';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { IClient } from 'src/app/models/clients.model'; // Actualizar esta línea
 
 @Component({
   selector: 'app-popup-client-detail',
@@ -11,10 +11,10 @@ export class PopupClientDetailComponent {
 
   constructor(
     public dialogRef: MatDialogRef<PopupClientDetailComponent>,
-    public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public user: UserData
+    @Inject(MAT_DIALOG_DATA) public client: IClient
   ){}
-  close(){
+
+  close() {
     this.dialogRef.close();
   }
 }

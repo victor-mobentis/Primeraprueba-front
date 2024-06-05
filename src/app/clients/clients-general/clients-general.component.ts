@@ -1,50 +1,17 @@
-import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { PopupClientDetailComponent } from './popup-client-detail/popup-client-detail.component';
-import { PopupMapClientsComponent } from './popup-map-clients/popup-map-clients.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
-
-export interface UserData {
-  codigo: string;
-  cliente: string;
-  poblacion: string;
-  provincia: string;
-  cp: string;
-  latitud: number;
-  longitud: number;
-}
-
-const CLIENTE: string[] = [
-  'Mercadona', 'Alimerka', 'Eroski', 'MasYMas', 'Carrefour', 'Lidl', 'Aldi', 'Dia', 'Supercor', 'Hipercor', 'Ahorramás',
-  'BM Supermercados', 'Bonpreu', 'Caprabo', 'Condis', 'El Corte Inglés', 'Froiz', 'Gadis', 'La Plaza de DIA', 'Lupa',
-  'Simply', 'Superdino', 'SuperSol', 'Ulabox', 'Consum', 'HiperDino'
-];
-
-const PROVINCIAS: string[] = [
-  'Álava', 'Albacete', 'Alicante', 'Almería', 'Asturias', 'Ávila', 'Badajoz', 'Barcelona', 'Burgos', 'Cáceres',
-  'Cádiz', 'Cantabria', 'Castellón', 'Ciudad Real', 'Córdoba', 'La Coruña', 'Cuenca', 'Gerona', 'Granada', 'Guadalajara',
-  'Guipúzcoa', 'Huelva', 'Huesca', 'Islas Baleares', 'Jaén', 'León', 'Lérida', 'Lugo', 'Madrid', 'Málaga',
-  'Murcia', 'Navarra', 'Orense', 'Palencia', 'Las Palmas', 'Pontevedra', 'La Rioja', 'Salamanca', 'Segovia', 'Sevilla', 'Soria',
-  'Tarragona', 'Santa Cruz de Tenerife', 'Teruel', 'Toledo', 'Valencia', 'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza'
-];
-
-const POBLACIONES: string[] = [
-  'Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Zaragoza', 'Málaga', 'Murcia', 'Palma', 'Las Palmas de Gran Canaria', 'Bilbao',
-  'Alicante', 'Córdoba', 'Valladolid', 'Vigo', 'Gijón', 'Hospitalet de Llobregat', 'Vitoria-Gasteiz', 'La Coruña', 'Granada', 'Elche',
-  'Oviedo', 'Santa Cruz de Tenerife', 'Pamplona', 'Cartagena', 'Sabadell', 'Jerez de la Frontera', 'Móstoles', 'Santander', 'Alcalá de Henares', 'Fuenlabrada',
-  'Legánes', 'San Sebastián', 'Getafe', 'Burgos', 'Albacete', 'Alcorcón', 'Almería', 'Donostia-San Sebastián', 'Castellón de la Plana', 'Logroño', 'Badajoz',
-  'La Laguna', 'Salamanca', 'Huelva', 'Marbella', 'Lérida', 'Tarragona', 'Dos Hermanas', 'Torrejón de Ardoz', 'Parla', 'Mataró'
-];
-
-const POSTAL_CODES: string[] = [
-  '08001', '08002', '08003', '08004', '08005', '08006', '08007', '08008', '08009', '08010',
-  '08011', '08012', '08013', '08014', '08015', '08016', '08017', '08018', '08019', '08020',
-  '08021', '08022', '08023', '08024', '08025', '08026', '08027', '08028', '08029', '08030'
-];
+import { IClient } from 'src/app/models/clients.model';
+import { IPoblacion } from 'src/app/models/poblaciones.model';
+import { IProvincia } from 'src/app/models/provincias.model';
+import { PopupClientDetailComponent } from './popup-client-detail/popup-client-detail.component';
+import { PopupMapClientsComponent } from './popup-map-clients/popup-map-clients.component';
+import { ClientsService } from 'src/app/services/clients/clients.service';
+import { FilterService } from 'src/app/services/filter/filter.service';
 
 @Component({
   selector: 'app-clients-general',
@@ -52,17 +19,26 @@ const POSTAL_CODES: string[] = [
   styleUrls: ['./clients-general.component.css']
 })
 export class ClientsGeneralComponent implements AfterViewInit, OnInit {
-  displayedColumns: string[] = ['select', 'codigo', 'cliente', 'provincia', 'poblacion', 'cp', 'detalles'];
-  dataSource: MatTableDataSource<UserData>;
-  selection = new SelectionModel<UserData>(true, []);
+  displayedColumns: string[] = [
+    'select', 'codigo', 'cliente', 'provincia', 'poblacion', 'cp', 'detalles'
+  ];
+  dataSource: MatTableDataSource<IClient>;
+  clientsList: IClient[] = [];
+  poblaciones: IPoblacion[] = [];
+  provincias: IProvincia[] = [];
+  selection = new SelectionModel<IClient>(true, []);
   form: FormGroup;
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
-  constructor(public dialog: MatDialog, private formBuilder: FormBuilder) {
-    const users = Array.from({ length: 100 }, (_, k) => createNewUser(k + 1));
-    this.dataSource = new MatTableDataSource(users);
+  constructor(
+    public dialog: MatDialog, 
+    private formBuilder: FormBuilder, 
+    private clientsService: ClientsService,
+
+  ) {
+    this.dataSource = new MatTableDataSource<IClient>([]);
     this.form = this.formBuilder.group({
       ClienteFilterControl: [''],
       PoblacionFilterControl: [''],
@@ -76,8 +52,18 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
+    this.loadClients();
     this.loadGoogleMapsScript();
   }
+
+  loadClients() {
+    this.clientsService.getClients().subscribe((clients: IClient[]) => {
+      this.clientsList = clients;
+      this.dataSource.data = clients;
+      console.log('Clientes cargados:', this.clientsList);
+    });
+  }
+
 
   private loadGoogleMapsScript() {
     if (!document.getElementById('google-maps-script')) {
@@ -101,12 +87,12 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
 
   applyFilter() {
     const filterValues = this.form.value;
-    this.dataSource.filterPredicate = (data: UserData, filter: string): boolean => {
+    this.dataSource.filterPredicate = (data: IClient, filter: string): boolean => {
       const searchTerms = JSON.parse(filter);
-      return (!searchTerms.ClienteFilterControl || data.cliente.toLowerCase().indexOf(searchTerms.ClienteFilterControl.toLowerCase()) !== -1) &&
-             (!searchTerms.PoblacionFilterControl || data.poblacion.toLowerCase().indexOf(searchTerms.PoblacionFilterControl.toLowerCase()) !== -1) &&
-             (!searchTerms.ProvinciaFilterControl || data.provincia.toLowerCase().indexOf(searchTerms.ProvinciaFilterControl.toLowerCase()) !== -1) &&
-             (!searchTerms.CpFilterControl || data.cp.toLowerCase().indexOf(searchTerms.CpFilterControl.toLowerCase()) !== -1);
+      return (!searchTerms.ClienteFilterControl || data.nombre_empresa.toLowerCase().indexOf(searchTerms.ClienteFilterControl.toLowerCase()) !== -1) &&
+             (!searchTerms.PoblacionFilterControl || data.nombre_poblacion.toLowerCase().indexOf(searchTerms.PoblacionFilterControl.toLowerCase()) !== -1) &&
+             (!searchTerms.ProvinciaFilterControl || data.nombre_provincia.toLowerCase().indexOf(searchTerms.ProvinciaFilterControl.toLowerCase()) !== -1) &&
+             (!searchTerms.CpFilterControl || data.CP.toString().toLowerCase().indexOf(searchTerms.CpFilterControl.toLowerCase()) !== -1);
     };
     this.dataSource.filter = JSON.stringify(filterValues);
   }
@@ -116,12 +102,12 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
     this.dataSource.filter = '';
   }
 
-  openDetailsDialog(user: UserData) {
+  openDetailsDialog(client: IClient) {
     const dialogRef = this.dialog.open(PopupClientDetailComponent, {
       width: '550px',
       height: 'auto',
       disableClose: true,
-      data: user
+      data: client
     });
   }
 
@@ -150,38 +136,4 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
       this.selection.clear() :
       this.dataSource.data.forEach(row => this.selection.select(row));
   }
-}
-
-function createNewUser(codigo: number): UserData {
-  const poblacion = POBLACIONES[Math.floor(Math.random() * POBLACIONES.length)];
-  const provincia = PROVINCIAS[Math.floor(Math.random() * PROVINCIAS.length)];
-  const cp = POSTAL_CODES[Math.floor(Math.random() * POSTAL_CODES.length)];
-  const cliente = CLIENTE[Math.floor(Math.random() * CLIENTE.length)];
-
-  // Definición del área de Barcelona
-  const barcelonaArea = {
-    latMin: 41.320, // Límite sur de Barcelona
-    latMax: 41.480, // Límite norte de Barcelona
-    lonMin: 2.069,  // Límite oeste de Barcelona
-    lonMax: 2.228   // Límite este de Barcelona
-  };
-
-  // Función para generar coordenadas aleatorias dentro del área de Barcelona
-  function getRandomCoordinatesInBarcelona() {
-    const latitud = Math.random() * (barcelonaArea.latMax - barcelonaArea.latMin) + barcelonaArea.latMin;
-    const longitud = Math.random() * (barcelonaArea.lonMax - barcelonaArea.lonMin) + barcelonaArea.lonMin;
-    return { latitud, longitud };
-  }
-
-  const { latitud, longitud } = getRandomCoordinatesInBarcelona();
-
-  return {
-    codigo: codigo.toString(),
-    cliente: cliente,
-    poblacion: poblacion,
-    provincia: provincia,
-    cp: cp,
-    latitud: latitud,
-    longitud: longitud,
-  };
 }
