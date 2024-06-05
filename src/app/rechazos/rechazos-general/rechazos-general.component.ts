@@ -25,11 +25,14 @@ export interface UserData {
   accionPrecioPorcentaje: number;
   accionCorrectora: string;
   tempAccionCorrectora?: string;
+  tempAccionPrecioPorcentaje?: number;
   editingAccionCorrectora?: boolean;
+  editingAccionPrecioPorcentaje?: boolean;
   propuestaAgente: string;
   latitud: number;
   longitud: number;
   symbol: string;
+  previousEstado?: string; // Almacenar el estado anterior
 }
 
 @Component({
@@ -42,6 +45,13 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   displayedColumns: string[] = ['select', 'estado', 'id', 'poblacion', 'provincia', 'cliente', 'producto', 'familia', 'subfamilia', 'rechazo', 'pvp', 'comp', 'competidor', 'accionPrecioPorcentaje', 'accionCorrectora', 'propuestaAgente'];
   dataSource: MatTableDataSource<UserData>;
   selection = new SelectionModel<UserData>(true, []);
+
+  estados = [
+    { value: 'Rechazado', viewValue: 'Rechazado' },
+    { value: 'En Proceso', viewValue: 'En Proceso' },
+    { value: 'Vendido', viewValue: 'Vendido' },
+    { value: 'No aplica', viewValue: 'No aplica' }
+  ];
 
   CLIENTES: string[] = [
     'Mercadona', 'Alimerka', 'Eroski', 'MasYMas', 'Carrefour', 'Lidl', 'Aldi', 'Dia', 'Supercor', 'Hipercor', 'Ahorramás',
@@ -242,38 +252,86 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     }
   }
 
-  startEditing(row: UserData) {
-    row.editingAccionCorrectora = true;
-    row.tempAccionCorrectora = row.accionCorrectora;
+  startEditing(row: UserData, field: string) {
+    if (field === 'accionCorrectora') {
+      row.editingAccionCorrectora = true;
+      row.tempAccionCorrectora = row.accionCorrectora;
+    } else if (field === 'accionPrecioPorcentaje') {
+      row.editingAccionPrecioPorcentaje = true;
+      row.tempAccionPrecioPorcentaje = row.accionPrecioPorcentaje;
+    }
   }
 
-  confirmEdit(row: UserData) {
-    row.accionCorrectora = row.tempAccionCorrectora || '';
-    row.editingAccionCorrectora = false;
-    this.onSave(row);
+  updateCharCount(row: UserData) {
+    // Este método se llama cada vez que se escribe en el input
   }
 
-  cancelEdit(row: UserData) {
-    row.editingAccionCorrectora = false;
+  confirmEdit(row: UserData, field: string) {
+    if (field === 'accionCorrectora') {
+      if (row.tempAccionCorrectora && row.tempAccionCorrectora.length <= 50) {
+        row.accionCorrectora = row.tempAccionCorrectora || '';
+        row.editingAccionCorrectora = false;
+        this.onSave(row);
+      } else {
+        this.snackBar.open('La acción correctora debe tener entre 1 y 50 caracteres.', '', { duration: 3000, verticalPosition: 'top' });
+      }
+    } else if (field === 'accionPrecioPorcentaje') {
+      row.accionPrecioPorcentaje = row.tempAccionPrecioPorcentaje || 0;
+      row.editingAccionPrecioPorcentaje = false;
+      this.onSave(row);
+    }
+  }
+
+  cancelEdit(row: UserData, field: string) {
+    if (field === 'accionCorrectora') {
+      row.editingAccionCorrectora = false;
+    } else if (field === 'accionPrecioPorcentaje') {
+      row.editingAccionPrecioPorcentaje = false;
+    }
   }
 
   onSave(row: UserData) {
     // Lógica para guardar el valor editado
     console.log('Valor guardado:', row.accionCorrectora);
-  
+
     // Mostrar Snackbar de éxito
     const config = new MatSnackBarConfig();
     config.duration = 3000;  // Duración de la snackbar
     config.verticalPosition = 'top';
-  
-    this.snackBar.open('Acción correctora cambiada correctamente', '', config);
+
+    this.snackBar.open('Acción correctora actualizada correctamente', '', config);
     this.cdr.detectChanges(); // Forzar la detección de cambios después de guardar
   }
 
   onSymbolChange(row: UserData) {
     // Lógica para manejar el cambio de símbolo
     console.log('Símbolo cambiado a:', row.symbol);
+    const config = new MatSnackBarConfig();
+    config.duration = 3000;  // Duración de la snackbar
+    config.verticalPosition = 'top';
+
+    this.snackBar.open('Símbolo cambiado a ' + row.symbol + ' correctamente', '', config);
     this.cdr.detectChanges(); // Forzar la detección de cambios después de cambiar el símbolo
+  }
+
+  onEstadoChange(event: any, row: UserData) {
+    const previousEstado = row.previousEstado || row.estado; // Utiliza el estado anterior almacenado o el actual si no hay uno anterior
+
+    // Actualiza los contadores
+    this.actualizarConteos(previousEstado, false); // Disminuir el contador del estado anterior
+    this.actualizarConteos(event.value, true); // Aumentar el contador del nuevo estado
+
+    // Actualiza el estado anterior
+    row.previousEstado = event.value;
+
+    // Actualiza el estado actual
+    row.estado = event.value;
+
+    // Mostrar mensaje de éxito
+    this.snackBar.open('Estado cambiado correctamente', '', {
+      duration: 3000,
+      verticalPosition: 'top'
+    });
   }
 
   createNewUser(id: number): UserData {
@@ -290,7 +348,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     const accionPrecioPorcentaje = Math.floor(Math.random() * 100);
     const accionCorrectora = this.ACCIONCORRECTORA[Math.floor(Math.random() * this.ACCIONCORRECTORA.length)];
     const propuestaAgente = this.PROPUESTA[Math.floor(Math.random() * this.PROPUESTA.length)];
-    
+
     // Definición del área de Madrid
     const madridArea = {
       latMin: 40.312, // Límite sur de Madrid
@@ -308,9 +366,12 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
     const { latitud, longitud } = getRandomCoordinatesInMadrid();
 
+    const estado = this.RECHAZOS[Math.floor(Math.random() * this.RECHAZOS.length)];
+
     return {
       id: id.toString(),
-      estado: this.RECHAZOS[Math.floor(Math.random() * this.RECHAZOS.length)],
+      estado: estado,
+      previousEstado: estado, // Almacenar el estado inicial como estado anterior
       poblacion: poblacion,
       provincia: provincia,
       cliente: cliente,

@@ -16,6 +16,12 @@ table {
   width: 100%;
 }
 
+.char-count {
+  font-size: 0.9rem;
+  color: #666;
+  margin-left: 8px;
+}
+
 .buttons-rechazos {
   background-color: #3F51B5;
   color: white;
@@ -56,17 +62,46 @@ th {
 }
 
 .estado-form-group {
-  width: 150px;
+  width: 100%;
   margin: 0;
 }
 
-.estado-select {
-  background-color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  padding: 5px 10px;
-  text-align: center;
-  cursor: pointer;
+.mat-form-field {
+  margin-bottom: 0 !important; /* Elimina el margen inferior del contenedor */
+}
+
+.mat-select-trigger {
+  height: 24px;
+  line-height: 24px;
+}
+
+.mat-select-value {
+  height: 24px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.mat-select-arrow {
+  margin-top: 0;
+}
+
+.mat-select-panel {
+  margin-top: 0;
+}
+
+.mat-select {
+  padding-top: 0;
+  padding-bottom: 0;
+  background-color: #ffffff; /* Fondo blanco */
+}
+
+.mat-form-field-wrapper {
+  padding-bottom: 0px !important; /* Elimina el espacio inferior del contenedor */
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+  display: none; /* Elimina el espacio inferior */
 }
 
 .option-image {

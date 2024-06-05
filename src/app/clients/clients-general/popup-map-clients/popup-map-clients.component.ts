@@ -43,13 +43,13 @@ export class PopupMapClientsComponent implements OnInit, AfterViewInit {
     this.markers = this.data.selectedRows.map(row => {
       const marker = new google.maps.Marker({
         position: { lat: row.latitud, lng: row.longitud },
-        title: row.nombre,
+        title: row.cliente,
         map: this.map?.googleMap,
       });
 
       const infoContent = `
         <div>
-          <h2>${row.nombre}</h2>
+          <h2>${row.cliente}</h2>
           <p>${row.poblacion}, ${row.provincia}</p>
           <p>${row.cp}</p>
         </div>
