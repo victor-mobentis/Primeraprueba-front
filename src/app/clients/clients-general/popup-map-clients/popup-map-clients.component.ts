@@ -1,7 +1,8 @@
+// src/app/clients/clients-general/popup-map-clients/popup-map-clients.component.ts
 import { Component, Inject, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GoogleMap } from '@angular/google-maps';
-import { UserData } from '../clients-general.component';
+import { IClient } from 'src/app/models/clients.model'; // Actualizar esta línea
 
 @Component({
   selector: 'app-popup-map-clients',
@@ -22,14 +23,14 @@ export class PopupMapClientsComponent implements OnInit, AfterViewInit {
 
   constructor(
     public dialogRef: MatDialogRef<PopupMapClientsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { selectedRows: UserData[] }
+    @Inject(MAT_DIALOG_DATA) public data: { selectedRows: IClient[] } // Actualizar esta línea
   ) {}
 
   ngOnInit(): void {
     if (this.data.selectedRows.length > 0) {
       this.center = {
-        lat: this.data.selectedRows[0].latitud,
-        lng: this.data.selectedRows[0].longitud
+        lat: this.data.selectedRows[0].cliente_latitud, // Cambiado de latitud
+        lng: this.data.selectedRows[0].cliente_longitud // Cambiado de longitud
       };
     }
   }
@@ -42,16 +43,16 @@ export class PopupMapClientsComponent implements OnInit, AfterViewInit {
   addMarkers() {
     this.markers = this.data.selectedRows.map(row => {
       const marker = new google.maps.Marker({
-        position: { lat: row.latitud, lng: row.longitud },
-        title: row.cliente,
+        position: { lat: row.cliente_latitud, lng: row.cliente_longitud }, // Cambiado de latitud y longitud
+        title: row.nombre_empresa, // Cambiado de cliente a nombre_empresa
         map: this.map?.googleMap,
       });
 
       const infoContent = `
         <div>
-          <h2>${row.cliente}</h2>
-          <p>${row.poblacion}, ${row.provincia}</p>
-          <p>${row.cp}</p>
+          <h2>${row.nombre_empresa}</h2> <!-- Cambiado de cliente a nombre_empresa -->
+          <p>${row.nombre_poblacion}, ${row.nombre_provincia}</p>
+          <p>${row.CP}</p> <!-- Cambiado de cp a CP -->
         </div>
       `;
 

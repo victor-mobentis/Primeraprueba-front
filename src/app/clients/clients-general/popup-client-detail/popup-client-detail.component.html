@@ -6,42 +6,40 @@
     </div>
     
     <!-- datos del cliente -->
-
     <mat-dialog-content class="px-0 d-flex flex-column gap-3">
         <div class="d-flex gap-2">
-                <!-- Codigo Cliente -->
-                <mat-form-field class="w-25" appearance="fill" subscriptSizing="dynamic">
-                    <mat-label>Código Cliente</mat-label>
-                    <input matInput readonly="true" [(ngModel)]="user.codigo" autocomplete="off" placeholder="Código cliente" />
-                </mat-form-field>
-
-                <!-- Cliente -->
-                <mat-form-field class="w-75" appearance="fill" subscriptSizing="dynamic">
-                    <mat-label>Cliente</mat-label>
-                    <input matInput readonly="true" [(ngModel)]="user.cliente" autocomplete="off" placeholder="Cliente" />
-                </mat-form-field>
+            <!-- Nombre Empresa -->
+            <mat-form-field class="w-75" appearance="fill" subscriptSizing="dynamic">
+                <mat-label>Nombre Empresa</mat-label>
+                <input matInput readonly="true" [(ngModel)]="client.nombre_empresa" autocomplete="off" placeholder="Nombre Empresa" />
+            </mat-form-field>
+            <!-- Nombre Fiscal -->
+            <mat-form-field class="w-75" appearance="fill" subscriptSizing="dynamic">
+                <mat-label>Nombre Fiscal</mat-label>
+                <input matInput readonly="true" [(ngModel)]="client.nombre_fiscal" autocomplete="off" placeholder="Nombre Fiscal" />
+            </mat-form-field>
         </div>
         <div class="">
             <div class="d-flex gap-2">
-                <!-- Codigo Postal -->
+                <!-- Código Postal -->
                 <mat-form-field appearance="fill" subscriptSizing="dynamic">
                     <mat-label>Código Postal</mat-label>
-                    <input matInput readonly="true" [(ngModel)]="user.cp" autocomplete="off" placeholder="Código postal" />
+                    <input matInput readonly="true" [(ngModel)]="client.CP" autocomplete="off" placeholder="Código postal" />
                 </mat-form-field>
-                <!-- Poblacion Cliente -->
+                <!-- Población Cliente -->
                 <mat-form-field appearance="fill" subscriptSizing="dynamic">
                     <mat-label>Población</mat-label>
-                    <input matInput readonly="true" [(ngModel)]="user.poblacion" autocomplete="off" placeholder="Población" />
+                    <input matInput readonly="true" [(ngModel)]="client.nombre_poblacion" autocomplete="off" placeholder="Población" />
                 </mat-form-field>
-                <!-- Proviencia Cliente -->
+                <!-- Provincia Cliente -->
                 <mat-form-field appearance="fill" subscriptSizing="dynamic">
                     <mat-label>Provincia</mat-label>
-                    <input matInput readonly="true" [(ngModel)]="user.provincia" autocomplete="off" placeholder="Provincia" />
+                    <input matInput readonly="true" [(ngModel)]="client.nombre_provincia" autocomplete="off" placeholder="Provincia" />
                 </mat-form-field>
             </div>
         </div>
     </mat-dialog-content>
-    <!-- Boton de cerrar -->
+    <!-- Botón de cerrar -->
     <mat-dialog-actions class="justify-content-end">
         <button mat-raised-button (click)="close()">Cerrar</button>
     </mat-dialog-actions>

@@ -5,9 +5,9 @@ export interface IClient{
     email: string;
     telefono: string;
     direccion: string;
+    CP: number;
     cliente_latitud: number;
     cliente_longitud: number;
-    provincia: string;
-    CP: number;
-    poblacion: string;
+    nombre_poblacion: string;
+    nombre_provincia: string;
 }
