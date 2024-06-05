@@ -53,13 +53,14 @@ export class PopupMapComponent implements OnInit, AfterViewInit {
       });
 
       const estadoColor = this.getEstadoColor(row.estado);
+      const rechazoColor = 'red';
       const infoContent = `
         <div>
           <h2>${row.cliente}</h2>
           <p style="color:${estadoColor};"><strong>${row.estado}</strong></p>
           <p>${row.poblacion}, ${row.provincia}</p>
           <p><strong>${row.producto}</strong></p>
-          <p><strong>${row.rechazo}</strong></p>
+          <p style="color:${rechazoColor};"><strong>${row.rechazo}</strong></p>
         </div>
       `;
 

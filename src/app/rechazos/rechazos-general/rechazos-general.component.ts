@@ -276,9 +276,13 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         this.snackBar.open('La acción correctora debe tener entre 1 y 50 caracteres.', '', { duration: 3000, verticalPosition: 'top' });
       }
     } else if (field === 'accionPrecioPorcentaje') {
-      row.accionPrecioPorcentaje = row.tempAccionPrecioPorcentaje || 0;
-      row.editingAccionPrecioPorcentaje = false;
-      this.onSave(row);
+      if (row.tempAccionPrecioPorcentaje !== undefined && row.tempAccionPrecioPorcentaje < 0) {
+        this.snackBar.open('No se pueden introducir valores negativos.', '', { duration: 3000, verticalPosition: 'top' });
+      } else {
+        row.accionPrecioPorcentaje = row.tempAccionPrecioPorcentaje || 0;
+        row.editingAccionPrecioPorcentaje = false;
+        this.onSave(row);
+      }
     }
   }
 
@@ -299,7 +303,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     config.duration = 3000;  // Duración de la snackbar
     config.verticalPosition = 'top';
 
-    this.snackBar.open('Acción correctora actualizada correctamente', '', config);
+    this.snackBar.open('ACCIÓN CORRECTORA se ha actualizado correctamente', '', config);
     this.cdr.detectChanges(); // Forzar la detección de cambios después de guardar
   }
 
@@ -310,7 +314,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     config.duration = 3000;  // Duración de la snackbar
     config.verticalPosition = 'top';
 
-    this.snackBar.open('Símbolo cambiado a ' + row.symbol + ' correctamente', '', config);
+    this.snackBar.open('Símbolo cambiado a ' + '[ ' + row.symbol + ' ]' + ' correctamente', '', config);
     this.cdr.detectChanges(); // Forzar la detección de cambios después de cambiar el símbolo
   }
 
@@ -328,7 +332,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     row.estado = event.value;
 
     // Mostrar mensaje de éxito
-    this.snackBar.open('Estado cambiado correctamente', '', {
+    this.snackBar.open('ESTADO se ha actualizado correctamente', '', {
       duration: 3000,
       verticalPosition: 'top'
     });
