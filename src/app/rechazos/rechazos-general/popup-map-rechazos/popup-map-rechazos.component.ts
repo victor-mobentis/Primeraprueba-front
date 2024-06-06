@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UserData } from '../rechazos-general.component';
+import { IRechazo } from 'src/app/models/rechazos.model';
 import { GoogleMap } from '@angular/google-maps';
 
 @Component({
@@ -22,14 +22,14 @@ export class PopupMapComponent implements OnInit, AfterViewInit {
 
   constructor(
     public dialogRef: MatDialogRef<PopupMapComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { selectedRows: UserData[] }
+    @Inject(MAT_DIALOG_DATA) public data: { selectedRows: IRechazo[] }
   ) {}
 
   ngOnInit(): void {
     if (this.data.selectedRows.length > 0) {
       this.center = {
-        lat: this.data.selectedRows[0].latitud,
-        lng: this.data.selectedRows[0].longitud
+        lat: this.data.selectedRows[0].rechazo_latitud,
+        lng: this.data.selectedRows[0].rechazo_longitud
       };
     }
   }
@@ -43,7 +43,7 @@ export class PopupMapComponent implements OnInit, AfterViewInit {
     this.markers = this.data.selectedRows.map(row => {
       const markerIcon = this.getMarkerIcon(row.estado);
       const marker = new google.maps.Marker({
-        position: { lat: row.latitud, lng: row.longitud },
+        position: { lat: row.rechazo_latitud, lng: row.rechazo_longitud },
         title: row.cliente,
         map: this.map?.googleMap,
         icon: {
@@ -60,7 +60,7 @@ export class PopupMapComponent implements OnInit, AfterViewInit {
           <p style="color:${estadoColor};"><strong>${row.estado}</strong></p>
           <p>${row.poblacion}, ${row.provincia}</p>
           <p><strong>${row.producto}</strong></p>
-          <p style="color:${rechazoColor};"><strong>${row.rechazo}</strong></p>
+          <p style="color:${rechazoColor};"><strong>${row.tipo_rechazo}</strong></p>
         </div>
       `;
 

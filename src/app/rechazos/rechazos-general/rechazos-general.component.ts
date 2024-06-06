@@ -8,32 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarConfig } from '@angular/material/snack-bar';
-
-export interface UserData {
-  id: string;
-  estado: string;
-  poblacion: string;
-  provincia: string;
-  cliente: string;
-  producto: string;
-  familia: string;
-  subfamilia: string;
-  rechazo: string;
-  pvp: number;
-  comp: number;
-  competidor: string;
-  accionPrecioPorcentaje: number;
-  accionCorrectora: string;
-  tempAccionCorrectora?: string;
-  tempAccionPrecioPorcentaje?: number;
-  editingAccionCorrectora?: boolean;
-  editingAccionPrecioPorcentaje?: boolean;
-  propuestaAgente: string;
-  latitud: number;
-  longitud: number;
-  symbol: string;
-  previousEstado?: string; // Almacenar el estado anterior
-}
+import { IRechazo } from 'src/app/models/rechazos.model';
+import { RechazadosService } from 'src/app/services/rechazados/rechazados.service';
 
 @Component({
   selector: 'app-rechazos-general',
@@ -42,30 +18,22 @@ export interface UserData {
 })
 export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   form: FormGroup;
-  displayedColumns: string[] = ['select', 'estado', 'id', 'poblacion', 'provincia', 'cliente', 'producto', 'familia', 'subfamilia', 'rechazo', 'pvp', 'comp', 'competidor', 'accionPrecioPorcentaje', 'accionCorrectora', 'propuestaAgente'];
-  dataSource: MatTableDataSource<UserData>;
-  selection = new SelectionModel<UserData>(true, []);
-
-  estados = [
-    { value: 'Rechazado', viewValue: 'Rechazado' },
-    { value: 'En Proceso', viewValue: 'En Proceso' },
-    { value: 'Vendido', viewValue: 'Vendido' },
-    { value: 'No aplica', viewValue: 'No aplica' }
-  ];
+  displayedColumns: string[] = ['select', 'estado', 'id', 'poblacion', 'provincia', 'cliente', 'producto', 'familia', 'subfamilia', 'rechazo', 'pvp', 'comp', 'competidor','accionPrecioSymbol', 'accionCorrectora', 'propuestaAgente'];
+  dataSource: MatTableDataSource<IRechazo>;
+  rechazoList: IRechazo[]=[];
+  selection = new SelectionModel<IRechazo>(true, []);
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
-  constructor(public dialog: MatDialog, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private cdr: ChangeDetectorRef) {
-    const users = [
-      this.createUser('1', 'Rechazado', 'Madrid', 'Madrid', 'Mercadona', 'Cerveza', 'Bebidas', 'Bebidas alcohólicas', 'Mal estado', 10, 8, 'Distribuciones Rico', 15, 'Promoción 2x1', 'Mejorar el descuento', 40.416775, -3.703790),
-      this.createUser('2', 'En Proceso', 'Barcelona', 'Barcelona', 'Carrefour', 'Queso', 'Lácteos', 'Quesos', 'Mejor precio competencia', 20, 18, 'Cadea 100 Profesional', 10, 'Aplicar campaña trimestral', 'Mejorar la calidad', 41.385064, 2.173404),
-      this.createUser('3', 'Vendido', 'Valencia', 'Valencia', 'Eroski', 'Aceite de oliva', 'Alimentos frescos', 'Frutas frescas', 'Producto no trabajado', 30, 28, 'Bazar Hogar', 5, 'Promoción 1+1', 'Mejorar el descuento', 39.469907, -0.376288),
-      this.createUser('4', 'No aplica', 'Sevilla', 'Sevilla', 'Lidl', 'Pan', 'Panadería', 'Pan blanco', 'Mala calidad', 40, 38, 'Distribuciones Rico', 25, 'Promoción 3x2', 'Mejorar la calidad', 37.389092, -5.984459),
-      this.createUser('5', 'Rechazado', 'Zaragoza', 'Zaragoza', 'Dia', 'Vino', 'Bebidas', 'Bebidas alcohólicas', 'Mal estado', 50, 48, 'Cadea 100 Profesional', 20, 'Regalo de cartelería de publicidad', 'Mejorar el descuento', 41.648823, -0.889085),
-    ];
-
-    this.dataSource = new MatTableDataSource(users);
+  constructor(
+    public dialog: MatDialog, 
+    private formBuilder: FormBuilder, 
+    private snackBar: MatSnackBar, 
+    private cdr: ChangeDetectorRef, 
+    private rechazadosService: RechazadosService
+  ) {
+    this.dataSource = new MatTableDataSource<IRechazo>([]);
 
     this.form = this.formBuilder.group({
       EstadoFilterControl: [''],
@@ -77,14 +45,22 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     });
 
     this.form.valueChanges.subscribe(() => {
-      this.applyFilter();
+      /* this.applyFilter(); */
     });
   }
 
   ngOnInit() {
+    this.loadRechazos();
     this.loadGoogleMapsScript();
   }
 
+  private loadRechazos() {
+    this.rechazadosService.getRechazos().subscribe((rechazos: IRechazo[]) => {
+        this.rechazoList = rechazos;
+        this.dataSource.data = rechazos;
+        console.log('Rechazos cargados:', rechazos); // Mostrar los resultados en la consola
+      });
+  }
   private loadGoogleMapsScript() {
     if (!document.getElementById('google-maps-script')) {
       const script = document.createElement('script');
@@ -96,21 +72,22 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     }
   }
 
-  applyFilter() {
+
+  /* applyFilter() {
     const filterValues = this.form.value;
-    this.dataSource.filterPredicate = (data: UserData, filter: string): boolean => {
+    this.dataSource.filterPredicate = (data: IRechazo, filter: string): boolean => {
       const searchTerms = JSON.parse(filter);
       return (
-        (!searchTerms.EstadoFilterControl || data.estado.toLowerCase().indexOf(searchTerms.EstadoFilterControl.toLowerCase()) !== -1) &&
+        (!searchTerms.EstadoFilterControl || data.estados.toLowerCase().indexOf(searchTerms.EstadoFilterControl.toLowerCase()) !== -1) &&
         (!searchTerms.PoblacionFilterControl || data.poblacion.toLowerCase().indexOf(searchTerms.PoblacionFilterControl.toLowerCase()) !== -1) &&
         (!searchTerms.ProvinciaFilterControl || data.provincia.toLowerCase().indexOf(searchTerms.ProvinciaFilterControl.toLowerCase()) !== -1) &&
         (!searchTerms.ProductoFilterControl || data.producto.toLowerCase().indexOf(searchTerms.ProductoFilterControl.toLowerCase()) !== -1) &&
-        (!searchTerms.FamiliaFilterControl || data.familia.toLowerCase().indexOf(searchTerms.FamiliaFilterControl.toLowerCase()) !== -1) &&
-        (!searchTerms.SubFamiliaFilterControl || data.subfamilia.toLowerCase().indexOf(searchTerms.SubFamiliaFilterControl.toLowerCase()) !== -1)
+        (!searchTerms.FamiliaFilterControl || data.segmentacion_familia.toLowerCase().indexOf(searchTerms.FamiliaFilterControl.toLowerCase()) !== -1) &&
+        (!searchTerms.SubFamiliaFilterControl || data.segmentacion_subfamilia.toLowerCase().indexOf(searchTerms.SubFamiliaFilterControl.toLowerCase()) !== -1)
       );
     };
     this.dataSource.filter = JSON.stringify(filterValues);
-  }
+  } */
 
   filtroReset() {
     this.form.reset();
@@ -156,7 +133,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     });
   }
 
-  getOptionImage(estado: string): string {
+  /* getOptionImage(estado: string): string {
     // Ruta base de las imágenes en la carpeta 'src/assets/icon/'
     const basePath = 'assets/icon/';
 
@@ -174,8 +151,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         return ''; // Devuelve una cadena vacía si el estado no coincide con ninguno de los casos anteriores
     }
   }
-
-  startEditing(row: UserData, field: string) {
+ */
+  /* startEditing(row: IRechazo, field: string) {
     if (field === 'accionCorrectora') {
       row.editingAccionCorrectora = true;
       row.tempAccionCorrectora = row.accionCorrectora;
@@ -183,13 +160,13 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       row.editingAccionPrecioPorcentaje = true;
       row.tempAccionPrecioPorcentaje = row.accionPrecioPorcentaje;
     }
-  }
+  } */
 
-  updateCharCount(row: UserData) {
+ /*  updateCharCount(row: IRechazo) {
     // Este método se llama cada vez que se escribe en el input
-  }
+  } */
 
-  confirmEdit(row: UserData, field: string) {
+  /* confirmEdit(row: IRechazo, field: string) {
     if (field === 'accionCorrectora') {
       if (row.tempAccionCorrectora && row.tempAccionCorrectora.length <= 50) {
         row.accionCorrectora = row.tempAccionCorrectora || '';
@@ -207,17 +184,17 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         this.onSave(row);
       }
     }
-  }
+  } */
 
-  cancelEdit(row: UserData, field: string) {
+  /* cancelEdit(row: IRechazo, field: string) {
     if (field === 'accionCorrectora') {
       row.editingAccionCorrectora = false;
     } else if (field === 'accionPrecioPorcentaje') {
       row.editingAccionPrecioPorcentaje = false;
     }
-  }
+  } */
 
-  onSave(row: UserData) {
+  /* onSave(row: IRechazo) {
     // Lógica para guardar el valor editado
     console.log('Valor guardado:', row.accionCorrectora);
 
@@ -228,9 +205,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
     this.snackBar.open('ACCIÓN CORRECTORA se ha actualizado correctamente', '', config);
     this.cdr.detectChanges(); // Forzar la detección de cambios después de guardar
-  }
+  } */
 
-  onSymbolChange(row: UserData) {
+  /* onSymbolChange(row: IRechazo) {
     // Lógica para manejar el cambio de símbolo
     console.log('Símbolo cambiado a:', row.symbol);
     const config = new MatSnackBarConfig();
@@ -239,9 +216,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
     this.snackBar.open('Símbolo cambiado a ' + '[ ' + row.symbol + ' ]' + ' correctamente', '', config);
     this.cdr.detectChanges(); // Forzar la detección de cambios después de cambiar el símbolo
-  }
+  } */
 
-  onEstadoChange(event: any, row: UserData) {
+  /* onEstadoChange(event: any, row: IRechazo) {
     const previousEstado = row.previousEstado || row.estado; // Utiliza el estado anterior almacenado o el actual si no hay uno anterior
     row.previousEstado = event.value;
     row.estado = event.value;
@@ -251,29 +228,6 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       duration: 3000,
       verticalPosition: 'top'
     });
-  }
+  } */
 
-  createUser(id: string, estado: string, poblacion: string, provincia: string, cliente: string, producto: string, familia: string, subfamilia: string, rechazo: string, pvp: number, comp: number, competidor: string, accionPrecioPorcentaje: number, accionCorrectora: string, propuestaAgente: string, latitud: number, longitud: number): UserData {
-    return {
-      id: id,
-      estado: estado,
-      previousEstado: estado, // Almacenar el estado inicial como estado anterior
-      poblacion: poblacion,
-      provincia: provincia,
-      cliente: cliente,
-      producto: producto,
-      familia: familia,
-      subfamilia: subfamilia,
-      rechazo: rechazo,
-      pvp: pvp,
-      comp: comp,
-      competidor: competidor,
-      accionPrecioPorcentaje: accionPrecioPorcentaje,
-      accionCorrectora: accionCorrectora,
-      latitud: latitud,
-      longitud: longitud,
-      propuestaAgente: propuestaAgente,
-      symbol: '%',
-    };
-  }
 }
