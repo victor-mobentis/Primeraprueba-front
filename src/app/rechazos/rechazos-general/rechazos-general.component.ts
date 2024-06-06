@@ -98,6 +98,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       document.head.appendChild(script);
     }
   }
+  
 
 
   /* applyFilter() {

@@ -135,7 +135,17 @@
           <!-- pvp promocion -->
           <ng-container matColumnDef="accionPrecioSymbol">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="sticky-header"> </th>
-            <td class="color-accioncorrectora" mat-cell *matCellDef="let row">{{row.pvp_es_promocion_precio}} {{row.pvp_es_promocion_symbol}}</td>
+            <td class="color-accioncorrectora" mat-cell *matCellDef="let row">
+              <div class="d-flex gap-1 ">
+                <span>{{row.pvp_es_promocion_precio}}</span>
+                <span>
+                  <select [(ngModel)]="row.pvp_es_promocion_symbol">
+                    <option [value]="1">€</option>
+                    <option [value]="0">%</option>
+                  </select>
+                </span>
+              </div>
+            </td>
           </ng-container>
           <!-- Accion correctora -->
           <ng-container matColumnDef="accionCorrectora">
