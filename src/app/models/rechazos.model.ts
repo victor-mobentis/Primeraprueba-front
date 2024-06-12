@@ -1,5 +1,5 @@
 export interface IRechazo {
-    id: number;
+    rechazo_id: number;
     estado: string; // Nombre del estado
     poblacion: string; // Nombre de la población
     provincia: string; // Nombre de Provincia
@@ -11,9 +11,10 @@ export interface IRechazo {
     pvp: number; // Precio del producto
     pvp_comp: number; //Precio del competidor
     competidor: string; // Nombre del competidor
-    pvp_es_competencia_precio: number; // Precio del competidor
-    pvp_es_competencia_symbol:boolean;
-    accion_correcta: string; // Acción correctora
+    pvp_es_promocion_precio: number; // Precio del competidor
+    id_simbolo: number;
+    pvp_es_promocion_symbol: string;
+    accion_correctora: string; // Acción correctora
     propuesta_agente: string; // Propuesta del agente
     anulado: boolean; // Estado anulado
     rechazo_longitud: number; // Longitud del rechazo
@@ -23,5 +24,5 @@ export interface IRechazo {
     tempAccionCorrectora?: string;
     editingPrecioPromocion?: boolean;
     tempPrecioPromocion?: number;
-    tempSimboloPromocion?: boolean;
+    tempSimboloPromocion?: number;
 }

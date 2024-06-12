@@ -5,6 +5,8 @@ import { Observable, map } from 'rxjs';
 import { IPoblacion } from 'src/app/models/poblaciones.model';
 import { IProvincia } from 'src/app/models/provincias.model';
 import  { IEstado } from'src/app/models/estados.model';
+import { ISimbolo } from 'src/app/models/simbolos.model';
+import { IRechazo } from 'src/app/models/rechazos.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -69,4 +71,16 @@ export class FilterService {
     return this._http.get<IEstado[]>(`${baseUrl}:${port}/api/filtro/estados`, options)
   }
 
+  getSimbolos(): Observable<ISimbolo[]>{
+    let baseUrl = localStorage.getItem('baseUrl');
+    let port = localStorage.getItem('port');
+    let options = {
+      headers: new HttpHeaders().set(
+        'Authorization',
+        `Bearer ${this._loginServices.getToken()}`
+      ),
+    };
+    return this._http.get<ISimbolo[]>(`${baseUrl}:${port}/api/filtro/simbolos`, options)
+  }
+    
 }

@@ -136,10 +136,10 @@
             <td mat-cell *matCellDef="let row">
               <div class="editable-cell">
                 <span class="color-accioncorrectora" *ngIf="!row.editingPrecioPromocion" (click)="startEditing(row, 'precioPromocion')">
-                  {{ row.pvp_es_competencia_precio }}
+                  {{ row.pvp_es_promocion_precio }}
                 </span>
                 <span class="color-accioncorrectora" *ngIf="!row.editingPrecioPromocion" (click)="startEditing(row, 'precioPromocion')">
-                  {{ row.pvp_es_competencia_symbol ? '€' : '%' }}
+                  {{ row.pvp_es_promocion_symbol }}
                 </span>
                 <div *ngIf="row.editingPrecioPromocion" class="d-flex align-items-center">
                   <input [(ngModel)]="row.tempPrecioPromocion"
@@ -147,9 +147,8 @@
                          required
                          type="number"
                          (input)="updateCharCount(row)" />
-                  <select [(ngModel)]="row.tempSimboloPromocion" (change)="onSymbolChange(row)" class="symbol-select me-2">
-                    <option [value]="true">€</option>
-                    <option [value]="false">%</option>
+                  <select [(ngModel)]="row.pvp_es_promocion_symbol" (change)="onSymbolChange(row)" class="symbol-select me-2">
+                          <option *ngFor="let simbolo of simbolos" [value]="simbolo.id">{{ simbolo.simbolo }}</option>
                   </select>
                   <button mat-icon-button color="primary" (click)="confirmEdit(row, 'precioPromocion')">
                     <mat-icon>check</mat-icon>
@@ -172,7 +171,7 @@
                        class="form-control me-2 large-input"
                        required
                        (input)="updateCharCount(row)" />
-                <div class="char-count">{{ row.tempAccionCorrectora?.length || 0 }}/50</div>
+                <div class="char-count">{{ row.accion_correctora?.length || 0 }}/50</div>
                 <button mat-icon-button color="primary" (click)="confirmEdit(row, 'accionCorrectora')">
                   <mat-icon>check</mat-icon>
                 </button>

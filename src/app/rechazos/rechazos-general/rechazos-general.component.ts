@@ -13,6 +13,7 @@ import { RechazadosService } from 'src/app/services/rechazados/rechazados.servic
 import { IEstadosRechazoCount } from 'src/app/models/count.model';
 import { FilterService } from 'src/app/services/filter/filter.service';
 import { IEstado } from 'src/app/models/estados.model';
+import { ISimbolo } from 'src/app/models/simbolos.model';
 
 @Component({
   selector: 'app-rechazos-general',
@@ -32,6 +33,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     cantidad_enProceso: 0
   };
   estados: IEstado[] = [];
+  simbolos: ISimbolo[]= [];
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
@@ -64,6 +66,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.loadRechazos();
     this.loadEstadosRechazos();
     this.loadEstados();
+    this.loadSimbolos();
     this.loadGoogleMapsScript();
   }
 
@@ -86,6 +89,13 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       this.estados = estados;
       console.log('Estados cargados:', estados); // Mostrar los estados en la consola
     });
+  }
+
+  private loadSimbolos(){
+    this.filterService.getSimbolos().subscribe((simbolos: ISimbolo[]) =>{
+      this.simbolos= simbolos;
+      console.log('Cargando simbolos: ', simbolos);
+    })
   }
 
   private loadGoogleMapsScript() {
@@ -179,38 +189,71 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     });
   }
 
-  startEditing(row: IRechazo & { editingAccionCorrectora?: boolean; tempAccionCorrectora?: string; editingPrecioPromocion?: boolean; tempPrecioPromocion?: number; tempSimboloPromocion?: boolean }, field: string) {
+  startEditing(row: IRechazo & { editingAccionCorrectora?: boolean; tempAccionCorrectora?: string; editingPrecioPromocion?: boolean; tempPrecioPromocion?: number; tempSimboloPromocion?: number }, field: string) {
     if (field === 'accionCorrectora') {
-      row.tempAccionCorrectora = row.accion_correcta;
+      row.tempAccionCorrectora = row.accion_correctora;
       row.editingAccionCorrectora = true;
     } else if (field === 'precioPromocion') {
-      row.tempPrecioPromocion = row.pvp_es_competencia_precio;
-      row.tempSimboloPromocion = row.pvp_es_competencia_symbol;
+      row.tempPrecioPromocion = row.pvp_es_promocion_precio;
+      row.tempSimboloPromocion = row.id_simbolo;
       row.editingPrecioPromocion = true;
     }
   }
 
-  updateCharCount(row: IRechazo & { editingAccionCorrectora?: boolean; tempAccionCorrectora?: string; editingPrecioPromocion?: boolean; tempPrecioPromocion?: number; tempSimboloPromocion?: boolean }) {
+  updateCharCount(row: IRechazo & { editingAccionCorrectora?: boolean; tempAccionCorrectora?: string; editingPrecioPromocion?: boolean; tempPrecioPromocion?: number; tempSimboloPromocion?: number }) {
     // Este método se llama cada vez que se escribe en el input
   }
 
-  confirmEdit(row: IRechazo & { editingAccionCorrectora?: boolean; tempAccionCorrectora?: string; editingPrecioPromocion?: boolean; tempPrecioPromocion?: number; tempSimboloPromocion?: boolean }, field: string) {
+  
+  confirmEdit(row: IRechazo & { editingAccionCorrectora?: boolean; tempAccionCorrectora?: string; editingPrecioPromocion?: boolean; tempPrecioPromocion?: number; tempSimboloPromocion?: number }, field: string) {
     if (field === 'accionCorrectora') {
       if (row.tempAccionCorrectora && row.tempAccionCorrectora.length <= 50) {
-        row.accion_correcta = row.tempAccionCorrectora || '';
+        row.accion_correctora = row.tempAccionCorrectora || '';
         row.editingAccionCorrectora = false;
-        // Aquí llamaría a la función de guardado, pero no lo haremos ahora
-        // this.onSave(row);
+        // Aquí podrías llamar a la función de guardado si lo deseas
+        this.rechazadosService.actualizarAccionCorrectora(row.rechazo_id, row.tempAccionCorrectora).subscribe(
+          (response) => {
+            // Actualización exitosa, manejar respuesta si es necesario
+            this.snackBar.open('Acción correctora actualizada correctamente.', '', { duration: 3000, verticalPosition: 'top' });
+          },
+          (error) => {
+            // Error al actualizar, mostrar mensaje de error
+            this.snackBar.open('Error al actualizar la acción correctora.', '', { duration: 3000, verticalPosition: 'top' });
+            console.error('Error al actualizar la acción correctora:', error);
+          }
+        );
       } else {
         this.snackBar.open('La acción correctora debe tener entre 1 y 50 caracteres.', '', { duration: 3000, verticalPosition: 'top' });
       }
     } else if (field === 'precioPromocion') {
-      row.pvp_es_competencia_precio = row.tempPrecioPromocion || 0;
-      row.pvp_es_competencia_symbol = row.tempSimboloPromocion || true;
-      row.editingPrecioPromocion = false;
-      // Aquí llamaría a la función de guardado, pero no lo haremos ahora
-      // this.onSave(row);
+      if (row.tempPrecioPromocion != null && !isNaN(row.tempPrecioPromocion) && row.tempSimboloPromocion) {
+        // Realizar la actualización solo si el precio y el símbolo de promoción son válidos
+        row.pvp_es_promocion_precio = row.tempPrecioPromocion;
+        row.id_simbolo = row.tempSimboloPromocion;
+  
+        this.rechazadosService.actualizarPrecioSimboloPromocion(row.rechazo_id, row.tempSimboloPromocion, row.tempPrecioPromocion).subscribe(
+          (response) => {
+            // Actualización exitosa, manejar respuesta si es necesario
+            this.snackBar.open('Precio y símbolo de promoción actualizados correctamente.', '', { duration: 3000, verticalPosition: 'top' });
+          },
+          (error) => {
+            // Error al actualizar, mostrar mensaje de error
+            this.snackBar.open('Error al actualizar el precio y el símbolo de promoción.', '', { duration: 3000, verticalPosition: 'top' });
+            console.error('Error al actualizar el precio y el símbolo de promoción:', error);
+          }
+        );
+      } else {
+        // Mostrar mensaje de error si el precio o el símbolo de promoción son inválidos
+        this.snackBar.open('El precio y el símbolo de promoción son obligatorios.', '', { duration: 3000, verticalPosition: 'top' });
+      }
+    } else {
+      // Manejar otros tipos de edición aquí si es necesario
     }
+  }
+  
+
+  onSymbolChange(row: any) {
+    console.log("Simbolo seleccionado:", row.pvp_es_promocion_symbol);
   }
 
   cancelEdit(row: IRechazo & { editingAccionCorrectora?: boolean; tempAccionCorrectora?: string; editingPrecioPromocion?: boolean; tempPrecioPromocion?: number; tempSimboloPromocion?: boolean }, field: string) {
@@ -219,14 +262,6 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     } else if (field === 'precioPromocion') {
       row.editingPrecioPromocion = false;
     }
-  }
-
-  onSymbolChange(row: IRechazo & { tempSimboloPromocion?: boolean }) {
-    this.snackBar.open('Símbolo cambiado a ' + (row.tempSimboloPromocion ? '€' : '%'), '', {
-      duration: 3000,
-      verticalPosition: 'top'
-    });
-    this.cdr.detectChanges(); // Forzar la detección de cambios después de cambiar el símbolo
   }
 
 }
