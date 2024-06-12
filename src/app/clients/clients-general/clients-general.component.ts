@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -36,8 +36,10 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
     public dialog: MatDialog, 
     private formBuilder: FormBuilder, 
     private clientsService: ClientsService,
-
+    private paginatorIntl: MatPaginatorIntl
   ) {
+    this.configurePaginatorLabels();
+
     this.dataSource = new MatTableDataSource<IClient>([]);
     this.form = this.formBuilder.group({
       ClienteFilterControl: [''],
@@ -54,6 +56,24 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     this.loadClients();
     this.loadGoogleMapsScript();
+  }
+
+  /* paginator */
+  private configurePaginatorLabels() {
+    this.paginatorIntl.itemsPerPageLabel = 'Clientes por página';
+    this.paginatorIntl.nextPageLabel = 'Página siguiente';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
+    this.paginatorIntl.getRangeLabel = (page: number, pageSize: number, length: number) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
+      return `${startIndex + 1} - ${endIndex} de ${length}`;
+    };
+    this.paginatorIntl.changes.next(); // Esto notifica a Angular Material de los cambios
   }
 
   loadClients() {

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -44,10 +44,14 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     private snackBar: MatSnackBar, 
     private cdr: ChangeDetectorRef, 
     private rechazadosService: RechazadosService,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private paginatorIntl: MatPaginatorIntl
   ) {
-    this.dataSource = new MatTableDataSource<IRechazo>([]);
 
+    this.configurePaginatorLabels();
+    
+    this.dataSource = new MatTableDataSource<IRechazo>([]);
+    
     this.form = this.formBuilder.group({
       EstadoFilterControl: [''],
       PoblacionFilterControl: [''],
@@ -55,11 +59,11 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       ProductoFilterControl: [''],
       FamiliaFilterControl: [''],
       SubFamiliaFilterControl: ['']
-    });
-
-    this.form.valueChanges.subscribe(() => {
-      /* this.applyFilter(); */
-    });
+      });
+      
+      this.form.valueChanges.subscribe(() => {
+        /* this.applyFilter(); */
+        });
   }
 
   ngOnInit() {
@@ -68,6 +72,24 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.loadEstados();
     this.loadSimbolos();
     this.loadGoogleMapsScript();
+  }
+
+  /* pagiantor */
+  private configurePaginatorLabels() {
+    this.paginatorIntl.itemsPerPageLabel = 'Rechazos por página';
+    this.paginatorIntl.nextPageLabel = 'Página siguiente';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
+    this.paginatorIntl.getRangeLabel = (page: number, pageSize: number, length: number) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
+      return `${startIndex + 1} - ${endIndex} de ${length}`;
+    };
+    this.paginatorIntl.changes.next(); // Esto notifica a Angular Material de los cambios
   }
 
   private loadRechazos() {
@@ -111,12 +133,12 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   
 
 
-  /* applyFilter() {
+  applyFilter() {
     const filterValues = this.form.value;
     this.dataSource.filterPredicate = (data: IRechazo, filter: string): boolean => {
       const searchTerms = JSON.parse(filter);
       return (
-        (!searchTerms.EstadoFilterControl || data.estados.toLowerCase().indexOf(searchTerms.EstadoFilterControl.toLowerCase()) !== -1) &&
+        (!searchTerms.EstadoFilterControl || data.estado.toLowerCase().indexOf(searchTerms.EstadoFilterControl.toLowerCase()) !== -1) &&
         (!searchTerms.PoblacionFilterControl || data.poblacion.toLowerCase().indexOf(searchTerms.PoblacionFilterControl.toLowerCase()) !== -1) &&
         (!searchTerms.ProvinciaFilterControl || data.provincia.toLowerCase().indexOf(searchTerms.ProvinciaFilterControl.toLowerCase()) !== -1) &&
         (!searchTerms.ProductoFilterControl || data.producto.toLowerCase().indexOf(searchTerms.ProductoFilterControl.toLowerCase()) !== -1) &&
@@ -125,7 +147,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       );
     };
     this.dataSource.filter = JSON.stringify(filterValues);
-  } */
+  }
 
   filtroReset() {
     this.form.reset();

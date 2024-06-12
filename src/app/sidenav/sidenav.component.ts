@@ -51,6 +51,6 @@ export class PagesComponent {
 
   logout() {
     this._loginServices.logout();
-    this.router.navigateByUrl('login');
+    this.router.navigateByUrl('/login');
   }
 }
