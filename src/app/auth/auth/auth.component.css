@@ -1,6 +1,8 @@
-mat-sidenav-container {
-    height: calc(100vh - 65px);
-  }
+
+
+.contenedor{
+  height: 100vh;
+}
 
 .content {
     height: 400px;
@@ -11,23 +13,29 @@ mat-sidenav-container {
 
 .logo {
     width: 60%;
-  }
+}
   
-  .login-form {
-    width: 100%;
-  }
+.login-fomrs {
+   width: 100%;
+}
   
-  .btn:hover {
-    color: var(--bs-btn-hover-color);
-    background-color: #52ca0a;
-    border-color: #52ca0a;
-  }
+.btn:hover {
+  color: var(--bs-btn-hover-color);
+  background-color: #52ca0a;
+  border-color: #52ca0a;
+}
   
-  .btn {
-    width: 30%;
-  }
-  
-  .btn-primary {
+.btn {
+  width: 30%;
+}
+
+ a{
+    font-weight: 100;
+    font-size: medium;
+    cursor: pointer;
+}
+
+.btn-primary {
     --bs-btn-color: #fff;
     --bs-btn-bg: rgb(6, 72, 6);
     --bs-btn-border-color: rgb(6, 72, 6);
@@ -42,13 +50,13 @@ mat-sidenav-container {
     --bs-btn-disabled-color: #fff;
     --bs-btn-disabled-bg: rgb(6, 72, 6);
     --bs-btn-disabled-border-color: rgb(6, 72, 6);
-  }
+}
   
-  .full-width {
-    width: 100%;
-  }
+.full-width {
+  width: 100%;
+}
   
-  .error {
+.error {
     color: red;
     font-size: 15px;
-  }
+}

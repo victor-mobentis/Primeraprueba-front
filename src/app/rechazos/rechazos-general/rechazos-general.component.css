@@ -3,6 +3,12 @@
   padding: 3px;
 }
 
+.page-heading{
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  font-weight: 300;
+}
+
 .color-dark {
   color: #6D6D6D;
 }

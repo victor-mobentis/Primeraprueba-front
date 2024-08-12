@@ -1,6 +1,14 @@
 /* styles.css */
 .screen {
   min-height: 100vh;
+  background-color: #f7f9fa;
+}
+
+
+.page-heading{
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  font-weight: 300;
 }
 
 span {
@@ -34,9 +42,6 @@ span {
   background-color: white;
 }
 
-.fondoGris {
-  background-color: #f3f3f3;
-}
 
 .verde {
   color: #4E5FBB;
@@ -49,4 +54,9 @@ span {
 
 .color-dark {
   color: #6D6D6D;
+}
+
+.shadow-card{
+  border: none;
+ box-shadow: 0 .5rem 1rem rgba(0,0,0,.15); 
 }

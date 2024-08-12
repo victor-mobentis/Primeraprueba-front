@@ -23,23 +23,16 @@ export class PagesComponent {
     public dialog: MatDialog
   ) {}
 
-  isExpanded = signal(false);
+  isExpanded = signal(true);
 
   sidenavWidth = computed(() => (this.isExpanded() ? '250px' : '70px'));
+  
+  profilePicSice = computed(() => this.isExpanded() ? '70' : '32');
 
-  // Nueva propiedad para controlar la expansión del menú
-  navExpanded: boolean = false;
-
-  // Función para verificar si la ruta está activa
-  isActiveRoute(route: string): boolean {
-    return this.router.url.includes(route);
-  }
-
-  // Método para cambiar el estado de la expansión del menú
-  toggleNavExpansion(): void {
-    this.navExpanded = !this.navExpanded;
-    // Actualizar el estado del menú
-    this.isExpanded.set(!this.isExpanded());
+  ngOnInit(): void {
+    // this.img = localStorage.getItem('img');
+    // this.username = localStorage.getItem('user');
+    // this.cargo = localStorage.getItem('cargo');
   }
 
   openProfileEditPopup(): void {

@@ -3,31 +3,36 @@
   padding: 3px;
 }
 
+.page-heading{
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  font-weight: 300;
+}
   
-  .color-dark {
+.color-dark {
     color: #6D6D6D;
-  }
+}
   
-  table {
-      width: 100%;
-    }
+table {
+  width: 100%;
+}
     
-    .mat-mdc-form-field {
-      font-size: 14px;
-      width: 100%;
-    }
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
     
-  
-    th {
-      color: #3F51B5;
-    }
+
+th {
+  color: #3F51B5;
+}
     
-    .sticky-header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background-color: #fff;
-    }
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #fff;
+}
 
     .buttons-clients {
       background-color: #3F51B5;

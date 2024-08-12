@@ -1,90 +1,68 @@
-<mat-sidenav-container>
-  <mat-sidenav class="p-2" #sidenav mode="side" opened="!collapsed()" [style.width]="sidenavWidth()">
+<mat-sidenav-container >
+  <mat-sidenav class="fondoGris"  #sidenav mode="side" opened="!collapsed()" [style.width]="sidenavWidth()">
     <!-- INICIO - botón de apertura y cierre-->
-    <div class="d-flex align-items-center ms-1 gap-3">
-      <button mat-icon-button (click)="toggleNavExpansion()">
-        <mat-icon class="">menu</mat-icon>
-      </button>
-      <h4 matListItemTitle class="fs-3 mb-0">Mobentis</h4>
-    </div>
+    <button class="mx-2" mat-icon-button (click)="isExpanded.set(!isExpanded())">
+      <mat-icon class="">menu</mat-icon>
+    </button>
     <!-- FIN - botón de apertura y cierre-->
-    <!-- Icono de perfil -->
-    <div class="d-flex flex-column align-items-center mt-4" *ngIf="navExpanded">
-      <div class="profile-picture" (click)="openProfileEditPopup()" style="cursor: pointer;">
-        <img src="../../assets/icon/defaultprofile.png" alt="Perfil" class="rounded-circle" width="100" height="100">
-      </div>
-      <div class="profile-info text-center mt-2">
-        <p class="mb-0 d-flex align-items-center justify-content-center" (click)="openProfileEditPopup()" style="cursor: pointer;">
-          {{_loginServices.user}} {{ _loginServices.lastname }}
-          <!-- <mat-icon class="ms-2" (click)="openProfileEditPopup()" style="cursor: pointer;">settings</mat-icon> ICONO EDITAR PERFIL (OPCIONAL) -->
-        </p>
-        <p class="text-muted">EMPLEADO</p>
-        <!-- <button mat-button (click)="openProfileEditPopup()">Editar perfil</button> BOTON EDITAR PERFIL (OPCIONAL) -->
-      </div>
-    </div>
-    <!-- Boton de perfil más pequeño -->
-    <div class="profile-picture-small d-flex align-items-center justify-content-center mt-4 mb-4" *ngIf="!navExpanded" (click)="openProfileEditPopup()" style="cursor: pointer;">
-      <img src="../../assets/icon/defaultprofile.png" alt="Perfil" class="rounded-circle" width="50" height="50">
-    </div>
+    <div class="centrado">
+        <!-- logo de la aplicacion o de la empresa -->
+        <a [routerLink]="['dashboard/global']">
+          <div class="centrado">
+            <img *ngIf="isExpanded(); else elseBlock" class="logo" src="/assets/images/AIW_logo.png" alt="logo" />
+            <ng-template #elseBlock><img class="logo_mini mb-2" src="/assets/images/AIW_mini.png" alt="logo" />
+            </ng-template>
+          </div>
+        </a>
+        <!-- fin de logo de la empresa o de la aplicaion -->
 
-    <mat-nav-list class="d-flex flex-column justify-content-between">
+        <!-- inicio de usaurio -->
+        <div class="centrado">
+          <img [width]="profilePicSice()" [height]="profilePicSice()" src="{../..}" alt="Perfil" class="avatar mat-elevation-z8 my-2" (click)="openProfileEditPopup()" onError="this.src='assets/images/user.png'" /> <!-- actualizar la img -->
+          <div class="usuario-text" [class.hide-usuario-text]="!isExpanded()">
+            <h2 class="name">
+              {{_loginServices.user}} {{ _loginServices.lastname }}
+            </h2>
+            <p class="designation ">EMPLEADO</p> <!-- actualizar el cargo:  {{_loginServices.cargo}}-->
+          </div>
+        </div>
+        <!-- fin de perfil de usaurio -->
+    </div>
+    <mat-nav-list class="p-0 d-flex flex-column">
       <!-- INICIO - Lista de botones-->
-      <div class=" d-flex flex-column align-items-center gap-2 mb-2">
         <!-- Boton Dashboard-->
         <a mat-list-item [routerLink]="['dashboard/global']" routerLinkActive="selected-menu-item"
-          #rlaDashboard="routerLinkActive" [activated]="rlaDashboard.isActive" class="d-flex align-items-center pe-0 ps-1">
-          <span matListItemTitle class="d-flex align-items-center gap-4 ">
-            <button matTooltip="Dashboard" class="btn w-6 h-6 text-center icon-custom">
-              <mat-icon>dashboard</mat-icon>
-            </button>
-            Dashboard
-          </span>
+          #rlaDashboard="routerLinkActive">
+          <img class="icon"
+          [src]="rlaDashboard.isActive ? 'assets/images/iconos/dashboard-icon-green.svg' : 'assets/images/iconos/dashboard-icon.svg'"
+          alt="Dashboard" matTooltip="Dashboard" matListItemIcon [class.active]="rlaDashboard.isActive" />
+          <span matListItemTitle class="">Dashboard</span>
         </a>
         <!-- INICIO - Boton Rechazos -->
         <a mat-list-item [routerLink]="['rechazos/global']" routerLinkActive="selected-menu-item"
-          #rlaRechazos="routerLinkActive" [activated]="rlaRechazos.isActive" class="d-flex align-items-center pe-0 ps-1">
-          <span matListItemTitle class="d-flex align-items-center gap-4">
-            <button matTooltip="Rechazos" class="btn w-6 h-6 text-center icon-custom">
-              <mat-icon>broken_image</mat-icon>
-            </button>
-            Rechazos
-          </span>
+          #rlaRechazos="routerLinkActive" >
+          <img [src]="rlaRechazos.isActive ? 'assets/images/iconos/pedidos-icon-green.svg' : 'assets/images/iconos/pedidos-icon.svg'" alt="Rechazos" matTooltip="Rechazos" matListItemIcon [class.active]="rlaRechazos.isActive">
+          <span matListItemTitle class="">Rechazos</span>
         </a>
         <!-- INICIO - Boton Clientes -->
         <a mat-list-item [routerLink]="['clientes/global']" routerLinkActive="selected-menu-item"
-          #rlaCliente="routerLinkActive" [activated]="rlaCliente.isActive" class="d-flex align-items-center pe-0 ps-1">
-          <span matListItemTitle class="d-flex align-items-center gap-4">
-            <button matTooltip="Clientes" class="btn w-6 h-6 text-center icon-custom">
-              <mat-icon>people</mat-icon>
-            </button>
-            Clientes
-          </span>
+          #rlaCliente="routerLinkActive" [activated]="rlaCliente.isActive">
+          <img [src]="rlaCliente.isActive ? 'assets/images/iconos/clientes-icon-blue-purple.svg' : 'assets/images/iconos/clientes-icon.svg'" alt="Clientes" matTooltip="Clientes" matListItemIcon [class.active]="rlaCliente.isActive" />
+          <span matListItemTitle class="">Clientes</span>
         </a>
+        <mat-divider></mat-divider>
         <!-- Config -->
         <a mat-list-item [routerLink]="['configuracion/global']" routerLinkActive="selected-menu-item"
-          #rlaConfig="routerLinkActive" [activated]="rlaConfig.isActive" class="d-flex align-items-center pe-0 ps-1">
-          <span routerLink="/configuration" matListItemTitle class="d-flex align-items-center gap-4">
-            <button matTooltip="Configuracion" type="button" class="btn w-6 h-6 text-center icon-custom">
-              <mat-icon [ngClass]="{'active-icon': isActiveRoute('/configuration')}">build</mat-icon>
-            </button>
-            Configuracion
-          </span>
+        #rlaConfig="routerLinkActive">
+          <img [src]="rlaConfig.isActive ? 'assets/images/iconos/configuracion-icon-green.svg' : 'assets/images/iconos/configuracion-icon.svg'" alt="Config" matTooltip="Config" matListItemIcon [class.active]="rlaConfig.isActive">
+          <span matListItemTitle class="" >Configuracion</span>
         </a>
-        <!-- Pon aqui otros list -->
-      </div>
-      <mat-divider></mat-divider>
-      <!-- Final de Rechazos -->
-      <div class="d-flex flex-column align-items-center mt-2">
+        <mat-divider></mat-divider>
         <!-- INICIO - Salir-->
-        <a mat-list-item (click)="logout()" class="d-flex align-items-center pe-0 ps-1">
-          <span  matListItemTitle class="d-flex align-items-center gap-4">
-            <button matTooltip="Salir" type="button" class="btn w-6 h-6 text-center icon-custom">
-              <mat-icon>exit_to_app</mat-icon>
-            </button>
-            Salir
-          </span>
+        <a mat-list-item (click)="logout()">
+          <img class="icon" src="assets/images/iconos/salir-icon.svg" alt="Salir" matTooltip="Salir" matListItemIcon />
+          <span  matListItemTitle class="">Salir</span>
         </a>
-      </div>
     </mat-nav-list>
   </mat-sidenav>
 

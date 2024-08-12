@@ -2,76 +2,79 @@
     margin: 0;
     padding: 0;
   }
-  
-  .logo {
+
+.logo {
     width: 180px;
     margin: 0;
-  }
+}
   
-  .logo_mini {
+.logo_mini {
     width: 26px;
-  }
+}
   
-  .avatar {
-    border-radius: 50%
-  }
+.avatar {
+  border-radius: 50%;
+  cursor: pointer;
+}
   
-  .name {
+.name {
     font-weight: normal;
     font-size: 1rem;
     margin-bottom: 0;
-  }
+}
   
-  .designation {
-    font-size: 0.8rem;
-    margin-bottom: .5em;
-  }
+.designation {
+  font-size: 0.8rem;
+  margin-bottom: .5em;
+}
   
-  .centrado {
-    text-align: center;
-  }
+.centrado {
+  text-align: center;
+}
   
-  .hide-usuario-text {
-    opacity: 0;
-    height: 0px !important;
-  }
+.hide-usuario-text {
+  opacity: 0;
+  height: 0px !important;
+}
   
-  .menu-item {
-    border-left: 5px solid;
-    border-left-color: rgba(0, 0, 0, 0);
-  }
+.menu-item {
+  border-left: 5px solid;
+  border-left-color: rgba(0, 0, 0, 0);
+}
   
-  .selected-menu-item {
-    background: rgba(81, 107, 255, 0.199); /* Agregar un fondo sutil para resaltar el elemento seleccionado */
-    border-radius: 10px; /* Agregar bordes redondeados al elemento seleccionado */
-  }
+.selected-menu-item {
+  background: rgba(81, 107, 255, 0.199); /* Agregar un fondo sutil para resaltar el elemento seleccionado */
+}
   
-  mat-sidenav-content {
+mat-sidenav-content {
     height: calc(100vh - 0px);
-  }
+}
   
-  mat-sidenav,
-  mat-sidenav-content {
-    transition: all 500ms ease-in-out;
+mat-sidenav,
+mat-sidenav-content {
+  transition: all 500ms ease-in-out;  
+}
   
-  }
-  
-  .mat-sidenav {
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.356); /* Agregar una sombra suave al menú lateral */
-  }
+mat-sidenav{
+  overflow-wrap: break-word;
+}
 
-  a > img {
-    margin-right: 18px !important;
-  }
-  
-  .screen {
-    min-height: 100vh;
-  }
+.mat-sidenav {
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.356); /* Agregar una sombra suave al menú lateral */
+}
 
-  a:hover {
-    background-color: rgba(81, 107, 255, 0.199);
-    border-radius: 10px;
-  }
+a > img {
+  margin-right: 18px !important;
+}
+  
+.screen {
+  min-height: 100vh;
+}
+
+a:hover {
+  background-color: rgba(81, 107, 255, 0.199);
+
+}
 
 a:not(:active) .icon-custom {
   color: inherit;
@@ -79,4 +82,11 @@ a:not(:active) .icon-custom {
 
 button {
   border: none;
+}
+/* Para el cambio de logo */
+.icono-svg {
+  width: 24px;
+  height: 24px;
+  fill: var(--primary);
+  /* Utiliza el color primario del tema como color de relleno */
 }

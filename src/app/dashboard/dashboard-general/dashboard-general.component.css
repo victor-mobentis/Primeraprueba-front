@@ -1,3 +1,9 @@
 .color-dark {
     color: #6D6D6D;
   }
+
+.page-heading{
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  font-weight: 300;
+}
