@@ -1,0 +1,41 @@
+<div class="header">
+    <div class="container-fluid relative no-padding">
+        <div class="header-row">
+            <div class="header-col header-col--logo">
+                <a class="navbar-brand header-inner d-flex align-items-center boards-main-link">
+                    <div class="brand inline">
+                        <img class="header-logo" src="/assets/images/AIW_mini.png" alt="logo" />
+                    </div>
+                </a>
+            </div>
+            <div class="header-col header-col--menu" [class.open]="menuOpen">
+                <div class="horizontal-navbar" data-intercom-target="horizontal-navbar">
+                    <ul class="menu-items">
+                        <li *ngFor="let item of menuItems" class="nav-item">
+                            <a [routerLink]="item.route">{{ item.label }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="header-col">
+                <!-- Botón de toggler para vista móvil -->
+                <button class="navbar-toggler" (click)="toggleMenu()" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">&#9776;</span>
+                </button>
+            </div>
+            <div class="header-col flex-0">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <img width="28" height="28" src="assets/images/user.png" alt="Perfil" class="avatar" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="h-screen">
+        <router-outlet></router-outlet>
+    </div>
+</div>

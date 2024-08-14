@@ -1,7 +1,8 @@
 /* styles.css */
 .screen {
   min-height: 100vh;
-  background-color: #f7f9fa;
+  background-color: #f3f4f6;
+  padding-top: 60px;
 }
 
 
@@ -59,4 +60,9 @@ span {
 .shadow-card{
   border: none;
  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15); 
+}
+@media (max-width: 991px) {
+  .screen{
+    padding-top: 48px;
+  }
 }

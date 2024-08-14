@@ -1,92 +1,80 @@
-.mat-drawer-inner-container {
-    margin: 0;
-    padding: 0;
-  }
+.header{
+  width: auto;
 
-.logo {
-    width: 180px;
-    margin: 0;
 }
-  
+
+body.menu-behind .header .brand{
+  border-radius: 6px;
+  padding: 6px;
+  margin: 0;
+}
+
+/* Estilos para el navbar */
+.navbar-dark {
+  background-color: #1f2a38; /* Fondo oscuro para el navbar */
+  padding-left:26px;
+}
+
+/* Estilos para los ítems del menú */
+.navbar-nav .nav-item .nav-link {
+  color: #ffffff; /* Color blanco para los enlaces del navbar */
+  cursor: pointer; /* Cursor de mano para los enlaces */
+}
+
+.header-col{
+  width: auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+.header-col--logo{
+  display: inline-flex;
+}
+.header-inner{
+  cursor: pointer;
+}
+/* Estilos para el logo */
 .logo_mini {
-    width: 26px;
+  height: 30px;
 }
-  
+
+/* Estilos para el submenú */
+.dropdown-menu {
+  display: none; /* Ocultar el submenú por defecto */
+  background-color: #1f2a38; /* Fondo oscuro para el submenú */
+}
+
+.nav-item:hover .dropdown-menu {
+  display: block; /* Mostrar el submenú cuando el ítem del menú esté en hover */
+  ;
+}
+
+/* Asegurar que el submenú se mantenga visible mientras el mouse está sobre él */
+.nav-item:hover .dropdown-menu,
+.dropdown-menu:hover {
+  display: block; /* Mostrar el submenú cuando el mouse está sobre el submenú */
+}
+
+.dropdown-item {
+  color: #ffffff; /* Color blanco para los ítems del submenú */
+}
+
+.dropdown-item:hover {
+  background-color: #495057; /* Color de fondo cuando se pasa el mouse sobre el ítem del submenú */
+}
+
+/* Estilos para el avatar del perfil */
 .avatar {
   border-radius: 50%;
   cursor: pointer;
-}
-  
-.name {
-    font-weight: normal;
-    font-size: 1rem;
-    margin-bottom: 0;
-}
-  
-.designation {
-  font-size: 0.8rem;
-  margin-bottom: .5em;
-}
-  
-.centrado {
-  text-align: center;
-}
-  
-.hide-usuario-text {
-  opacity: 0;
-  height: 0px !important;
-}
-  
-.menu-item {
-  border-left: 5px solid;
-  border-left-color: rgba(0, 0, 0, 0);
-}
-  
-.selected-menu-item {
-  background: rgba(81, 107, 255, 0.199); /* Agregar un fondo sutil para resaltar el elemento seleccionado */
-}
-  
-mat-sidenav-content {
-    height: calc(100vh - 0px);
-}
-  
-mat-sidenav,
-mat-sidenav-content {
-  transition: all 500ms ease-in-out;  
-}
-  
-mat-sidenav{
-  overflow-wrap: break-word;
+  margin-left: 10px;
 }
 
-.mat-sidenav {
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.356); /* Agregar una sombra suave al menú lateral */
-}
-
-a > img {
-  margin-right: 18px !important;
-}
+@media (min-width: 992px) {
+  .header .header-inner .header-row{
+    height: 64px;
+  }
   
-.screen {
-  min-height: 100vh;
-}
-
-a:hover {
-  background-color: rgba(81, 107, 255, 0.199);
-
-}
-
-a:not(:active) .icon-custom {
-  color: inherit;
-}
-
-button {
-  border: none;
-}
-/* Para el cambio de logo */
-.icono-svg {
-  width: 24px;
-  height: 24px;
-  fill: var(--primary);
-  /* Utiliza el color primario del tema como color de relleno */
+  .header-col{
+    flex: 0 0 auto;
+  }
 }

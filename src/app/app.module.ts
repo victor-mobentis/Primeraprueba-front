@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PagesModule } from './sidenav/sidenav.module';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from './auth/auth.module';
+import { NavbarModule } from './navbar/navbar.module';
 /**
   * IMPORTS COMPONENTS
 */
@@ -15,8 +16,7 @@ import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
-    AppComponent
-
+    AppComponent,
     /* lo unico que se declarara sera los componentes creados en la carpeta componentes paginas no */
 
   ],
@@ -26,6 +26,7 @@ import { AppComponent } from './app.component';
     BrowserAnimationsModule,
     PagesModule,
     HttpClientModule,
+    NavbarModule,
     AuthModule
   ],
   providers: [],

@@ -1,0 +1,178 @@
+*{
+    z-index: 5000;
+}
+body {
+    color: #1f2937;
+    font-family: Roboto, sans-serif !important;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: .036em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-font-feature-settings: "kern" 1;
+    -moz-font-feature-settings: "kern" 1;
+}
+
+
+.header {
+    width: 100%;
+    background-color: #1f2937;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-left: 16px;
+    position: relative; /* Asegúrate de que el contenedor tenga posición relativa */
+}
+
+.header, .header-row {
+    height: 48px;
+}
+
+.brand {
+    border-radius: 6px;
+    padding: 6px;
+    margin: 0;
+}
+
+.header-col {
+    display: flex;
+    align-items: center;
+}
+
+.header-col--logo {
+    text-align: center;
+    flex: 0 0 auto; /* Ocupa el espacio restante para centrar el logo */
+}
+
+.header-logo {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    max-height: 32px;
+}
+
+.menu-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.menu-items li {
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+
+.nav-item a {
+    color: black;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.nav-item a:hover {
+    background-color: #374151;
+    color: #fff;
+}
+
+.navbar-toggler {
+    display: none;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+.navbar-toggler-icon {
+    display: inline-block;
+    width: 1.5em;
+    height: 1em;
+    vertical-align: middle;
+    background-image: var(--bs-navbar-toggler-icon-bg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+}
+
+@media (max-width: 991.98px) {
+    .header-row {
+        justify-content: space-between;
+    }
+
+    .header-col--logo {
+        order: 2; /* Coloca el logo en el centro */
+        text-align: center; /* Centra el logo dentro del contenedor */
+    }
+
+    .header-col.flex-0 {
+        order: 3; /* Coloca el ícono de usuario en la derecha */
+    }
+
+    .header-col--menu {
+        order: 4;
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 48px;
+        left: 0;
+        width: 100%;
+        background-color: #ffffff;
+        padding: 16px;
+        border-radius: 0 0 10px 10px;
+    }
+
+    .navbar-toggler {
+        display: block;
+        order: 1; /* Coloca el botón de hamburguesa a la izquierda */
+    }
+
+    .menu-items {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .menu-items li {
+        margin-bottom: 8px;
+    }
+
+    .menu-items li:last-child {
+        margin-bottom: 0;
+    }
+
+    .header-col--menu.open {
+        display: flex;
+        align-items: flex-start;
+    }
+}
+
+@media (min-width: 992px) {
+    .header, .header-inner, .header-row {
+        height: 64px;
+    }
+
+    .navbar-toggler {
+        display: none;
+    }
+
+    .header-col--menu {
+        width: auto;
+        flex: 1 1 auto;
+    }
+    .nav-item a{
+        color: #fff;
+    }
+}

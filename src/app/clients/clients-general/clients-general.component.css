@@ -1,6 +1,7 @@
 .screen {
-  height: 100vh;
-  padding: 3px;
+  min-height: 100%;
+  padding-top: 60px;
+  background-color: #f3f4f6;
 }
 
 .page-heading{
@@ -116,4 +117,10 @@ th {
   
   .estado-select-container {
     margin-left: 10px;
+  }
+
+  @media (max-width: 991px) {
+    .screen{
+      padding-top: 45px;
+    }
   }

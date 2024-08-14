@@ -1,75 +1,55 @@
-<mat-sidenav-container >
-  <mat-sidenav class="fondoGris"  #sidenav mode="side" opened="!collapsed()" [style.width]="sidenavWidth()">
-    <!-- INICIO - botón de apertura y cierre-->
-    <button class="mx-2" mat-icon-button (click)="isExpanded.set(!isExpanded())">
-      <mat-icon class="">menu</mat-icon>
-    </button>
-    <!-- FIN - botón de apertura y cierre-->
-    <div class="centrado">
-        <!-- logo de la aplicacion o de la empresa -->
-        <a [routerLink]="['dashboard/global']">
-          <div class="centrado">
-            <img *ngIf="isExpanded(); else elseBlock" class="logo" src="/assets/images/AIW_logo.png" alt="logo" />
-            <ng-template #elseBlock><img class="logo_mini mb-2" src="/assets/images/AIW_mini.png" alt="logo" />
-            </ng-template>
-          </div>
-        </a>
-        <!-- fin de logo de la empresa o de la aplicaion -->
-
-        <!-- inicio de usaurio -->
-        <div class="centrado">
-          <img [width]="profilePicSice()" [height]="profilePicSice()" src="{../..}" alt="Perfil" class="avatar mat-elevation-z8 my-2" (click)="openProfileEditPopup()" onError="this.src='assets/images/user.png'" /> <!-- actualizar la img -->
-          <div class="usuario-text" [class.hide-usuario-text]="!isExpanded()">
-            <h2 class="name">
-              {{_loginServices.user}} {{ _loginServices.lastname }}
-            </h2>
-            <p class="designation ">EMPLEADO</p> <!-- actualizar el cargo:  {{_loginServices.cargo}}-->
-          </div>
+<nav class="header navbar navbar-expand-lg navbar-dark">
+  <!-- Logo de la aplicación o de la empresa -->
+   <div class="container-fluid relative no-padding">
+    <div class="header-col header-col--logo">
+      <a class="navbar-brand header-inner d-flex align-items-center boards-main-link " [routerLink]="['dashboard/global']">
+        <div class="brand inline">
+          <img class="header-logo" src="/assets/images/AIW_mini.png" alt="logo" />
         </div>
-        <!-- fin de perfil de usaurio -->
+      </a>
+      <!-- Botón de toggler para vista móvil -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>  
     </div>
-    <mat-nav-list class="p-0 d-flex flex-column">
-      <!-- INICIO - Lista de botones-->
-        <!-- Boton Dashboard-->
-        <a mat-list-item [routerLink]="['dashboard/global']" routerLinkActive="selected-menu-item"
-          #rlaDashboard="routerLinkActive">
-          <img class="icon"
-          [src]="rlaDashboard.isActive ? 'assets/images/iconos/dashboard-icon-green.svg' : 'assets/images/iconos/dashboard-icon.svg'"
-          alt="Dashboard" matTooltip="Dashboard" matListItemIcon [class.active]="rlaDashboard.isActive" />
-          <span matListItemTitle class="">Dashboard</span>
-        </a>
-        <!-- INICIO - Boton Rechazos -->
-        <a mat-list-item [routerLink]="['rechazos/global']" routerLinkActive="selected-menu-item"
-          #rlaRechazos="routerLinkActive" >
-          <img [src]="rlaRechazos.isActive ? 'assets/images/iconos/pedidos-icon-green.svg' : 'assets/images/iconos/pedidos-icon.svg'" alt="Rechazos" matTooltip="Rechazos" matListItemIcon [class.active]="rlaRechazos.isActive">
-          <span matListItemTitle class="">Rechazos</span>
-        </a>
-        <!-- INICIO - Boton Clientes -->
-        <a mat-list-item [routerLink]="['clientes/global']" routerLinkActive="selected-menu-item"
-          #rlaCliente="routerLinkActive" [activated]="rlaCliente.isActive">
-          <img [src]="rlaCliente.isActive ? 'assets/images/iconos/clientes-icon-blue-purple.svg' : 'assets/images/iconos/clientes-icon.svg'" alt="Clientes" matTooltip="Clientes" matListItemIcon [class.active]="rlaCliente.isActive" />
-          <span matListItemTitle class="">Clientes</span>
-        </a>
-        <mat-divider></mat-divider>
-        <!-- Config -->
-        <a mat-list-item [routerLink]="['configuracion/global']" routerLinkActive="selected-menu-item"
-        #rlaConfig="routerLinkActive">
-          <img [src]="rlaConfig.isActive ? 'assets/images/iconos/configuracion-icon-green.svg' : 'assets/images/iconos/configuracion-icon.svg'" alt="Config" matTooltip="Config" matListItemIcon [class.active]="rlaConfig.isActive">
-          <span matListItemTitle class="" >Configuracion</span>
-        </a>
-        <mat-divider></mat-divider>
-        <!-- INICIO - Salir-->
-        <a mat-list-item (click)="logout()">
-          <img class="icon" src="assets/images/iconos/salir-icon.svg" alt="Salir" matTooltip="Salir" matListItemIcon />
-          <span  matListItemTitle class="">Salir</span>
-        </a>
-    </mat-nav-list>
-  </mat-sidenav>
+    <div class="header-col header-col--menu">
+      <!-- Contenido del navbar -->
+      <div class="collapse navbar-collapse " id="navbarNav">
+        <ul class="navbar-nav">
+          <!-- Botones del menú -->
+          <li class="nav-item" *ngFor="let item of menuItems" [ngClass]="{'dropdown': item.hasSubmenu}">
+            <a class="nav-link" 
+               [routerLink]="item.route" 
+               routerLinkActive="active"
+               (mouseover)="toggleDropdown(item)"
+               (mouseleave)="hideDropdown(item)">
+              {{item.label}}
+            </a>
+    
+            <!-- Submenú desplegable para ítems con submenú -->
+            <div class="dropdown-menu" *ngIf="item.hasSubmenu && item.showSubmenu">
+              <a class="dropdown-item" *ngFor="let subItem of item.submenuItems" [routerLink]="subItem.route">
+                {{subItem.label}}
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+          <!-- Espacio flexible -->
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <img [width]="profilePicSize()" [height]="profilePicSize()" src="{../..}" alt="Perfil" class="avatar" (click)="openProfileEditPopup()" onError="this.src='assets/images/user.png'" />
+            </li>
+          </ul>
 
-  <!-- El bonton de salir -->
-  <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
-    <div class="h-screen">
-      <router-outlet></router-outlet>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+
+   </div>
+   </nav>
+   
+   <!-- Contenido principal -->
+   <div class="content">
+     <div class="h-screen">
+       <router-outlet></router-outlet>
+     </div>
+   </div>

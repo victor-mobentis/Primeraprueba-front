@@ -1,6 +1,7 @@
 .screen {
-  height: 100vh;
-  padding: 3px;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  padding-top: 60px;
 }
 
 .page-heading{
@@ -187,4 +188,10 @@ th {
   width: 150px;
   text-align: left;
   padding: 5px;
+}
+
+@media (max-width: 991px) {
+  .screen{
+    padding-top: 48px;
+  }
 }

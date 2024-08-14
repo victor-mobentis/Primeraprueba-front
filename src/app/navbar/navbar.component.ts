@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProfileEditPopupComponent } from '../configuration/configuration-general/profile-edit-popup/profile-edit-popup.component'; // Ajusta la ruta
 
 
+
 interface SubMenuItem {
   label: string;
   route: string;
@@ -19,12 +20,17 @@ interface MenuItem {
 }
 
 @Component({
-  selector: 'app-sidenav',
-  templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.css']
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.css']
 })
-export class PagesComponent {
-  searchQuery: string = ''; // Variable para el término de búsqueda
+export class NavbarComponent {
+
+  menuOpen = false;
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
 
   menuItems: MenuItem[] = [
     { label: 'Dashboard', route: 'dashboard/global' },
@@ -37,7 +43,7 @@ export class PagesComponent {
         { label: 'Cliente 1', route: 'clientes/global/subcliente1' },
         { label: 'Cliente 2', route: 'clientes/global/subcliente2' }
       ],
-      showSubmenu: false // Inicializar la propiedad
+      showSubmenu: false
     },
     { label: 'Configuración', route: 'configuracion/global' }
   ];

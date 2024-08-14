@@ -1,9 +1,20 @@
 .color-dark {
     color: #6D6D6D;
   }
-
+.screen{
+  background-color: #f3f4f6;
+  min-height: 100vh;
+  padding-top: 60px;
+}
 .page-heading{
   text-transform: uppercase;
   letter-spacing: .2em;
   font-weight: 300;
+}
+
+
+@media (max-width: 991px) {
+  .screen{
+    padding-top: 48px;
+  }
 }
