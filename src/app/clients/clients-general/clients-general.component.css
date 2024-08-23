@@ -1,5 +1,5 @@
 .screen {
-  min-height: 100%;
+  min-height: 100vh;
   padding-top: 60px;
   background-color: #f3f4f6;
 }

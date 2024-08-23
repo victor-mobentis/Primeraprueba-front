@@ -22,7 +22,7 @@ import { ISimbolo } from 'src/app/models/simbolos.model';
 })
 export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   form: FormGroup;
-  displayedColumns: string[] = ['select', 'estado', 'rechazo_id', 'poblacion', 'provincia', 'cliente', 'producto', 'nombre_familia', 'nombre_subfamilia', 'tipo_rechazo', 'precio_producto', 'precio_competidor', 'competidor','pvp_es_promocion_precio', 'accion_correctora', 'propuesta_agente'];
+  displayedColumns: string[] = ['select', 'estado', 'rechazo_id', 'poblacion', /* 'provincia', */  'producto'/* , 'nombre_familia' */,'cliente', 'nombre_subfamilia', 'tipo_rechazo', 'precio_producto', 'precio_competidor', 'competidor','pvp_es_promocion_precio', 'accion_correctora', 'propuesta_agente'];
   dataSource: MatTableDataSource<IRechazo>;
   rechazoList: IRechazo[] = [];
   selection = new SelectionModel<IRechazo>(true, []);
@@ -142,7 +142,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         (!searchTerms.PoblacionFilterControl || data.poblacion.toLowerCase().indexOf(searchTerms.PoblacionFilterControl.toLowerCase()) !== -1) &&
         (!searchTerms.ProvinciaFilterControl || data.provincia.toLowerCase().indexOf(searchTerms.ProvinciaFilterControl.toLowerCase()) !== -1) &&
         (!searchTerms.ProductoFilterControl || data.producto.toLowerCase().indexOf(searchTerms.ProductoFilterControl.toLowerCase()) !== -1) &&
-        (!searchTerms.FamiliaFilterControl || data.nombre_familia.toLowerCase().indexOf(searchTerms.FamiliaFilterControl.toLowerCase()) !== -1) &&
+        /* (!searchTerms.FamiliaFilterControl || data.nombre_familia.toLowerCase().indexOf(searchTerms.FamiliaFilterControl.toLowerCase()) !== -1) && */
         (!searchTerms.SubFamiliaFilterControl || data.nombre_subfamilia.toLowerCase().indexOf(searchTerms.SubFamiliaFilterControl.toLowerCase()) !== -1)
       );
     };

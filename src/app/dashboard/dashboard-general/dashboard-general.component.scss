@@ -1,0 +1,101 @@
+.fondo {
+  background-color: #f3f3f3;
+}
+
+.hide {
+  visibility: hidden;
+  transition: all 1s ease-out;
+  opacity: 0;
+}
+
+.numeroKPI {
+  font-weight: 900;
+  font-size: larger;
+}
+
+.tituloKPI {
+  font-size: small;
+  font-weight: lighter;
+}
+
+.kpis {
+  background-color: white;
+  border-radius: 1em;
+}
+
+.abajo {
+  border-top: solid white;
+}
+
+.verde {
+  background-color: #3ab284;
+}
+
+.amarillo {
+  background-color: #d6d253;
+}
+
+.fondo-blanco {
+  background-color: white;
+  border-radius: 1em;
+}
+
+.contenedor-grafica-s {
+  height: 300px;
+}
+
+.contenedor-grafica-t {
+  height: 618px;
+}
+
+// .grande {
+//     display: none;
+// }
+
+// @media (max-width: 1399px) {
+//     .medio {
+//         display: block;
+//     }
+
+//     .grande {
+//         display: none;
+//     }
+// }
+
+// @media (min-width: 1400px) {
+//     .medio {
+//         display: none;
+//     }
+
+//     .grande {
+//         display: block;
+//     }
+// }
+
+
+.icon-title {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+
+//Estilos tabla
+
+
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.mat-column-pedidos {
+  width: 150px;
+}
+
+.mat-column-ventas {
+  width: 150px;
+}
+
+.mat-column-atencion_cliente {
+  width: 150px;
+}
