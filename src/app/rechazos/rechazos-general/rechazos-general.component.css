@@ -111,6 +111,7 @@ th {
   display: none; /* Elimina el espacio inferior */
 }
 
+
 .option-image {
   border-radius: 50%;
   width: 24px;
@@ -154,6 +155,7 @@ th {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 5px;
 }
 
 .editable-input {
@@ -190,6 +192,52 @@ th {
   padding: 5px;
 }
 
+.mat-column-select{
+  width: 40px;
+  padding:0;
+}
+.mat-column-estado{
+  width: 70px;
+  padding: 0 8px;
+}
+.estado-form-field{
+  width: 189px;
+}
+
+.mat-column-rechazo_id{
+  width: 40px;
+  padding: 0 10px;
+  padding-right: 0;
+}
+
+.mat-column-poblacion{
+  min-width: 70px;
+  padding: 0 5px;
+  padding-right: 0;
+}
+.mat-column-producto{
+  width: 150px;
+  padding: 0 5px;
+}
+
+.mat-column-cliente{
+  width: 150px;
+  padding: 0 5px;
+}
+.mat-column-accion_correctora{
+  width: 300px;
+  padding: 0 5px;
+}
+.small-height-field,
+.width-select-simbolo{
+  width: 74px;
+}
+.large-height-field{
+  width: 200px;
+}
+mat-select .mat-mdc-text-field-wrapper{
+  padding: 0 8px;
+}
 @media (max-width: 991px) {
   .screen{
     padding-top: 48px;

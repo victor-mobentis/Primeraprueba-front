@@ -22,7 +22,7 @@ import { ISimbolo } from 'src/app/models/simbolos.model';
 })
 export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   form: FormGroup;
-  displayedColumns: string[] = ['select', 'estado', 'rechazo_id', 'poblacion', /* 'provincia', */  'producto'/* , 'nombre_familia' */,'cliente', 'nombre_subfamilia', 'tipo_rechazo', 'precio_producto', 'precio_competidor', 'competidor','pvp_es_promocion_precio', 'accion_correctora', 'propuesta_agente'];
+  displayedColumns: string[] = ['select', 'estado', 'rechazo_id', 'poblacion', /* 'provincia', */  'producto'/* , 'nombre_familia' */,'cliente', 'nombre_subfamilia', 'tipo_rechazo', 'precio_producto', 'precio_competidor', 'competidor', 'accion_correctora', 'propuesta_agente'];
   dataSource: MatTableDataSource<IRechazo>;
   rechazoList: IRechazo[] = [];
   selection = new SelectionModel<IRechazo>(true, []);
@@ -261,81 +261,26 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   updateCharCount(row: IRechazo & { editingAccionCorrectora?: boolean; tempAccionCorrectora?: string; editingPrecioPromocion?: boolean; tempPrecioPromocion?: number; tempSimboloPromocion?: number }) {
   }
 
-  ///metodo para confirmar la edicion
-  confirmEdit(row: IRechazo & { editingAccionCorrectora?: boolean; tempAccionCorrectora?: string; editingPrecioPromocion?: boolean; tempPrecioPromocion?: number; tempSimboloPromocion?: number }, field: string) {
-    if (field === 'accionCorrectora') {
-      const id_rechazo = row.rechazo_id;
-      if (row.tempAccionCorrectora && row.tempAccionCorrectora.length <= 50) {
-        row.accion_correctora = row.tempAccionCorrectora || '';
-        row.editingAccionCorrectora = false;
-        const accion_correctora = row.tempAccionCorrectora;
-        console.log('Enviando datos a actualizarAccionCorrectora:', {
-          id_rechazo: row.rechazo_id,
-          accion_correctora: accion_correctora,
-        });
-        // Aquí podrías llamar a la función de guardado si lo deseas
-        this.rechazadosService.actualizarAccionCorrectora(id_rechazo, accion_correctora).subscribe(
-          (response) => {
-            // Actualización exitosa, manejar respuesta si es necesario
-            this.snackBar.open('Acción correctora actualizada correctamente.', '', { duration: 3000, verticalPosition: 'top' });
-            row.editingPrecioPromocion = false;
-          },
-          (error) => {
-            // Error al actualizar, mostrar mensaje de error
-            this.snackBar.open('Error al actualizar la acción correctora.', '', { duration: 3000, verticalPosition: 'top' });
-            console.error('Error al actualizar la acción correctora:', error);
-          }
-        );
-      } else {
-        this.snackBar.open('La acción correctora debe tener entre 1 y 50 caracteres.', '', { duration: 3000, verticalPosition: 'top' });
-      }
-    } else if (field === 'precioPromocion') {
-      if (row.tempPrecioPromocion != null && !isNaN(row.tempPrecioPromocion) && row.tempSimboloPromocion) {
-        // Realizar la actualización solo si el precio y el símbolo de promoción son válidos
-        row.pvp_es_promocion_precio = row.tempPrecioPromocion;
-        row.id_simbolo = row.tempSimboloPromocion;
-        console.log('Enviando datos a actualizarPrecioSimboloPromocion:', {
-          rechazo_id: row.rechazo_id,
-          tempPrecioPromocion: row.tempPrecioPromocion,
-          tempSimboloPromocion: row.tempSimboloPromocion,
-        });
-        this.rechazadosService.actualizarPrecioSimboloPromocion(row.rechazo_id,  row.tempPrecioPromocion, row.tempSimboloPromocion,).subscribe(
-          (response) => {
-            // Actualización exitosa, manejar respuesta si es necesario
-            location.reload();
-            this.snackBar.open('Precio y símbolo de promoción actualizados correctamente.', '', { duration: 3000, verticalPosition: 'top' });
-          },
-          (error) => {
-            // Error al actualizar, mostrar mensaje de error
-            this.snackBar.open('Error al actualizar el precio y el símbolo de promoción.', '', { duration: 3000, verticalPosition: 'top' });
-            console.error('Error al actualizar el precio y el símbolo de promoción:', error);
-          }
-        );
-      } else {
-        // Mostrar mensaje de error si el precio o el símbolo de promoción son inválidos
-        this.snackBar.open('El precio y el símbolo de promoción son obligatorios.', '', { duration: 3000, verticalPosition: 'top' });
-      }
-    } else {
-      // Manejar otros tipos de edición aquí si es necesario
-    }
-  }
+
   
   //metodo para cambiar el simbolo
-  onSymbolChange(row: any) {
-    console.log("Simbolo seleccionado:", row.pvp_es_promocion_symbol);
-  }
-  
-  cancelEdit(row: IRechazo & { editingAccionCorrectora?: boolean; tempAccionCorrectora?: string; editingPrecioPromocion?: boolean; tempPrecioPromocion?: number; tempSimboloPromocion?: number }, field: string) {
-    if (field === 'accionCorrectora') {
-      row.editingAccionCorrectora = false;
-    } else if (field === 'precioPromocion') {
-      if (row.tempPrecioPromocion != null && !isNaN(row.tempPrecioPromocion)) {
-        row.pvp_es_promocion_precio = row.tempPrecioPromocion;
-      }
-      if (row.tempSimboloPromocion) {
-        row.id_simbolo = row.tempSimboloPromocion;
-      }
-      row.editingPrecioPromocion = false;
+  /* crear una consulta en rechazados.service.ts */
+  updateSymbol(row: IRechazo & { tempSimboloPromocion?: number }) {
+    // Actualiza el símbolo en el objeto `row` y llama al servicio para guardarlo
+    if (row.tempSimboloPromocion != null) {
+      row.id_simbolo = row.tempSimboloPromocion;
+      console.log('Símbolo actualizado:', row.id_simbolo);
+
+      // Llamada al servicio para guardar el cambio en el servidor (si es necesario)
+      this.rechazadosService.actualizarPrecioSimboloPromocion(row.rechazo_id, row.tempSimboloPromocion, row.tempSimboloPromocion).subscribe(
+        (response) => {
+          this.snackBar.open('Símbolo actualizado correctamente.', '', { duration: 3000, verticalPosition: 'top' });
+        },
+        (error) => {
+          this.snackBar.open('Error al actualizar el símbolo.', '', { duration: 3000, verticalPosition: 'top' });
+          console.error('Error al actualizar el símbolo:', error);
+        }
+      );
     }
   }
 

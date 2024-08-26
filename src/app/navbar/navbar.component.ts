@@ -4,8 +4,6 @@ import { LoginService } from '../services/auth/login.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileEditPopupComponent } from '../configuration/configuration-general/profile-edit-popup/profile-edit-popup.component'; // Ajusta la ruta
 
-
-
 interface SubMenuItem {
   label: string;
   route: string;
@@ -27,6 +25,7 @@ interface MenuItem {
 export class NavbarComponent {
 
   menuOpen = false;
+  profileMenuOpen = false; // Nueva propiedad para manejar el menú de perfil
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
@@ -68,6 +67,10 @@ export class NavbarComponent {
   logout() {
     this._loginServices.logout();
     this.router.navigateByUrl('/login');
+  }
+
+  toggleProfileMenu() {
+    this.profileMenuOpen = !this.profileMenuOpen;
   }
 
   toggleDropdown(item: MenuItem) {

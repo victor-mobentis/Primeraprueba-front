@@ -4,7 +4,7 @@
             <div class="header-col header-col--logo">
                 <a class="navbar-brand header-inner d-flex align-items-center boards-main-link" [routerLink]="['/']">
                     <div class="brand inline">
-                        <img class="header-logo" src="/assets/images/AIW_mini.png" alt="logo" />
+                        <img class="header-logo" src="../../assets/images/mobentisLogo.png" alt="logo" />
                     </div>
                 </a>
             </div>
@@ -26,7 +26,20 @@
             <div class="header-col flex-0">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <img width="28" height="28" src="assets/images/user.png" alt="Perfil" class="avatar" />
+                        <img (click)="toggleProfileMenu()"
+                             width="28"
+                             height="28"
+                             src="assets/images/user.png"
+                             alt="Perfil"
+                             class="avatar"
+                             [class.active]="profileMenuOpen"/>
+                        <!-- Menú desplegable de perfil -->
+                        <div class="profile-menu" *ngIf="profileMenuOpen">
+                            <ul>
+                                <li (click)="openProfileEditPopup()">Perfil</li>
+                                <li (click)="logout()">Salir</li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
             </div>

@@ -5,14 +5,15 @@
 }
 
 .content {
-    height: 400px;
+    height: auto;
     display: flex;
     font-size: 2rem;
     color: lightgray;
+    padding: 36px;
 }
 
 .logo {
-    width: 60%;
+    width: 30%;
 }
   
 .login-fomrs {
