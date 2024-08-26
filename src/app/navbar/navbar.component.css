@@ -33,7 +33,7 @@ body {
 }
 
 .header, .header-row {
-    height: 48px;
+    height: 61px;
 }
 
 .brand {
@@ -143,6 +143,41 @@ body {
   .avatar.active {
     border: 2px solid #007bff; /* Opcional: resaltado cuando el menú está abierto */
   }
+
+  .name {
+    color: white;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: .2px;
+    padding: 0;
+  }
+  .cargo{
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: .25px;
+    color: white;
+  }
+  .no-padding {
+    margin: 0 !important;
+  }
+  
+
+  .btn-profile{
+    padding-left: 8px;
+    padding-right: 5px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    cursor: pointer;
+  }
+
+.btn-profile:hover{
+    background-color: #37415180;
+}
+
 
 @media (max-width: 991.98px) {
     .header-row {

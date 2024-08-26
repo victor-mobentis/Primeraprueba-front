@@ -13,7 +13,7 @@ export class ConfigurationGeneralComponent {
 
   openProfileEditPopup(): void {
     const dialogRef = this.dialog.open(ProfileEditPopupComponent, {
-      width: '400px',
+      width: 'auto',
       disableClose: true
     });
   }

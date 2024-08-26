@@ -1,5 +1,5 @@
 <div class="header">
-    <div class="container-fluid relative no-padding">
+    <div class="relative no-padding">
         <div class="header-row">
             <div class="header-col header-col--logo">
                 <a class="navbar-brand header-inner d-flex align-items-center boards-main-link" [routerLink]="['/']">
@@ -26,13 +26,19 @@
             <div class="header-col flex-0">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <img (click)="toggleProfileMenu()"
-                             width="28"
-                             height="28"
-                             src="assets/images/user.png"
-                             alt="Perfil"
-                             class="avatar"
-                             [class.active]="profileMenuOpen"/>
+                        <div class="d-flex gap-3 align-items-center btn-profile" (click)="toggleProfileMenu()" [class.active]="profileMenuOpen">
+                            <img 
+                                 width="35"
+                                 height="35"
+                                 src="assets/images/user.png"
+                                 alt="Perfil"
+                                 class="avatar"
+                                 />
+                            <div >
+                                <h3 class="name no-padding">{{_loginServices.user}}</h3>
+                                <p class="cargo no-padding">Mobentis</p>
+                            </div>
+                        </div>
                         <!-- Menú desplegable de perfil -->
                         <div class="profile-menu" *ngIf="profileMenuOpen">
                             <ul>
