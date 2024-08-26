@@ -8,13 +8,11 @@
         </div>
         <!-- boton de filtrado -->
         <div class="d-flex align-items-center gap-2">
-          <button matTooltip="Ver en Mapa" class="btn buttons-clients d-flex justify-content-center align-items-center" (click)="verEnMapa()">
+          <button matTooltip="Ver en Mapa" class="btn btn-secondary d-flex justify-content-center align-items-center" (click)="verEnMapa()">
             <mat-icon class="p-0 m-0">map</mat-icon>
-            <span class="ms-1">Mapa</span>
           </button>
-          <button class="btn buttons-clients d-flex align-items-center" title="Ver Filtros" (click)="drawer.toggle()">
-            <i class="bi bi-funnel-fill p-0 m-0"></i>
-            <span class="ms-1">Filtros</span>
+          <button matTooltip="Ver Filtros" class="btn btn-secondary d-flex align-items-center" (click)="drawer.toggle()">
+            <mat-icon class="p-0 m-0">filter_list_alt</mat-icon>
           </button>
         </div>
       </div>
