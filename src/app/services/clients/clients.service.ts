@@ -28,7 +28,7 @@ export class ClientsService {
       ),
     };
     return this._http
-      .post<IClient[]>(`${this.baseUrl}:${this.port}/api/clientes`,
+      .post<IClient[]>(`${this.baseUrl}:${this.port}/api/clients/`,
         {},
         options,
       )
@@ -49,7 +49,7 @@ export class ClientsService {
       ),
     };
     return this._http
-      .post<IClient[]>(`${this.baseUrl}:${this.port}/api/clientes/${id}`,
+      .post<IClient[]>(`${this.baseUrl}:${this.port}/api/clients/${id}`,
         {},
         options,
       )
@@ -71,7 +71,7 @@ export class ClientsService {
       ),
     };
     return this._http
-      .post(`${this.baseUrl}:${this.port}/api/clientes/contactos/:id${id}`,
+      .post(`${this.baseUrl}:${this.port}/api/clients/contacts/:id${id}`,
         {},
         options,
       )

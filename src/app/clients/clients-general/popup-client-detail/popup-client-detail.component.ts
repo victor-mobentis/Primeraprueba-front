@@ -11,6 +11,7 @@ import { timeout } from 'rxjs';
 import { IClient } from 'src/app/models/clients.model';
 import { ClientsService } from 'src/app/services/clients/clients.service';
 import { ClientsGeneralComponent } from '../clients-general.component';
+import { ClientContactListComponent } from '../client-contact-list/client-contact-list.component';
 @Component({
   selector: 'app-popup-client-detail',
   templateUrl: './popup-client-detail.component.html',
@@ -60,7 +61,7 @@ export class PopupClientDetailComponent {
       .pipe(timeout(20000))
       .subscribe(
         (data: any) => {
-          const clientsData: any[] = data.data;
+          const clientsData: any[] = data;
           this.cliente = clientsData[0];
           this.form.patchValue({
             codigo_Cliente: clientsData[0].customer_ERP_id,
@@ -108,7 +109,7 @@ export class PopupClientDetailComponent {
   }
 
   editContact() {
-    const dialogRef = this.dialog.open(ClientsGeneralComponent, {
+    const dialogRef = this.dialog.open(ClientContactListComponent, {
       width: '1000px',
       disableClose: true,
       data: { id: this.id_cliente },

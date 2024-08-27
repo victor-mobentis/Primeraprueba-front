@@ -30,13 +30,13 @@ export class ClientContactService {
     };
     return this._http
       .post<Contact[]>(
-        `${this.baseUrl}:${this.port}/api/clientes/contactos/${id}`,
+        `${this.baseUrl}:${this.port}/api/clients/contacts/${id}`,
         {},
         options
       )
       .pipe(
         map((data: any) => {
-          return data.data;
+          return data;
         })
       );
   }
@@ -50,37 +50,15 @@ export class ClientContactService {
     };
     return this._http
       .post<Contact>(
-        `${this.baseUrl}:${this.port}/api/clientes/contacto/${id}`,
+        `${this.baseUrl}:${this.port}/api/clients/contact/${id}`,
         {},
         options
       )
       .pipe(
         map((data: any) => {
-          return data.data[0];
+          return data[0];
         })
       );
   }
 
-  sendEmail(email: string) {
-    let options = {
-      headers: new HttpHeaders().set(
-        'Authorization',
-        `Bearer ${this._loginServices.getToken()}`
-      ),
-    };
-    return this._http
-      .post(
-        `${this.baseUrl}:${this.port}/api/email/contacto`,
-        {
-          destinatarios: [email]
-        },
-        options
-      )
-      .pipe(
-        map((data: any) => {
-          // Aquí puedes realizar cualquier transformación necesaria en los datos
-          return data.status;
-        })
-      );
-  }
 }
