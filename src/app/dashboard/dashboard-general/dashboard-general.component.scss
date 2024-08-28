@@ -1,11 +1,19 @@
 .fondo {
   background-color: #f3f3f3;
 }
-
+.page-heading{
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  font-weight: 300;
+}
 .hide {
   visibility: hidden;
   transition: all 1s ease-out;
   opacity: 0;
+}
+
+.color-dark {
+  color: #6D6D6D;
 }
 
 .numeroKPI {
