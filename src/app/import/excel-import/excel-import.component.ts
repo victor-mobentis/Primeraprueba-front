@@ -169,7 +169,7 @@ export class ExcelImportComponent {
 
       console.log(JSON.stringify(recarga))
       console.log('Update realizada con exito');
-            this.router.navigateByUrl("/mobentisrechazos/configuracion/global")
+            this.router.navigateByUrl("/mobentis/configuracion/global")
             this._snackBar.open('Los datos se han importado correctamente', '', {
               duration: 2000,
             });
@@ -215,7 +215,7 @@ export class ExcelImportComponent {
   }
 
   volverAConfig() {
-    this.router.navigateByUrl('/mobentisrechazos/configuracion/global');
+    this.router.navigateByUrl('/mobentis/configuracion/global');
   }
 
   resetListaDeEmparejamientoDeCampos() {

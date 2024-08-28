@@ -246,6 +246,7 @@ th {
 .width-select-simbolo{
   width: 74px;
 }
+
 .large-height-field{
   width: 200px;
 }
@@ -354,7 +355,7 @@ tr.example-element-row:not(.example-expanded-row):active {
 }
 
 .mat-column-nombre_subfamilia {
-  min-width: 200px;
+  min-width: 100px;
   padding: 0;
 }
 .mat-column-propuesta_agente {

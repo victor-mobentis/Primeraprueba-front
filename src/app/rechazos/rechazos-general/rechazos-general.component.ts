@@ -119,6 +119,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.loadGoogleMapsScript();
     this.loadCompetidores();
     this.loadTiposRechazo();
+    
   }
 
   /* pagiantor */

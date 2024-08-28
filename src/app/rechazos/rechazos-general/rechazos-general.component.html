@@ -112,9 +112,9 @@
           <td class="color-rechazo" mat-cell *matCellDef="let row">
             <div class="d-flex align-items-center justify-content-center gap-2">
               <div class="form-group estado-form-group">
-                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="estado-form-field color-rechazo">
-                  <mat-select [(ngModel)]="row.tipo_rechazo" name="estado-{{row.tipo_rechazo}}"
-                    class="small-height-select">
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="estado-form-field color-rechazo" >
+                  <mat-select [(ngModel)]="row.tipo_rechazo" name="estado-{{row.tipo_rechazo}}" matTooltip="{{row.tipo}}"
+                    class="small-height-select text-danger" >
                     <mat-option *ngFor="let rechazo of tipos_rechazo" [value]="row.tipo_rechazo">
                       {{ rechazo.tipo }}
                     </mat-option>
@@ -166,12 +166,12 @@
         <!-- Acción Correctora Column -->
         <ng-container matColumnDef="accion_correctora">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Acción Correctora</th>
-          <td mat-cell *matCellDef="let row" class="color-accioncorrectora">
+          <td mat-cell *matCellDef="let row" class="">
             <div class="editable-cell d-flex align-items-center">
               <!-- Campo para precio de promoción -->
               <mat-form-field appearance="outline" class="small-height-field" subscriptSizing="dynamic">
                 <input matInput [(ngModel)]="row.pvp_es_promocion_precio" type="number" placeholder="Precio"
-                  class="no-padding" />
+                  class="no-padding text-success" />
               </mat-form-field>
 
               <!-- Campo para símbolo de promoción -->
@@ -186,7 +186,7 @@
 
               <!-- Campo para acción correctora -->
               <mat-form-field appearance="outline" class="large-height-field" subscriptSizing="dynamic">
-                <input matInput [(ngModel)]="row.accion_correctora" maxlength="50" placeholder="Acción Correctora" matTooltip="{{row.accion_correctora}}"
+                <input class="text-success" matInput [(ngModel)]="row.accion_correctora" maxlength="50" placeholder="Acción Correctora" matTooltip="{{row.accion_correctora}}"
                 [matTooltipDisabled]="row.accion_correctora?.length <= 25" />
               </mat-form-field>
             </div>
@@ -201,7 +201,7 @@
         <!-- Fecha interes -->
         <ng-container matColumnDef="interes">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class=""> Interés </th>
-          <td mat-cell *matCellDef="let row"> {{ row.fecha_interes }} </td>
+          <td mat-cell *matCellDef="let row" class="text-success"> {{ row.fecha_interes }} </td>
         </ng-container>
 
         <ng-container matColumnDef="expand" stickyEnd>
@@ -242,7 +242,7 @@
                   <!-- Promoción del Competidor -->
                   <div class="col-md-3 col-sm-6 text-center">
                     <p class="title-expandend-menu">Promoción Competidor:</p>
-                    <p>{{ element.promocion_competidor }}</p>
+                    <p>{{ element.promo_competencia }}</p>
                   </div>
                 </div>
 
