@@ -251,9 +251,6 @@ th {
   padding: 0 !important; /* Elimina el padding */
    min-height: auto;
 }
-::ng-deep table.converter-table .mat-mdc-row {
-  height: 10px !important;
-}
 
 ::ng-deep  .mat-mdc-option{
   padding-left: 2px !important;
@@ -272,9 +269,12 @@ th {
 ::ng-deep table .mdc-text-field--outlined{
   padding-right: 2px;
   padding-left: 2px;
-  width: 85%;
+  width: 100%;
 }
 
+::ng-deep .mat-mdc-option .mdc-list-item__primary-text{
+  font-size: 14px !important;
+}
 
 mat-select .mat-mdc-text-field-wrapper{
   padding: 0 8px;
