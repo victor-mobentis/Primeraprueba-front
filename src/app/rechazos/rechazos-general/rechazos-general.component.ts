@@ -20,17 +20,30 @@ import { IEstadosRechazoCount } from 'src/app/models/count.model';
 import { FilterService } from 'src/app/services/filter/filter.service';
 import { IEstado } from 'src/app/models/estados.model';
 import { ISimbolo } from 'src/app/models/simbolos.model';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+} from '@angular/animations';
 import { ICompetidor } from 'src/app/models/competidores.model';
+import { ITipo_Rechazo } from 'src/app/models/tipos_rechazos.model';
 @Component({
   selector: 'app-rechazos-general',
   templateUrl: './rechazos-general.component.html',
   styleUrls: ['./rechazos-general.component.css'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
+      state(
+        'collapsed',
+        style({ height: '0px', minHeight: '0', display: 'none' })
+      ),
       state('expanded', style({ height: '*', display: 'block' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
     ]),
   ],
 })
@@ -65,6 +78,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   };
   estados: IEstado[] = [];
   competidores: ICompetidor[] = [];
+  tipos_rechazo: ITipo_Rechazo[] = [];
   simbolos: ISimbolo[] = [];
   expandedElement?: IRechazo | null;
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
@@ -104,6 +118,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.loadSimbolos();
     this.loadGoogleMapsScript();
     this.loadCompetidores();
+    this.loadTiposRechazo();
   }
 
   /* pagiantor */
@@ -132,11 +147,32 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   }
 
   private loadRechazos() {
+    this.rechazoList = [
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      
+    ];
+    this.dataSource.data = this.rechazoList;
+    
     this.rechazadosService.getRechazos().subscribe((rechazos: IRechazo[]) => {
-      this.rechazoList = rechazos;
-      this.dataSource.data = rechazos;
+      //this.rechazoList = rechazos;
+      //this.dataSource.data = rechazos;
       console.log('Rechazos cargados:', rechazos); // Mostrar los resultados en la consola
     });
+    
   }
   private loadEstadosRechazos() {
     this.rechazadosService
@@ -155,9 +191,20 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   }
 
   private loadCompetidores() {
-    
-  this.competidores = [{nombre: 'Distribuciones Rico',  id: 1}, {nombre: 'Cadena 100 Profesional',  id: 2}, {nombre: 'Bazar Hogar',  id: 3}];
+    this.competidores = [
+      { nombre: 'Distribuciones Rico', id: 1 },
+      { nombre: 'Cadena 100 Profesional', id: 2 },
+      { nombre: 'Bazar Hogar', id: 3 },
+    ];
+  }
 
+  private loadTiposRechazo() {
+    this.tipos_rechazo = [
+      { tipo: 'Mal estado', id: 1 },
+      { tipo: 'Mala calidad', id: 2 },
+      { tipo: 'Producto no trabajado', id: 3 },
+      { tipo: 'Mejor precio competencia', id: 4 },
+    ];
   }
 
   private loadSimbolos() {
@@ -247,6 +294,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         return `${basePath}vendido.svg`;
       case 'No aplica':
         return `${basePath}no_aplica.svg`;
+      case 'Pendiente':
+        return `${basePath}pendiente.svg`;
       default:
         return ''; // Devuelve una cadena vacía si el estado no coincide con ninguno de los casos anteriores
     }
@@ -298,6 +347,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       console.log('ID de Estado seleccionado:', idEstadoSeleccionado);
 
       // Llamar al servicio para actualizar el estado
+      /*
       this.rechazadosService
         .actualizarEstados(row.rechazo_id, idEstadoSeleccionado)
         .subscribe(
@@ -309,6 +359,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
             console.error('Error al actualizar el estado', error);
           }
         );
+        */
     } else {
       console.error(
         'No se encontró el ID del estado seleccionado en el array estados'

@@ -360,6 +360,11 @@ tr.example-element-row:not(.example-expanded-row):active {
   max-width: 48px;
   padding: 0;
 }
+.mat-column-estado{
+  max-width: 200px;
+
+  
+}
 .promo-icon {
   font-size: 24px;
   font-weight: bold;
