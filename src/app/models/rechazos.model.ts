@@ -10,7 +10,7 @@ export interface IRechazo {
     tipo_rechazo: string; // motivo de rechazo
     precio_producto: number; // Precio del producto
     precio_competidor: number; //Precio del competidor
-    competidor: string; // Nombre del competidor
+    competidor: number; // Nombre del competidor
     pvp_es_promocion_precio: number; // Precio del competidor
     id_simbolo: number;
     pvp_es_promocion_symbol: string;
@@ -19,7 +19,12 @@ export interface IRechazo {
     anulado: boolean; // Estado anulado
     rechazo_longitud: number; // Longitud del rechazo
     rechazo_latitud: number; // Latitud del rechazo
-
+    notas: string
+    tiene_promo_propia: boolean
+    tiene_promo_competencia: boolean
+    promo_propia: string
+    promo_competencia:string
+    fecha_interes:string
     editingAccionCorrectora?: boolean;
     tempAccionCorrectora?: string;
     editingPrecioPromocion?: boolean;
