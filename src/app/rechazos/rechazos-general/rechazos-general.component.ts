@@ -29,6 +29,7 @@ import {
 } from '@angular/animations';
 import { ICompetidor } from 'src/app/models/competidores.model';
 import { ITipo_Rechazo } from 'src/app/models/tipos_rechazos.model';
+import { ExportService } from 'src/app/services/export/export.service';
 @Component({
   selector: 'app-rechazos-general',
   templateUrl: './rechazos-general.component.html',
@@ -53,9 +54,11 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     'select',
     'estado',
     'poblacion',
-    /* 'provincia', */ 'producto' /* , 'nombre_familia' */,
+    /* 'provincia', */ 
     'cliente',
+    /* , 'nombre_familia' */
     'nombre_subfamilia',
+    'producto' ,
     'tipo_rechazo',
     'precio_producto',
     'promo_propia',
@@ -81,6 +84,11 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   tipos_rechazo: ITipo_Rechazo[] = [];
   simbolos: ISimbolo[] = [];
   expandedElement?: IRechazo | null;
+
+  //Para la exportación en excel
+  selectedOption: string = 'Excel';
+
+
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
@@ -91,7 +99,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     private cdr: ChangeDetectorRef,
     private rechazadosService: RechazadosService,
     private filterService: FilterService,
-    private paginatorIntl: MatPaginatorIntl
+    private paginatorIntl: MatPaginatorIntl,
+    private _exportService: ExportService,
   ) {
     this.configurePaginatorLabels();
 
@@ -594,5 +603,56 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
           }
         );
     }
+  }
+
+
+  //Funcion para exportar los pedidos a excel
+  exportar_rechazos() {
+    // Verificar si hay pedidos seleccionados
+    if (this.selection.isEmpty()) {
+      /*
+      this.toastr.info(
+        'Por favor, seleccione algún pedido para la exportación.',
+        'Seleccionar pedido'
+      );
+      */
+      return;
+    }
+    if (this.selectedOption == '') {
+      //this.toastr.info('Por favor, seleccione el tipo de exportación.', 'Selecciona el tipo de exportación');
+
+      return;
+    }
+      // Si no hay pedidos exportados, mostrar directamente los IDs seleccionados
+      this.exportarIds();
+    
+  }
+
+  exportarIds() {
+    // Obtener los IDs seleccionados
+    const idsSeleccionados = this.selection.selected.map((row) => row.rechazo_id);
+    this.exportData(this.rechazoList)
+  }
+
+  //Función que se encarga de enviar los datos a exportar
+  exportData(data: any[]): void {
+    console.log('en funcion ', data);
+    console.log('en funcion', this.selectedOption);
+    const now = new Date();
+    const timestamp = now.toISOString().slice(0, 16).replace(/[-T:]/g, '-');
+
+    const fileName = `exportacion_pedidos_${timestamp}`;
+
+    if (this.selectedOption === 'Excel') {
+      this._exportService.exportToExcel(data, fileName);
+    } else if (this.selectedOption === 'CSV') {
+      this._exportService.exportToCSV(data, fileName);
+    } else if (this.selectedOption === 'Json') {
+      this._exportService.exportToJson(data, fileName);
+    }
+  }
+
+  updateOption(option: string) {
+    this.selectedOption = option;
   }
 }
