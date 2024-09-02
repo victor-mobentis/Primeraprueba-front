@@ -91,6 +91,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
+  
 
   constructor(
     public dialog: MatDialog,
@@ -99,10 +100,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     private cdr: ChangeDetectorRef,
     private rechazadosService: RechazadosService,
     private filterService: FilterService,
-    private paginatorIntl: MatPaginatorIntl,
     private _exportService: ExportService,
   ) {
-    this.configurePaginatorLabels();
 
     this.dataSource = new MatTableDataSource<IRechazo>([]);
 
@@ -131,39 +130,13 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     
   }
 
-  /* pagiantor */
-  private configurePaginatorLabels() {
-    this.paginatorIntl.itemsPerPageLabel = 'Rechazos por página';
-    this.paginatorIntl.nextPageLabel = 'Página siguiente';
-    this.paginatorIntl.previousPageLabel = 'Página anterior';
-    this.paginatorIntl.firstPageLabel = 'Primera página';
-    this.paginatorIntl.lastPageLabel = 'Última página';
-    this.paginatorIntl.getRangeLabel = (
-      page: number,
-      pageSize: number,
-      length: number
-    ) => {
-      if (length === 0 || pageSize === 0) {
-        return `0 de ${length}`;
-      }
-      const startIndex = page * pageSize;
-      const endIndex =
-        startIndex < length
-          ? Math.min(startIndex + pageSize, length)
-          : startIndex + pageSize;
-      return `${startIndex + 1} - ${endIndex} de ${length}`;
-    };
-    this.paginatorIntl.changes.next(); // Esto notifica a Angular Material de los cambios
-  }
-
   private loadRechazos() {
     this.rechazoList = [
-      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 96.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: true,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
+      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Artículo de provisiones',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 996.55,precio_competidor: 54.99,competidor: 3,pvp_es_promocion_precio: 45,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: true,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promoción 5x1 todo el año',fecha_interes: '',},
       {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Bicono para tubo d.10',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mejor precio competencia',precio_producto: 29.54,precio_competidor: 27.04,competidor: 1,pvp_es_promocion_precio: 20,id_simbolo: 2,pvp_es_promocion_symbol: '%',accion_correctora: 'Promoción 2+1',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción trimestral',tiene_promo_propia: true,tiene_promo_competencia: true,promo_propia: 'Promoción 5+2',promo_competencia: '4+2 en verano',fecha_interes: '15/12/23',},
       {rechazo_id: 1,estado: 'No aplica',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Cobre',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Producto no trabajado',precio_producto: 48.08,precio_competidor: 81.37,competidor: 1,pvp_es_promocion_precio: 15,id_simbolo: 2,pvp_es_promocion_symbol: '%',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: '',tiene_promo_propia: false,tiene_promo_competencia: false,promo_propia: '',promo_competencia: '',fecha_interes: '20/12/23',},
       {rechazo_id: 1,estado: 'Rechazado',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Eje',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 57.75,precio_competidor: 27.41,competidor: 1,pvp_es_promocion_precio: 20,id_simbolo: 2,pvp_es_promocion_symbol: '%',accion_correctora: 'Aplicar campaña trimestral',propuesta_agente: '',anulado: true,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Interesado al finalizar la promoción actual',tiene_promo_propia: true,tiene_promo_competencia: false,promo_propia: '3x2 Promoción Verano',promo_competencia: '',fecha_interes: '15/12/23',},
-      {rechazo_id: 1,estado: 'Rechazado',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Finissimas',nombre_familia: 'Alimentacion',nombre_subfamilia: '',tipo_rechazo: 'Mala calidad',precio_producto: 27.97,precio_competidor: 77.35,competidor: 1,pvp_es_promocion_precio: 30,id_simbolo: 2,pvp_es_promocion_symbol: '%',accion_correctora: 'Aplicar campaña trimestral',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promocion 5x1 todo el año',fecha_interes: '',},
-      {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Importe mantenimiento bicicleta carretera',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mejor precio competencia',precio_producto: 52.00,precio_competidor: 49.50,competidor: 2,pvp_es_promocion_precio: 20,id_simbolo: 2,pvp_es_promocion_symbol: '%',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promocion 5x1 todo el año',fecha_interes: '15/12/23',},
+      {rechazo_id: 1,estado: 'Rechazado',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Finissimas',nombre_familia: 'Alimentacion',nombre_subfamilia: '',tipo_rechazo: 'Mala calidad',precio_producto: 27.97,precio_competidor: 77.35,competidor: 1,pvp_es_promocion_precio: 30,id_simbolo: 2,pvp_es_promocion_symbol: '%',accion_correctora: 'Aplicar campaña trimestral',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promocion 5x1 todo el año',fecha_interes: '',},{rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Importe mantenimiento bicicleta carretera',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mejor precio competencia',precio_producto: 52.00,precio_competidor: 49.50,competidor: 2,pvp_es_promocion_precio: 20,id_simbolo: 2,pvp_es_promocion_symbol: '%',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción especial del cliente',tiene_promo_propia: false,tiene_promo_competencia: true,promo_propia: '',promo_competencia: 'Promocion 5x1 todo el año',fecha_interes: '15/12/23',},
       {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Importe mantenimiento bicicleta de paseo',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mala calidad',precio_producto: 74.27,precio_competidor: 47.19,competidor: 1,pvp_es_promocion_precio: 30,id_simbolo: 2,pvp_es_promocion_symbol: '%',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'Es una promoción trimestral',tiene_promo_propia: true,tiene_promo_competencia: true,promo_propia: 'Promocion 5+2',promo_competencia: '4+2 en verano',fecha_interes: '',},
       {rechazo_id: 1,estado: 'Vendido',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Junta aun 40-113 4055-10',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Producto no trabajado',precio_producto: 53.70,precio_competidor: 44.97,competidor: 0,pvp_es_promocion_precio: 35,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Lanzar Promoción 3x2',propuesta_agente: 'Mejorar el descuento del cliente',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: '',tiene_promo_propia: false,tiene_promo_competencia: false,promo_propia: '',promo_competencia: '',fecha_interes: '',},
       {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Leche Pascual Entera',nombre_familia: 'Alimentacion',nombre_subfamilia: '',tipo_rechazo: 'Mejor precio competencia',precio_producto: 87.27,precio_competidor: 71.22,competidor: 1,pvp_es_promocion_precio: 20,id_simbolo: 2,pvp_es_promocion_symbol: '%',accion_correctora: 'Promoción 1+1',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'No le ha gustado el producto',tiene_promo_propia: true,tiene_promo_competencia: false,promo_propia: '3x2 Promoción Verano',promo_competencia: '',fecha_interes: '',},

@@ -1,5 +1,5 @@
-<mat-drawer-container class="screen">
-  <div class="d-flex justify-content-between align-items-center py-3 m-3">
+<div class="screen">
+  <div class="d-flex flex-column gap-2 flex-xl-row justify-content-between align-items-center py-3 m-3">
     <div class="d-flex align-items-center justify-content-start ">
       <mat-icon class="color-dark">broken_image</mat-icon>
       <h1 class="mb-0 ps-2 color-dark page-heading">Converter</h1>
@@ -35,310 +35,246 @@
     </div>
     <!-- END Info Rechazos -->
     <div class="d-flex align-items-center gap-2">
-      <mat-button-toggle-group class="button d-flex align-items-center">
-        <mat-button-toggle class="" (click)="exportar_rechazos()">Exportar</mat-button-toggle>
-        <mat-button-toggle class="" [matMenuTriggerFor]="dropdownMenuOne">
-          {{selectedOption}}<mat-icon>arrow_drop_down</mat-icon>
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-  
-      <mat-menu #dropdownMenuOne="matMenu" xPosition="before">
-        <button mat-menu-item (click)="updateOption('Excel')">Excel</button>
-        <button mat-menu-item (click)="updateOption('CSV')">CSV</button>
-        <button mat-menu-item (click)="updateOption('Json')">Json</button>
-      </mat-menu>
-      <button matTooltip="Ver en Mapa" class="btn btn-secondary d-flex justify-content-center align-items-center"
-        (click)="verEnMapa()">
-        <mat-icon class="p-0 m-0">location_on</mat-icon>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-primary" (click)="exportar_rechazos()">Exportar</button>
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          {{ selectedOption }} <i class="bi bi-caret-down"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li><button class="dropdown-item" (click)="updateOption('Excel')">Excel</button></li>
+          <li><button class="dropdown-item" (click)="updateOption('CSV')">CSV</button></li>
+          <li><button class="dropdown-item" (click)="updateOption('Json')">Json</button></li>
+        </ul>
+      </div>
+      <button class="btn btn-color d-flex justify-content-center align-items-center" (click)="verEnMapa()">
+        <i class="bi bi-geo-alt-fill"></i>
       </button>
-      <button matTooltip="Ver Filtros" class="btn btn-secondary d-flex align-items-center" (click)="drawer.toggle()">
-        <mat-icon class="p-0 m-0">filter_list_alt</mat-icon>
+      <button class="btn btn-secondary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="">
+        <i class="bi bi-funnel-fill"></i>
       </button>
     </div>
     
   </div>
   <!-- TABLA -->
-  <div class="mat-elevation-z2 m-3">
-    <div class="table-wrapper">
-      <table class="converter-table" mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
-        <!-- Checkbox Column -->
-        <ng-container matColumnDef="select" sticky>
-          <th mat-header-cell *matHeaderCellDef class="sticky-header">
-            <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
-              [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
+  <div class="table-responsive m-3">
+    <table class="table table-hover table-sm my-0">
+      <thead>
+        <tr class="">
+          <!-- Checkbox Column -->
+          <th scope="col" class="text-center">
+            <input type="checkbox" (change)="masterToggle()"
+                   [checked]="selection.hasValue() && isAllSelected()"
+                   [indeterminate]="selection.hasValue() && !isAllSelected()" />
           </th>
-          <td mat-cell *matCellDef="let row">
-            <mat-checkbox color="primary" (click)="$event.stopPropagation()"
-              (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"></mat-checkbox>
-          </td>
-        </ng-container>
-        <!-- Estado Column -->
-        <ng-container matColumnDef="estado">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="">Estado</th>
-          <td mat-cell *matCellDef="let row" class="estado-cell">
-            <div class="d-flex align-items-center justify-content-center gap-2">
-              <div class="form-group estado-form-group">
-                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="estado-form-field">
-                  <mat-select [(ngModel)]="row.estado" name="estado-{{row.rechazo_id}}" class="small-height-select"
-                    (selectionChange)="actualizarEstados(row)">
-                    <mat-select-trigger>
-                      <img [src]="getOptionImage(row.estado)" alt="{{ row.estado }} Image" class="option-image">
-                      {{ row.estado }}
-                    </mat-select-trigger>
-                    <mat-option *ngFor="let estado of estados" [value]="estado.estado" class="custom-option">
-                      <img [src]="getOptionImage(estado.estado)" alt="{{ estado.estado }} Image" class="option-image">
-                      {{ estado.estado }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
+          <!-- Estado Column -->
+          <th scope="col" class="text-center">Estado</th>
+          <!-- Población Column -->
+          <th scope="col">Población</th>
+          <!-- Cliente Column -->
+          <th scope="col">Cliente</th>
+          <!-- Subfamilia Column -->
+          <th scope="col">Subfamilia</th>
+          <!-- Producto Column -->
+          <th scope="col">Producto</th>
+          <!-- Rechazo Column -->
+          <th scope="col">Rechazo</th>
+          <!-- Precio Column -->
+          <th scope="col" class="text-end">Precio</th>
+          <!-- Promo Propia Column -->
+          <th scope="col" class="text-center"></th>
+          <!-- Competidor Column -->
+          <th scope="col" class="text-end">Comp.</th>
+          <!-- Promo Competidor Column -->
+          <th scope="col" class="text-center"></th>
+          <!-- Competidor Column -->
+          <th scope="col">Competidor</th>
+          <!-- Acción Correctora Column -->
+          <th scope="col" class="text-center">Acción Correctora</th>
+          <!-- Propuesta Agente Column -->
+          <th scope="col">Propuesta Agente</th>
+          <!-- Fecha Interés Column -->
+          <th scope="col" class="text-success text-end">Fecha Interés</th>
+          <!-- Expand Column -->
+          <th scope="col" class="text-center"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let row of dataSource.data">
+          <tr>
+            <!-- Checkbox Column -->
+            <td class="text-center centrado_column">
+              <input type="checkbox" (click)="$event.stopPropagation()" 
+                     (change)="selection.toggle(row)" 
+                     [checked]="selection.isSelected(row)" />
+            </td>
+            <!-- Estado Column -->
+            <td class="text-center ">
+              <div class="d-flex align-items-center justify-content-center">
+                <img [src]="getOptionImage(row.estado)" alt="{{ row.estado }} Image" class="option-image">
+                <select class="form-select form-select-sm select_estado" [(ngModel)]="row.estado" (change)="actualizarEstados(row)">
+                  <option *ngFor="let estado of estados" [value]="estado.estado">
+                    {{ estado.estado }}
+                  </option>
+                </select>
               </div>
-            </div>
-          </td>
-        </ng-container>
-
-        <!-- Poblacion Column -->
-        <ng-container matColumnDef="poblacion">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""> Población </th>
-          <td mat-cell *matCellDef="let row" matTooltip="{{row.poblacion}}"
-            [matTooltipDisabled]="row.poblacion?.length <= 16"> {{ row.poblacion }} </td>
-        </ng-container>
-        
-        <!-- Cliente Column -->
-        <ng-container matColumnDef="cliente">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
-          <td mat-cell *matCellDef="let row" matTooltip="{{row.cliente}}"
-            [matTooltipDisabled]="row.cliente?.length <= 42"> {{ row.cliente }} </td>
-        </ng-container>
-        <!-- columna de subfamilia -->
-        <ng-container matColumnDef="nombre_subfamilia">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""> Subfamilia </th>
-          <td mat-cell *matCellDef="let row" matTooltip="{{row.nombre_subfamilia}}"
-            [matTooltipDisabled]="row.nombre_subfamilia?.length <= 16"> {{ row.nombre_subfamilia }} </td>
-        </ng-container>
-        <!-- Producto Column -->
-        <ng-container matColumnDef="producto">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""> Producto </th>
-          <td mat-cell *matCellDef="let row" matTooltip="{{row.producto}}"
-            [matTooltipDisabled]="row.producto?.length <= 32"> {{ row.producto }} </td>
-        </ng-container>
-        <!-- Rechazo Column -->
-        <ng-container matColumnDef="tipo_rechazo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""> Rechazo </th>
-          <td class="color-rechazo" mat-cell *matCellDef="let row">
-            <div class="d-flex align-items-center justify-content-center gap-2">
-              <div class="form-group estado-form-group">
-                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="estado-form-field color-rechazo" >
-                  <mat-select [(ngModel)]="row.tipo_rechazo" name="estado-{{row.tipo_rechazo}}" matTooltip="{{row.tipo_rechazo}}"
-                    class="small-height-select text-danger" >
-                    <mat-option *ngFor="let rechazo of tipos_rechazo" [value]="rechazo.tipo">
-                      {{ rechazo.tipo }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </div>
-          </td>
-        </ng-container>
-        <!-- PVP Column -->
-        <ng-container matColumnDef="precio_producto">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-end"> Precio </th>
-          <td class="text-end" mat-cell *matCellDef="let row"> {{ row.precio_producto}} € </td>
-        </ng-container>
-        <!-- promo_propia Column -->
-        <ng-container matColumnDef="promo_propia">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""> </th>
-          <td mat-cell *matCellDef="let row"> <mat-icon *ngIf="row.tiene_promo_propia" matTooltip="{{row.promo_propia}}"
-              class="promo-icon">P</mat-icon> </td>
-        </ng-container>
-        <!-- Comp Column -->
-        <ng-container matColumnDef="precio_competidor">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-end"> Comp. </th>
-          <td mat-cell *matCellDef="let row" class="text-end"> {{ row.precio_competidor }}€ </td>
-        </ng-container>
-        <!-- promo_propia Column -->
-        <ng-container matColumnDef="promo_competidor">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center"> </th>
-          <td mat-cell *matCellDef="let row" class="text-center"> <mat-icon *ngIf="row.tiene_promo_competencia"
-              matTooltip="{{row.promo_competencia}}" class="promo-icon">P</mat-icon> </td>
-        </ng-container>
-        <!-- Competidor Column -->
-        <ng-container matColumnDef="competidor">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""> Competidor </th>
-          <td mat-cell *matCellDef="let row">
-            <div class="d-flex align-items-center justify-content-center gap-2">
-              <div class="form-group estado-form-group">
-                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="estado-form-field color-rechazo">
-                  <mat-select [(ngModel)]="row.competidor" name="estado-{{row.competidor}}" class="small-height-select">
-                    <mat-option *ngFor="let competidor of competidores" [value]="competidor.id" class="custom-option">
-                      {{ competidor.nombre }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </div>
-          </td>
-        </ng-container>
-        <!-- Acción Correctora Column -->
-        <ng-container matColumnDef="accion_correctora">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Acción Correctora</th>
-          <td mat-cell *matCellDef="let row" class="">
-            <div class="editable-cell d-flex align-items-center">
-              <!-- Campo para precio de promoción -->
-              <mat-form-field appearance="outline" class="small-height-field" subscriptSizing="dynamic">
-                <input matInput [(ngModel)]="row.pvp_es_promocion_precio" type="number" placeholder="Precio"
-                  class="no-padding text-success" />
-              </mat-form-field>
-
-              <!-- Campo para símbolo de promoción -->
-              <mat-form-field appearance="outline" class="width-select-simbolo" subscriptSizing="dynamic">
-                <mat-select [(ngModel)]="row.id_simbolo" class="small-height-select"
-                  (selectionChange)="updateSymbol(row)">
-                  <mat-option *ngFor="let simbolo of simbolos" [value]="simbolo.id" class="custom-option">
+            </td>
+            <!-- Población Column -->
+            <td class="centrado_column">{{ row.poblacion }}</td>
+            <!-- Cliente Column -->
+            <td class="row_cliente centrado_column">{{ row.cliente }}</td>
+            <!-- Subfamilia Column -->
+            <td class="centrado_column">{{ row.nombre_subfamilia }}</td>
+            <!-- Producto Column -->
+            <td class="row_producto centrado_column">{{ row.producto }}</td>
+            <!-- Rechazo Column -->
+            <td class="text-center">
+              <select class="form-select form-select-sm text-danger select_rechazo" [(ngModel)]="row.tipo_rechazo">
+                <option *ngFor="let rechazo of tipos_rechazo" [value]="rechazo.tipo">{{ rechazo.tipo }}</option>
+              </select>
+            </td>
+            <!-- Precio Column -->
+            <td class="text-end row_precio_producto centrado_column">{{ row.precio_producto }} €</td>
+            <!-- Promo Propia Column -->
+            <td class="text-center centrado_column">
+              <i *ngIf="row.tiene_promo_propia" class="promo-icon" [attr.title]="row.promo_propia">P</i>
+            </td>
+            <!-- Competidor Column -->
+            <td class="text-end row_precio_competidor centrado_column">{{ row.precio_competidor }} €</td>
+            <!-- Promo Competidor Column -->
+            <td class="text-center centrado_column">
+              <i *ngIf="row.tiene_promo_competencia" class="promo-icon" [attr.title]="row.promo_competencia">P</i>
+            </td>
+            <!-- Competidor Column -->
+            <td>
+              <select class="form-select form-select-sm row_select_competidor" [(ngModel)]="row.competidor">
+                <option *ngFor="let competidor of competidores" [value]="competidor.id">{{ competidor.nombre }}</option>
+              </select>
+            </td>
+            <!-- Acción Correctora Column -->
+            <td class="">
+              <div class="d-flex align-items-center gap-2">
+                <!-- Campo para precio de promoción -->
+                <input type="number" class="form-control form-control-sm accion_correctora_precio text-success" [(ngModel)]="row.pvp_es_promocion_precio" placeholder="0" />
+    
+                <!-- Campo para símbolo de promoción -->
+                <select class="form-select form-select-sm accion_correctora_simbolo" [(ngModel)]="row.id_simbolo" (change)="updateSymbol(row)">
+                  <option *ngFor="let simbolo of simbolos" [value]="simbolo.id">
                     {{ simbolo.simbolo }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <!-- Campo para acción correctora -->
-              <mat-form-field appearance="outline" class="large-height-field" subscriptSizing="dynamic">
-                <input class="text-success" matInput [(ngModel)]="row.accion_correctora" maxlength="50" placeholder="Acción Correctora" matTooltip="{{row.accion_correctora}}"
-                [matTooltipDisabled]="row.accion_correctora?.length <= 25" />
-              </mat-form-field>
-            </div>
-          </td>
-        </ng-container>
-        <!-- Propuesta agente Column -->
-        <ng-container matColumnDef="propuesta_agente">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Propuesta Agente </th>
-          <td mat-cell *matCellDef="let row" matTooltip="{{row.propuesta_agente}}"
-            [matTooltipDisabled]="row.propuesta_agente?.length <= 25"> {{ row.propuesta_agente }} </td>
-        </ng-container>
-        <!-- Fecha interes -->
-        <ng-container matColumnDef="interes">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""> Interés </th>
-          <td mat-cell *matCellDef="let row" class="text-success"> {{ row.fecha_interes }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="expand" stickyEnd>
-          <th class="sticky-header" mat-header-cell *matHeaderCellDef aria-label="row actions"></th>
-          <td class="text-center" mat-cell *matCellDef="let element">
-            <button mat-icon-button aria-label="expand row"
-              (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
-              <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
-              <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="expandedDetail">
-          <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-            <div [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed'">
-              <!-- Contenedor expandible a la derecha -->
-              <div class="expandable-row">
-                <!-- Primera fila -->
-                <div class="row mb-2 w-100 px-6">
-                  <!-- Campo PVP -->
-                  <div class="col-md-3 col-sm-6 text-center">
-                    <p class="title-expandend-menu">PVP:</p>
-                    <p>{{ element.precio_producto }}€</p>
-                  </div>
-
-                  <!-- Promoción Propia -->
-                  <div class="col-md-3 col-sm-6 text-center">
-                    <p class="title-expandend-menu">Promoción Propia:</p>
-                    <p>{{ element.promo_propia }}</p>
-                  </div>
-
-                  <!-- Precio del Competidor -->
-                  <div class="col-md-3 col-sm-6 text-center">
-                    <p class="title-expandend-menu">Precio Competidor:</p>
-                    <p>{{ element.precio_competidor }}€</p>
-                  </div>
-
-                  <!-- Promoción del Competidor -->
-                  <div class="col-md-3 col-sm-6 text-center">
-                    <p class="title-expandend-menu">Promoción Competidor:</p>
-                    <p>{{ element.promo_competencia }}</p>
-                  </div>
-                </div>
-
-                <!-- Segunda fila (Notas) -->
-                <div class="row">
-                  <div class="col-12 text-center">
-                    <p class="title-expandend-menu">Notas:</p>
-                    <p>{{ element.notas }}</p>
-                  </div>
-                </div>
+                  </option>
+                </select>
+    
+                <!-- Campo para acción correctora -->
+                <input type="text" class="form-control form-control-sm row_accion_correctora text-success" [(ngModel)]="row.accion_correctora" maxlength="50" placeholder="Acción Correctora" />
               </div>
-            </div>
-          </td>
+            </td>
+            <!-- Propuesta Agente Column -->
+            <td class="row_propuesta_agente centrado_column">{{ row.propuesta_agente }}</td>
+            <!-- Fecha Interés Column -->
+            <td class="text-success centrado_column row_fecha_interes">{{ row.fecha_interes }}</td>
+            <!-- Expand Column -->
+            <td class="text-center">
+              <button class="btn btn-link p-0" (click)="expandedElement = (expandedElement === row ? null : row)">
+                <i class="bi" [ngClass]="expandedElement === row ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+              </button>
+            </td>
+          </tr>
+  
+          <!-- Row Expanded Detail -->
+          <ng-container *ngIf="expandedElement === row">
+            <tr>
+              <td [attr.colspan]="displayedColumns.length">
+                <div class="p-2">
+                  <div class="row mb-2">
+                    <div class="col-md-3 col-sm-6">
+                      <strong>PVP:</strong> {{ row.precio_producto }} €
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                      <strong>Promoción Propia:</strong> {{ row.promo_propia }}
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                      <strong>Precio Competidor:</strong> {{ row.precio_competidor }} €
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                      <strong>Promoción Competidor:</strong> {{ row.promo_competencia }}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <strong>Notas:</strong> {{ row.notas }}
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
         </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
-          [class.example-expanded-row]="expandedElement === element">
-        </tr>
-        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="4">No hay datos que mostrar</td>
-        </tr>
-      </table>
-    </div>
-    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+      </tbody>
+    </table>
   </div>
+  <!-- Paginador -->
+   
+  <nav>
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="!paginator?.hasPreviousPage()" (click)="paginator?.previousPage()">
+        <a class="page-link" href="javascript:void(0)">Anterior</a>
+      </li>
+      <li class="page-item disabled">
+        <span class="page-link" *ngIf="paginator">
+          {{ paginator.pageIndex + 1 }} / {{ paginator.getNumberOfPages() }}
+        </span>
+      </li>
+      <li class="page-item" [class.disabled]="!paginator?.hasNextPage()" (click)="paginator?.nextPage()">
+        <a class="page-link" href="javascript:void(0)">Siguiente</a>
+      </li>
+    </ul>
+  </nav>
+  
   <!-- END TABLA -->
   <!-- menu derecho -->
-  <mat-drawer #drawer class="sidenav px-3 py-5" mode="over" position="end">
-    <div class="d-flex align-items-center mt-3 pt-3 gap-3">
-      <mat-icon class="icono-svg">filter_list_alt</mat-icon>
-      <h2 class="my-0">Filtro de Rechazos</h2>
-    </div>
-    <form [formGroup]="form" (ngSubmit)="applyFilter()" class="d-flex flex-column gap-3">
-      <div class="d-flex flex-column">
-        <div class="content-end gap-2 d-flex my-3">
-          <button class="buttons-rechazos text-white" mat-button>Filtrar</button>
-          <button (click)="filtroReset()" class="buttons-rechazos text-white" mat-button>Limpiar</button>
-          <button (click)="drawer.toggle()" class="buttons-rechazos text-white" mat-button>Cancelar</button>
-        </div>
-        <div class="mb-2 d-flex flex-column gap-3">
-
-          <mat-form-field subscriptSizing="dynamic" class="">
-            <mat-label>Estado</mat-label>
-            <mat-select formControlName="EstadoFilterControl">
-              <mat-option value="">- Todos -</mat-option>
-              <mat-option value="Rechazado">Rechazado</mat-option>
-              <mat-option value="En Proceso">En Proceso</mat-option>
-              <mat-option value="Vendido">Vendido</mat-option>
-              <mat-option value="No aplica">No aplica</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field subscriptSizing="dynamic" class="">
-            <mat-label>Poblacion</mat-label>
-            <input formControlName="PoblacionFilterControl" matInput>
-          </mat-form-field>
-
-          <mat-form-field subscriptSizing="dynamic" class="">
-            <mat-label>Provincia</mat-label>
-            <input formControlName="ProvinciaFilterControl" matInput>
-          </mat-form-field>
-
-          <mat-form-field subscriptSizing="dynamic" class="">
-            <mat-label>Producto</mat-label>
-            <input formControlName="ProductoFilterControl" matInput>
-          </mat-form-field>
-
-          <mat-form-field subscriptSizing="dynamic" class="">
-            <mat-label>Familia</mat-label>
-            <input formControlName="FamiliaFilterControl" matInput>
-          </mat-form-field>
-
-          <mat-form-field subscriptSizing="dynamic" class="">
-            <mat-label>Subfamilia</mat-label>
-            <input formControlName="SubFamiliaFilterControl" matInput>
-          </mat-form-field>
-        </div>
-        
+    <!-- Filtros (Menú derecho) -->
+    <div class="modal fade" tabindex="-1" id="drawer" aria-labelledby="expandedElement" aria-hidden="true">
+      <div class="offcanvas-header">
+        <h5 id="drawerLabel">Filtro de Rechazos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
-    </form>
-  </mat-drawer>
-</mat-drawer-container>
+      <form [formGroup]="form" (ngSubmit)="applyFilter()" class="d-flex flex-column gap-3 p-3">
+        <div class="d-flex flex-column gap-3">
+          <button class="btn btn-primary" type="submit">Filtrar</button>
+          <button type="button" class="btn btn-secondary" (click)="filtroReset()">Limpiar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+          <div class="mb-2 d-flex flex-column gap-3">
+            <div class="form-group">
+              <label for="estado">Estado</label>
+              <select id="estado" class="form-select" formControlName="EstadoFilterControl">
+                <option value="">- Todos -</option>
+                <option value="Rechazado">Rechazado</option>
+                <option value="En Proceso">En Proceso</option>
+                <option value="Vendido">Vendido</option>
+                <option value="No aplica">No aplica</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="poblacion">Población</label>
+              <input id="poblacion" class="form-control" formControlName="PoblacionFilterControl" />
+            </div>
+            <div class="form-group">
+              <label for="provincia">Provincia</label>
+              <input id="provincia" class="form-control" formControlName="ProvinciaFilterControl" />
+            </div>
+            <div class="form-group">
+              <label for="producto">Producto</label>
+              <input id="producto" class="form-control" formControlName="ProductoFilterControl" />
+            </div>
+            <div class="form-group">
+              <label for="familia">Familia</label>
+              <input id="familia" class="form-control" formControlName="FamiliaFilterControl" />
+            </div>
+            <div class="form-group">
+              <label for="subfamilia">Subfamilia</label>
+              <input id="subfamilia" class="form-control" formControlName="SubFamiliaFilterControl" />
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+</div>

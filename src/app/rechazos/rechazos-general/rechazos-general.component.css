@@ -39,6 +39,11 @@ th {
   color: #3F51B5;
 }
 
+.btn-color{
+  background-color: #3F51B5;
+  color: white;
+}
+
 .title-expandend-menu{
   color: #3F51B5;
 }
@@ -134,10 +139,10 @@ th {
 
 
 .option-image {
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
+  width: 20px; /* Ajusta según el tamaño deseado */
+  height: auto;
+  vertical-align: middle; /* Alinea verticalmente con el texto */
+  margin: 8px; /* Espacio entre la imagen y el texto */
 }
 
 .rechazado {
@@ -172,131 +177,6 @@ th {
   height: auto;
 }
 
-.editable-cell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-
-.editable-input {
-  color: #10a03b;
-  border: none;
-  outline: none;
-  width: 60px;
-  text-align: right;
-  padding-right: 5px;
-}
-
-.symbol-select {
-  justify-content: center;
-  align-items: center;
-  margin-left: 5px;
-  height: 100%;
-  border: none;
-  outline: none;
-  background: none;
-  cursor: pointer;
-}
-
-.no-border-select {
-  border: none;
-  padding: 0;
-  font-size: 14px;
-  color: #495057;
-  cursor: pointer;
-}
-
-.large-input {
-  width: 150px;
-  text-align: left;
-  padding: 5px;
-}
-
-.mat-column-select{
-  width: 40px;
-  padding:0;
-}
-.mat-column-estado{
-  width: 80px;
-  padding: 0 8px;
-}
-.mat-column-tipo_rechazo{
-  width: 90px;
-  padding: 0 8px;
-}
-
-.mat-column-rechazo_id{
-  width: 40px;
-  padding: 0 10px;
-  padding-right: 0;
-}
-
-.mat-column-poblacion{
-  min-width: 70px;
-  padding: 0 5px;
-  padding-right: 0;
-}
-.mat-column-producto{
-  width: 150px;
-  padding: 0 5px;
-}
-
-.mat-column-cliente{
-  width: 150px;
-  padding: 0 5px;
-}
-.mat-column-accion_correctora{
-  width: 300px;
-  padding: 0 5px;
-}
-.small-height-field,
-.width-select-simbolo{
-  width: 74px;
-}
-
-.large-height-field{
-  width: 200px;
-}
-
-/* para la altura de los input */
-::ng-deep table.converter-table .mat-mdc-form-field-infix {
-  padding: 0 !important; /* Elimina el padding */
-   min-height: auto;
-   width: 100%;
-}
-
-::ng-deep  .mat-mdc-option{
-  padding-left: 2px !important;
-  padding-right: 3px !important;
-  min-height: 30px !important;
-}
-
-::ng-deep div.mat-mdc-select-panel{
-  padding: 2px 0 !important;
-}
-
-::ng-deep table .mat-mdc-select-value-text{
-  font-size: 14px;
-}
-
-::ng-deep table .mdc-text-field--outlined{
-  padding-right: 2px;
-  padding-left: 2px;
-}
-::ng-deep table .mat-column-competidor .mdc-text-field--outlined{
-  padding-right: 2px;
-  padding-left: 2px;
-  width: 90%;
-}
-
-::ng-deep .mat-mdc-option .mdc-list-item__primary-text{
-  font-size: 14px !important;
-}
-
-mat-select .mat-mdc-text-field-wrapper{
-  padding: 0 8px;
-}
 
 
 
@@ -404,30 +284,108 @@ tr.example-element-row:not(.example-expanded-row):active {
   box-sizing: border-box;
 }
 
-/* Alineación y espaciado */
-.row {
-  display: flex;
-  justify-content: center;
-  margin: 0;
-}
 
-.col-md-3, .col-sm-6 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 8px;
-}
-
+/* css de tabla con boostrap */
 .text-center {
   text-align: center;
 }
 
 
-::ng-deep .custom-option mat-pseudo-checkbox{
-  display: none !important;
-}
-
 
 .icono-svg{
   color: #5c5c5c;
+}
+.accion_correctora_precio{
+  width: 52px;
+}
+
+.accion_correctora_simbolo{
+  width: 65px;
+}
+table{
+  font-size: 12px;
+}
+
+.select_estado{
+  min-width: 120px;
+}
+.row_cliente{
+  min-width: 160px;
+}
+.row_producto{
+  min-width: 160px;
+}
+.select_rechazo{
+  min-width: 130px;
+}
+.row_precio_producto, .row_precio_competidor{
+  min-width: 50px;
+}
+
+.row_select_competidor{
+  min-width: 150px;
+}
+
+.row_accion_correctora{
+  min-width: 160px;
+}
+.row_propuesta_agente{
+  min-width: 180px;
+}
+.row_fecha_interes{
+  min-width: 85px;
+  text-align: end;
+}
+.centrado_column{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.table-responsive {
+  max-height: 600px; /* Ajusta según sea necesario */
+  max-width: 100%; /* Asegura que el contenedor no exceda el ancho de su contenedor padre */
+  margin: 0 auto; /* Centra la tabla en el contenedor */
+}
+
+.table thead th {
+  position: -webkit-sticky; /* Para Safari */
+  position: sticky;
+  top: 0; /* Fija el encabezado en la parte superior */
+  background-color: #fff; /* Asegúrate de que el fondo sea blanco o del color que desees */
+  z-index: 1; /* Asegúrate de que esté sobre el contenido de la tabla */
+}
+
+/* Estilo para la columna fija de los checkboxes */
+.table-responsive table thead th:first-child,
+.table-responsive table tbody td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2; /* Asegura que el encabezado esté sobre el contenido */
+  background-color: white; /* Mantiene el fondo blanco para la columna fija */
+}
+
+/* Estilo para la columna fija de expand */
+.table-responsive table thead th:last-child,
+.table-responsive table tbody td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 2; /* Asegura que el encabezado esté sobre el contenido */
+  background-color: white; /* Mantiene el fondo blanco para la columna fija */
+}
+
+/* Ajustes adicionales para las celdas de datos */
+.table-responsive table tbody td:first-child {
+  z-index: 1; /* Asegura que el contenido esté debajo del encabezado */
+}
+
+.table-responsive table thead th:first-child {
+  z-index: 3; /* Asegura que el encabezado esté encima del contenido */
+}
+
+.table-responsive table tbody td:last-child {
+  z-index: 0; /* Asegura que el contenido esté debajo del encabezado */
+}
+
+.table-responsive table thead th:last-child {
+  z-index: 3; /* Asegura que el encabezado esté encima del contenido */
 }
