@@ -69,7 +69,7 @@ export class GraficaProductosTopComponent {
       series: [
         {
           color: '#87CEFA',
-          data: [200, 120, 455, 320, 200, 200, 200, 200, 200, 200],
+          data: [6686, 1500, 12058, 7500, 6686, 6686, 6686, 6686, 6686, 6686],
           type: 'bar',
           label: {
             show: true,

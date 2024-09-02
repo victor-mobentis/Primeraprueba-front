@@ -39,7 +39,7 @@ export class GraficaPedidosSegmentacion1Component {
         bottom: 40
       },
       title: {
-        text: "Ponteciabilidad",
+        text: "Pontecialidad",
         top: 10,
         left: 'center',
         textStyle: {
@@ -69,7 +69,7 @@ export class GraficaPedidosSegmentacion1Component {
       series: [
         {
           color: '#87CEFA',
-          data: [200, 120, 455, 320],
+          data: [11210, 8123, 32522, 15005],
           type: 'bar',
           label: {
             show: true,

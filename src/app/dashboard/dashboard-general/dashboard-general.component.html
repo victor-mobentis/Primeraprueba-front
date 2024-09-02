@@ -6,100 +6,11 @@
           <img class="col-1 icon-title p-0 my-4" src="assets/images/iconos/dashboard-icon-dark.svg" alt="Dashboard"
             matListItemIcon />
             <h1 class="mb-0 color-dark page-heading">Dashboard</h1>
-            
           </div>
-          
       </div>
     </div>
-    <div class="col-12 col-xl-8 d-flex align-items-center justify-content-center">
-      <div class="d-flex justify-content-evenly kpis gap-3 px-3">
-        <div class="bg-white text-center rounded-3 d-flex justify-content-evenly align-items-center gap-2 px-2 text-rech">
-          <div class="d-flex flex-column m-1">
-            <h3 class="m-0 fw-bold">
-              66.860
-            </h3>
-            <span class=" font-dashboard custom-bold">Rechazos</span>
-          </div>
-        </div>
-        <div class="bg-white text-center rounded-3 d-flex justify-content-evenly align-items-center gap-2 px-2">
-          <div class="d-flex flex-column m-1">
-            <h3 class="m-0 fw-bold">753</h3>
-            <span class="font-dashboard custom-bold ">Caducado</span>
-          </div>
-
-          <div class="border my-2" style="height: 45px;"></div>
-          <div class="d-flex flex-column m-1">
-            <h3 class="m-0 fw-bold">280</h3>
-            <span class="font-dashboard custom-bold">Mala calidad</span>
-          </div>
-          <div class="border my-2" style="height: 45px;"></div>
-          <div class="d-flex flex-column m-1">
-            <h3 class="m-0 fw-bold">280</h3>
-            <span class="font-dashboard custom-bold">Precio</span>
-          </div>
-          <div class="border my-2" style="height: 45px;"></div>
-          <div class="d-flex flex-column m-1">
-            <h3 class="m-0 fw-bold">280</h3>
-            <span class="font-dashboard custom-bold">No Aplica</span>
-          </div>
-        </div>
-        <!--
-        <div class="border my-2">
-        </div>
-        <div class="d-flex flex-column m-1">
-          <div class="text-center numeroKPI">
-            29.230
-          </div>
-          <div class="text-center tituloKPI">Att. Cliente</div>
-        </div>
-        -->
-
-        <div class="bg-white text-center rounded-3 d-flex justify-content-evenly align-items-center gap-2 px-2">
-          <div class="d-flex flex-column m-1">
-            <h3 class="m-0 fw-bold">50</h3>
-            <span class="font-dashboard custom-bold ">Pendiente</span>
-          </div>
-          <div class="border my-2" style="height: 45px;"></div>
-          <div class="d-flex flex-column m-1">
-            <h3 class="m-0 fw-bold">200</h3>
-            <span class="font-dashboard custom-bold">En proceso</span>
-          </div>
-          <div class="border my-2" style="height: 45px;"></div>
-          <div class="d-flex flex-column m-1">
-            <h3 class="m-0 fw-bold">35</h3>
-            <span class="font-dashboard custom-bold">Desistido</span>
-          </div>
-          <div class="border my-2" style="height: 45px;"></div>
-          <div class="d-flex flex-column m-1">
-            <h3 class="m-0 fw-bold">135</h3>
-            <span class="font-dashboard custom-bold ">Rechazado</span>
-          </div>
-          <div class="border my-2" style="height: 45px;"></div>
-          <div class="d-flex flex-column m-1">
-            <h3 class="m-0 fw-bold">269</h3>
-            <span class="font-dashboard custom-bold">Vendido</span>
-          </div>
-        </div>
-
-
-        
-        <!--<div class="border my-2">
-        </div>
-        <div class="d-flex flex-column m-1">
-          <div class="text-center numeroKPI">
-            12.543 €
-          </div>
-          <div class="text-center tituloKPI">Ventas/día</div>
-        </div>
-        <div class="d-flex flex-column m-1">
-          <div class="text-center numeroKPI">
-            2.385.245 €
-          </div>
-          <div class="text-center tituloKPI">Ventas</div>
-        </div>
-      -->
-      </div>
-    </div>
+    <app-kpi class=""></app-kpi>
+    
     <div class="col-12 col-xl-2 align-self-center d-flex justify-content-end">
       <button type="button" class="btn btn-secondary pb-0" (click)="toggleFiltro()">
         <mat-icon class="p-0 m-0">filter_list_alt</mat-icon>
@@ -163,10 +74,9 @@
               </mat-select>
             </mat-form-field>
           </div>
-
         </div>
-        <div class="row gx-2">
 
+        <div class="row gx-2">
           <div class="col">
             <mat-form-field subscriptSizing="dynamic" class="mb-2 col-12">
               <mat-label>Población</mat-label>
@@ -191,7 +101,6 @@
               </mat-select>
             </mat-form-field>
           </div>
-
         </div>
 
         <div class="col justify-content-end gap-2 d-flex mt-2">
@@ -210,7 +119,7 @@
         <div class="contenedor-grafica-s fondo-blanco"><app-grafica-clientes></app-grafica-clientes></div>
       </div>
       <div class="col-4">
-        <div class="contenedor-grafica-s fondo-blanco"><app-grafica-pedidos></app-grafica-pedidos></div>
+        <div class="contenedor-grafica-s fondo-blanco"><app-grafica-motivos></app-grafica-motivos></div>
       </div>
       <div class="col-4">
         <div class="contenedor-grafica-s fondo-blanco">
@@ -246,17 +155,14 @@
       <div class="col-4">
         <div class="contenedor-grafica-s fondo-blanco">
           <app-grafica-pedidos-mes class=""></app-grafica-pedidos-mes>
-
         </div>
       </div>
       <div class="col-4">
         <div class="contenedor-grafica-s fondo-blanco">
           <app-grafica-pedidos-dia></app-grafica-pedidos-dia>
-
         </div>
       </div>
     </div>
-
   </div>
 
   <div class="fondo-blanco p-3 mt-3">
@@ -300,9 +206,7 @@
         <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons
           MatPaginatorIntl="Select page of users"></mat-paginator>
       </div>
-
-
     </div>
-
   </div>
+
 </div>

@@ -64,7 +64,7 @@ export class GraficaPedidosMesComponent {
       series: [
         {
           color: '#87CEFA',
-          data: [0, 0, 0, 0, 120, 300, 580,],
+          data: [0, 0, 0, 0, 5860, 18000, 43000,],
           type: 'bar'
         }
       ]

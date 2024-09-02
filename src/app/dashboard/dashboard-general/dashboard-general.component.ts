@@ -6,7 +6,7 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 
 import { GraficaClientesComponent } from 'src/app/components/grafica-clientes/grafica-clientes.component';
 import { GraficaPedidosDiaComponent } from 'src/app/components/grafica-pedidos-dia/grafica-pedidos-dia.component';
-import { GraficaPedidosComponent } from 'src/app/components/grafica-pedidos/grafica-pedidos.component';
+import { GraficaMotivosComponent } from 'src/app/components/grafica-motivos/grafica-motivos.component';
 import { GraficaPedidosFamiliasProductosComponent } from 'src/app/components/grafica-pedidos-familias-productos/grafica-pedidos-familias-productos.component';
 import { GraficaPedidosMesComponent } from 'src/app/components/grafica-pedidos-mes/grafica-pedidos-mes.component';
 import { GraficaPedidosSegmentacion1Component } from 'src/app/components/grafica-pedidos-segmentacion1/grafica-pedidos-segmentacion1.component';
@@ -36,19 +36,19 @@ export class DashboardGeneralComponent {
     end: new FormControl(this.fechaHoy),
   });
   //Filtros
-  familiaList: string[] = ['Aceites', 'Aceitunas / Encurtidos', 'Adhesivos', 'Agua GLP', 'Arroces','Azucar / Chocolate','Bombones','Cafés','Camisas Hombre','Cárnicos','Cereales Desayuno','Conservas Fruta','Conservas Pescado','Conservas Vegetales','Culinarios','Embutidos CF','Ensaladas CF','Ensaladas Salteadas','Espec. Banquetes','Especias','Fiambres / Embutidos','Huevo Derivados','Jamones','Jardín / Hogar','Leche GLP','Legumbres','Miel','Motor','Pantalones Hombre','Pasta','Quesos','Sal','Salsas','Verduras','Vinagres','Zumos / Néctares','Zumos GLP'];
-  agenteList: IFiltroAgente[] = [{id: 0,name: 'FELIPE GARCILASO RIBERA'}, {id: 1,name: 'GUSTAVO BLANCO MORENO'}, {id: 2,name: 'FMERCEDES MUÑIZ ALONSO'},{id: 4,name: 'MIRIAM ALVAREZ MAS'}];
-  poblacionList: string[] = ['ALALPARDO','ALCALA DE HENARES','ALCOBENDAS','ALCORCON','ALDEA SANTILLANA','ALGETE','ARANDA DE DUERO','ARAVACA','ARGANDA DEL REY','ARROYOMOLINOS','AVILA','BELVIS DEL JARAMA','BOADILLA DEL MONTE','BOECILLO','CAMARMA DE ESTERUELAS','CAMBEO','CAMPOREAL','CERCEDA','CIEMPOZUELOS','CIFUENTES','COBEÑA','COBISA','COLLADO VILLALBA','COLMENAR DE OREJA','COLMENAR VIEJO','COMENAR VIEJO','COSLADA','DAGANZO','DON BENITO','EL CASAR','EL MOLAR','EL PLANTIO','EL TIEMBLO','EL VELLON','ESTREMERA','FUENLABRADA','FUENTE EL FRESNO','FUENTE EL SAZ','FUENTE EL SAZ DE JARAMA','FUENTE EL SAZ DEL JARAMA','GALAPAGAR','GETAFE','GUADALAJARA','GUADALIX DE LA SIERRA','GUADARRAMA','ISLA DE LA TOJA','LA CABRERA','LA VALL D´UIXO','LAS ROZAS','LEGANES','LOECHES','LOS HUEROS - VILLALBILLA','LOZOYUELA','MADRID','MAJADAHONDA','MAJADAHONDA','MANGIRON-PUENTES VIEJAS','MANZANARES DEL REAL','MANZANARES EL REAL','MATALPINO','MONDEJAR','MORALZARZAL','NAVACERRADA','NAVAGALAMELLA','NAVALAFUENTE','NULES','OLIAS DEL REY','ONDA','OTERO DE HERREROS','PELAYOS DE LA PRESA','PEZUELA DE LAS TORRES','PIOZ','POZOAMARGO','POZUELO DE ALARCON','RIVAS VACIAMADRID','ROA','S.S.REYES','SAN AGUSTIN DE GUADALIX','SAN FERNANDO DE HENARES','SAN MARTIN DE LA VEGA','SAN RAFAEL','SAN SEBASTIAN  DE LOS REYES','SANTOS DE LA HUMOSA','SESEÑA','SEVILLA LA NUEVA','SIGUENZA','SOTO DEL REAL','TOLEDO','TORREJON DE ARDOZ','TORRELAGUNA','TORREMOCHA DE JARAMA','TRES CANTOS','VALDETORRES DEL JARAMA','VALL DE UXO','VILLANUEVA DE ALCARDETE','VILLENA','ZARAGOZA','ZARZALEJO'];
-  provinciaList: string[] = ['ALICANTE','AVILA','BADAJOZ','BURGOS','CANTABRIA','CASTELLON','CUENCA','GUADALAJARA','MADRID','ORENSE','PONTEVEDRA','SEGOVIA','TOLEDO','VALLADOLID','ZARAGOZA'];
-  s1: ISegmentacion[] = [{segmentation_value_id: 11,segmentation_value: 'A  (> 5.000 euros/mes)',name: 'Potenciabilidad'},{segmentation_value_id: 12,segmentation_value: 'B  (Entre 2.500 - 4.999 euros/mes)',name: 'Potenciabilidad'},{segmentation_value_id: 12,segmentation_value: 'C  (Entre 1.000 y 2.499 €/mes)',name: 'Potenciabilidad'},{segmentation_value_id: 12,segmentation_value: 'D ( < 1.000 euros) ',name: 'Potenciabilidad'}];
-  s2: ISegmentacion[] = [{segmentation_value_id: 11,segmentation_value: 'Bar/Tapas  (No especializado)',name: 'Tipologia'},{segmentation_value_id: 12,segmentation_value: 'Cerveceria / Cafeteria  (Especializado)',name: 'Tipologia'},{segmentation_value_id: 12,segmentation_value: 'Restaurante Independiente (Incluye catering)',name: 'Tipologia'},{segmentation_value_id: 12,segmentation_value: 'Noche (Disco, Pubs, Bar de copas) ',name: 'Tipologia'},{segmentation_value_id: 12,segmentation_value: 'Restauracion organizada: Franquicias, Tematicos',name: 'Tipologia'},{segmentation_value_id: 12,segmentation_value: 'Hoteles, Hostales, posadas',name: 'Tipologia'},{segmentation_value_id: 12,segmentation_value: 'OCIO (Deporte,Cines,Teatro,Salon Juegos,..)',name: 'Tipologia'},{segmentation_value_id: 12,segmentation_value: 'Colectividades:comedor empresa, Enseñanza,Admin,',name: 'Tipologia'},{segmentation_value_id: 12,segmentation_value: 'Tienda Alimentacion Minorista(Super,China,Panad..)',name: 'Tipologia'},{segmentation_value_id: 12,segmentation_value: 'Tienda Impulso(F Secos,Chuches,Estanco,Vending',name: 'Tipologia'},{segmentation_value_id: 12,segmentation_value: 'Mayoristas (Distribuidores, Cash, por mayor)',name: 'Tipologia'},{segmentation_value_id: 12,segmentation_value: 'Restauracion en Ruta(aeropuerto,E.S. Carreteras)',name: 'Tipologia'},{segmentation_value_id: 12,segmentation_value: 'Personal Empresa / Autoconsumo',name: 'Tipologia'},{segmentation_value_id: 12,segmentation_value: 'Alquiler',name: 'Tipologia'}];
-  s3: ISegmentacion[] = [{segmentation_value_id: 11,segmentation_value: 'Tradicional',name: 'Imagen'},{segmentation_value_id: 12,segmentation_value: 'Moderna',name: 'Imagen'},{segmentation_value_id: 12,segmentation_value: 'Emblemática',name: 'Imagen'}];
+  familiaList: string[] = ['Aceites', 'Aceitunas / Encurtidos', 'Adhesivos', 'Agua GLP', 'Arroces', 'Azucar / Chocolate', 'Bombones', 'Cafés', 'Camisas Hombre', 'Cárnicos', 'Cereales Desayuno', 'Conservas Fruta', 'Conservas Pescado', 'Conservas Vegetales', 'Culinarios', 'Embutidos CF', 'Ensaladas CF', 'Ensaladas Salteadas', 'Espec. Banquetes', 'Especias', 'Fiambres / Embutidos', 'Huevo Derivados', 'Jamones', 'Jardín / Hogar', 'Leche GLP', 'Legumbres', 'Miel', 'Motor', 'Pantalones Hombre', 'Pasta', 'Quesos', 'Sal', 'Salsas', 'Verduras', 'Vinagres', 'Zumos / Néctares', 'Zumos GLP'];
+  agenteList: IFiltroAgente[] = [{ id: 0, name: 'FELIPE GARCILASO RIBERA' }, { id: 1, name: 'GUSTAVO BLANCO MORENO' }, { id: 2, name: 'FMERCEDES MUÑIZ ALONSO' }, { id: 4, name: 'MIRIAM ALVAREZ MAS' }];
+  poblacionList: string[] = ['ALALPARDO', 'ALCALA DE HENARES', 'ALCOBENDAS', 'ALCORCON', 'ALDEA SANTILLANA', 'ALGETE', 'ARANDA DE DUERO', 'ARAVACA', 'ARGANDA DEL REY', 'ARROYOMOLINOS', 'AVILA', 'BELVIS DEL JARAMA', 'BOADILLA DEL MONTE', 'BOECILLO', 'CAMARMA DE ESTERUELAS', 'CAMBEO', 'CAMPOREAL', 'CERCEDA', 'CIEMPOZUELOS', 'CIFUENTES', 'COBEÑA', 'COBISA', 'COLLADO VILLALBA', 'COLMENAR DE OREJA', 'COLMENAR VIEJO', 'COMENAR VIEJO', 'COSLADA', 'DAGANZO', 'DON BENITO', 'EL CASAR', 'EL MOLAR', 'EL PLANTIO', 'EL TIEMBLO', 'EL VELLON', 'ESTREMERA', 'FUENLABRADA', 'FUENTE EL FRESNO', 'FUENTE EL SAZ', 'FUENTE EL SAZ DE JARAMA', 'FUENTE EL SAZ DEL JARAMA', 'GALAPAGAR', 'GETAFE', 'GUADALAJARA', 'GUADALIX DE LA SIERRA', 'GUADARRAMA', 'ISLA DE LA TOJA', 'LA CABRERA', 'LA VALL D´UIXO', 'LAS ROZAS', 'LEGANES', 'LOECHES', 'LOS HUEROS - VILLALBILLA', 'LOZOYUELA', 'MADRID', 'MAJADAHONDA', 'MAJADAHONDA', 'MANGIRON-PUENTES VIEJAS', 'MANZANARES DEL REAL', 'MANZANARES EL REAL', 'MATALPINO', 'MONDEJAR', 'MORALZARZAL', 'NAVACERRADA', 'NAVAGALAMELLA', 'NAVALAFUENTE', 'NULES', 'OLIAS DEL REY', 'ONDA', 'OTERO DE HERREROS', 'PELAYOS DE LA PRESA', 'PEZUELA DE LAS TORRES', 'PIOZ', 'POZOAMARGO', 'POZUELO DE ALARCON', 'RIVAS VACIAMADRID', 'ROA', 'S.S.REYES', 'SAN AGUSTIN DE GUADALIX', 'SAN FERNANDO DE HENARES', 'SAN MARTIN DE LA VEGA', 'SAN RAFAEL', 'SAN SEBASTIAN  DE LOS REYES', 'SANTOS DE LA HUMOSA', 'SESEÑA', 'SEVILLA LA NUEVA', 'SIGUENZA', 'SOTO DEL REAL', 'TOLEDO', 'TORREJON DE ARDOZ', 'TORRELAGUNA', 'TORREMOCHA DE JARAMA', 'TRES CANTOS', 'VALDETORRES DEL JARAMA', 'VALL DE UXO', 'VILLANUEVA DE ALCARDETE', 'VILLENA', 'ZARAGOZA', 'ZARZALEJO'];
+  provinciaList: string[] = ['ALICANTE', 'AVILA', 'BADAJOZ', 'BURGOS', 'CANTABRIA', 'CASTELLON', 'CUENCA', 'GUADALAJARA', 'MADRID', 'ORENSE', 'PONTEVEDRA', 'SEGOVIA', 'TOLEDO', 'VALLADOLID', 'ZARAGOZA'];
+  s1: ISegmentacion[] = [{ segmentation_value_id: 11, segmentation_value: 'A  (> 5.000 euros/mes)', name: 'Potenciabilidad' }, { segmentation_value_id: 12, segmentation_value: 'B  (Entre 2.500 - 4.999 euros/mes)', name: 'Potenciabilidad' }, { segmentation_value_id: 12, segmentation_value: 'C  (Entre 1.000 y 2.499 €/mes)', name: 'Potenciabilidad' }, { segmentation_value_id: 12, segmentation_value: 'D ( < 1.000 euros) ', name: 'Potenciabilidad' }];
+  s2: ISegmentacion[] = [{ segmentation_value_id: 11, segmentation_value: 'Bar/Tapas  (No especializado)', name: 'Tipologia' }, { segmentation_value_id: 12, segmentation_value: 'Cerveceria / Cafeteria  (Especializado)', name: 'Tipologia' }, { segmentation_value_id: 12, segmentation_value: 'Restaurante Independiente (Incluye catering)', name: 'Tipologia' }, { segmentation_value_id: 12, segmentation_value: 'Noche (Disco, Pubs, Bar de copas) ', name: 'Tipologia' }, { segmentation_value_id: 12, segmentation_value: 'Restauracion organizada: Franquicias, Tematicos', name: 'Tipologia' }, { segmentation_value_id: 12, segmentation_value: 'Hoteles, Hostales, posadas', name: 'Tipologia' }, { segmentation_value_id: 12, segmentation_value: 'OCIO (Deporte,Cines,Teatro,Salon Juegos,..)', name: 'Tipologia' }, { segmentation_value_id: 12, segmentation_value: 'Colectividades:comedor empresa, Enseñanza,Admin,', name: 'Tipologia' }, { segmentation_value_id: 12, segmentation_value: 'Tienda Alimentacion Minorista(Super,China,Panad..)', name: 'Tipologia' }, { segmentation_value_id: 12, segmentation_value: 'Tienda Impulso(F Secos,Chuches,Estanco,Vending', name: 'Tipologia' }, { segmentation_value_id: 12, segmentation_value: 'Mayoristas (Distribuidores, Cash, por mayor)', name: 'Tipologia' }, { segmentation_value_id: 12, segmentation_value: 'Restauracion en Ruta(aeropuerto,E.S. Carreteras)', name: 'Tipologia' }, { segmentation_value_id: 12, segmentation_value: 'Personal Empresa / Autoconsumo', name: 'Tipologia' }, { segmentation_value_id: 12, segmentation_value: 'Alquiler', name: 'Tipologia' }];
+  s3: ISegmentacion[] = [{ segmentation_value_id: 11, segmentation_value: 'Tradicional', name: 'Imagen' }, { segmentation_value_id: 12, segmentation_value: 'Moderna', name: 'Imagen' }, { segmentation_value_id: 12, segmentation_value: 'Emblemática', name: 'Imagen' }];
   constructor(
     private dateAdapter: DateAdapter<any>,
     private _filterServices: FilterService,
     private fb: FormBuilder,
     private graficaClientes: GraficaClientesComponent,
-    private graficaPedidos: GraficaPedidosComponent,
+    private graficaPedidos: GraficaMotivosComponent,
     private graficaPedidosDia: GraficaPedidosDiaComponent,
     private graficaPedidosSegmentacion1: GraficaPedidosSegmentacion1Component,
     private graficaPedidosSegmentacion2: GraficaPedidosSegmentacion2Component,
@@ -89,58 +89,58 @@ export class DashboardGeneralComponent {
   ];
   valoresTablas: ITablaDashboard[][] = [
     [
-      { nombre: 'B (Entre 2.500 - 4.999 euros/mes)', total: 455, rechazos: { 'Mal estado':245, 'Producto no trabajado': 0,  'Mala Calidad': 210 , 'Mejor precio competencia': 0} },
-      { nombre: 'A (> 5.000 euros/mes)', total: 320, rechazos: { 'Mal estado': 100, 'Producto no trabajado': 90,  'Mala Calidad': 110 , 'Mejor precio competencia': 20} },
-      { nombre: 'D ( < 1.000 euros)', total: 200, rechazos: { 'Mal estado': 100, 'Producto no trabajado': 0,  'Mala Calidad': 75 , 'Mejor precio competencia': 25} },
-      { nombre: 'C  (Entre 1.000 y 2.499 €/mes)', total: 120, rechazos: { 'Mal estado': 50, 'Producto no trabajado': 20,  'Mala Calidad': 35 , 'Mejor precio competencia': 15}},
+      { nombre: 'B (Entre 2.500 - 4.999 euros/mes)', total: 455, rechazos: { 'Caducado': 245, 'Mala Calidad': 210, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'A (> 5.000 euros/mes)', total: 320, rechazos: { 'Caducado': 100, 'Mala Calidad': 110, 'Precio': 90, 'No aplica': 20 } },
+      { nombre: 'D ( < 1.000 euros)', total: 200, rechazos: { 'Caducado': 100, 'Mala Calidad': 75, 'Precio': 0, 'No aplica': 25 } },
+      { nombre: 'C  (Entre 1.000 y 2.499 €/mes)', total: 120, rechazos: { 'Caducado': 50, 'Mala Calidad': 35, 'Precio': 20, 'No aplica': 15 } },
     ],
     [
-      { nombre: 'OCIO (Deporte,Cines,Teatro,Salon Juegos,..)', total: 10, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'Tienda Alimentacion Minorista(Super,China,Panad..)', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'Bar/Tapas (No especializado)', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'Mayoristas (Distribuidores, Cash, por mayor)', total: 10, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0}},
-      { nombre: 'Personal Empresa / Autoconsumo', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
+      { nombre: 'OCIO (Deporte,Cines,Teatro,Salon Juegos,..)', total: 10, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Tienda Alimentacion Minorista(Super,China,Panad..)', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Bar/Tapas (No especializado)', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Mayoristas (Distribuidores, Cash, por mayor)', total: 10, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Personal Empresa / Autoconsumo', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
     ],
     [
-      { nombre: 'Moderna', total: 10, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'Emblemática', total: 20, rechazos:{ 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'Tradicional', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
+      { nombre: 'Moderna', total: 10, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Emblemática', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Tradicional', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
     ],
     [
-      { nombre: 'ANTONIO II - BAR', total: 10, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'CUESTA - BAR', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'MANOLO - CAFETERIA PASTELERIA', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'MONCAYO - RTE.', total: 10, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'MONTANA - CAFETERIA', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'NIBUR - CAFETERIA', total: 10, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'RENAULT TRES CANTOS - BAR', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'SEVILLA - BAR', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
+      { nombre: 'ANTONIO II - BAR', total: 10, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'CUESTA - BAR', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'MANOLO - CAFETERIA PASTELERIA', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'MONCAYO - RTE.', total: 10, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'MONTANA - CAFETERIA', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'NIBUR - CAFETERIA', total: 10, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'RENAULT TRES CANTOS - BAR', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'SEVILLA - BAR', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
     ],
     [
-      { nombre: 'MADRID', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
+      { nombre: 'MADRID', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
     ],
     [
-      { nombre: 'ALCOBENDAS', total: 10, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'SAN SEBASTIAN DE LOS REYES', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'TRES CANTOS', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'COLMENAR VIEJO', total: 10, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'MADRID', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
+      { nombre: 'ALCOBENDAS', total: 10, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'SAN SEBASTIAN DE LOS REYES', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'TRES CANTOS', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'COLMENAR VIEJO', total: 10, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'MADRID', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
     ],
     [
-      { nombre: 'Aceites', total: 10, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'Conservas Pescado', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'Miel', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'Fiambres / Embutidos', total: 10, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'Leche GLP', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'Pasta', total: 10, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'Sal', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'Vinagres', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'Zumos / Néctares', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
+      { nombre: 'Aceites', total: 10, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Conservas Pescado', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Miel', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Fiambres / Embutidos', total: 10, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Leche GLP', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Pasta', total: 10, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Sal', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Vinagres', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'Zumos / Néctares', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
     ],
     [
-      { nombre: 'MERCEDES MUÑIZ ALONSO', total: 10, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'FELIPE GARCILASO RIBERA', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
-      { nombre: 'MIRIAM ALVAREZ MAS	', total: 20, rechazos: { 'Mal estado': 2, 'Producto no trabajado': 0,  'Mala Calidad': 0 , 'Mejor precio competencia': 0} },
+      { nombre: 'MERCEDES MUÑIZ ALONSO', total: 10, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'FELIPE GARCILASO RIBERA', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'MIRIAM ALVAREZ MAS	', total: 20, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },
     ],
   ];
   columnasDinamicas: string[] = ['nombre', 'total']; // Columnas por defecto
@@ -183,8 +183,8 @@ export class DashboardGeneralComponent {
     });
 
     // Añadir las columnas dinámicas basadas en los tipos de rechazos presentes
-    
-    this.columnasDinamicas = ['nombre', 'total',...Array.from(rechazosTipos)];
+
+    this.columnasDinamicas = ['nombre', 'total', ...Array.from(rechazosTipos)];
     this.columnasRechazos = [...Array.from(rechazosTipos)]
     console.log(this.columnasDinamicas)
     this.dataSource.data = this.data;

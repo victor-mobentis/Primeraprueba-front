@@ -1,0 +1,22 @@
+:host {
+    display: contents;
+}
+
+.numeroKPI {
+    font-weight: 900;
+    font-size: larger;
+}
+
+.tituloKPI {
+    font-size: small;
+    font-weight: lighter;
+}
+
+.kpis {
+    border-radius: 1em;
+}
+
+span.font-dashboard {
+    font-size: 12px;
+    color: #6D6D6D;
+}

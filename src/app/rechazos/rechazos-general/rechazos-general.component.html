@@ -131,7 +131,7 @@
                 <mat-form-field appearance="outline" subscriptSizing="dynamic" class="estado-form-field color-rechazo" >
                   <mat-select [(ngModel)]="row.tipo_rechazo" name="estado-{{row.tipo_rechazo}}" matTooltip="{{row.tipo_rechazo}}"
                     class="small-height-select text-danger" >
-                    <mat-option *ngFor="let rechazo of tipos_rechazo" [value]="row.tipo_rechazo">
+                    <mat-option *ngFor="let rechazo of tipos_rechazo" [value]="rechazo.tipo">
                       {{ rechazo.tipo }}
                     </mat-option>
                   </mat-select>

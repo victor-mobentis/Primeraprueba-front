@@ -70,7 +70,7 @@ export class GraficaPedidosSegmentacion2Component {
       series: [
         {
           color: '#87CEFA',
-          data: [145, 200, 83, 370, 139],
+          data: [10700, 15300, 6010, 24700, 10530],
           type: 'bar',
           label: {
             show: true,
