@@ -133,7 +133,12 @@ th {
  
 }
 
-/* css de tabla con boostrap */
+
+/* barara de busqueda */
+.ms-n5 {
+  margin-left: -40px;
+}
+/* fin de barra de busqueda */
 .text-center {
   text-align: center;
 }

@@ -5,34 +5,9 @@
       <h1 class="mb-0 ps-2 color-dark page-heading">Rechazos</h1>
     </div>
     <!-- Info Rechazos -->
-    <div class="mx-3 details d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-      <div class="bg-white text-center rounded-3 d-flex justify-content-evenly align-items-center gap-2 px-3">
-        <div class="d-flex flex-column m-1">
-          <h3 class="m-0 fw-bold">50</h3>
-          <span class="text-muted custom-bold ">Pendiente</span>
-        </div>
-        <div class="border my-2" style="height: 45px;"></div>
-        <div class="d-flex flex-column m-1">
-          <h3 class="m-0 fw-bold">135</h3>
-          <span class="text-muted custom-bold ">Rechazado</span>
-        </div>
-        <div class="border my-2" style="height: 45px;"></div>
-        <div class="d-flex flex-column m-1">
-          <h3 class="m-0 fw-bold">200</h3>
-          <span class="text-muted custom-bold">En proceso</span>
-        </div>
-        <div class="border my-2" style="height: 45px;"></div>
-        <div class="d-flex flex-column m-1">
-          <h3 class="m-0 fw-bold">35</h3>
-          <span class="text-muted custom-bold">No Aplica</span>
-        </div>
-        <div class="border my-2" style="height: 45px;"></div>
-        <div class="d-flex flex-column m-1">
-          <h3 class="m-0 fw-bold">269</h3>
-          <span class="text-muted custom-bold">Vendido</span>
-        </div>
-      </div>
-    </div>
+     <div class="">
+       <app-kpi></app-kpi>
+     </div>
     <!-- END Info Rechazos -->
     
     
@@ -41,7 +16,14 @@
    <div class="m-3">
      <div class="d-flex align-items-center justify-content-between gap-5">
       <!-- buscado -->
-       <input id="search-input" type="text" class="form-control mb-3" placeholder="Buscar en la tabla...">
+        <div class="input-group mb-3">
+          <input class="form-control border-end-0 border" type="search" placeholder="Buscar..." id="example-search-input">
+          <span class="input-group-append">
+              <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="button">
+                  <i class="fa fa-search"></i>
+              </button>
+          </span>
+        </div>
        <!-- botones y filtros -->
        <div class="d-flex align-items-center gap-2 mb-3">
         <div class="btn-group" role="group">

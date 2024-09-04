@@ -35,11 +35,14 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 */
 import { RechazosGeneralComponent } from './rechazos-general/rechazos-general.component';
 import { PopupMapComponent } from './rechazos-general/popup-map-rechazos/popup-map-rechazos.component';
+import { SharedModule } from '../shared/shared.module';
+
 
 @NgModule({
     declarations: [
         RechazosGeneralComponent,
         PopupMapComponent,
+        
     ],
     imports: [
         CommonModule,
@@ -68,6 +71,7 @@ import { PopupMapComponent } from './rechazos-general/popup-map-rechazos/popup-m
         MatSliderModule,
         MatMenuModule,
         MatButtonToggleModule,
+        SharedModule
     ]
 })
 export class RechazosModule{}
