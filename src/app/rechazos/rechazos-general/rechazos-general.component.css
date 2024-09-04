@@ -418,3 +418,14 @@ table{
 .modal.fade .modal-dialog-slide-right {
   transform: translateX(0);
 }
+
+/* color de la columna accion correctora */
+th:nth-child(13) {
+  background-color: #4e62d121 !important; /* Color de fondo */
+  color: black;
+}
+
+.fondo_accionCorrectora{
+  background-color: #4e62d121;
+  color: white;
+}
