@@ -16,12 +16,6 @@
 
 table {
   width: 100%;
-
-}
-
-.mat-mdc-form-field {
-  font-size: 14px;
-  width: 100%;
 }
 
 .char-count {
@@ -44,9 +38,6 @@ th {
   color: white;
 }
 
-.title-expandend-menu{
-  color: #3F51B5;
-}
 .custom-bold {
   font-weight: 500;
 }
@@ -65,10 +56,7 @@ th {
   z-index: 10;
 }
 
-.table-wrapper {
-  max-height: 70vh;
-  overflow: auto;
-}
+
 
 
 
@@ -89,60 +77,13 @@ th {
   border-radius: 10px;
 }
 
-.estado-cell {
-  text-align: center;
-  vertical-align: middle;
-}
-
-.estado-form-group {
-  width: 100%;
-  margin: 0;
-}
-
-.mat-form-field {
-  margin-bottom: 0 !important; /* Elimina el margen inferior del contenedor */
-}
-
-.mat-select-trigger {
-  height: 24px;
-  line-height: 24px;
-}
-
-.mat-select-value {
-  height: 24px;
-  line-height: 24px;
-  display: flex;
-  align-items: center;
-}
-
-.mat-select-arrow {
-  margin-top: 0;
-}
-
-.mat-select-panel {
-  margin-top: 0;
-}
-
-.mat-select {
-  padding-top: 0;
-  padding-bottom: 0;
-  background-color: #ffffff; /* Fondo blanco */
-}
-
-.mat-form-field-wrapper {
-  padding-bottom: 0px !important; /* Elimina el espacio inferior del contenedor */
-}
-
-.mat-mdc-form-field-subscript-wrapper {
-  display: none; /* Elimina el espacio inferior */
-}
 
 
 .option-image {
   width: 20px; /* Ajusta según el tamaño deseado */
   height: auto;
   vertical-align: middle; /* Alinea verticalmente con el texto */
-  margin: 8px; /* Espacio entre la imagen y el texto */
+
 }
 
 .rechazado {
@@ -170,14 +111,6 @@ th {
   color: #FF5757;
 }
 
-.sidenav {
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-  height: auto;
-}
-
-
 
 
 /* movil */
@@ -187,77 +120,6 @@ th {
   }
 }
 
-tr.example-detail-row {
-  height: 0;
-}
-
-tr.example-element-row:not(.example-expanded-row):hover {
-  background: whitesmoke;
-}
-
-tr.example-element-row:not(.example-expanded-row):active {
-  background: #efefef;
-}
-
-.example-element-row td {
-  border-bottom-width: 0;
-}
-
-.example-element-detail {
-  overflow: hidden;
-  display: flex;
-}
-
-.example-element-symbol {
-  font-weight: bold;
-  font-size: 40px;
-  line-height: normal;
-}
-
-.example-element-description {
-  padding: 16px;
-}
-
-.example-element-description-attribution {
-  opacity: 0.5;
-}
-
-.mat-column-producto {
-  min-width: 300px;
-  padding: 0;
-}
-
-.mat-column-cliente {
-  min-width: 300px;
-  padding: 0;
-}
-
-.mat-column-accion_correctora{
-  min-width: 300px;
-  padding: 0;
-}
-
-.mat-column-poblacion {
-  min-width: 140px;
-  padding: 0;
-}
-
-.mat-column-nombre_subfamilia {
-  min-width: 100px;
-  padding: 0;
-}
-.mat-column-propuesta_agente {
-  min-width: 250px;
-}
-.mat-column-promo_propia, .mat-column-promo_competidor{
-  max-width: 24px;
-  padding: 0;
-}
-
-.mat-column-expand{
-  max-width: 48px;
-  padding: 0;
-}
 
 .promo-icon {
   font-size: 14px;
@@ -270,20 +132,6 @@ tr.example-element-row:not(.example-expanded-row):active {
   height: 24px;
  
 }
-
-/* Contenedor expandible */
-.expandable-row {
-  
-  width: calc(100% - 20px); /* Ajusta el ancho para el margen derecho */
-  background: #fafafa;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
-}
-
 
 /* css de tabla con boostrap */
 .text-center {
@@ -312,6 +160,10 @@ table{
 }
 .row_producto{
   min-width: 160px;
+  max-width: 160px;
+  white-space: nowrap; /* Evita el salto de línea */
+  overflow: hidden; /* Oculta el desbordamiento */
+  text-overflow: ellipsis;
 }
 .select_rechazo{
   width: 115px;
@@ -328,15 +180,16 @@ table{
   min-width: 160px;
 }
 .row_propuesta_agente{
-  min-width: 180px;
+  min-width: 150px;
+  max-width: 150px;
+  white-space: nowrap; /* Evita el salto de línea */
+  overflow: hidden; /* Oculta el desbordamiento */
+  text-overflow: ellipsis;
 }
+
 .row_fecha_interes{
   min-width: 85px;
   text-align: end;
-}
-.centrado_column{
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 .table-responsive {
@@ -421,8 +274,8 @@ table{
 
 /* color de la columna accion correctora */
 th:nth-child(13) {
-  background-color: #4e62d121 !important; /* Color de fondo */
-  color: black;
+  background-color: #4e62d1 !important; /* Color de fondo */
+  color:white;
 }
 
 .fondo_accionCorrectora{

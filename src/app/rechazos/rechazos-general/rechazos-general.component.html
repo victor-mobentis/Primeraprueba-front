@@ -57,12 +57,15 @@
   </div>
   <!-- TABLA -->
    <div class="m-3">
+     <div>
+       <input id="search-input" type="text" class="form-control mb-3" placeholder="Buscar en la tabla...">
+     </div>
      <div class="table-responsive">
        <table class="table table-hover table-sm my-0">
          <thead>
            <tr class="">
              <!-- Checkbox Column -->
-             <th scope="col" class="text-center">
+             <th scope="col" class="text-center pe-3">
                <input type="checkbox" (change)="masterToggle()"
                       [checked]="selection.hasValue() && isAllSelected()"
                       [indeterminate]="selection.hasValue() && !isAllSelected()" />
@@ -94,7 +97,7 @@
              <!-- Propuesta Agente Column -->
              <th scope="col">Propuesta Agente</th>
              <!-- Fecha Interés Column -->
-             <th scope="col" class="text-success text-end">Fecha Interés</th>
+             <th scope="col" class="text-success text-end">Interés</th>
              <!-- Expand Column -->
              <th scope="col" class="text-center"></th>
            </tr>
@@ -103,14 +106,14 @@
            <ng-container *ngFor="let row of dataSource.data">
              <tr>
                <!-- Checkbox Column -->
-               <td class="text-center centrado_column">
+               <td class="text-center pe-3">
                  <input type="checkbox" (click)="$event.stopPropagation()" 
                         (change)="selection.toggle(row)" 
                         [checked]="selection.isSelected(row)" />
                </td>
                <!-- Estado Column -->
-               <td class="text-center ">
-                 <div class="d-flex align-items-center justify-content-center">
+               <td class="text-center">
+                 <div class="d-flex align-items-center gap-1 justify-content-center">
                    <img [src]="getOptionImage(row.estado)" alt="{{ row.estado }} Image" class="option-image">
                    <select class="form-select form-select-sm select_estado" [(ngModel)]="row.estado" (change)="actualizarEstados(row)">
                      <option *ngFor="let estado of estados" [value]="estado.estado">
@@ -120,34 +123,36 @@
                  </div>
                </td>
                <!-- Población Column -->
-               <td class="centrado_column">{{ row.poblacion }}</td>
+               <td class="">{{ row.poblacion }}</td>
                <!-- Cliente Column -->
-               <td class="row_cliente centrado_column">{{ row.cliente }}</td>
+               <td class="row_cliente">{{ row.cliente }}</td>
                <!-- Subfamilia Column -->
-               <td class="centrado_column">{{ row.nombre_subfamilia }}</td>
+               <td class="">{{ row.nombre_subfamilia }}</td>
                <!-- Producto Column -->
-               <td class="row_producto centrado_column">{{ row.producto }}</td>
+               <td class="row_producto">
+                <span [ngbTooltip]="row.producto.length > 23 ? 'tooltip' : null" [ngbTooltip]="row.producto.length > 23 ? row.producto : ''">{{ row.producto }}</span>
+              </td>
                <!-- Rechazo Column -->
                <td class="text-center">
-                 <select class="form-select form-select-sm text-danger select_rechazo" [(ngModel)]="row.tipo_rechazo">
-                   <option *ngFor="let rechazo of tipos_rechazo" [value]="rechazo.tipo">{{ rechazo.tipo }}</option>
+                 <select class="form-select form-select-sm text-danger select_rechazo" [(ngModel)]="row.tipo_rechazo" [ngbTooltip]="row.tipo_rechazo">
+                   <option *ngFor="let rechazo of tipos_rechazo" [value]="rechazo.tipo" >{{ rechazo.tipo }}</option>
                  </select>
                </td>
                <!-- Precio Column -->
                <td class="text-end row_precio_producto centrado_column">{{ row.precio_producto }} €</td>
                <!-- Promo Propia Column -->
                <td class="text-center centrado_column">
-                 <i *ngIf="row.tiene_promo_propia" class="promo-icon" [attr.title]="row.promo_propia">P</i>
+                 <i *ngIf="row.tiene_promo_propia" class="promo-icon" [ngbTooltip]="row.promo_propia">P</i>
                </td>
                <!-- Competidor Column -->
                <td class="text-end row_precio_competidor centrado_column">{{ row.precio_competidor }} €</td>
                <!-- Promo Competidor Column -->
                <td class="text-center centrado_column">
-                 <i *ngIf="row.tiene_promo_competencia" class="promo-icon" [attr.title]="row.promo_competencia">P</i>
+                 <i *ngIf="row.tiene_promo_competencia" class="promo-icon" [ngbTooltip]="row.promo_competencia">P</i>
                </td>
                <!-- Competidor Column -->
                <td>
-                 <select class="form-select form-select-sm row_select_competidor" [(ngModel)]="row.competidor">
+                 <select class="form-select form-select-sm row_select_competidor" [(ngModel)]="row.competidor" [ngbTooltip]="getCompetidorNombre(row.competidor)">
                    <option *ngFor="let competidor of competidores" [value]="competidor.id">{{ competidor.nombre }}</option>
                  </select>
                </td>
@@ -165,16 +170,18 @@
                    </select>
        
                    <!-- Campo para acción correctora -->
-                   <input type="text" class="form-control form-control-sm row_accion_correctora text-success" [(ngModel)]="row.accion_correctora" maxlength="50" placeholder="Acción Correctora" />
+                   <input type="text" class="form-control form-control-sm row_accion_correctora text-success" [(ngModel)]="row.accion_correctora" maxlength="50" placeholder="Acción Correctora" [ngbTooltip]="row.accion_correctora"/>
                  </div>
                </td>
                <!-- Propuesta Agente Column -->
-               <td class="row_propuesta_agente centrado_column">{{ row.propuesta_agente }}</td>
+               <td class="row_propuesta_agente" >
+                <span [ngbTooltip]="row.propuesta_agente.length > 23 ? 'tooltip' : null" [ngbTooltip]="row.propuesta_agente.length > 23 ? row.propuesta_agente : ''">{{ row.propuesta_agente }}</span>
+               </td>
                <!-- Fecha Interés Column -->
                <td class="text-success centrado_column row_fecha_interes">{{ row.fecha_interes }}</td>
                <!-- Expand Column -->
-               <td class="text-center">
-                 <button class="btn btn-link p-0" (click)="expandedElement = (expandedElement === row ? null : row)">
+               <td class="text-center ps-3">
+                 <button class="btn btn-color py-0 px-1 text-white" (click)="expandedElement = (expandedElement === row ? null : row)">
                    <i class="bi" [ngClass]="expandedElement === row ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                  </button>
                </td>

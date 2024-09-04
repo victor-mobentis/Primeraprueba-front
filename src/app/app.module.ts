@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 */
 import { AppComponent } from './app.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     NavbarModule,
     AuthModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

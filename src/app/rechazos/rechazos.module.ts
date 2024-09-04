@@ -28,6 +28,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatMenuModule } from '@angular/material/menu';
 
+/* imports de boostrap */
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 /**
     * IMPORTS COMPONENTS
 */
@@ -42,6 +44,7 @@ import { PopupMapComponent } from './rechazos-general/popup-map-rechazos/popup-m
     imports: [
         CommonModule,
         RechazosRoutingModule,
+        NgbTooltipModule,
         MatTableModule,
         MatCheckboxModule,
         MatSortModule,
