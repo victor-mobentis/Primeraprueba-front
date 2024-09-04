@@ -35,7 +35,8 @@ export class GraficaPedidosMesComponent {
 
     option = {
       grid: {
-        bottom: 40
+        bottom: 40,
+        left: 50
       },
       title: {
         text: 'Por mes',
@@ -64,7 +65,7 @@ export class GraficaPedidosMesComponent {
       series: [
         {
           color: '#87CEFA',
-          data: [0, 0, 0, 0, 120, 300, 580,],
+          data: [0, 0, 0, 0, 5860, 18000, 43000,],
           type: 'bar'
         }
       ]

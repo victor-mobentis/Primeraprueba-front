@@ -19,10 +19,10 @@ export class GraficaPedidosFamiliasProductosComponent {
 
   chart: echarts.ECharts | undefined;
 
-  resize(){
+  resize() {
     this.chart?.resize();
   }
-  
+
   pintarGrafica() {
 
     let nombres: any = []
@@ -69,7 +69,7 @@ export class GraficaPedidosFamiliasProductosComponent {
       series: [
         {
           color: '#87CEFA',
-          data: [120, 200, 150, 80, 70, 110, 0, 0, 20, 34],
+          data: [11600, 18460, 12300, 7200, 7100, 10200],
           type: 'bar',
           label: {
             show: true,

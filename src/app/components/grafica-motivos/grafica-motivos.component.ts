@@ -30,11 +30,11 @@ type EChartsOption = echarts.ComposeOption<
 >;
 
 @Component({
-  selector: 'app-grafica-pedidos',
-  templateUrl: './grafica-pedidos.component.html',
-  styleUrls: ['./grafica-pedidos.component.css']
+  selector: 'app-grafica-motivos',
+  templateUrl: './grafica-motivos.component.html',
+  styleUrls: ['./grafica-motivos.component.css']
 })
-export class GraficaPedidosComponent {
+export class GraficaMotivosComponent {
 
   chart: echarts.ECharts | undefined;
 
@@ -43,10 +43,6 @@ export class GraficaPedidosComponent {
   }
   
   pintarGrafica() {
-    var pedidosConfirmados = 0
-    var pedidosRechazados = 0
-    var pedidosPendientes = 0
-
     var chartDom = document.getElementById('main2')!;
     var myChart = echarts.init(chartDom);
     this.chart = myChart;
@@ -86,10 +82,10 @@ export class GraficaPedidosComponent {
           startAngle: 180,
           endAngle: 360,
           data: [
-            { value: 735, name: 'Caducado' },
-            { value: 280, name: 'Mala calidad' },
-            { value: 280, name: 'Precio' },
-            {value: 280, name: 'No aplica'}
+            { value: 23136, name: 'Caducado' },
+            { value: 18370, name: 'Mala calidad' },
+            { value: 17224, name: 'Precio' },
+            {value: 8130, name: 'No aplica'}
           ]
         }
       ]
