@@ -5,48 +5,25 @@ import {
   OnInit,
   ChangeDetectorRef,
 } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { SelectionModel } from '@angular/cdk/collections';
-import { PopupMapComponent } from './popup-map-rechazos/popup-map-rechazos.component';
-import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSnackBarConfig } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { PopupMapComponent } from './popup-map-rechazos/popup-map-rechazos.component';
 import { IRechazo } from 'src/app/models/rechazos.model';
 import { RechazadosService } from 'src/app/services/rechazados/rechazados.service';
 import { IEstadosRechazoCount } from 'src/app/models/count.model';
 import { FilterService } from 'src/app/services/filter/filter.service';
 import { IEstado } from 'src/app/models/estados.model';
 import { ISimbolo } from 'src/app/models/simbolos.model';
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from '@angular/animations';
 import { ICompetidor } from 'src/app/models/competidores.model';
 import { ITipo_Rechazo } from 'src/app/models/tipos_rechazos.model';
 import { ExportService } from 'src/app/services/export/export.service';
+import { ToastrService } from 'ngx-toastr';
+import { SelectionModel } from '@angular/cdk/collections';
+
 @Component({
   selector: 'app-rechazos-general',
   templateUrl: './rechazos-general.component.html',
   styleUrls: ['./rechazos-general.component.css'],
-  animations: [
-    trigger('detailExpand', [
-      state(
-        'collapsed',
-        style({ height: '0px', minHeight: '0', display: 'none' })
-      ),
-      state('expanded', style({ height: '*', display: 'block' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
-    ]),
-  ],
 })
 export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   form: FormGroup;
@@ -54,11 +31,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     'select',
     'estado',
     'poblacion',
-    /* 'provincia', */ 
     'cliente',
-    /* , 'nombre_familia' */
     'nombre_subfamilia',
-    'producto' ,
+    'producto',
     'tipo_rechazo',
     'precio_producto',
     'promo_propia',
@@ -70,7 +45,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     'interes',
     'expand',
   ];
-  dataSource: MatTableDataSource<IRechazo>;
+  dataSource: any[] = []; // Temporarily set to any[]
   rechazoList: IRechazo[] = [];
   selection = new SelectionModel<IRechazo>(true, []);
   estadosRechazoCount: IEstadosRechazoCount = {
@@ -85,26 +60,17 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   simbolos: ISimbolo[] = [];
   expandedElement?: IRechazo | null;
 
-  //Para la exportación en excel
   selectedOption: string = 'Excel';
-
-
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  @ViewChild(MatSort) sort: MatSort | undefined;
-  
 
   constructor(
     public dialog: MatDialog,
     private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
     private rechazadosService: RechazadosService,
     private filterService: FilterService,
     private _exportService: ExportService,
+    private toastr: ToastrService,
   ) {
-
-    this.dataSource = new MatTableDataSource<IRechazo>([]);
-
     this.form = this.formBuilder.group({
       EstadoFilterControl: [''],
       PoblacionFilterControl: [''],
@@ -115,7 +81,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     });
 
     this.form.valueChanges.subscribe(() => {
-      /* this.applyFilter(); */
+      this.applyFilter();
     });
   }
 
@@ -127,7 +93,6 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.loadGoogleMapsScript();
     this.loadCompetidores();
     this.loadTiposRechazo();
-    
   }
 
   private loadRechazos() {
@@ -312,28 +277,25 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       {rechazo_id: 1,estado: 'En Proceso',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Leche Pascual Entera',nombre_familia: 'Alimentacion',nombre_subfamilia: '',tipo_rechazo: 'Mejor precio competencia',precio_producto: 87.27,precio_competidor: 71.22,competidor: 1,pvp_es_promocion_precio: 20,id_simbolo: 2,pvp_es_promocion_symbol: '%',accion_correctora: 'Promoción 1+1',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: 'No le ha gustado el producto',tiene_promo_propia: true,tiene_promo_competencia: false,promo_propia: '3x2 Promoción Verano',promo_competencia: '',fecha_interes: '',},
       {rechazo_id: 1,estado: 'Vendido',poblacion: 'Oviedo',provincia: 'Asturias',cliente: 'ANTIGUA ESTACION, LA',producto: 'Llanta aluminio montaña delantera',nombre_familia: 'Accesiorios',nombre_subfamilia: 'Varios',tipo_rechazo: 'Mejor precio competencia',precio_producto: 98.56,precio_competidor: 48.38,competidor: 1,pvp_es_promocion_precio: 39,id_simbolo: 1,pvp_es_promocion_symbol: '€',accion_correctora: 'Promoción que se adapte al cliente',propuesta_agente: '',anulado: false,rechazo_latitud:37.177336,rechazo_longitud:-3.598557,notas: '',tiene_promo_propia: false,tiene_promo_competencia: false,promo_propia: '',promo_competencia: '',fecha_interes: '',},
     ];
-    this.dataSource.data = this.rechazoList;
-    
+    this.dataSource = this.rechazoList;
+
     this.rechazadosService.getRechazos().subscribe((rechazos: IRechazo[]) => {
-      //this.rechazoList = rechazos;
-      //this.dataSource.data = rechazos;
-      console.log('Rechazos cargados:', rechazos); // Mostrar los resultados en la consola
+      console.log('Rechazos cargados:', rechazos);
+      this.dataSource = rechazos;
     });
-    
   }
+
   private loadEstadosRechazos() {
-    this.rechazadosService
-      .countEstadosRechazos()
-      .subscribe((contadores: IEstadosRechazoCount[]) => {
-        this.estadosRechazoCount = contadores[0];
-        console.log('Contadores de estados de rechazos:', contadores); // Mostrar los contadores en la consola
-      });
+    this.rechazadosService.countEstadosRechazos().subscribe((contadores: IEstadosRechazoCount[]) => {
+      this.estadosRechazoCount = contadores[0];
+      console.log('Contadores de estados de rechazos:', contadores);
+    });
   }
 
   private loadEstados() {
     this.filterService.getEstados().subscribe((estados: IEstado[]) => {
       this.estados = estados;
-      console.log('Estados cargados:', estados); // Mostrar los estados en la consola
+      console.log('Estados cargados:', estados);
     });
   }
 
@@ -343,7 +305,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       { nombre: 'Cadena 100 Profesional', id: 2 },
       { nombre: 'Bazar Hogar', id: 3 },
     ];
-    console.log('Competidores cargados:', this.competidores); ///eliminar esto cuadno termines
+    console.log('Competidores cargados:', this.competidores);
   }
 
   private loadTiposRechazo() {
@@ -374,38 +336,13 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
   applyFilter() {
     const filterValues = this.form.value;
-    this.dataSource.filterPredicate = (
-      data: IRechazo,
-      filter: string
-    ): boolean => {
-      const searchTerms = JSON.parse(filter);
-      return (
-        (!searchTerms.EstadoFilterControl ||
-          data.estado
-            .toLowerCase()
-            .indexOf(searchTerms.EstadoFilterControl.toLowerCase()) !== -1) &&
-        (!searchTerms.PoblacionFilterControl ||
-          data.poblacion
-            .toLowerCase()
-            .indexOf(searchTerms.PoblacionFilterControl.toLowerCase()) !==
-            -1) &&
-        (!searchTerms.ProvinciaFilterControl ||
-          data.provincia
-            .toLowerCase()
-            .indexOf(searchTerms.ProvinciaFilterControl.toLowerCase()) !==
-            -1) &&
-        (!searchTerms.ProductoFilterControl ||
-          data.producto
-            .toLowerCase()
-            .indexOf(searchTerms.ProductoFilterControl.toLowerCase()) !== -1) &&
-        /* (!searchTerms.FamiliaFilterControl || data.nombre_familia.toLowerCase().indexOf(searchTerms.FamiliaFilterControl.toLowerCase()) !== -1) && */
-        (!searchTerms.SubFamiliaFilterControl ||
-          data.nombre_subfamilia
-            .toLowerCase()
-            .indexOf(searchTerms.SubFamiliaFilterControl.toLowerCase()) !== -1)
-      );
-    };
-    this.dataSource.filter = JSON.stringify(filterValues);
+    this.dataSource = this.dataSource.filter(data =>
+      (!filterValues.EstadoFilterControl || data.estado.toLowerCase().includes(filterValues.EstadoFilterControl.toLowerCase())) &&
+      (!filterValues.PoblacionFilterControl || data.poblacion.toLowerCase().includes(filterValues.PoblacionFilterControl.toLowerCase())) &&
+      (!filterValues.ProvinciaFilterControl || data.provincia.toLowerCase().includes(filterValues.ProvinciaFilterControl.toLowerCase())) &&
+      (!filterValues.ProductoFilterControl || data.producto.toLowerCase().includes(filterValues.ProductoFilterControl.toLowerCase())) &&
+      (!filterValues.SubFamiliaFilterControl || data.nombre_subfamilia.toLowerCase().includes(filterValues.SubFamiliaFilterControl.toLowerCase()))
+    );
   }
 
   getCompetidorNombre(id: number): string {
@@ -415,28 +352,21 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
   filtroReset() {
     this.form.reset();
-    this.dataSource.filter = '';
+    this.applyFilter();
   }
 
   ngAfterViewInit() {
-    if (this.dataSource && this.paginator) {
-      this.dataSource.paginator = this.paginator;
-      this.cdr.detectChanges(); // Forzar la detección de cambios después de actualizar los conteos
-    }
-    if (this.sort) {
-      this.dataSource.sort = this.sort;
-    }
+    // Placeholder for further initialization if needed
   }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.dataSource.length;
     return numSelected === numRows;
   }
 
   getOptionImage(estado: string): string {
     const basePath = 'assets/icon/';
-
     switch (estado) {
       case 'Rechazado':
         return `${basePath}rechazado.svg`;
@@ -449,30 +379,26 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       case 'Pendiente':
         return `${basePath}pendiente.svg`;
       default:
-        return ''; // Devuelve una cadena vacía si el estado no coincide con ninguno de los casos anteriores
+        return '';
     }
   }
 
   masterToggle() {
     this.isAllSelected()
       ? this.selection.clear()
-      : this.dataSource.data.forEach((row) => this.selection.select(row));
+      : this.dataSource.forEach(row => this.selection.select(row));
   }
-  ///metodo para obtener los simbolos
+
   getSimboloName(symbolId: number): string {
-    const symbol = this.simbolos.find((s) => s.id === symbolId);
+    const symbol = this.simbolos.find(s => s.id === symbolId);
     return symbol ? symbol.simbolo : '';
   }
 
   verEnMapa() {
     if (this.selection.selected.length === 0) {
-      const config = new MatSnackBarConfig();
-      config.duration = 3000;
-      config.verticalPosition = 'top';
-      this.snackBar.open(
+      this.toastr.warning(
         'Debe seleccionar al menos 1 rechazo antes de ver en el mapa.',
-        '',
-        config
+        'Advertencia'
       );
       return;
     }
@@ -485,7 +411,6 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     });
   }
 
-  ///funcion para axtualizar estado
   actualizarEstados(row: IRechazo) {
     const estadoSeleccionado = this.estados.find(
       (estado) => estado.estado === row.estado
@@ -493,25 +418,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
     if (estadoSeleccionado) {
       const idEstadoSeleccionado = estadoSeleccionado.id;
-
-      // Mostrar en consola el rechazo_id y el ID del estado seleccionado
       console.log('ID de Rechazo seleccionado:', row.rechazo_id);
       console.log('ID de Estado seleccionado:', idEstadoSeleccionado);
-
-      // Llamar al servicio para actualizar el estado
-      /*
-      this.rechazadosService
-        .actualizarEstados(row.rechazo_id, idEstadoSeleccionado)
-        .subscribe(
-          (response) => {
-            console.log('Estado actualizado correctamente');
-            location.reload();
-          },
-          (error) => {
-            console.error('Error al actualizar el estado', error);
-          }
-        );
-        */
     } else {
       console.error(
         'No se encontró el ID del estado seleccionado en el array estados'
@@ -519,46 +427,11 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     }
   }
 
-  startEditing(
-    row: IRechazo & {
-      editingAccionCorrectora?: boolean;
-      tempAccionCorrectora?: string;
-      editingPrecioPromocion?: boolean;
-      tempPrecioPromocion?: number;
-      tempSimboloPromocion?: number;
-    },
-    field: string
-  ) {
-    if (field === 'accionCorrectora') {
-      row.tempAccionCorrectora = row.accion_correctora;
-      row.editingAccionCorrectora = true;
-    } else if (field === 'precioPromocion') {
-      row.tempPrecioPromocion = row.pvp_es_promocion_precio;
-      row.tempSimboloPromocion = row.id_simbolo;
-      row.editingPrecioPromocion = true;
-    }
-  }
-
-  // Este método se llama cada vez que se escribe en el input
-  updateCharCount(
-    row: IRechazo & {
-      editingAccionCorrectora?: boolean;
-      tempAccionCorrectora?: string;
-      editingPrecioPromocion?: boolean;
-      tempPrecioPromocion?: number;
-      tempSimboloPromocion?: number;
-    }
-  ) {}
-
-  //metodo para cambiar el simbolo
-  /* crear una consulta en rechazados.service.ts */
   updateSymbol(row: IRechazo & { tempSimboloPromocion?: number }) {
-    // Actualiza el símbolo en el objeto `row` y llama al servicio para guardarlo
     if (row.tempSimboloPromocion != null) {
       row.id_simbolo = row.tempSimboloPromocion;
       console.log('Símbolo actualizado:', row.id_simbolo);
 
-      // Llamada al servicio para guardar el cambio en el servidor (si es necesario)
       this.rechazadosService
         .actualizarPrecioSimboloPromocion(
           row.rechazo_id,
@@ -567,52 +440,31 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         )
         .subscribe(
           (response) => {
-            this.snackBar.open('Símbolo actualizado correctamente.', '', {
-              duration: 3000,
-              verticalPosition: 'top',
-            });
+            this.toastr.success('Símbolo actualizado correctamente.', '', {});
           },
           (error) => {
-            this.snackBar.open('Error al actualizar el símbolo.', '', {
-              duration: 3000,
-              verticalPosition: 'top',
-            });
+            this.toastr.error('Error al actualizar el símbolo.', '', {});
             console.error('Error al actualizar el símbolo:', error);
           }
         );
     }
   }
 
-
-  //Funcion para exportar los pedidos a excel
   exportar_rechazos() {
-    // Verificar si hay pedidos seleccionados
     if (this.selection.isEmpty()) {
-      /*
-      this.toastr.info(
-        'Por favor, seleccione algún pedido para la exportación.',
-        'Seleccionar pedido'
-      );
-      */
       return;
     }
     if (this.selectedOption == '') {
-      //this.toastr.info('Por favor, seleccione el tipo de exportación.', 'Selecciona el tipo de exportación');
-
       return;
     }
-      // Si no hay pedidos exportados, mostrar directamente los IDs seleccionados
-      this.exportarIds();
-    
+    this.exportarIds();
   }
 
   exportarIds() {
-    // Obtener los IDs seleccionados
-    const idsSeleccionados = this.selection.selected.map((row) => row.rechazo_id);
-    this.exportData(this.rechazoList)
+    const idsSeleccionados = this.selection.selected.map(row => row.rechazo_id);
+    this.exportData(this.rechazoList);
   }
 
-  //Función que se encarga de enviar los datos a exportar
   exportData(data: any[]): void {
     console.log('en funcion ', data);
     console.log('en funcion', this.selectedOption);

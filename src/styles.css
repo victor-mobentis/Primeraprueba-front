@@ -1,6 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-
-
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
@@ -21,3 +19,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .card.border-left-warning {
     border-left: 0.25rem solid #f6c23e; /* Color de advertencia de Bootstrap */
 }
+
+/* estilo para el funcionamiento de toast */
+@import 'ngx-toastr/toastr';
