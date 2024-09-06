@@ -78,7 +78,7 @@ export class DashboardGeneralComponent {
   cargandoDatostabla: boolean = true;
   tablaActiva: number = 0;
   nombresTablas: string[] = [
-    'Potenciabilidad',
+    'Potencialidad',
     'Tipología',
     'Imagen',
     'Clientes',
@@ -89,10 +89,10 @@ export class DashboardGeneralComponent {
   ];
   valoresTablas: ITablaDashboard[][] = [
     [
-      { nombre: 'B (Entre 2.500 - 4.999 euros/mes)', total: 455, rechazos: { 'Caducado': 245, 'Mala Calidad': 210, 'Precio': 0, 'No aplica': 0 } },
-      { nombre: 'A (> 5.000 euros/mes)', total: 320, rechazos: { 'Caducado': 100, 'Mala Calidad': 110, 'Precio': 90, 'No aplica': 20 } },
-      { nombre: 'D ( < 1.000 euros)', total: 200, rechazos: { 'Caducado': 100, 'Mala Calidad': 75, 'Precio': 0, 'No aplica': 25 } },
-      { nombre: 'C  (Entre 1.000 y 2.499 €/mes)', total: 120, rechazos: { 'Caducado': 50, 'Mala Calidad': 35, 'Precio': 20, 'No aplica': 15 } },
+      { nombre: 'B (Entre 2.500 - 4.999 euros/mes)', total: 15.005, rechazos: { 'Caducado': 245, 'Mala Calidad': 210, 'Precio': 0, 'No aplica': 0 } },
+      { nombre: 'A (> 5.000 euros/mes)', total: 32.522, rechazos: { 'Caducado': 100, 'Mala Calidad': 110, 'Precio': 90, 'No aplica': 20 } },
+      { nombre: 'D ( < 1.000 euros)', total: 8.123, rechazos: { 'Caducado': 100, 'Mala Calidad': 75, 'Precio': 0, 'No aplica': 25 } },
+      { nombre: 'C  (Entre 1.000 y 2.499 €/mes)', total: 11.211, rechazos: { 'Caducado': 50, 'Mala Calidad': 35, 'Precio': 20, 'No aplica': 15 } },
     ],
     [
       { nombre: 'OCIO (Deporte,Cines,Teatro,Salon Juegos,..)', total: 10, rechazos: { 'Caducado': 2, 'Mala Calidad': 0, 'Precio': 0, 'No aplica': 0 } },

@@ -63,7 +63,6 @@ import { SharedModule } from '../shared/shared.module';
     MatPaginatorModule,
     MatNativeDateModule,
     MatTooltipModule,
-
     SharedModule,
   ],
   providers: [
