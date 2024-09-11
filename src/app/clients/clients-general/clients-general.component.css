@@ -1,14 +1,19 @@
-span {
-  position: relative;
-  top: 5px;
+.separador-superior {
+  height: 64px;
 }
-span.input-group-append{
-  top: 0;
+
+#busqueda {
+  width: 300px;
+}
+
+.table-responsive {
+  height: calc(100vh - 220px)
 }
 
 table {
   width: 100%;
-  table-layout: fixed;
+  font-size: 12px;
+  overflow: visible;
 }
 
 .mat-mdc-form-field {
@@ -16,7 +21,7 @@ table {
   width: 100%;
 }
 
-.page-heading{
+.page-heading {
   text-transform: uppercase;
   letter-spacing: .2em;
   font-weight: 300;
@@ -27,13 +32,20 @@ th {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  vertical-align: middle;
+
 }
+
 .table thead th {
-  position: -webkit-sticky; /* Para Safari */
+  position: -webkit-sticky;
+  /* Para Safari */
   position: sticky;
-  top: 0; /* Fija el encabezado en la parte superior */
-  background-color: #fff; /* Asegúrate de que el fondo sea blanco o del color que desees */
-  z-index: 1; /* Asegúrate de que esté sobre el contenido de la tabla */
+  top: 0;
+  /* Fija el encabezado en la parte superior */
+  background-color: #fff;
+  /* Asegúrate de que el fondo sea blanco o del color que desees */
+  z-index: 1;
+  /* Asegúrate de que esté sobre el contenido de la tabla */
 }
 
 .sticky {
@@ -63,11 +75,13 @@ th {
 .filtro-container {
   position: fixed;
 }
+
 /* modal */
 .modal-header {
   border-bottom: none;
   padding-bottom: 0;
 }
+
 .modal-dialog-slide-right {
   position: absolute;
   top: 0;
@@ -77,21 +91,26 @@ th {
   transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
 }
+
 .modal.fade .modal-dialog-slide-right {
   transform: translateX(0);
 }
-.modal-content{
+
+.modal-content {
   min-height: 100vh;
   padding: 8px;
   width: 500px;
 }
-.modal-body{
+
+.modal-body {
   padding-top: 0;
 }
+
 /* end modal */
 
 .ng-select .ng-select-container .ng-value {
-  color: #495057; /* Ajusta el color del texto para que coincida con Bootstrap */
+  color: #495057;
+  /* Ajusta el color del texto para que coincida con Bootstrap */
 }
 
 /* Ajusta el ancho del ng-select para que coincida con el diseño de Bootstrap */
@@ -100,13 +119,15 @@ ng-select {
 }
 
 /* columnas medidas */
-.row_column_checkbox{
+.row_column_checkbox {
   width: 40px;
 }
-.row_column_sm{
+
+.row_column_sm {
   width: 100px;
 }
-.row_column_md{
+
+.row_column_md {
   width: 120px;
 }
 
@@ -130,22 +151,25 @@ ng-select {
 .screen {
   min-height: 100vh;
   background-color: #f3f4f6;
-  padding-top: 60px;
 }
 
 th {
   color: #3f51b5;
 }
-.cursor{
+
+.cursor {
   cursor: pointer;
 }
-.btn-color{
+
+.btn-color {
   background-color: #3F51B5;
   color: white;
 }
-.icon_color{
+
+.icon_color {
   color: #3F51B5;
 }
+
 .map-button {
   background-color: #6b757d;
   color: white;
@@ -214,12 +238,4 @@ th {
 .icon-svg {
   width: 40px;
   height: 40px;
-}
-
-
-/* cosas de bootstrap */
-.table-responsive {
-  max-height: 600px; /* Ajusta según sea necesario */
-  max-width: 100%; /* Asegura que el contenedor no exceda el ancho de su contenedor padre */
-  margin: 0 auto; /* Centra la tabla en el contenedor */
 }
