@@ -6,28 +6,29 @@
       <h1 class="mb-0 ps-2 color-dark page-heading">Rechazos</h1>
     </div>
     <!-- Info Rechazos -->
-     <div class="">
-       <app-kpi></app-kpi>
-     </div>
+    <div class="">
+      <app-kpi></app-kpi>
+    </div>
     <!-- END Info Rechazos -->
   </div>
   <!-- TABLA -->
-   <div class="m-3">
-     <div class="d-flex align-items-center justify-content-between gap-5">
+  <div class="m-3">
+    <div class="d-flex align-items-center justify-content-between gap-5">
       <!-- buscado -->
-        <div class="input-group mb-3">
-          <input class="form-control border-end-0 border" type="search" placeholder="Buscar..." id="example-search-input">
-          <span class="input-group-append">
-              <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="button">
-                  <i class="fa fa-search"></i>
-              </button>
-          </span>
-        </div>
-       <!-- botones y filtros -->
-       <div class="d-flex align-items-center gap-2 mb-3">
+      <div class="input-group mb-3">
+        <input class="form-control border-end-0 border" type="search" placeholder="Buscar..." id="example-search-input">
+        <span class="input-group-append">
+          <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="button">
+            <i class="fa fa-search"></i>
+          </button>
+        </span>
+      </div>
+      <!-- botones y filtros -->
+      <div class="d-flex align-items-center gap-2 mb-3">
         <div class="btn-group" role="group">
           <button type="button" class="btn btn-color" (click)="exportar_rechazos()">Exportar</button>
-          <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+            aria-expanded="false">
             {{ selectedOption }}
           </button>
           <ul class="dropdown-menu">
@@ -39,272 +40,304 @@
         <button class="btn btn-color d-flex justify-content-center align-items-center" (click)="verEnMapa()">
           <i class="bi bi-geo-alt-fill"></i>
         </button>
-        <button class="btn btn-secondary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#filtroModal">
+        <button class="btn btn-secondary d-flex align-items-center" data-bs-toggle="modal"
+          data-bs-target="#filtroModal">
           <i class="bi bi-funnel-fill"></i>
         </button>
       </div>
-      </div>
-     <div class="table-responsive">
-       <table class="table table-hover table-sm my-0">
-         <thead>
-           <tr class="">
-             <!-- Checkbox Column -->
-             <th scope="col" class="text-center pe-3">
-               <input type="checkbox" (change)="masterToggle()"
-                      [checked]="selection.hasValue() && isAllSelected()"
-                      [indeterminate]="selection.hasValue() && !isAllSelected()" />
-             </th>
-             <!-- Estado Column -->
-             <th scope="col" class="text-center cursor" (click)="sortData('estado')">
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover table-sm my-0">
+        <thead>
+          <tr class="">
+            <!-- Checkbox Column -->
+            <th scope="col" class="text-center pe-3">
+              <input type="checkbox" (change)="masterToggle()" [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()" />
+            </th>
+            <!-- Estado Column -->
+            <th scope="col" class="text-center cursor" (click)="sortData('estado')">
               Estado
-              <i *ngIf="currentSortColumn === 'estado'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+              <i *ngIf="currentSortColumn === 'estado'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
-             <!-- Población Column -->
-             <th scope="col" class="row_poblacion cursor" (click)="sortData('poblacion')">
+            <!-- Primer Rechazo Fecha Column -->
+            <th scope="col" class="cursor" (click)="sortData('fecha')">
+              Fecha
+              <i *ngIf="currentSortColumn === 'poblacion'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+            </th>
+            <!-- Población Column -->
+            <th scope="col" class="row_poblacion cursor" (click)="sortData('poblacion')">
               Población
-              <i *ngIf="currentSortColumn === 'poblacion'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+              <i *ngIf="currentSortColumn === 'poblacion'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
-             <!-- Cliente Column -->
-             <th scope="col" (click)="sortData('cliente')" class="cursor">
+            <!-- Cliente Column -->
+            <th scope="col" (click)="sortData('cliente')" class="cursor">
               Cliente
-              <i *ngIf="currentSortColumn === 'cliente'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+              <i *ngIf="currentSortColumn === 'cliente'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
-             <!-- Subfamilia Column -->
-             <th scope="col" (click)="sortData('nombre_subfamilia')" class="row_subfamilia cursor">
+            <!-- Subfamilia Column -->
+            <th scope="col" (click)="sortData('nombre_subfamilia')" class="row_subfamilia cursor">
               Subfamilia
-              <i *ngIf="currentSortColumn === 'subfamilia'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+              <i *ngIf="currentSortColumn === 'subfamilia'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
-             <!-- Producto Column -->
-             <th scope="col" (click)="sortData('producto')" class="cursor">
+            <!-- Producto Column -->
+            <th scope="col" (click)="sortData('producto')" class="cursor">
               Producto
-              <i *ngIf="currentSortColumn === 'producto'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+              <i *ngIf="currentSortColumn === 'producto'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
-             <!-- Rechazo Column -->
-             <th scope="col" (click)="sortData('tipo_rechazo')" class="cursor">
+            <!-- Rechazo Column -->
+            <th scope="col" (click)="sortData('tipo_rechazo')" class="cursor">
               Rechazo
-              <i *ngIf="currentSortColumn === 'tipo_rechazo'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+              <i *ngIf="currentSortColumn === 'tipo_rechazo'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
-             <!-- Precio Column -->
-             <th scope="col" class="text-end cursor" (click)="sortData('precio_producto')">
+            <!-- Precio Column -->
+            <th scope="col" class="text-end cursor" (click)="sortData('precio_producto')">
               Mi Precio
-              <i *ngIf="currentSortColumn === 'precio_producto'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+              <i *ngIf="currentSortColumn === 'precio_producto'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
-             <!-- Promo Propia Column -->
-             <th scope="col" class="text-center cursor" (click)="sortData('promo_propia')">
-              <i *ngIf="currentSortColumn === 'promo_propia'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
-             </th>
-             <!-- Competidor Column -->
-             <th scope="col" class="text-end cursor" (click)="sortData('precio_competidor')">
+            <!-- Promo Propia Column -->
+            <th scope="col" class="text-center cursor" (click)="sortData('promo_propia')">
+              <i *ngIf="currentSortColumn === 'promo_propia'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+            </th>
+            <!-- Competidor Column -->
+            <th scope="col" class="text-end cursor" (click)="sortData('precio_competidor')">
               Su Precio
-              <i *ngIf="currentSortColumn === 'precio_competidor'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+              <i *ngIf="currentSortColumn === 'precio_competidor'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
-             <!-- Promo Competidor Column -->
-             <th scope="col" class="text-center cursor" (click)="sortData('promo_competencia')">
-              <i *ngIf="currentSortColumn === 'promo_competencia'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
-             </th>
-             <!-- Competidor Column -->
-             <th scope="col" (click)="sortData('competidor')" class="cursor">
+            <!-- Promo Competidor Column -->
+            <th scope="col" class="text-center cursor" (click)="sortData('promo_competencia')">
+              <i *ngIf="currentSortColumn === 'promo_competencia'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+            </th>
+            <!-- Competidor Column -->
+            <th scope="col" (click)="sortData('competidor')" class="cursor">
               Competidor
-              <i *ngIf="currentSortColumn === 'competidor'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+              <i *ngIf="currentSortColumn === 'competidor'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
-             <!-- Acción Correctora Column -->
-             <th scope="col" class="text-center">Convertir en oportunidad (% ó € + Promo)</th>
-             <!-- Propuesta Agente Column -->
-             <th scope="col" (click)="sortData('propuesta_agente')" class="cursor">
+            <!-- Acción Correctora Column -->
+            <th scope="col" class="text-center">Convertir en oportunidad (% ó € + Promo)</th>
+            <!-- Propuesta Agente Column -->
+            <th scope="col" (click)="sortData('propuesta_agente')" class="cursor">
               Propuesta Agente
-              <i *ngIf="currentSortColumn === 'propuesta_agente'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+              <i *ngIf="currentSortColumn === 'propuesta_agente'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
-             <!-- Fecha Interés Column -->
-             <th scope="col" class="text-success text-end cursor" (click)="sortData('fecha_interes')">
-               <i *ngIf="currentSortColumn === 'fecha_interes'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+            <!-- Fecha Interés Column -->
+            <th scope="col" class="text-success text-end cursor" (click)="sortData('fecha_interes')">
+              <i *ngIf="currentSortColumn === 'fecha_interes'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               Interés
             </th>
             <!-- columna ficha -->
             <th scope="col" class="text-center ps-3">Ficha</th>
-             <!-- Expand Column -->
-             <th scope="col" class="text-center"></th>
-           </tr>
-         </thead>
-         <tbody>
-           <ng-container *ngFor="let row of dataSource">
-             <tr>
-               <!-- Checkbox Column -->
-               <td class="text-center pe-3">
-                 <input type="checkbox" (click)="$event.stopPropagation()" 
-                        (change)="selection.toggle(row)" 
-                        [checked]="selection.isSelected(row)" />
-               </td>
-               <!-- Estado Column -->
-               <td class="text-center">
-                 <div class="d-flex align-items-center gap-1 justify-content-center">
-                   <img [src]="getOptionImage(row.status_id)" alt="{{ getEstado(row.status_id) }} Image" class="option-image">
-                   <select class="form-select form-select-sm select_estado" [(ngModel)]="row.status_id" (change)="actualizarEstados(row)">
-                     <option *ngFor="let estado of estados" [value]="estado.id">
-                       {{ estado.name }}
-                     </option>
-                   </select>
-                 </div>
-               </td>
-               <!-- Población Column -->
-               <td class="">{{ row.city }}</td>
-               <!-- Cliente Column -->
-               <td class="row_cliente">{{ row.customer_name }}</td>
-               <!-- Subfamilia Column -->
-               <td class="">{{ row.subfamily }}</td>
-               <!-- Producto Column -->
-               <td class="row_producto">
-                <span [ngbTooltip]="row.product?.length > 23 ? 'tooltip' : null" [ngbTooltip]="row.product?.length > 23 ? row.product : ''">{{ row.product }}</span>
+            <!-- Expand Column -->
+            <th scope="col" class="text-center"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let row of dataSource">
+            <tr>
+              <!-- Checkbox Column -->
+              <td class="text-center pe-3">
+                <input type="checkbox" (click)="$event.stopPropagation()" (change)="selection.toggle(row)"
+                  [checked]="selection.isSelected(row)" />
               </td>
-               <!-- Rechazo Column -->
-               <td class="text-center">
-                 <select class="form-select form-select-sm text-danger select_rechazo" [(ngModel)]="row.reason_rejection_id" [ngbTooltip]="getMotivoRechazo(row.reason_rejection_id)">
-                   <option *ngFor="let rechazo of tipos_rechazo" [value]="rechazo.id" >{{ rechazo.rejection }}</option>
-                 </select>
-               </td>
-               <!-- Precio Column -->
-               <td class="text-end row_precio_producto centrado_column">{{ row.pvp }} €</td>
-               <!-- Promo Propia Column -->
-               <td class="text-center centrado_column">
-                 <i *ngIf="row.has_own_promo" class="promo-icon" [ngbTooltip]="row.own_promo">P</i>
-               </td>
-               <!-- Competidor Column -->
-               <td class="text-end row_precio_competidor centrado_column">{{ row.pvp_competitor }} €</td>
-               <!-- Promo Competidor Column -->
-               <td class="text-center centrado_column">
-                 <i *ngIf="row.has_competitor_promo" class="promo-icon" [ngbTooltip]="row.competitor_promo">P</i>
-               </td>
-               <!-- Competidor Column -->
-               <td>
-                 <select class="form-select form-select-sm row_select_competidor" [(ngModel)]="row.competitor_id" [ngbTooltip]="getCompetidorNombre(row.competitor_id)">
-                   <option *ngFor="let competidor of competidores" [value]="competidor.id">{{ competidor.name }}</option>
-                 </select>
-               </td>
-               <!-- Acción Correctora Column -->
-               <td class="fondo_accionCorrectora">
-                 <div class="d-flex align-items-center gap-1">
-                   <!-- Campo para precio de promoción -->
-                   <input type="number" class="form-control form-control-sm accion_correctora_precio text-success" [(ngModel)]="row.corrective_action_value" placeholder="0" min="0" />
-       
-                   <!-- Campo para símbolo de promoción -->
-                   <select class="form-select form-select-sm accion_correctora_simbolo" [(ngModel)]="row.corrective_action_symbol_id" (change)="updateSymbol(row)">
-                     <option *ngFor="let simbolo of simbolos" [value]="simbolo.id">
-                       {{ simbolo.symbol }}
-                     </option>
-                   </select>
-       
-                   <!-- Campo para acción correctora -->
-                   <input type="text" class="form-control form-control-sm row_accion_correctora text-success" [(ngModel)]="row.corrective_action_text" maxlength="50" placeholder="Promoción" [ngbTooltip]="row.corrective_action_text"/>
-                 </div>
-               </td>
-               <!-- Propuesta Agente Column -->
-               <td class="row_propuesta_agente" >
-                <span [ngbTooltip]="row.salesman_proposal?.length > 23 ? 'tooltip' : null" [ngbTooltip]="row.salesman_proposal?.length > 23 ? row.salesman_proposal : ''">{{ row.salesman_proposal }}</span>
-               </td>
-               <!-- Fecha Interés Column -->
-               <td class="text-success centrado_column row_fecha_interes">{{ row.interest_date }}</td>
-               <!-- ficha column -->
-                <td class="text-center ps-3">
-                  <i class="bi bi-eye-fill fs-5 icon_color cursor" (click)="viewRechazo(row.customer_id)"></i>
+              <!-- Estado Column -->
+              <td class="text-center">
+                <div class="d-flex align-items-center gap-1 justify-content-center">
+                  <img [src]="getOptionImage(row.status_id)" alt="{{ getEstado(row.status_id) }} Image"
+                    class="option-image">
+                  <select class="form-select form-select-sm select_estado" [(ngModel)]="row.status_id"
+                    (change)="actualizarEstados(row)">
+                    <option *ngFor="let estado of estados" [value]="estado.id">
+                      {{ estado.name }}
+                    </option>
+                  </select>
+                </div>
+              </td>
+              <!-- Primer Rechazo Column -->
+              <td class="">{{ row.rejection_date }}</td>
+              <!-- Población Column -->
+              <td class="">{{ row.city }}</td>
+              <!-- Cliente Column -->
+              <td class="row_cliente">{{ row.customer_name }}</td>
+              <!-- Subfamilia Column -->
+              <td class="">{{ row.subfamily }}</td>
+              <!-- Producto Column -->
+              <td class="row_producto">
+                <span [ngbTooltip]="row.product.length > 23 ? 'tooltip' : null"
+                  [ngbTooltip]="row.product.length > 23 ? row.product : ''">{{ row.product }}</span>
+              </td>
+              <!-- Rechazo Column -->
+              <td class="text-center">
+                <select class="form-select form-select-sm text-danger select_rechazo"
+                  [(ngModel)]="row.reason_rejection_id" [ngbTooltip]="getMotivoRechazo(row.reason_rejection_id)">
+                  <option *ngFor="let rechazo of tipos_rechazo" [value]="rechazo.id">{{ rechazo.rejection }}</option>
+                </select>
+              </td>
+              <!-- Precio Column -->
+              <td class="text-end row_precio_producto centrado_column">{{ row.pvp }} €</td>
+              <!-- Promo Propia Column -->
+              <td class="text-center centrado_column">
+                <i *ngIf="row.has_own_promo" class="promo-icon" [ngbTooltip]="row.own_promo">P</i>
+              </td>
+              <!-- Competidor Column -->
+              <td class="text-end row_precio_competidor centrado_column">{{ row.pvp_competitor }} €</td>
+              <!-- Promo Competidor Column -->
+              <td class="text-center centrado_column">
+                <i *ngIf="row.has_competitor_promo" class="promo-icon" [ngbTooltip]="row.competitor_promo">P</i>
+              </td>
+              <!-- Competidor Column -->
+              <td>
+                <select class="form-select form-select-sm row_select_competidor" [(ngModel)]="row.competitor_id"
+                  [ngbTooltip]="getCompetidorNombre(row.competitor_id)">
+                  <option *ngFor="let competidor of competidores" [value]="competidor.id">{{ competidor.name }}</option>
+                </select>
+              </td>
+              <!-- Acción Correctora Column -->
+              <td class="fondo_accionCorrectora">
+                <div class="d-flex align-items-center gap-1">
+                  <!-- Campo para precio de promoción -->
+                  <input type="number" class="form-control form-control-sm accion_correctora_precio text-success"
+                    [(ngModel)]="row.corrective_action_value" placeholder="0" min="0" />
+
+                  <!-- Campo para símbolo de promoción -->
+                  <select class="form-select form-select-sm accion_correctora_simbolo"
+                    [(ngModel)]="row.corrective_action_symbol_id" (change)="updateSymbol(row)">
+                    <option *ngFor="let simbolo of simbolos" [value]="simbolo.id">
+                      {{ simbolo.symbol }}
+                    </option>
+                  </select>
+
+                  <!-- Campo para acción correctora -->
+                  <input type="text" class="form-control form-control-sm row_accion_correctora text-success"
+                    [(ngModel)]="row.corrective_action_text" maxlength="50" placeholder="Promoción"
+                    [ngbTooltip]="row.corrective_action_text" />
+                </div>
+              </td>
+              <!-- Propuesta Agente Column -->
+              <td class="row_propuesta_agente">
+                <span [ngbTooltip]="row.salesman_proposal.length > 23 ? 'tooltip' : null"
+                  [ngbTooltip]="row.salesman_proposal.length > 23 ? row.salesman_proposal : ''">{{
+                  row.salesman_proposal }}</span>
+              </td>
+              <!-- Fecha Interés Column -->
+              <td class="text-success centrado_column row_fecha_interes">{{ row.interest_date }}</td>
+              <!-- ficha column -->
+              <td class="text-center ps-3">
+                <i class="bi bi-eye-fill fs-5 icon_color cursor" (click)="viewRechazo(row.customer_id)"></i>
+              </td>
+              <!-- Expand Column -->
+              <td class="text-center">
+                <button class="btn btn-color py-0 px-1 text-white"
+                  (click)="expandedElement = (expandedElement === row ? null : row)">
+                  <i class="bi" [ngClass]="expandedElement === row ? 'bi-x' : 'bi bi-three-dots-vertical'"></i>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Row Expanded Detail -->
+            <ng-container *ngIf="expandedElement === row">
+              <tr>
+                <td [attr.colspan]="displayedColumns.length">
+                  <div class="p-2">
+                    <div class="row mb-2">
+                      <div class="col-md-3 col-sm-6">
+                        <strong>PVP:</strong> {{ row.pvp }} €
+                      </div>
+                      <div class="col-md-3 col-sm-6">
+                        <strong>Promoción Propia:</strong> {{ row.own_promo }}
+                      </div>
+                      <div class="col-md-3 col-sm-6">
+                        <strong>Precio Competidor:</strong> {{ row.pvp_competitor }} €
+                      </div>
+                      <div class="col-md-3 col-sm-6">
+                        <strong>Promoción Competidor:</strong> {{ row.competitor_promo }}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12">
+                        <strong>Notas:</strong> {{ row.notes }}
+                      </div>
+                    </div>
+                  </div>
                 </td>
-               <!-- Expand Column -->
-               <td class="text-center">
-                 <button class="btn btn-color py-0 px-1 text-white" (click)="expandedElement = (expandedElement === row ? null : row)">
-                   <i class="bi" [ngClass]="expandedElement === row ? 'bi-x' : 'bi bi-three-dots-vertical'"></i>
-                 </button>
-               </td>
-             </tr>
-     
-             <!-- Row Expanded Detail -->
-             <ng-container *ngIf="expandedElement === row">
-               <tr>
-                 <td [attr.colspan]="displayedColumns.length">
-                   <div class="p-2">
-                     <div class="row mb-2">
-                       <div class="col-md-3 col-sm-6">
-                         <strong>PVP:</strong> {{ row.pvp }} €
-                       </div>
-                       <div class="col-md-3 col-sm-6">
-                         <strong>Promoción Propia:</strong> {{ row.own_promo }}
-                       </div>
-                       <div class="col-md-3 col-sm-6">
-                         <strong>Precio Competidor:</strong> {{ row.pvp_competitor }} €
-                       </div>
-                       <div class="col-md-3 col-sm-6">
-                         <strong>Promoción Competidor:</strong> {{ row.competitor_promo }}
-                       </div>
-                     </div>
-                     <div class="row">
-                       <div class="col-12">
-                         <strong>Notas:</strong> {{ row.notes }}
-                       </div>
-                     </div>
-                   </div>
-                 </td>
-               </tr>
-             </ng-container>
-           </ng-container>
-         </tbody>
-       </table>
-     </div>
-     <!-- Paginador -->     
-     
-   </div>
-  
+              </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <!-- Paginador -->
+
+  </div>
+
   <!-- END TABLA -->
   <!-- menu derecho -->
-    <!-- Filtros (Menú derecho) -->
-    <div class="modal fade" tabindex="-1" id="filtroModal" aria-labelledby="filtroModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-slide-right">
-        <div class="modal-content">
-          <div class="modal-header d-flex align-items-center gap-2">
-            <i class="bi bi-funnel-fill mb-3 fs-4"></i>
-            <h2 id="drawerLabel">Filtro de Rechazos</h2>
-          </div>
-          <div class="modal-body">
-            <form [formGroup]="form" (ngSubmit)="applyFilter()" class="d-flex flex-column gap-3">
-              <div class="d-flex flex-column gap-3">
-                <div class="d-flex w-100 gap-3">
-                  <button class="btn btn-color" type="submit">Filtrar</button>
-                  <button type="button" class="btn btn-secondary" (click)="filtroReset()">Limpiar</button>
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+  <!-- Filtros (Menú derecho) -->
+  <div class="modal fade" tabindex="-1" id="filtroModal" aria-labelledby="filtroModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-slide-right">
+      <div class="modal-content">
+        <div class="modal-header d-flex align-items-center gap-2">
+          <i class="bi bi-funnel-fill mb-3 fs-4"></i>
+          <h2 id="drawerLabel">Filtro de Rechazos</h2>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="form" (ngSubmit)="applyFilter()" class="d-flex flex-column gap-3">
+            <div class="d-flex flex-column gap-3">
+              <div class="d-flex w-100 gap-3">
+                <button class="btn btn-color" type="submit">Filtrar</button>
+                <button type="button" class="btn btn-secondary" (click)="filtroReset()">Limpiar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+              </div>
+              <div class="mb-2 d-flex flex-column gap-3">
+                <div class="form-group">
+                  <label for="estado">Estado</label>
+                  <select id="estado" class="form-select" formControlName="EstadoFilterControl">
+                    <option value="">- Todos -</option>
+                    <option value="Rechazado">Rechazado</option>
+                    <option value="En Proceso">En Proceso</option>
+                    <option value="Vendido">Vendido</option>
+                    <option value="No aplica">No aplica</option>
+                  </select>
                 </div>
-                <div class="mb-2 d-flex flex-column gap-3">
-                  <div class="form-group">
-                    <label for="estado">Estado</label>
-                    <select id="estado" class="form-select" formControlName="EstadoFilterControl">
-                      <option value="">- Todos -</option>
-                      <option value="Rechazado">Rechazado</option>
-                      <option value="En Proceso">En Proceso</option>
-                      <option value="Vendido">Vendido</option>
-                      <option value="No aplica">No aplica</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="poblacion">Población</label>
-                    <input id="poblacion" class="form-control" formControlName="PoblacionFilterControl" />
-                  </div>
-                  <div class="form-group">
-                    <label for="provincia">Provincia</label>
-                    <input id="provincia" class="form-control" formControlName="ProvinciaFilterControl" />
-                  </div>
-                  <div class="form-group">
-                    <label for="producto">Producto</label>
-                    <input id="producto" class="form-control" formControlName="ProductoFilterControl" />
-                  </div>
-                  <div class="form-group">
-                    <label for="familia">Familia</label>
-                    <input id="familia" class="form-control" formControlName="FamiliaFilterControl" />
-                  </div>
-                  <div class="form-group">
-                    <label for="subfamilia">Subfamilia</label>
-                    <input id="subfamilia" class="form-control" formControlName="SubFamiliaFilterControl" />
-                  </div>
+                <div class="form-group">
+                  <label for="poblacion">Población</label>
+                  <input id="poblacion" class="form-control" formControlName="PoblacionFilterControl" />
+                </div>
+                <div class="form-group">
+                  <label for="provincia">Provincia</label>
+                  <input id="provincia" class="form-control" formControlName="ProvinciaFilterControl" />
+                </div>
+                <div class="form-group">
+                  <label for="producto">Producto</label>
+                  <input id="producto" class="form-control" formControlName="ProductoFilterControl" />
+                </div>
+                <div class="form-group">
+                  <label for="familia">Familia</label>
+                  <input id="familia" class="form-control" formControlName="FamiliaFilterControl" />
+                </div>
+                <div class="form-group">
+                  <label for="subfamilia">Subfamilia</label>
+                  <input id="subfamilia" class="form-control" formControlName="SubFamiliaFilterControl" />
                 </div>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
-      
     </div>
+
+  </div>
 </div>
