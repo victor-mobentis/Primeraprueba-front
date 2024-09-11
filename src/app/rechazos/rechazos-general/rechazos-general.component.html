@@ -167,7 +167,7 @@
                   <img [src]="getOptionImage(row.status_id)" alt="{{ getEstado(row.status_id) }} Image"
                     class="option-image">
                   <select class="form-select form-select-sm select_estado" [(ngModel)]="row.status_id"
-                    (change)="actualizarEstados(row)">
+                    (ngModelChange)="actualizarEstados(row)">
                     <option *ngFor="let estado of estados" [value]="estado.id">
                       {{ estado.name }}
                     </option>
