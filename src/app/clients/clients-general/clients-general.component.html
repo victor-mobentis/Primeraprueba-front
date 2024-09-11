@@ -1,20 +1,23 @@
 <div class="screen">
+  <div class="separador-superior"></div>
   <div class="">
-    <div class="d-flex justify-content-between m-3 py-3">
+    <div class="d-flex justify-content-between m-4">
       <h1 class="mb-0">
         <img class="icon-title" src="assets/images/iconos/clientes-icon-dark.svg" alt="Clientes" matListItemIcon />
         <span class=" mb-0 ps-2 color-dark page-heading">Clientes</span>
       </h1>
     </div>
-    
-    
+
+
     <div class="m-3">
       <div class="d-flex align-items-center justify-content-between gap-5">
         <!-- buscador -->
-        <div class="input-group mb-3">
-          <input class="form-control border-end-0 border" type="search" placeholder="Buscar..." id="example-search-input">
+        <div class="input-group mb-3" id="busqueda">
+          <input class="form-control border-end-0 border" type="search" placeholder="Buscar..."
+            id="example-search-input">
           <span class="input-group-append">
-            <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="button">
+            <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5"
+              type="button">
               <i class="fa fa-search"></i>
             </button>
           </span>
@@ -26,50 +29,52 @@
             <mat-icon>location_on</mat-icon>
           </button>
           <button ngbTooltip="Ver filtros" class="btn btn-secondary d-flex align-items-center" data-bs-toggle="modal"
-          data-bs-target="#filtroModal">
+            data-bs-target="#filtroModal">
             <mat-icon class="p-0 m-0">filter_list_alt</mat-icon>
           </button>
         </div>
-        
+
       </div>
       <!-- tabla -->
-      <div class="table-responsive mb-2">
+      <div class="table-responsive">
         <table class="table table-hover">
           <!-- Checkbox Column -->
           <thead>
             <tr>
-              <th class="th-checkbox text-center row_column_checkbox">
-                <input type="checkbox" class="form-check-input" (change)="masterToggle()" [checked]="selection.hasValue() && isAllSelected()"
-                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+              <th class="th-checkbox row_column_checkbox text-center p-2">
+                <div class="d-flex align-items-center">
+                  <input type="checkbox" (change)="masterToggle()" [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </div>
               </th>
-              <th scope="col" class="row_column_sm cursor"(click)="sortData('customer_ERP_id')">Código 
+              <th scope="col" class="row_column_sm cursor" (click)="sortData('customer_ERP_id')">Código
                 <i *ngIf="sortColumn === 'customer_ERP_id'" class="bi"
-                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+                  [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
               <th scope="col" class="cursor" (click)="sortData('name')">
                 Nombre
                 <i *ngIf="sortColumn === 'name'" class="bi"
-                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+                  [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
               <th scope="col" class="row_column_md cursor" (click)="sortData('province')">
                 Provincia
                 <i *ngIf="sortColumn === 'province'" class="bi"
-                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+                  [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
-              <th scope="col" class="row_column_md cursor" (click)="sortData('city')" >
+              <th scope="col" class="row_column_md cursor" (click)="sortData('city')">
                 Población
                 <i *ngIf="sortColumn === 'city'" class="bi"
-                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+                  [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
-              <th scope="col" class="row_column_sm cursor" (click)="sortData('pc')" >
+              <th scope="col" class="row_column_sm cursor" (click)="sortData('pc')">
                 C.P.
                 <i *ngIf="sortColumn === 'pc'" class="bi"
-                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+                  [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
               <th scope="col" class="cursor" (click)="sortData('address')">
                 Dirección
                 <i *ngIf="sortColumn === 'address'" class="bi"
-                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+                  [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
               <th scope="col" class="text-center row_column_sm">Ficha</th>
             </tr>
@@ -77,9 +82,11 @@
           <tbody>
             <ng-container *ngFor="let row of dataSource.data">
               <tr>
-                <td class="text-center">
-                  <input type="checkbox" class="form-check-input" (click)="$event.stopPropagation()" (change)="selection.toggle(row)"
-                    [checked]="selection.isSelected(row)" [disabled]="isCheckboxDisabled(row)">
+                <td class="text-center p-2">
+                  <div class="d-flex align-items-center">
+                    <input type="checkbox" (click)="$event.stopPropagation()" (change)="selection.toggle(row)"
+                      [checked]="selection.isSelected(row)" [disabled]="isCheckboxDisabled(row)">
+                  </div>
                 </td>
                 <td>{{ row.customer_ERP_id }}</td>
                 <td [title]="row.name">
@@ -101,15 +108,14 @@
                   </button>
                 </td>
               </tr>
-  
+
             </ng-container>
           </tbody>
         </table>
-      
-        <!-- Paginador -->
+
       </div>
       <!-- paginator -->
-      <nav aria-label="Page navigation">
+      <!-- <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
           <li class="page-item">
             <a class="page-link"aria-label="First">
@@ -121,7 +127,8 @@
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
-          <!-- Page numbers here -->
+
+          
           <li class="page-item">
             <a class="page-link">1</a>
           </li>
@@ -142,7 +149,7 @@
             </a>
           </li>
         </ul>
-      </nav>
+      </nav> -->
     </div>
   </div>
   <!-- apartado de filtros -->
@@ -161,7 +168,8 @@
                 <div class="col-12 justify-content-end gap-2 d-flex mt-2">
                   <button class="btn btn-color" type="submit" (click)="applyComplexFilter()">Filtrar</button>
                   <button type="button" class="btn btn-secondary" (click)="filtroReset()">Limpiar</button>
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    aria-label="Close">Cancelar</button>
                 </div>
                 <div class="mb-2 d-flex flex-column gap-3">
                   <div class="mb-2">
@@ -173,92 +181,61 @@
                   </div>
                   <div *ngIf="s1.length > 0" class="mb-2">
                     <label>{{s1[0].name}}</label>
-                    <ng-select 
-                      [items]="s1"
-                      bindLabel="segmentation_value"
-                      bindValue="segmentation_value_id"
-                      formControlName="segmentacion1FilterControl"
-                      [multiple]="true" 
-                      class="form-control p-0"
+                    <ng-select [items]="s1" bindLabel="segmentation_value" bindValue="segmentation_value_id"
+                      formControlName="segmentacion1FilterControl" [multiple]="true" class="form-control p-0"
                       placeholder="Seleccione una o más opciones">
                     </ng-select>
                   </div>
                   <div *ngIf="s2.length > 0" class="mb-2">
                     <label>{{s2[0].name}}</label>
-                    <ng-select 
-                      [items]="s2"
-                      bindLabel="segmentation_value"
-                      bindValue="segmentation_value_id"
-                      formControlName="segmentacion2FilterControl"
-                      [multiple]="true" 
-                      class="form-control p-0"
+                    <ng-select [items]="s2" bindLabel="segmentation_value" bindValue="segmentation_value_id"
+                      formControlName="segmentacion2FilterControl" [multiple]="true" class="form-control p-0"
                       placeholder="Seleccione una o más opciones">
                     </ng-select>
                   </div>
-                  
+
                   <div *ngIf="s3.length > 0" class="mb-2">
                     <label>{{s3[0].name}}</label>
-                    <ng-select 
-                      [items]="s3"
-                      bindLabel="segmentation_value"
-                      bindValue="segmentation_value_id"
-                      formControlName="segmentacion3FilterControl"
-                      [multiple]="true" 
-                      class="form-control p-0"
+                    <ng-select [items]="s3" bindLabel="segmentation_value" bindValue="segmentation_value_id"
+                      formControlName="segmentacion3FilterControl" [multiple]="true" class="form-control p-0"
                       placeholder="Seleccione una o más opciones">
                     </ng-select>
                   </div>
-                  
+
                   <div class="mb-2">
                     <label for="cliente">Cliente</label>
-                    <input type="text" class="form-control" formControlName="cliente" placeholder="Introduzca el nombre del cliente">
+                    <input type="text" class="form-control" formControlName="cliente"
+                      placeholder="Introduzca el nombre del cliente">
                   </div>
-                  
+
                   <div class="mb-2">
                     <label for="provincia">Provincia</label>
-                    <ng-select 
-                      [items]="provinciaList"
-                      bindLabel="name"
-                      [multiple]="true" 
-                      formControlName="provinciaFilterControl"
-                      class="form-control p-0"
+                    <ng-select [items]="provinciaList" bindLabel="name" [multiple]="true"
+                      formControlName="provinciaFilterControl" class="form-control p-0"
                       placeholder="Seleccione una o más provincias">
                     </ng-select>
                   </div>
-                  
+
                   <div class="mb-2">
                     <label for="poblacion">Población</label>
-                    <ng-select 
-                      [items]="poblacionList"
-                      bindLabel="name"
-                      [multiple]="true"
-                      formControlName="poblacionFilterControl"
-                      class="form-control p-0"
+                    <ng-select [items]="poblacionList" bindLabel="name" [multiple]="true"
+                      formControlName="poblacionFilterControl" class="form-control p-0"
                       placeholder="Seleccione una o más poblaciones">
                     </ng-select>
                   </div>
-                  
+
                   <div class="mb-2">
                     <label for="agente">Vendedor</label>
-                    <ng-select 
-                      [items]="agenteList"
-                      bindLabel="name"
-                      bindValue="id"
-                      [multiple]="true"
-                      formControlName="agenteFilterControl"
-                      class="form-control p-0"
+                    <ng-select [items]="agenteList" bindLabel="name" bindValue="id" [multiple]="true"
+                      formControlName="agenteFilterControl" class="form-control p-0"
                       placeholder="Seleccione uno o más vendedores">
                     </ng-select>
                   </div>
-                  
+
                   <div class="mb-2">
                     <label for="familia">Familia</label>
-                    <ng-select 
-                      [items]="familiaList"
-                      bindLabel="name"  
-                      [multiple]="true"
-                      formControlName="familiaFilterControl"
-                      class="form-control p-0"
+                    <ng-select [items]="familiaList" bindLabel="name" [multiple]="true"
+                      formControlName="familiaFilterControl" class="form-control p-0"
                       placeholder="Seleccione una o más familias">
                     </ng-select>
                   </div>
