@@ -53,9 +53,11 @@
         <thead>
           <tr class="">
             <!-- Checkbox Column -->
-            <th scope="col" class="text-center pe-3">
-              <input type="checkbox" (change)="masterToggle()" [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()" />
+            <th scope="col" class="text-center p-2">
+              <div class=" d-flex align-items-center justify-self-center">
+                <input type="checkbox" (change)="masterToggle()" [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()" />
+              </div>
             </th>
             <!-- Estado Column -->
             <th scope="col" class="text-center cursor" (click)="sortData('estado')">
@@ -128,7 +130,9 @@
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <!-- Acción Correctora Column -->
-            <th scope="col" class="text-center">Convertir en oportunidad (% ó € + Promo)</th>
+            <th scope="col" class="text-center header-correctora">Convertir en oportunidad (% ó € + Promo)</th>
+            <!-- Acción Correctora Enviar Column -->
+            <th scope="col" class="text-center header-correctora"></th>
             <!-- Propuesta Agente Column -->
             <th scope="col" (click)="sortData('propuesta_agente')" class="cursor">
               Propuesta Agente
@@ -151,9 +155,11 @@
           <ng-container *ngFor="let row of dataSource">
             <tr>
               <!-- Checkbox Column -->
-              <td class="text-center pe-3">
-                <input type="checkbox" (click)="$event.stopPropagation()" (change)="selection.toggle(row)"
-                  [checked]="selection.isSelected(row)" />
+              <td class="text-center px-2">
+                <div class=" d-flex align-items-center justify-self-center">
+                  <input type="checkbox" (click)="$event.stopPropagation()" (change)="selection.toggle(row)"
+                    [checked]="selection.isSelected(row)" />
+                </div>
               </td>
               <!-- Estado Column -->
               <td class="text-center">
@@ -226,6 +232,12 @@
                   <input type="text" class="form-control form-control-sm row_accion_correctora text-success"
                     [(ngModel)]="row.corrective_action_text" maxlength="50" placeholder="Promoción"
                     [ngbTooltip]="row.corrective_action_text" />
+                </div>
+              </td>
+              <!-- Acción Correctora Enviar Column -->
+              <td class="pe-2 fondo_accionCorrectora">
+                <div class=" d-flex align-items-center justify-self-center">
+                  <input type="checkbox" (click)="$event.stopPropagation()" [checked]="row.corrective_action_sent" />
                 </div>
               </td>
               <!-- Propuesta Agente Column -->

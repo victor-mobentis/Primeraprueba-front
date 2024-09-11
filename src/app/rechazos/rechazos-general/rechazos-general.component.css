@@ -1,8 +1,8 @@
-.screen{
+.screen {
   background-color: #f3f4f6;
 }
 
-.separador-superior{
+.separador-superior {
   height: 64px;
 }
 
@@ -19,9 +19,11 @@
 .color-dark {
   color: #6D6D6D;
 }
-.main{
+
+.main {
   height: 50%;
 }
+
 .table-responsive {
   height: calc(100vh - 227px)
 }
@@ -42,13 +44,17 @@ td {
 }
 
 .buttons-rechazos {
-  background-color: #6b757d;
+  background-color: #6b757d ;
   color: white;
 }
 
 th {
   color: #3F51B5;
+}
 
+.header-correctora {
+  color: white;
+  background-color: #3F51B5 !important;
 }
 
 .cursor {
