@@ -45,9 +45,7 @@ export class AddEditReasonRejectionsComponent {
         .pipe(timeout(20000))
         .subscribe(
           (data: IMotivoRechazo) => {
-            console.log(data);
             this.motivoRechazo = data;
-            console.log(this.motivoRechazo);
             this.reasonForm.patchValue({
               codigo: this.motivoRechazo.rejection_code,
               nombre: this.motivoRechazo.rejection,
@@ -56,7 +54,7 @@ export class AddEditReasonRejectionsComponent {
           },
           (error) => {
             // Maneja los errores adecuadamente
-            console.error('Error al cargar los motivos de rechazo', error);
+            console.error('Error al cargar los motivoss de rechazo', error);
             this.cargando = false;
           }
         );
