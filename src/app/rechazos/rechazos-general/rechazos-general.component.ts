@@ -48,7 +48,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     'interes',
     'expand',
   ];
-  dataSource: any[] = []; // Temporarily set to any[]
+  dataSource: IRechazo[] = []; // Temporarily set to any[]
   rechazoList: IRechazo[] = [];
   selection = new SelectionModel<IRechazo>(true, []);
   estados: IEstado[] = [];
@@ -338,16 +338,16 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       this.currentSortColumn === column && this.sortDirection === 'asc';
 
     // Ordenar la fuente de datos
-    this.dataSource.sort((a, b) => {
-      const compareA = a[column];
-      const compareB = b[column];
+    // this.dataSource.sort((a, b) => {        //Nombres de variables legibles por favor.
+    //   const compareA = a[column];           //Cambiar esto para que funcione la ordenación
+    //   const compareB = b[column];
 
-      if (typeof compareA === 'string' && typeof compareB === 'string') {
-        return compareA.localeCompare(compareB) * (isAsc ? 1 : -1);
-      } else {
-        return (compareA - compareB) * (isAsc ? 1 : -1);
-      }
-    });
+    //   if (typeof compareA === 'string' && typeof compareB === 'string') {
+    //     return compareA.localeCompare(compareB) * (isAsc ? 1 : -1);
+    //   } else {
+    //     return (compareA - compareB) * (isAsc ? 1 : -1);
+    //   }
+    // });
 
     // Actualizar la columna actual y alternar la dirección
     this.currentSortColumn = column;
