@@ -13,11 +13,9 @@ import { MenuItem }  from 'src/app/models/menuItem.model';
 })
 export class NavbarComponent {
   menuOpen = false;
-  profileMenuOpen = false; // Nueva propiedad para manejar el menú de perfil
+  profileMenuOpen = false; 
 
-  menuItems: any[] = [
-   
-  ];
+  menuItems: any[] = [];
 
   constructor(
     public _loginServices: LoginService,
@@ -30,48 +28,30 @@ export class NavbarComponent {
     this._menuService.getMenuItems(1, 'es').subscribe(
       (items) => {
         if (items && Array.isArray(items)) {
-          console.log('Datos recibidos:', items);
           this.menuItems = this.mapItems(items, null);
         } else {
-          console.error('Datos recibidos no son válidos:', items);
-          this.menuItems = []; // Valores predeterminados si los datos son inválidos
+          this.menuItems = [];
         }
       },
       (error) => {
-        console.error('Error al obtener los menús', error);
-        this.menuItems = []; // Valores predeterminados en caso de error
+        this.menuItems = []; 
       }
     );
   }
 
   mapItems(items: any[], parentId: number | null): any[] {
-    console.log('Filtrando ítems para parentId:', parentId);
-  
     const filteredItems = items.filter(item => item.parent_menu_id === parentId);
-    console.log('Ítems filtrados:', filteredItems);
   
     // Recursión para submenús
     return filteredItems.map(item => ({
       ...item,
       isSubmenuOpen: false,
-      submenuItems: this.mapItems(items, item.id) // Recursión para submenús
+      submenuItems: this.mapItems(items, item.id)
     }));
   }
 
   closeMenu() {
     this.menuOpen = false;
-  }
-
-  openSubmenu(item: any) {
-    item.isSubmenuOpen = true;
-  }
-
-  closeSubmenu(item: any) {
-    item.isSubmenuOpen = false;
-  }
-
-  toggleSubmenu(item: any) {
-    item.isSubmenuOpen = !item.isSubmenuOpen;
   }
 
   toggleMenu() {
@@ -99,17 +79,7 @@ export class NavbarComponent {
     this.profileMenuOpen = !this.profileMenuOpen;
   }
 
-  toggleDropdown(item: MenuItem) {
-    if (item.hasSubmenu) {
-      item.showSubmenu = true; // Mostrar el submenú
-    }
-  }
-
-  hideDropdown(item: MenuItem) {
-    if (item.hasSubmenu) {
-      item.showSubmenu = false; // Ocultar el submenú
-    }
-  }
+ 
 
   onSearch(query: string) {
     // Implementa la lógica de búsqueda aquí
