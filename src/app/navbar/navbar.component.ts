@@ -3,19 +3,8 @@ import { Router } from '@angular/router';
 import { LoginService } from '../services/auth/login.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileEditPopupComponent } from '../configuration/configuration-general/profile-edit-popup/profile-edit-popup.component'; // Ajusta la ruta
-
-interface SubMenuItem {
-  label: string;
-  route: string;
-}
-
-interface MenuItem {
-  label: string;
-  route: string;
-  hasSubmenu?: boolean;
-  submenuItems?: SubMenuItem[];
-  showSubmenu?: boolean; // Agregar esta propiedad
-}
+import { MenuService } from '../services/menu/menu.service';
+import { MenuItem }  from 'src/app/models/menuItem.model';
 
 @Component({
   selector: 'app-navbar',
@@ -27,17 +16,27 @@ export class NavbarComponent {
   profileMenuOpen = false; // Nueva propiedad para manejar el menú de perfil
 
   menuItems: MenuItem[] = [
-    { label: 'Dashboard', route: 'dashboard/global' },
-    { label: 'Converter', route: 'rechazos/global' },
-    { label: 'Clientes', route: 'clientes/global' },
-    { label: 'Configuración', route: 'configuracion/global' },
+   
   ];
 
   constructor(
     public _loginServices: LoginService,
+    public _menuServices: MenuService,
     private router: Router,
     public dialog: MatDialog
   ) {}
+
+  ngOnInit(): void {
+    this._menuServices.getMenuItems(1, 'es').subscribe(
+      (data: any) => {
+        console.log(data);
+        this.menuItems = data;
+      },
+      (error) => {
+        console.error('Error al cargar el menu', error);
+      }
+    );
+  }
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
