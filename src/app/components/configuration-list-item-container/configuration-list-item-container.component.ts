@@ -1,0 +1,13 @@
+import { Component, Input } from '@angular/core';
+import { ListItem } from 'src/app/models/listItem.model';
+
+@Component({
+  selector: 'app-configuration-list-item-container',
+  templateUrl: './configuration-list-item-container.component.html',
+  styleUrls: ['./configuration-list-item-container.component.css']
+})
+export class ConfigurationListItemContainerComponent {
+  @Input() title!: string;
+  @Input() items: ListItem[] = [];
+  
+}
