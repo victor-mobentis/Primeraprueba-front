@@ -3,5 +3,5 @@ export interface ListItem {
     description: string;
     type: 'popup' | 'route';  
     route?: string;  
-    popupFunction?: () => void;  
+    popupFunction?: string;  
   }
