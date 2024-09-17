@@ -185,7 +185,6 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
       if (this.form.get('cliente')?.value) {
         this.filtrosAplicados.push({ nombre: 'Cliente', valor: this.form.get('cliente')?.value });
       }
-      
       // Convertir los valores de segmentación a los valores legibles
       this.addSegmentacionFilter('segmentacion1FilterControl', 'Potenciabilidad', this.s1);
       this.addSegmentacionFilter('segmentacion2FilterControl', 'Tipología', this.s2);
@@ -214,16 +213,16 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
       this.applyFilterLogic();
   }
   // Método para agregar los filtros de segmentación con los valores convertidos
-private addSegmentacionFilter(controlName: string, filtroNombre: string, segmentacionList: ISegmentacion[]) {
-  const selectedIds = this.form.get(controlName)?.value || [];
-  const selectedValues = segmentacionList
-      .filter(s => selectedIds.includes(s.segmentation_value_id))
-      .map(s => s.segmentation_value);
-  
-  if (selectedValues.length > 0) {
-      this.filtrosAplicados.push({ nombre: filtroNombre, valor: selectedValues.join(', ') });
+  private addSegmentacionFilter(controlName: string, filtroNombre: string, segmentacionList: ISegmentacion[]) {
+    const selectedIds = this.form.get(controlName)?.value || [];
+    const selectedValues = segmentacionList
+        .filter(s => selectedIds.includes(s.segmentation_value_id))
+        .map(s => s.segmentation_value);
+    
+    if (selectedValues.length > 0) {
+        this.filtrosAplicados.push({ nombre: filtroNombre, valor: selectedValues.join(', ') });
+    }
   }
-}
   /* botin para eleiminar solo un filtro */
   removeFilter(filtro: { nombre: string, valor: any }) {
       // Eliminar el filtro de la lista de filtros aplicados
