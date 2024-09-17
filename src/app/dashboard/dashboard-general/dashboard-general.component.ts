@@ -2,8 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { FilterService } from 'src/app/services/filter/filter.service';
-import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
-
 import { GraficaClientesComponent } from 'src/app/components/grafica-clientes/grafica-clientes.component';
 import { GraficaPedidosDiaComponent } from 'src/app/components/grafica-pedidos-dia/grafica-pedidos-dia.component';
 import { GraficaMotivosComponent } from 'src/app/components/grafica-motivos/grafica-motivos.component';
@@ -598,7 +596,6 @@ export class DashboardGeneralComponent {
   ventasDia: number = 0;
   totalVentas: number = 0;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
   dataSource = new MatTableDataSource<ITablaDashboard>(this.data);
 
   ngOnInit(): void {
