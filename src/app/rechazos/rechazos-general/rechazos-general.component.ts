@@ -22,6 +22,8 @@ import { PopupClientDetailComponent } from 'src/app/clients/clients-general/popu
 import { ICompetidor } from 'src/app/models/competidor.model';
 ;
 import { IMotivoRechazo } from 'src/app/models/motivoRechazo.model';
+import { IProvincia } from 'src/app/models/provincias.model';
+import { IPoblacion } from 'src/app/models/poblaciones.model';
 
 @Component({
   selector: 'app-rechazos-general',
@@ -52,6 +54,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   rechazoList: IRechazo[] = [];
   selection = new SelectionModel<IRechazo>(true, []);
   estados: IEstado[] = [];
+  provincias: IProvincia[] =[];
+  poblacion: IPoblacion[] = [];
   competidores: ICompetidor[] = [];
   tipos_rechazo: IMotivoRechazo[] = [];
   simbolos: ISimbolo[] = [];
@@ -86,10 +90,12 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.loadRechazos();
     this.loadEstadosRechazos();
     this.loadEstados();
+    this.loadProvincias();
     this.loadSimbolos();
     this.loadGoogleMapsScript();
     this.loadCompetidores();
     this.loadTiposRechazo();
+    this.loadPoblacion();
   }
 
   private loadRechazos() {
@@ -98,6 +104,17 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       this.dataSource = rechazos;
       this.rechazoList = rechazos;
     });
+  }
+  private loadProvincias(){
+    this.filterService.getProvincias().subscribe((provincias: IProvincia[]) =>{
+      this.provincias = provincias;
+    });
+  }
+
+  private loadPoblacion(){
+    this.filterService.getPoblaciones().subscribe((poblacion: IPoblacion[]) =>{
+      this.poblacion = poblacion;
+    })
   }
 
   private loadEstadosRechazos() {}
@@ -123,10 +140,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         this.tipos_rechazo = motivos_rechazo;
       });
   }
-
+  
   private loadSimbolos() {
     this.filterService.getSimbolos().subscribe((simbolos: ISimbolo[]) => {
-      console.log(simbolos);
       this.simbolos = simbolos;
     });
   }

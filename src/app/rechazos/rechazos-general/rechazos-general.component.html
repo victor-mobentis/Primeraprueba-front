@@ -15,16 +15,68 @@
   <!-- TABLA -->
   <div class="mt-3 mx-3 main">
     <div class="d-flex align-items-center justify-content-between mb-3">
-      <!-- buscado -->
-      <div class="input-group" id="busqueda">
-        <input class="form-control border-end-0 border col-4" type="search" placeholder="Buscar..."
-          id="example-search-input">
-        <span class="">
-          <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="button">
-            <i class="fa fa-search"></i>
-          </button>
-        </span>
-      </div>
+      <div class="d-flex gap-3 align-items-center">
+         <!-- buscado -->
+         <div class="input-group" id="busqueda">
+           <input class="form-control border-end-0 border col-4" type="search" placeholder="Buscar..."
+             id="example-search-input">
+           <span class="">
+             <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="button">
+               <i class="fa fa-search"></i>
+             </button>
+           </span>
+         </div>
+         <!-- boton de filtros aplicados o limpiar -->
+         <div class="d-flex gap-2 align-items-center">
+            <!-- filtros -->
+             <div class="btn-group" #dropdownWrapper>
+                <a type="button" class="dropdown-toggle fw-semibold text-decoration-none color-text" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" id="dropdownMenuButton">+ Filtros </a>
+                <ul class="dropdown-menu cursor">
+                  <form [formGroup]="form">
+                    <!-- fecha -->
+
+                    <!-- estados -->
+                    <li class="dropend">
+                      <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Estados</a>
+                      <ul class="dropdown-menu">
+                        <li *ngFor="let estado of estados" class="cursor">
+                          <a class="dropdown-item">{{estado.name}}</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <!-- provincia -->
+                    <li class="dropend">
+                      <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Provincia</a>
+                      <ul class="dropdown-menu">
+                        <li *ngFor="let provincia of provincias" class="cursor" [value]="provincia.id">
+                          <a class="dropdown-item">{{provincia.name}}</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <!-- poblacion -->
+                    <li class="dropend">
+                      <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Poblacion</a>
+                      <ul class="dropdown-menu">
+                        <li *ngFor="let poblacion of poblacion" class="cursor" [value]="poblacion.id">
+                          <a class="dropdown-item">{{poblacion.name}}</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <!-- Producto -->
+                    <li class="dropend">
+                      <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Producto</a>
+                      <ul class="dropdown-menu p-2">
+                          <input type="text" class="form-control" formControlName="producto" placeholder="Introduzca el producto">
+                      </ul>
+                    </li>
+                    <!-- Familia -->
+                     
+                    <!-- subfamilia -->
+                  </form>
+                </ul>
+             </div>
+         </div>
+        </div>
       <!-- botones y filtros -->
       <div class="d-flex align-items-center gap-2">
         <div class="btn-group" role="group">

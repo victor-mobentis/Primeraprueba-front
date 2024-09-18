@@ -9,6 +9,7 @@ import { ISimbolo } from 'src/app/models/simbolos.model';
 import { IRechazo } from 'src/app/models/rechazos.model';
 import { ICompetidor } from 'src/app/models/competidor.model';
 import { IMotivoRechazo } from 'src/app/models/motivoRechazo.model';
+import { IFamilia } from 'src/app/models/familia.mode';
 @Injectable({
   providedIn: 'root'
 })
@@ -108,5 +109,18 @@ export class FilterService {
     };
     return this._http.get<IMotivoRechazo[]>(`${baseUrl}:${port}/api/filtro/motivos-rechazo`, options)
   }
-    
+  
+  /* llamada  a la consulta para familia */
+  getFamilia(): Observable<IFamilia[]>{
+    let baseUrl = localStorage.getItem('baseUrl');
+    let port = localStorage.getItem('port');
+    let options = {
+      headers: new HttpHeaders().set(
+        'Authorization',
+        `Bearer ${this._loginServices.getToken()}`
+      ),
+    };
+    return this._http.get<IFamilia[]>(`${baseUrl}:${port}`, options)
+  }
+
 }
