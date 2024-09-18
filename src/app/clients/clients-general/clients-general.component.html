@@ -128,7 +128,7 @@
             </ul>
           </div>
         </div>
-        
+
         <!-- botones de  filtros y mapa -->
         <div class="boton-filtro d-flex gap-2 align-self-start me-3">
           <button ngbTooltip="Ver en Mapa" class="btn btn-color d-flex justify-content-center align-items-center gap-2"
@@ -154,40 +154,35 @@
                     [indeterminate]="selection.hasValue() && !isAllSelected()">
                 </div>
               </th>
-              <th scope="col" class="row_column_sm cursor" (click)="sortData('customer_ERP_id')">Código
-                <i *ngIf="sortColumn === 'customer_ERP_id'" class="bi"
-                  [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+              <th scope="col" class="row_column_sm cursor" (click)="sortData('customer_ERP_id')">
+                Código
+                <i *ngIf="sortColumn === 'customer_ERP_id'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
               <th scope="col" class="cursor" (click)="sortData('name')">
                 Nombre
-                <i *ngIf="sortColumn === 'name'" class="bi"
-                  [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+                <i *ngIf="sortColumn === 'name'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
               <th scope="col" class="row_column_md cursor" (click)="sortData('province')">
                 Provincia
-                <i *ngIf="sortColumn === 'province'" class="bi"
-                  [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+                <i *ngIf="sortColumn === 'province'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
               <th scope="col" class="row_column_md cursor" (click)="sortData('city')">
                 Población
-                <i *ngIf="sortColumn === 'city'" class="bi"
-                  [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+                <i *ngIf="sortColumn === 'city'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
               <th scope="col" class="row_column_sm cursor" (click)="sortData('pc')">
                 C.P.
-                <i *ngIf="sortColumn === 'pc'" class="bi"
-                  [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+                <i *ngIf="sortColumn === 'pc'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
               <th scope="col" class="cursor" (click)="sortData('address')">
                 Dirección
-                <i *ngIf="sortColumn === 'address'" class="bi"
-                  [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+                <i *ngIf="sortColumn === 'address'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
               <th scope="col" class="text-center row_column_sm">Ficha</th>
             </tr>
           </thead>
           <tbody>
-            <ng-container *ngFor="let row of dataSource.data">
+            <ng-container *ngFor="let row of paginatedData">
               <tr>
                 <td class="text-center p-2">
                   <div class="d-flex align-items-center">
@@ -227,42 +222,12 @@
         </div>
       </div>
 
-      <!-- paginator -->
-      <!-- <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          <li class="page-item">
-            <a class="page-link"aria-label="First">
-              <span aria-hidden="true">&laquo;&laquo;</span>
-            </a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
+      <!-- Componente de paginación externo -->
+      <app-pagination [totalItems]="dataSource.data.length" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
+        (pageChange)="onPageChange($event)">
+      </app-pagination>
 
-          
-          <li class="page-item">
-            <a class="page-link">1</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link">2</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link">3</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" aria-label="Last">
-              <span aria-hidden="true">&raquo;&raquo;</span>
-            </a>
-          </li>
-        </ul>
-      </nav> -->
+      
     </div>
   </div>
 

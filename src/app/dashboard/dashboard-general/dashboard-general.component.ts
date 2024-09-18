@@ -2,8 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { FilterService } from 'src/app/services/filter/filter.service';
-import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
-
 import { GraficaClientesComponent } from 'src/app/components/grafica-clientes/grafica-clientes.component';
 import { GraficaPedidosDiaComponent } from 'src/app/components/grafica-pedidos-dia/grafica-pedidos-dia.component';
 import { GraficaMotivosComponent } from 'src/app/components/grafica-motivos/grafica-motivos.component';
@@ -309,6 +307,7 @@ export class DashboardGeneralComponent {
       name: 'Imagen',
     },
   ];
+
   constructor(
     private dateAdapter: DateAdapter<any>,
     private _filterServices: FilterService,
@@ -321,10 +320,8 @@ export class DashboardGeneralComponent {
     private graficaPedidosSegmentacion3: GraficaPedidosSegmentacion3Component,
     private graficaPedidosFamiliasProductos: GraficaPedidosFamiliasProductosComponent,
     private graficaPedidosMes: GraficaPedidosMesComponent,
-    private graficaTopProductos: GraficaProductosTopComponent,
-    private paginatorIntl: MatPaginatorIntl
+    private graficaTopProductos: GraficaProductosTopComponent
   ) {
-    this.configurePaginatorLabels();
     this.dateAdapter.setLocale('es');
     this.filtro = this.fb.group({
       cliente: [],
@@ -586,6 +583,11 @@ export class DashboardGeneralComponent {
   data: ITablaDashboard[] = [
     // más datos
   ];
+  // paginacion
+  paginadorData: ITablaDashboard[] = [];
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  totalPages: number = 0;
   // KPI
   totalClientes: number = 0;
   attCliente: number = 0;
@@ -594,12 +596,12 @@ export class DashboardGeneralComponent {
   ventasDia: number = 0;
   totalVentas: number = 0;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
   dataSource = new MatTableDataSource<ITablaDashboard>(this.data);
 
   ngOnInit(): void {
     this.cargarFiltros();
     this.generarColumnasDinamicas();
+    this.loadTableData();
   }
 
   ngAfterViewInit() {
@@ -608,7 +610,6 @@ export class DashboardGeneralComponent {
 
   generarColumnasDinamicas(): void {
     const rechazosTipos: Set<string> = new Set();
-
     // Detectar los tipos de rechazos presentes en los datos
     this.data.forEach((item) => {
       if (item.rechazos) {
@@ -621,12 +622,9 @@ export class DashboardGeneralComponent {
     });
 
     // Añadir las columnas dinámicas basadas en los tipos de rechazos presentes
-
     this.columnasDinamicas = ['nombre', 'total', ...Array.from(rechazosTipos)];
     this.columnasRechazos = [...Array.from(rechazosTipos)];
-    console.log(this.columnasDinamicas);
     this.dataSource.data = this.data;
-    console.log(this.dataSource.data);
   }
 
   cargarGraficos() {
@@ -863,50 +861,47 @@ export class DashboardGeneralComponent {
     this.graficaTopProductos.resize();
   }
 
+  loadTableData() {
+    console.log(`Tabla activa seleccionada: ${this.tablaActiva}`);
+    console.log(
+      `Datos de la tabla seleccionada:`,
+      this.valoresTablas[this.tablaActiva]
+    );
+    // Actualiza los datos
+    this.currentPage = 1;
+    this.dataSource.data = this.valoresTablas[this.tablaActiva];
+    this.data = this.valoresTablas[this.tablaActiva];
+
+    // Generar las columnas dinámicas
+
+    this.generarColumnasDinamicas();
+    this.totalPages = Math.ceil(
+      this.dataSource.data.length / this.itemsPerPage
+    );
+    this.paginate();
+    console.log(this.dataSource.data);
+  }
+
   select(event: Event) {
-    // Asegúrate de que `event.target` es un `HTMLSelectElement`
-    const selectElement = event.target as HTMLSelectElement;
-
-    if (selectElement) {
-        const value = selectElement.value;
-        const index = Number(value);
-
-        if (!isNaN(index) && index >= 0 && index < this.valoresTablas.length) {
-            console.log(`Tabla activa seleccionada: ${index}`);
-            console.log(`Datos de la tabla seleccionada:`, this.valoresTablas[index]);
-
-            // Actualiza los datos
-            this.dataSource.data = this.valoresTablas[index];
-            this.data = this.valoresTablas[index];
-
-            // Generar las columnas dinámicas
-            this.generarColumnasDinamicas();
-        } else {
-            console.error('Índice de tabla activa fuera de rango o es null:', value);
-        }
+    const target = event.target as HTMLSelectElement;
+    if (target) {
+      this.tablaActiva = +target.value;
+      this.loadTableData();
     }
-}
-  private configurePaginatorLabels() {
-    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
-    this.paginatorIntl.nextPageLabel = 'Página siguiente';
-    this.paginatorIntl.previousPageLabel = 'Página anterior';
-    this.paginatorIntl.firstPageLabel = 'Primera página';
-    this.paginatorIntl.lastPageLabel = 'Última página';
-    this.paginatorIntl.getRangeLabel = (
-      page: number,
-      pageSize: number,
-      length: number
-    ) => {
-      if (length === 0 || pageSize === 0) {
-        return `0 de ${length}`;
-      }
-      const startIndex = page * pageSize;
-      const endIndex =
-        startIndex < length
-          ? Math.min(startIndex + pageSize, length)
-          : startIndex + pageSize;
-      return `${startIndex + 1} - ${endIndex} de ${length}`;
-    };
-    this.paginatorIntl.changes.next();
+  }
+
+  changePage(page: number) {
+    if (page < 1 || page > this.totalPages) {
+      return;
+    }
+    this.currentPage = page;
+    this.paginate();
+  }
+
+  paginate
+  () {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    this.paginadorData = this.dataSource.data.slice(start, end);
   }
 }

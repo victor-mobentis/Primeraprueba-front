@@ -1,0 +1,15 @@
+<div class="list-group-item">
+    <!-- Si es un popup -->
+    <span *ngIf="listItem.type === 'popup'" (click)="handlePopup()">
+      <span>{{ listItem.label }}</span>
+      <br>
+      <span class="description">{{ listItem.description }}</span>
+    </span>
+  
+    <!-- Si es una ruta -->
+    <a *ngIf="listItem.type === 'route'" [routerLink]="[listItem.route]" class="list-group-item-action">
+      <span>{{ listItem.label }}</span>
+      <br>
+      <span class="description">{{ listItem.description }}</span>
+    </a>
+  </div>

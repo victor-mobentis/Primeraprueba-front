@@ -31,6 +31,7 @@ import { IPoblacion } from 'src/app/models/poblaciones.model';
   styleUrls: ['./rechazos-general.component.css'],
 })
 export class RechazosGeneralComponent implements AfterViewInit, OnInit {
+
   form: FormGroup;
   displayedColumns: string[] = [
     'select',
@@ -57,7 +58,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   provincias: IProvincia[] =[];
   poblacion: IPoblacion[] = [];
   competidores: ICompetidor[] = [];
-  tipos_rechazo: IMotivoRechazo[] = [];
+  motivos_rechazo: IMotivoRechazo[] = [];
   simbolos: ISimbolo[] = [];
   expandedElement?: IRechazo | null;
 
@@ -117,7 +118,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     })
   }
 
-  private loadEstadosRechazos() {}
+  private loadEstadosRechazos() { }
 
   private loadEstados() {
     this.filterService.getEstados().subscribe((estados: IEstado[]) => {
@@ -137,7 +138,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.filterService
       .getMotivosRechazo()
       .subscribe((motivos_rechazo: IMotivoRechazo[]) => {
-        this.tipos_rechazo = motivos_rechazo;
+        this.motivos_rechazo = motivos_rechazo;
       });
   }
   
@@ -185,13 +186,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     );
   }
 
-  getCompetidorNombre(id: number): string {
-    const competidor = this.competidores.find((c) => c.id == id);
-    return competidor ? competidor.name : 'No encontrado';
-  }
-
   getMotivoRechazo(id: number): string {
-    const rechazo = this.tipos_rechazo.find((c) => c.id == id);
+    const rechazo = this.motivos_rechazo.find((c) => c.id == id);
     return rechazo ? rechazo.rejection : 'No encontrado';
   }
 
@@ -337,28 +333,70 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   currentSortColumn: string = '';
   sortData(column: string) {
     const isAsc = this.currentSortColumn === column && this.sortDirection === 'asc';
-  
+
     // Ordenar la fuente de datos dependiendo del tipo de dato
     this.dataSource.sort((a, b) => {
       const compareA = a[this.currentSortColumn as keyof IRechazo];
       const compareB = b[this.currentSortColumn as keyof IRechazo];
-  
+
       // Verificar si los valores son de tipo cadena (string)
       if (typeof compareA === 'string' && typeof compareB === 'string') {
         return compareA.localeCompare(compareB) * (isAsc ? 1 : -1);
-      } 
-      
+      }
+
       // Si son números, simplemente restar
       if (typeof compareA === 'number' && typeof compareB === 'number') {
         return (compareA - compareB) * (isAsc ? 1 : -1);
       }
-  
+
       // Agregar soporte para otras comparaciones según sea necesario
       return 0;
     });
-  
+
     // Actualizar la columna actual y alternar la dirección
     this.currentSortColumn = column;
     this.sortDirection = isAsc ? 'desc' : 'asc';
+  }
+
+  changeMotivo(event: Event, row: IRechazo) {
+    const selectElement = event.target as HTMLSelectElement;
+
+    if (selectElement) {
+      const newReasonId = Number(selectElement.value);
+      const newReasonName = this.motivos_rechazo.find(rechazo => rechazo.id === newReasonId);
+
+      const dataSourceIndex = this.dataSource.indexOf(row);
+
+      this.dataSource[dataSourceIndex].reason_rejection_id = newReasonId;
+      this.dataSource[dataSourceIndex].reason_rejection = newReasonName?.rejection ?? "No encontrado";
+    }
+  }
+
+  changeEstado(event: Event, row: IRechazo) {
+    const selectElement = event.target as HTMLSelectElement;
+
+    if (selectElement) {
+      const newStatusId = Number(selectElement.value);
+      const newStatusName = this.estados.find(estado => estado.id === newStatusId);
+
+      const dataSourceIndex = this.dataSource.indexOf(row);
+
+      this.dataSource[dataSourceIndex].status_id = newStatusId;
+      this.dataSource[dataSourceIndex].status = newStatusName?.name ?? "No encontrado";
+    }
+  }
+
+  changeCompetidor(event: Event, row: IRechazo) {
+    const selectElement = event.target as HTMLSelectElement;
+
+    if (selectElement) {
+      const newCompetidorId = Number(selectElement.value);
+      const newCompetidorName = this.competidores.find(competidor => competidor.id === newCompetidorId);
+
+      const dataSourceIndex = this.dataSource.indexOf(row);
+
+      this.dataSource[dataSourceIndex].competitor_id = newCompetidorId;
+      this.dataSource[dataSourceIndex].competitor_name = newCompetidorName?.name ?? "No encontrado";
+    }
   }
 }

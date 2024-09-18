@@ -37,6 +37,9 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
     'acciones',
   ];
   dataSource: { data: IClient[] } = { data: [] };
+  paginatedData: IClient[] = []; // Datos que se muestran en la página actual
+  currentPage = 1; 
+  itemsPerPage = 10; 
   clientsList: IClient[] = [];
   cargando: boolean = false;
   selection = new SelectionModel<IClient>(true, []);
@@ -85,24 +88,41 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.cargando = true;
     this.loadGoogleMapsScript().then(() => {
-      this._clientsServices
-        .getClients()
-        .pipe(timeout(20000))
-        .subscribe(
-          (data: any) => {
-            const clientsData: any[] = data;
-            this.dataSource.data = clientsData;
-            this.clientsList = this.dataSource.data;
-            // Forzar la detección de cambios
-            this.cdr.detectChanges();
-            this.cargando = false;
-          },
-          (error) => {
-            console.error('Error al asignar el dataSource:', error);
-            this.cargando = false;
-          }
-        );
+      this.loadData()
     });
+  }
+
+  private loadData(){
+    this._clientsServices
+    .getClients()
+    .pipe(timeout(20000))
+    .subscribe(
+      (data: any) => {
+        const clientsData: any[] = data;
+        this.dataSource.data = clientsData;
+        this.clientsList = this.dataSource.data;
+        this.paginate();
+        // Forzar la detección de cambios
+        this.cdr.detectChanges();
+        this.cargando = false;
+      },
+      (error) => {
+        console.error('Error al asignar el dataSource:', error);
+        this.cargando = false;
+      }
+    );
+  }
+
+  paginate() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    this.paginatedData = this.dataSource.data.slice(start, end);
+
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.paginate();
   }
 
   private loadGoogleMapsScript(): Promise<void> {
@@ -162,7 +182,8 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
       }
       return 0;
     });
-
+    this.currentPage = 1
+    this.paginate()
   }
 
   editContact(id_Cliente?: number) {
@@ -423,6 +444,7 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
     }
 
     this.dataSource.data = auxList;
+    this.paginate()
     this.closeDropdown();
   }
 
