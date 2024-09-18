@@ -878,7 +878,7 @@ export class DashboardGeneralComponent {
     this.totalPages = Math.ceil(
       this.dataSource.data.length / this.itemsPerPage
     );
-    this.paginateData();
+    this.paginate();
     console.log(this.dataSource.data);
   }
 
@@ -895,10 +895,11 @@ export class DashboardGeneralComponent {
       return;
     }
     this.currentPage = page;
-    this.paginateData();
+    this.paginate();
   }
 
-  paginateData() {
+  paginate
+  () {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
     this.paginadorData = this.dataSource.data.slice(start, end);

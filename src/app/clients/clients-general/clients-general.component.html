@@ -223,7 +223,7 @@
       </div>
 
       <!-- Componente de paginación externo -->
-      <app-pagination [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
+      <app-pagination [totalItems]="dataSource.data.length" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
         (pageChange)="onPageChange($event)">
       </app-pagination>
 

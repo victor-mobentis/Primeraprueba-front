@@ -40,7 +40,6 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
   paginatedData: IClient[] = []; // Datos que se muestran en la página actual
   currentPage = 1; 
   itemsPerPage = 10; 
-  totalItems = 0; 
   clientsList: IClient[] = [];
   cargando: boolean = false;
   selection = new SelectionModel<IClient>(true, []);
@@ -102,7 +101,6 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
         const clientsData: any[] = data;
         this.dataSource.data = clientsData;
         this.clientsList = this.dataSource.data;
-        this.totalItems = this.dataSource.data.length;
         this.paginate();
         // Forzar la detección de cambios
         this.cdr.detectChanges();
@@ -119,6 +117,7 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
     this.paginatedData = this.dataSource.data.slice(start, end);
+
   }
 
   onPageChange(page: number) {
@@ -445,6 +444,7 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
     }
 
     this.dataSource.data = auxList;
+    this.paginate()
     this.closeDropdown();
   }
 
