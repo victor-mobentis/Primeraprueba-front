@@ -1,30 +1,52 @@
-mat-form-field {
-    width: 100%;
-}
-
-.row {
-    padding-bottom: .5em;
-}
-
-h2 {
-    text-align: center;
-}
-
-.btnContacts {
-    cursor: pointer;
-    color: #3c27c5;
-}
-
-.icon-title {
+  /* Header Styles */
+  h2 {
+    font-size: 1.75rem;
+    margin: 0;
+    color: #007bff;
+    display: flex;
+    align-items: center;
+  }
+  
+  .icon-title {
     width: 40px;
     height: 40px;
-    margin-right: 5px;
-}
-
-.color-dark {
-    color: #6D6D6D;
-}
-
-.mat-mdc-progress-spinner {
-    --mdc-circular-progress-active-indicator-color: #3f51b5;
+    margin-right: 10px;
   }
+  
+  .text-dark {
+    color: #495057;
+  }
+  
+
+.modal-header {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-content {
+  border-color: #007bff;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-outline-secondary {
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+h5 {
+  color: #007bff;
+}
+
+.form-control-plaintext {
+  color: #333;
+  font-weight: bold;
+}
