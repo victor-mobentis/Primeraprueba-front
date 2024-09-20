@@ -28,50 +28,123 @@
          </div>
          <!-- boton de filtros aplicados o limpiar -->
          <div class="d-flex gap-2 align-items-center">
+            <div class="d-flex gap-2 align-items-center">
+              <!-- Botón para cada filtro aplicado -->
+              <button 
+                class="d-flex m-0 btn btn-outline-danger btn-sm align-items-center" 
+                *ngFor="let filtro of filtrosAplicados" 
+                (click)="removeFilter(filtro)"
+              >
+                <p class="m-0">{{ filtro.nombre }}: {{ filtro.valor || 'Vacío' }}</p>
+                <i class="ps-2 bi bi-x-circle-fill"></i>
+              </button>
+            
+              <!-- Botón "Limpiar" solo si hay filtros aplicados -->
+              <button 
+                *ngIf="filtrosAplicados.length > 0" 
+                class="btn btn-outline-danger btn-sm" 
+                (click)="filtroReset()"
+              >
+                Limpiar
+              </button>
+            </div>
             <!-- filtros -->
              <div class="btn-group" #dropdownWrapper>
                 <a type="button" class="dropdown-toggle fw-semibold text-decoration-none color-text" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" id="dropdownMenuButton">+ Filtros </a>
-                <ul class="dropdown-menu cursor">
-                  <form [formGroup]="form">
+                <ul class="dropdown-menu">
+                  <form [formGroup]="form" (ngSubmit)="applyComplexFilter()">
                     <!-- fecha -->
-
-                    <!-- estados -->
                     <li class="dropend">
+                      <a class="dropdown-item dropdown-toggle cursor" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Fecha</a>
+                      <ul class="dropdown-menu">
+                        <li class="cursor">
+                          <a class="dropdown-item">Último mes</a>
+                        </li>
+                        <li class="cursor">
+                          <a class="dropdown-item">Última semana</a>
+                        </li>
+                        <li class="cursor">
+                          <a class="dropdown-item">Últimos 30 días</a>
+                        </li>
+                        <li class="cursor">
+                          <a class="dropdown-item">Últimos 15 días</a>
+                        </li>
+                        
+                      </ul>
+                    </li>
+                    <!-- estados -->
+                    <li class="dropend cursor">
                       <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Estados</a>
                       <ul class="dropdown-menu">
                         <li *ngFor="let estado of estados" class="cursor">
-                          <a class="dropdown-item">{{estado.name}}</a>
+                          <a class="dropdown-item" (click)="onFilter('Estados', estado.id)">{{ estado.name }}</a>
                         </li>
                       </ul>
                     </li>
                     <!-- provincia -->
-                    <li class="dropend">
-                      <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Provincia</a>
+                    <li class="dropend cursor">
+                      <a class="dropdown-item dropdown-toggle" 
+                         data-bs-toggle="dropdown" 
+                         aria-expanded="false" 
+                         data-bs-auto-close="outside" 
+                         (click)="onAbrirDropdown('provincias')">
+                        Provincia
+                      </a>
                       <ul class="dropdown-menu">
-                        <li *ngFor="let provincia of provincias" class="cursor" [value]="provincia.id">
-                          <a class="dropdown-item">{{provincia.name}}</a>
+                        <!-- Input para buscar la provincia -->
+                        <input *ngIf="listasFiltradas.provincias.length >= 20" type="text" class="form-control" placeholder="Introduzca la provincia" (input)="onBuscar($event, 'provincias')">                        
+                        <!-- Lista de provincias filtradas -->
+                        <li  *ngFor="let provincia of listasFiltradas.provincias" class="cursor">
+                          <a class="dropdown-item" (click)="onFilter('Provincias', provincia.id)">{{ provincia.name }}</a>
                         </li>
                       </ul>
                     </li>
                     <!-- poblacion -->
-                    <li class="dropend">
-                      <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Poblacion</a>
+                    <li class="dropend cursor">
+                      <a 
+                        class="dropdown-item dropdown-toggle" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false" 
+                        data-bs-auto-close="outside"
+                        (click)="onAbrirDropdown('poblacion')">
+                      Poblacion
+                      </a>
                       <ul class="dropdown-menu">
-                        <li *ngFor="let poblacion of poblacion" class="cursor" [value]="poblacion.id">
-                          <a class="dropdown-item">{{poblacion.name}}</a>
+                        <input *ngIf="listasFiltradas.poblacion.length >= 20" type="text" class="form-control" placeholder="Introduzca la población" (input)="onBuscar($event, 'poblacion')">
+                        <li *ngFor="let poblacion of listasFiltradas.poblacion" class="cursor">
+                          <a class="dropdown-item" (click)="onFilter('Poblaciones', poblacion.id)">{{poblacion.name}}</a>
                         </li>
                       </ul>
                     </li>
                     <!-- Producto -->
-                    <li class="dropend">
+                    <li class="dropend cursor">
                       <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Producto</a>
                       <ul class="dropdown-menu p-2">
-                          <input type="text" class="form-control" formControlName="producto" placeholder="Introduzca el producto">
+                          <input type="text" class="form-control"  placeholder="Introduzca el producto">
                       </ul>
                     </li>
                     <!-- Familia -->
-                     
+                    <li class="dropend cursor">
+                      <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Familia</a>
+                      <ul class="dropdown-menu p-2">
+                        <input type="text" class="form-control" formControlName="producto" placeholder="Introduzca la familia" *ngIf="listasFiltradas.poblacion.length >= 20">
+                        <li *ngFor="let familia of familias" class="cursor">
+                          <a class="dropdown-item" (click)="onFilter('Familia', familia.family)">
+                            {{ familia.family }}
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
                     <!-- subfamilia -->
+                    <li class="dropend cursor">
+                      <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">SubFamilia</a>
+                      <ul class="dropdown-menu p-2">
+                          <input type="text" class="form-control" formControlName="producto" placeholder="Introduzca la subfamilia" *ngIf="listasFiltradas.subfamilias.length >= 20">
+                          <li *ngFor="let subfamilias of subfamilias" class="cursor">
+                            <a class="dropdown-item" (click)="onFilter('SubFamilia', subfamilias.subfamily)">{{ subfamilias.subfamily || 'Vacío' }}</a>
+                          </li>
+                      </ul>
+                    </li>
                   </form>
                 </ul>
              </div>
@@ -204,7 +277,7 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let row of dataSource">
+          <ng-container *ngFor="let row of paginatedData">
             <tr>
               <!-- Checkbox Column -->
               <td class="text-center px-2">
@@ -347,7 +420,9 @@
       </table>
     </div>
     <!-- Paginador -->
-
+    <app-pagination [totalItems]="dataSource.length" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
+        (pageChange)="onPageChange($event)">
+    </app-pagination>
   </div>
 
   <!-- END TABLA -->
@@ -361,7 +436,7 @@
           <h2 id="drawerLabel">Filtro de Rechazos</h2>
         </div>
         <div class="modal-body">
-          <form [formGroup]="form" (ngSubmit)="applyFilter()" class="d-flex flex-column gap-3">
+          <form [formGroup]="form" class="d-flex flex-column gap-3">
             <div class="d-flex flex-column gap-3">
               <div class="d-flex w-100 gap-3">
                 <button class="btn btn-color" type="submit">Filtrar</button>

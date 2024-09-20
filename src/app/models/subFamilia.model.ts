@@ -1,3 +1,3 @@
 export interface ISubFamilia{
-    name: string;
+    subfamily: string;
 }

@@ -1,3 +1,3 @@
 export interface IFamilia{
-    name: string;
+    family: string;
 }

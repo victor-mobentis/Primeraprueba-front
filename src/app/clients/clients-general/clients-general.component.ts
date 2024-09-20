@@ -85,6 +85,11 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
   s2: ISegmentacion[] = [{segmentation_value_id: 1,segmentation_value: 'Bar/Tapas  (No especializado)',name: 'Tipologia'},{segmentation_value_id: 2,segmentation_value: 'Cerveceria / Cafeteria  (Especializado)',name: 'Tipologia'},{segmentation_value_id: 21,segmentation_value: 'Restaurante Independiente (Incluye catering)',name: 'Tipologia'},{segmentation_value_id: 3,segmentation_value: 'Noche (Disco, Pubs, Bar de copas) ',name: 'Tipologia'},{segmentation_value_id: 32,segmentation_value: 'Restauracion organizada: Franquicias, Tematicos',name: 'Tipologia'},{segmentation_value_id: 33,segmentation_value: 'Hoteles, Hostales, posadas',name: 'Tipologia'},{segmentation_value_id: 34,segmentation_value: 'OCIO (Deporte,Cines,Teatro,Salon Juegos,..)',name: 'Tipologia'},{segmentation_value_id: 35,segmentation_value: 'Colectividades:comedor empresa, Enseñanza,Admin,',name: 'Tipologia'},{segmentation_value_id: 36,segmentation_value: 'Tienda Alimentacion Minorista(Super,China,Panad..)',name: 'Tipologia'},{segmentation_value_id: 37,segmentation_value: 'Tienda Impulso(F Secos,Chuches,Estanco,Vending',name: 'Tipologia'},{segmentation_value_id: 18,segmentation_value: 'Mayoristas (Distribuidores, Cash, por mayor)',name: 'Tipologia'},{segmentation_value_id: 54,segmentation_value: 'Restauracion en Ruta(aeropuerto,E.S. Carreteras)',name: 'Tipologia'},{segmentation_value_id: 55,segmentation_value: 'Personal Empresa / Autoconsumo',name: 'Tipologia'},{segmentation_value_id: 58,segmentation_value: 'Alquiler',name: 'Tipologia'}];
   s3: ISegmentacion[] = [{segmentation_value_id: 10,segmentation_value: 'Tradicional',name: 'Imagen'},{segmentation_value_id: 22,segmentation_value: 'Moderna',name: 'Imagen'},{segmentation_value_id: 23,segmentation_value: 'Emblemática',name: 'Imagen'}];
  
+  listasFiltradas = {
+    poblacionList: [] as string[],
+    provinciaList: [] as string[],
+  }
+
   ngOnInit(): void {
     this.cargando = true;
     this.loadGoogleMapsScript().then(() => {
@@ -592,4 +597,6 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
     const dropdown = new bootstrap.Dropdown(dropdownToggle);
     dropdown.hide();  // Cierra el dropdown de Bootstrap
   }
+
+  /* para filtrar las opciones de filtrar */
 }

@@ -25,9 +25,6 @@
   height: 50%;
 }
 
-.table-responsive {
-  height: calc(100vh - 227px)
-}
 
 table {
   width: 100%;
@@ -348,4 +345,19 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
   text-align: right;
+}
+
+ /* filtros */
+.dropdown-toggle::after{
+  display: none;
+}
+ .color-text{
+  color: #3F51B5;
+}
+
+.w-max{
+  width: max-content;
+}
+.w-datepicker{
+  width: 165px;
 }

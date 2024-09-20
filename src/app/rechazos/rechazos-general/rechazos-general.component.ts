@@ -4,6 +4,7 @@ import {
   ViewChild,
   OnInit,
   ChangeDetectorRef,
+  ElementRef
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,15 +25,28 @@ import { ICompetidor } from 'src/app/models/competidor.model';
 import { IMotivoRechazo } from 'src/app/models/motivoRechazo.model';
 import { IProvincia } from 'src/app/models/provincias.model';
 import { IPoblacion } from 'src/app/models/poblaciones.model';
+import { IFamilia } from 'src/app/models/familia.mode';
+import { ISubFamilia } from 'src/app/models/subFamilia.model';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
+import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
+import { JsonPipe } from '@angular/common';
+
+
+declare var bootstrap: any;
 @Component({
   selector: 'app-rechazos-general',
+  
   templateUrl: './rechazos-general.component.html',
   styleUrls: ['./rechazos-general.component.css'],
 })
 export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
-  form: FormGroup;
+  fromDate: NgbDateStruct | null = null;
+toDate: NgbDateStruct | null = null;
+
+  form: any;
   displayedColumns: string[] = [
     'select',
     'estado',
@@ -52,6 +66,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     'expand',
   ];
   dataSource: IRechazo[] = []; // Temporarily set to any[]
+  paginatedData: IRechazo[] = []; // Datos que se muestran en la página actual
+  currentPage = 1; 
+  itemsPerPage = 10; 
   rechazoList: IRechazo[] = [];
   selection = new SelectionModel<IRechazo>(true, []);
   estados: IEstado[] = [];
@@ -60,11 +77,22 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   competidores: ICompetidor[] = [];
   motivos_rechazo: IMotivoRechazo[] = [];
   simbolos: ISimbolo[] = [];
+  familias: IFamilia[] =[];
+  subfamilias: ISubFamilia[] =[];
   expandedElement?: IRechazo | null;
-
   selectedOption: string = 'Excel';
+  filtrosAplicados: Array<{nombre: string, valor: any}> = [];
+
+  listasFiltradas = {
+    estados: [] as IEstado[],
+    provincias: [] as IProvincia[],
+    poblacion: [] as IPoblacion[],
+    familias: [] as IFamilia[],
+    subfamilias: [] as ISubFamilia[],
+  };
 
   constructor(
+    
     public dialog: MatDialog,
     private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef,
@@ -83,14 +111,16 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     });
 
     this.form.valueChanges.subscribe(() => {
-      this.applyFilter();
+      this.applyFilterLogic();
     });
   }
-
+  
   ngOnInit() {
     this.loadRechazos();
+    this.loadSubFamilias();
     this.loadEstadosRechazos();
     this.loadEstados();
+    this.loadFamilias();
     this.loadProvincias();
     this.loadSimbolos();
     this.loadGoogleMapsScript();
@@ -98,17 +128,39 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.loadTiposRechazo();
     this.loadPoblacion();
   }
+  getProvincia(id: number): string {
+    const provincia = this.provincias.find((c) => c.id == id);
+    return provincia ? provincia.name : 'No encontrado';
+  }
+  
+  getPoblacion(id: number): string {
+    const poblacion = this.poblacion.find((c) => c.id == id);
+    return poblacion ? poblacion.name : 'No encontrado';
+  }
 
   private loadRechazos() {
     this.rechazadosService.getRechazos().subscribe((rechazos: IRechazo[]) => {
       console.log('Rechazos cargados:', rechazos);
       this.dataSource = rechazos;
       this.rechazoList = rechazos;
+      this.paginate();
     });
   }
   private loadProvincias(){
     this.filterService.getProvincias().subscribe((provincias: IProvincia[]) =>{
       this.provincias = provincias;
+    });
+  }
+  private loadFamilias(){
+    this.filterService.getFamilias().subscribe((familias: IFamilia[]) =>{
+      this.familias = familias;
+      console.log(familias);
+    });
+  }
+  private loadSubFamilias(){
+    this.filterService.getSubFamilias().subscribe((subfamilias: ISubFamilia[]) =>{
+      this.subfamilias = subfamilias;
+      console.log(subfamilias);
     });
   }
 
@@ -159,31 +211,160 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     }
   }
 
-  applyFilter() {
-    const filterValues = this.form.value;
-    this.dataSource = this.dataSource.filter(
-      (data) =>
-        (!filterValues.EstadoFilterControl ||
-          data.status
-            .toLowerCase()
-            .includes(filterValues.EstadoFilterControl.toLowerCase())) &&
-        (!filterValues.PoblacionFilterControl ||
-          data.city
-            .toLowerCase()
-            .includes(filterValues.PoblacionFilterControl.toLowerCase())) &&
-        (!filterValues.ProvinciaFilterControl ||
-          data.province
-            .toLowerCase()
-            .includes(filterValues.ProvinciaFilterControl.toLowerCase())) &&
-        (!filterValues.ProductoFilterControl ||
-          data.product
-            .toLowerCase()
-            .includes(filterValues.ProductoFilterControl.toLowerCase())) &&
-        (!filterValues.SubFamiliaFilterControl ||
-          data.subfamily
-            .toLowerCase()
-            .includes(filterValues.SubFamiliaFilterControl.toLowerCase()))
-    );
+  applyComplexFilter(){
+    this.filtrosAplicados = [];
+
+    // Obtener el valor del filtro de Estados
+    const estadoValue = this.form.get('EstadoFilterControl')?.value;
+    if (estadoValue && estadoValue.length > 0) {
+      const estadoNames = estadoValue.map((id: number) => this.getEstado(id)).join(', ');
+      this.filtrosAplicados.push({
+        nombre: 'Estado',
+        valor: estadoNames
+      });
+    }
+
+    const provinciaValue = this.form.get('ProvinciaFilterControl')?.value;
+    if (provinciaValue && provinciaValue.length > 0) {
+      const provinciaNames = provinciaValue.map((id: number) => this.getProvincia(id)).join(', ');
+      this.filtrosAplicados.push({
+        nombre: 'Provincia', 
+        valor: provinciaNames // Aquí se muestra el nombre de la provincia en lugar del ID
+      });
+    }
+
+    const poblacionValue = this.form.get('PoblacionFilterControl')?.value;
+    if(poblacionValue && poblacionValue.length > 0){
+      const poblacionNames = poblacionValue.map((id: number) => this.getPoblacion(id)).join(', ');
+      this.filtrosAplicados.push({
+        nombre: 'Poblacion',
+        valor: poblacionNames // Aquí se muestra el nombre de la población en lugar del ID
+      });
+    }
+
+    const familiaValue = this.form.get('FamiliaFilterControl')?.value;
+    if (familiaValue && familiaValue.length > 0){
+      this.filtrosAplicados.push({
+        nombre: 'Familia',
+        valor: familiaValue.join(', ')
+      });
+    }
+
+    const subfamiliaValue = this.form.get('SubFamiliaFilterControl')?.value;
+    if (subfamiliaValue && subfamiliaValue.length > 0){
+      this.filtrosAplicados.push({
+        nombre: 'SubFamilia',
+        valor: subfamiliaValue.join(', ')
+      });
+    }
+    this.cdr.detectChanges();
+    this.applyFilterLogic();
+  }
+
+  onFilter(filterType: string, value: any) {
+    // Obtener el control de formulario dinámicamente basado en el tipo de filtro
+    const filterControlName = this.getFilterControlName(filterType);
+    let currentSelection: any[] = this.form.get(filterControlName)?.value || [];
+  
+    // Comprobar si el valor ya está en la selección y actualizarla
+    if (currentSelection.includes(value)) {
+      currentSelection = currentSelection.filter(v => v !== value);
+    } else {
+      currentSelection.push(value);
+    }
+  
+    // Actualizar el formulario con la nueva selección
+    this.form.get(filterControlName)?.setValue(currentSelection);
+  
+    // Aplicar la lógica del filtro actualizado
+    this.applyComplexFilter();
+  }
+
+  // Método auxiliar para obtener el nombre del control de formulario basado en el tipo de filtro
+  getFilterControlName(filterType: string): string {
+    switch (filterType) {
+      case 'Estados': return 'EstadoFilterControl';
+      case 'Provincias': return 'ProvinciaFilterControl';
+      case 'Poblaciones': return 'PoblacionFilterControl';
+      case 'Familia': return 'FamiliaFilterControl';
+      case 'SubFamilia': return 'SubFamiliaFilterControl';
+      default: 
+        console.warn('Tipo de filtro no válido');
+        return '';
+    }
+  }
+  
+  // Método para eliminar un filtro específico
+  removeFilter(filtro: { nombre: string, valor: any }) {
+    // Elimina el filtro de la lista de filtros aplicados
+    this.filtrosAplicados = this.filtrosAplicados.filter(f => f.nombre !== filtro.nombre || f.valor !== filtro.valor);
+  
+    // Resetea el control del formulario según el filtro que se elimina
+    switch (filtro.nombre) {
+      case 'Estado':
+        this.form.get('EstadoFilterControl')?.reset();
+        break;
+      case 'Provincia':
+        this.form.get('ProvinciaFilterControl')?.reset();
+        break;
+      case 'Poblacion':
+        this.form.get('PoblacionFilterControl')?.reset();
+        break;
+      case 'Familia':
+        this.form.get('FamiliaFilterControl')?.reset();
+        break;
+      case 'SubFamilia':
+        this.form.get('SubFamiliaFilterControl')?.reset();
+        break;
+    }
+  
+    // Actualiza el formulario y los datos
+    this.applyComplexFilter();
+  }
+
+  applyFilterLogic() {
+
+    let auxList: IRechazo[] = this.rechazoList;
+  
+    // Filtrar por Estados (IDs numéricos)
+    if (this.form.value.EstadoFilterControl?.length) {
+      auxList = auxList.filter(rechazo =>
+        this.form.value.EstadoFilterControl.includes(rechazo.status_id)
+      );
+    }
+  
+    // Filtrar por Provincias (IDs numéricos)
+    if (this.form.value.ProvinciaFilterControl?.length) {
+      auxList = auxList.filter(rechazo =>
+        this.form.value.ProvinciaFilterControl.includes(rechazo.province_id)
+      );
+    }
+  
+    // Filtrar por Poblaciones (IDs numéricos)
+    if (this.form.value.PoblacionFilterControl?.length) {
+      auxList = auxList.filter(rechazo =>
+        this.form.value.PoblacionFilterControl.includes(rechazo.city_id)
+      );
+    }
+  
+    // Filtrar por Familias (comparación de texto)
+    if (this.form.value.FamiliaFilterControl?.length) {
+      auxList = auxList.filter(rechazo =>
+        this.form.value.FamiliaFilterControl.includes(rechazo.family)
+      );
+    }
+  
+    // Filtrar por SubFamilias (comparación de texto)
+    if (this.form.value.SubFamiliaFilterControl?.length) {
+      auxList = auxList.filter(rechazo =>
+        this.form.value.SubFamiliaFilterControl.includes(rechazo.subfamily)
+      );
+    }
+    
+    this.dataSource = auxList;
+    this.currentPage = 1;
+    this.paginate();
+    this.closeDropdown();
   }
 
   getMotivoRechazo(id: number): string {
@@ -197,8 +378,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   }
 
   filtroReset() {
+    this.filtrosAplicados = [];
     this.form.reset();
-    this.applyFilter();
+    this.applyFilterLogic();
   }
 
   ngAfterViewInit() {
@@ -356,6 +538,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     // Actualizar la columna actual y alternar la dirección
     this.currentSortColumn = column;
     this.sortDirection = isAsc ? 'desc' : 'asc';
+    this.currentPage = 1;
+    this.paginate();
   }
 
   changeMotivo(event: Event, row: IRechazo) {
@@ -398,5 +582,47 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       this.dataSource[dataSourceIndex].competitor_id = newCompetidorId;
       this.dataSource[dataSourceIndex].competitor_name = newCompetidorName?.name ?? "No encontrado";
     }
+  }
+  paginate() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    this.paginatedData = this.dataSource.slice(start, end);
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.paginate();
+  }
+  /* para la fecha */
+  Fechascapturadas() {
+    
+    // Aquí va la lógica de filtrado
+  }
+  /* para filtrar las opciones de busqueda */
+    // Método genérico para buscar en cualquier lista dinámica
+  onBuscar(event: any, categoria: 'estados' | 'provincias' | 'poblacion') {
+      const valor = event.target.value.toLowerCase();
+  
+      if (valor === '') {
+        // Restaurar la lista original si no hay búsqueda
+        this.listasFiltradas[categoria] = this[categoria];
+      } else {
+        // Filtrar la lista correspondiente
+        this.listasFiltradas[categoria] = this[categoria].filter(item =>
+          item.name.toLowerCase().includes(valor)
+        );
+      }
+    }
+  
+    // Método para restaurar las listas cuando se abre el dropdown
+    onAbrirDropdown(categoria: 'estados' | 'provincias' | 'poblacion') {
+      this.listasFiltradas[categoria] = this[categoria]; 
+    }
+     // Método para cerrar el dropdown
+    @ViewChild('dropdownWrapper') dropdownWrapper!: ElementRef;
+    closeDropdown() {
+      const dropdownToggle = this.dropdownWrapper.nativeElement.querySelector('.dropdown-toggle');
+      const dropdown = new bootstrap.Dropdown(dropdownToggle);
+      dropdown.hide();  // Cierra el dropdown de Bootstrap
   }
 }

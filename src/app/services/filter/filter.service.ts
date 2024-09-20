@@ -10,6 +10,7 @@ import { IRechazo } from 'src/app/models/rechazos.model';
 import { ICompetidor } from 'src/app/models/competidor.model';
 import { IMotivoRechazo } from 'src/app/models/motivoRechazo.model';
 import { IFamilia } from 'src/app/models/familia.mode';
+import { ISubFamilia } from 'src/app/models/subFamilia.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -20,7 +21,7 @@ export class FilterService {
     private _loginServices: LoginService
   ) { }
 
-  getProvincias(): Observable<any[]> {
+  getProvincias(): Observable<IProvincia[]> {
     let schema = localStorage.getItem('schema');
     let baseUrl = localStorage.getItem('baseUrl');
     let port = localStorage.getItem('port');
@@ -41,7 +42,8 @@ export class FilterService {
         })
       );
   }
-  getPoblaciones(): Observable<any[]> {
+  getPoblaciones(): Observable<IPoblacion[]> {
+    let schema = localStorage.getItem('schema');
     let baseUrl = localStorage.getItem('baseUrl');
     let port = localStorage.getItem('port');
     let options = {
@@ -111,7 +113,7 @@ export class FilterService {
   }
   
   /* llamada  a la consulta para familia */
-  getFamilia(): Observable<IFamilia[]>{
+  getFamilias(): Observable<IFamilia[]>{
     let baseUrl = localStorage.getItem('baseUrl');
     let port = localStorage.getItem('port');
     let options = {
@@ -120,7 +122,19 @@ export class FilterService {
         `Bearer ${this._loginServices.getToken()}`
       ),
     };
-    return this._http.get<IFamilia[]>(`${baseUrl}:${port}`, options)
+    return this._http.get<IFamilia[]>(`${baseUrl}:${port}/api/filtro/familias`, options)
   }
 
+  /* llamada  a la consulta para familia */
+  getSubFamilias(): Observable<ISubFamilia[]>{
+    let baseUrl = localStorage.getItem('baseUrl');
+    let port = localStorage.getItem('port');
+    let options = {
+      headers: new HttpHeaders().set(
+        'Authorization',
+        `Bearer ${this._loginServices.getToken()}`
+      ),
+    };
+    return this._http.get<ISubFamilia[]>(`${baseUrl}:${port}/api/filtro/subfamilias`, options)
+  }
 }

@@ -6,9 +6,6 @@
   width: 300px;
 }
 
-.table-responsive {
-  height: calc(100vh - 220px)
-}
 
 table {
   width: 100%;
