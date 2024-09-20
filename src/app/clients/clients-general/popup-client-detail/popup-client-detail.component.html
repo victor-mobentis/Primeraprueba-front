@@ -15,7 +15,8 @@
     </button>
     <button class="btn btn-sm btn-outline-secondary me-2 mb-2">
       <i class="bi bi-save me-1"></i> Guardar
-    </button> -->
+    </button> 
+    -->
     <button class="btn btn-sm btn-outline-secondary me-2 mb-2">
       <i class="bi bi-bar-chart-line me-1"></i> Estadísticas
     </button>
@@ -39,6 +40,10 @@
     </button>
     <button class="btn btn-sm btn-outline-secondary me-2 mb-2">
       <i class="bi bi-currency-exchange me-1"></i> Cobros
+    </button>
+    
+    <button ngbTooltip="Ver en Mapa" class="btn btn-sm btn-outline-secondary me-2 mb-2" (click)="verEnMapa()">
+      <i class="bi bi-geo-alt me-1"></i>
     </button>
     <button [disabled]="contacts == 0" class="btn btn-sm btn-outline-secondary me-2 mb-2" type="button"
       (click)="editContact()">
@@ -70,189 +75,13 @@
     <!-- Datos Generales -->
     <div class="tab-pane fade show active" id="datos" role="tabpanel">
       <div>
-        <h5>Generales</h5>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="row">
-              <div class="col-3 mb-3">
-                <span>Código:</span>
-                <p class="form-control-plaintext">{{ cliente?.customer_ERP_id }}</p>
-              </div>
-              <div class="col mb-3">
-                <span>Nombre:</span>
-                <p class="form-control-plaintext">{{ cliente?.name }}</p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-3 mb-3">
-                <span>CIF:</span>
-                <p class="form-control-plaintext">{{ cliente?.cif }}</p>
-              </div>
-              <div class="col mb-3">
-                <span>Nombre fiscal:</span>
-                <p class="form-control-plaintext">{{ cliente?.tax_name }}</p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-3 mb-3">
-                <span>País:</span>
-                <p class="form-control-plaintext">ESPAÑA</p>
-              </div>
-              <div class="col mb-3">
-                <span>Dirección:</span>
-                <p class="form-control-plaintext">{{ cliente?.address }}</p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-2 mb-3">
-                <span>CP:</span>
-                <p class="form-control-plaintext">{{ cliente?.pc }}</p>
-              </div>
-              <div class="col mb-3">
-                <span>Población:</span>
-                <p class="form-control-plaintext">{{ cliente?.city }}</p>
-              </div>
-              <div class="col mb-3">
-                <span>Provincia:</span>
-                <p class="form-control-plaintext">{{ cliente?.province }}</p>
-              </div>
-            </div>
-            <div *ngIf="cliente?.nsegmentacion_1" class="mb-3">
-              <span>{{ cliente?.nsegmentacion_1 }}:</span>
-              <p class="form-control-plaintext">{{ cliente?.descripcion_s1 }}</p>
-            </div>
-            <div *ngIf="cliente?.nsegmentacion_2" class="mb-3">
-              <span>{{ cliente?.nsegmentacion_2 }}:</span>
-              <p class="form-control-plaintext">{{ cliente?.descripcion_s2 }}</p>
-            </div>
-            <div *ngIf="cliente?.nsegmentacion_3" class="mb-3">
-              <span>{{ cliente?.nsegmentacion_3 }}:</span>
-              <p class="form-control-plaintext">{{ cliente?.descripcion_s3 }}</p>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <span>Contacto:</span>
-              <p class="form-control-plaintext">Sin especificar</p>
-            </div>
-            <div class="row">
-              <div class="col mb-3">
-                <span>Tel. 1:</span>
-                <p class="form-control-plaintext">{{ cliente?.phone_1 }}</p>
-              </div>
-              <div class="col mb-3">
-                <span>Tel. 2:</span>
-                <p class="form-control-plaintext">{{ cliente?.phone_2 }}</p>
-              </div>
-              <div class="col mb-3">
-                <span>Fax:</span>
-                <p class="form-control-plaintext">Sin especificar</p>
-              </div>
-            </div>
-            <div class="mb-3">
-              <span>Email:</span>
-              <p class="form-control-plaintext">{{ cliente?.email }}</p>
-            </div>
-            <div class="mb-3">
-              <span>Web:</span>
-              <p class="form-control-plaintext">Sin especificar</p>
-            </div>
-            <div class="mb-3">
-              <span>Agencia:</span>
-              <p class="form-control-plaintext">Sin especificar</p>
-            </div>
-            <div class="mb-3">
-              <span>Ruta:</span>
-              <p class="form-control-plaintext">Sin especificar</p>
-            </div>
-            <div class="row">
-              <div class="col mb-3">
-                <span>Latitud:</span>
-                <p class="form-control-plaintext">{{ cliente?.latitude }}</p>
-              </div>
-              <div class="col mb-3">
-                <span>Longitud:</span>
-                <p class="form-control-plaintext">{{ cliente?.longitude }}</p>
-              </div>
-              <div class="col mb-3">
-                <button ngbTooltip="Ver en Mapa"
-                  class="btn btn-color d-flex justify-content-center align-items-center gap-2" (click)="verEnMapa()">
-                  <mat-icon>location_on</mat-icon>
-                </button>
-              </div>
-            </div>
-            <div class="form-check mb-3">
-              <input class="form-check-input" type="checkbox" id="potencialCheck">
-              <label class="form-check-label" for="potencialCheck">
-                Potencial
-              </label>
-            </div>
-          </div>
-        </div>
+        <app-cliente-datos-generales [cliente]="this.cliente"></app-cliente-datos-generales>
       </div>
       <div>
-        <h5>Económicos</h5>
-        <div class="row">
-          <div class="col-2 mb-3">
-            <span>Tipo IVA:</span>
-            <p class="form-control-plaintext">Sin especificar</p>
-          </div>
-          <div class="col mb-3">
-            <span>Forma Pago:</span>
-            <p class="form-control-plaintext">Sin especificar</p>
-          </div>
-          <div class="col mb-3">
-            <span>Banco:</span>
-            <p class="form-control-plaintext">Sin especificar</p>
-          </div>
-          <div class="col-2 mb-3">
-            <span>Vencimientos:</span>
-            <p class="form-control-plaintext">Sin especificar</p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-2 mb-3">
-            <span>Días pago:</span>
-            <p class="form-control-plaintext">Sin especificar</p>
-          </div>
-          <div class="col mb-3">
-            <div class="row">
-              <div class="col mb-3">
-                <span>%Dto:</span>
-                <p class="form-control-plaintext">n/a</p>
-              </div>
-              <div class="col mb-3">
-                <span>%Rappel:</span>
-                <p class="form-control-plaintext">n/a</p>
-              </div>
-              <div class="col mb-3">
-                <span>%Dto P.P.:</span>
-                <p class="form-control-plaintext">n/a</p>
-              </div>
-            </div>
-          </div>
-          <div class="col mb-3">
-            <span>Cuenta:</span>
-            <p class="form-control-plaintext">Sin especificar</p>
-          </div>
-          <div class="col-2 mb-3">
-            <span>Tipo tarifa:</span>
-            <p class="form-control-plaintext">Sin especificar</p>
-          </div>
-        </div>
+        <app-cliente-economicos [cliente]="this.cliente"></app-cliente-economicos>
       </div>
       <div>
-        <h5>Más info</h5>
-        <div class="row">
-          <div class="col mb-3">
-            <span>Notas para pedidos:</span>
-            <p class="form-control-plaintext">Sin especificar</p>
-          </div>
-          <div class="col mb-3">
-            <span>Observaciones:</span>
-            <p class="form-control-plaintext">Sin especificar</p>
-          </div>
-        </div>
+        <app-cliente-mas-info [cliente]="this.cliente"></app-cliente-mas-info>
       </div>
     </div>
 
