@@ -127,11 +127,11 @@
       </div>
       <!-- tabla -->
       <div class="table-responsive {{cargando?'d-none':''}}">
-        <table class="table table-hover">
+        <table class="table table-hover table-sm">
           <!-- Checkbox Column -->
           <thead>
             <tr>
-              <th class="th-checkbox row_column_checkbox text-center p-2">
+              <th class="th-checkbox row_column_checkbox text-center px-2">
                 <div class="d-flex align-items-center">
                   <input type="checkbox" (change)="masterToggle()" [checked]="selection.hasValue() && isAllSelected()"
                     [indeterminate]="selection.hasValue() && !isAllSelected()">
@@ -141,7 +141,7 @@
                 Código
                 <i *ngIf="sortColumn === 'customer_ERP_id'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
-              <th scope="col" class="cursor" (click)="sortData('name')">
+              <th scope="col" class="cursor row_column_lg" (click)="sortData('name')">
                 Nombre
                 <i *ngIf="sortColumn === 'name'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
@@ -157,7 +157,7 @@
                 C.P.
                 <i *ngIf="sortColumn === 'pc'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
-              <th scope="col" class="cursor" (click)="sortData('address')">
+              <th scope="col" class="cursor row_column_xl" (click)="sortData('address')">
                 Dirección
                 <i *ngIf="sortColumn === 'address'" class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
               </th>
@@ -167,7 +167,7 @@
           <tbody>
             <ng-container *ngFor="let row of paginatedData">
               <tr>
-                <td class="text-center p-2">
+                <td class="text-center px-2">
                   <div class="d-flex align-items-center">
                     <input type="checkbox" (click)="$event.stopPropagation()" (change)="selection.toggle(row)"
                       [checked]="selection.isSelected(row)" [disabled]="isCheckboxDisabled(row)">

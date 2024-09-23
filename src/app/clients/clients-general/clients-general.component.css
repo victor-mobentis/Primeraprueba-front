@@ -134,9 +134,17 @@ ng-select {
 }
 
 .row_column_md {
-  width: 120px;
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
 }
 
+.row_column_lg{
+  width: 400px;
+}
+.row_column_xl{
+  width: 600px;
+}
 
 .sort-asc::after {
   content: '▲';
