@@ -7,6 +7,7 @@ import { MenuItemComponent } from '../components/menu-item/menu-item.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { PaginationComponent } from '../components/pagination/pagination.component';
 import { FormsModule } from '@angular/forms';
+import { ProgressCircleComponent } from '../components/progress-circle/progress-circle.component';
 
 @NgModule({
   declarations: [
@@ -14,10 +15,11 @@ import { FormsModule } from '@angular/forms';
     DecimalesPipe,
     EnterosPipe,
     PaginationComponent,
+    ProgressCircleComponent,
   ],
   imports: [
     CommonModule,
-    FormsModule 
+    FormsModule
 
   ],
   exports: [
@@ -25,6 +27,7 @@ import { FormsModule } from '@angular/forms';
     DecimalesPipe,
     EnterosPipe,
     PaginationComponent,
+    ProgressCircleComponent,
   ]
 })
 export class SharedModule { }
