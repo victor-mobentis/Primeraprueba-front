@@ -40,7 +40,7 @@
   }
   
   .progress-text {
-    font-size: 150%;
+    font-size: larger;
     margin-bottom: 10px;
     font-weight: bold;
     transition: opacity 0.3s ease-in-out;
@@ -48,7 +48,7 @@
   
   .progress-value {
     margin-top: 25px;
-    font-size: 80%;
+    font-size: smaller;
     color: gray;
     transition: opacity 0.3s ease-in-out;
   }
