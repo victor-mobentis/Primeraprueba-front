@@ -35,6 +35,7 @@ import { AddEditReasonRejectionsComponent } from './configuration-general/reason
 import { ListItemComponent } from '../components/list-item/list-item.component';
 import { ConfigurationListItemContainerComponent } from '../components/configuration-list-item-container/configuration-list-item-container.component';
 import { SharedModule } from "../shared/shared.module";
+import { AddCompetitorComponent } from './configuration-general/add-competitor/add-competitor.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,7 @@ import { SharedModule } from "../shared/shared.module";
     ReasonsRejectionsComponent,
     AddEditReasonRejectionsComponent,
     ListItemComponent, // A futuro igual mover a shared
-    ConfigurationListItemContainerComponent,
+    ConfigurationListItemContainerComponent, AddCompetitorComponent,
   ],
   imports: [
     CommonModule,
