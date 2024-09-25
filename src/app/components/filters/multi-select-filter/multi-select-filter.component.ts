@@ -1,46 +1,78 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import { FilterService } from 'src/app/services/filter/filter.service';
 
 @Component({
   selector: 'app-multi-select-filter',
   templateUrl: './multi-select-filter.component.html',
-  styleUrls: ['./multi-select-filter.component.css']
+  styleUrls: ['./multi-select-filter.component.css'],
 })
 export class MultiSelectFilterComponent {
   @Input() title: string = 'Seleccionar';
-  @Input() options: any[] = [];
+  @Input() endpoint: string = '';
+  @Input() id: string = '';
   @Output() selectionChange = new EventEmitter<any[]>();
 
+  options: any[] = [];
   filteredOptions: any[] = [];
   selectedOptions: any[] = [];
   searchTerm: string = '';
 
-  ngOnInit() {
+  constructor(private _filterService: FilterService) {
+    console.log('Endpoint inicial:', this.endpoint);
+  }
 
-    this.filteredOptions = this.options;
-    this.onSearchChange()
+  ngOnInit() {
+    console.log('Endpoint ngonInit:', this.endpoint);
+    if (this.endpoint) {
+      this.loadOptions(this.endpoint);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['options'] && changes['options'].currentValue) {
-      this.filteredOptions = changes['options'].currentValue;
+    if (changes['endpoint'] && changes['endpoint'].currentValue) {
+      this.loadOptions(changes['endpoint'].currentValue);
     }
   }
+
+  loadOptions(endpoint: string) {
+    this._filterService.getFilterOptions(endpoint).subscribe(
+      (options) => {
+        this.options = options;
+        this.filteredOptions = options;
+      },
+      (error) => {
+        console.error('Error al cargar las opciones:', error);
+      }
+    );
+  }
   onSearchChange() {
-    this.filteredOptions = this.options.filter(option =>
+    this.filteredOptions = this.options.filter((option) =>
       option.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 
   toggleSelection(option: any) {
-    const index = this.selectedOptions.indexOf(option.id);
+    const index = this.selectedOptions.indexOf(option);
     if (index > -1) {
       this.selectedOptions.splice(index, 1);
     } else {
-      this.selectedOptions.push(option.id);
+      this.selectedOptions.push(option);
     }
-    console.log(this.title)
-    console.log(this.selectedOptions)
+    console.log(this.title);
+    console.log(this.selectedOptions);
     this.selectionChange.emit(this.selectedOptions);
   }
-}
 
+  reset() {
+    this.selectedOptions = [];
+    this.filteredOptions = this.options;
+    this.searchTerm = '';
+    //this.selectionChange.emit(this.selectedOptions);
+  }
+}

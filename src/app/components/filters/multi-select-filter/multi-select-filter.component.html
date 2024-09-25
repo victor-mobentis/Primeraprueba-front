@@ -8,7 +8,7 @@
           class="bi bi-search"></i></button>
     </div>
     <li *ngFor="let option of filteredOptions" class="cursor">
-      <a class="dropdown-item" (click)="toggleSelection(option)">{{ option.name }}</a>
+      <a class="dropdown-item" (click)="toggleSelection(option)">{{ option.name || 'Vacío' }}</a>
 
     </li>
   </ul>

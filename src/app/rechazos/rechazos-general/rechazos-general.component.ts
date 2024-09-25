@@ -641,4 +641,10 @@ toDate: NgbDateStruct | null = null;
       const dropdown = new bootstrap.Dropdown(dropdownToggle);
       dropdown.hide();  // Cierra el dropdown de Bootstrap
   }
+
+  //Funcion nuevos filtros
+  onFiltersChanged(selectedFilters: { [key: string]: any }) {
+    console.log('Filtros seleccionados:', selectedFilters);
+    // Aquí puedes manejar los filtros seleccionados según sea necesario
+  }
 }

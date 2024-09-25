@@ -16,162 +16,21 @@
   <div class="mt-3 mx-3 main">
     <div class="d-flex align-items-center justify-content-between mb-3">
       <div class="d-flex gap-3 align-items-center">
-         <!-- buscado -->
-         <div class="input-group" id="busqueda">
-           <input class="form-control border-end-0 border col-4" type="search" placeholder="Buscar..."
-             id="example-search-input">
-           <span class="">
-             <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="button">
-               <i class="fa fa-search"></i>
-             </button>
-           </span>
-         </div>
-         <!-- boton de filtros aplicados o limpiar -->
-         <div class="d-flex gap-2 align-items-center">
-            <div class="d-flex gap-2 align-items-center">
-              <!-- Botón para cada filtro aplicado -->
-              <button 
-                class="d-flex m-0 btn btn-outline-danger btn-sm align-items-center" 
-                *ngFor="let filtro of filtrosAplicados" 
-                (click)="removeFilter(filtro)"
-              >
-                <p class="m-0">{{ filtro.nombre }}: {{ filtro.valor || 'Vacío' }}</p>
-                <i class="ps-2 bi bi-x-circle-fill"></i>
-              </button>
-            
-              <!-- Botón "Limpiar" solo si hay filtros aplicados -->
-              <button 
-                *ngIf="filtrosAplicados.length > 0" 
-                class="btn btn-outline-danger btn-sm" 
-                (click)="filtroReset()"
-              >
-                Limpiar
-              </button>
-            </div>
-            <!-- filtros -->
-             <!--
-             <div class="btn-group" #dropdownWrapper>
-                <a type="button" class="dropdown-toggle fw-semibold text-decoration-none color-text" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" id="dropdownMenuButton">+ Filtros </a>
-                <ul class="dropdown-menu">
-                  <form [formGroup]="form" >
-                    
-                    <li class="dropend">
-                      <a class="dropdown-item dropdown-toggle cursor" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Fecha</a>
-                      <ul class="dropdown-menu">
-                        <li class="cursor">
-                          <a class="dropdown-item">Último mes</a>
-                        </li>
-                        <li class="cursor">
-                          <a class="dropdown-item">Última semana</a>
-                        </li>
-                        <li class="cursor">
-                          <a class="dropdown-item">Últimos 30 días</a>
-                        </li>
-                        <li class="cursor">
-                          <a class="dropdown-item">Últimos 15 días</a>
-                        </li>
-                        
-                      </ul>
-                    </li>
-                    
-                    <li class="dropend cursor">
-                      <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Estados</a>
-                      <ul class="dropdown-menu">
-                        <li *ngFor="let estado of estados" class="cursor">
-                          <a class="dropdown-item" (click)="onFilter('Estados', estado.id)">{{ estado.name }}</a>
-                        </li>
-                      </ul>
-                    </li>
-                    
-                    <li class="dropend cursor">
-                      <a class="dropdown-item dropdown-toggle" 
-                         data-bs-toggle="dropdown" 
-                         aria-expanded="false" 
-                         data-bs-auto-close="outside" 
-                         (click)="onAbrirDropdown('provincias')">
-                        Provincia
-                      </a>
-                      <ul class="dropdown-menu">
-                        
-                        <input *ngIf="listasFiltradas.provincias.length >= 20" type="text" class="form-control" placeholder="Introduzca la provincia" (input)="onBuscar($event, 'provincias')">                        
-                        
-                        <li  *ngFor="let provincia of listasFiltradas.provincias" class="cursor">
-                          <a class="dropdown-item" (click)="onFilter('Provincias', provincia.id)">{{ provincia.name }}</a>
-                        </li>
-                      </ul>
-                    </li>
-                    
-                    <li class="dropend cursor">
-                      <a 
-                        class="dropdown-item dropdown-toggle" 
-                        data-bs-toggle="dropdown" 
-                        aria-expanded="false" 
-                        data-bs-auto-close="outside"
-                        (click)="onAbrirDropdown('poblacion')">
-                      Poblacion
-                      </a>
-                      <ul class="dropdown-menu">
-                        <input *ngIf="listasFiltradas.poblacion.length >= 20" type="text" class="form-control" placeholder="Introduzca la población" (input)="onBuscar($event, 'poblacion')">
-                        <li *ngFor="let poblacion of listasFiltradas.poblacion" class="cursor">
-                          <a class="dropdown-item" (click)="onFilter('Poblaciones', poblacion.id)">{{poblacion.name}}</a>
-                        </li>
-                      </ul>
-                    </li>
-                    
-                    <li class="dropend cursor">
-                      <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Producto</a>
-                      <ul class="dropdown-menu p-2 w-max">
-                          <div class="input-group input-group-sm">
-                            <input type="text" class="form-control border border-end-0" formControlName="ProductoFilterControl" placeholder="Introduzca el producto" (keydown.enter)="applyComplexFilter()">
-                            <button class="btn border border-start-0" type="button" id="button-addon2" (click)="applyComplexFilter()"><i class="bi bi-search"></i></button>
-                          </div>
-                          
-                      </ul>
-                    </li>
-                    
-                    <li class="dropend cursor">
-                      <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Familia</a>
-                      <ul class="dropdown-menu p-2">
-                        <input type="text" class="form-control" formControlName="producto" placeholder="Introduzca la familia" *ngIf="listasFiltradas.poblacion.length >= 20">
-                        <li *ngFor="let familia of familias" class="cursor">
-                          <a class="dropdown-item" (click)="onFilter('Familia', familia.family)">
-                            {{ familia.family }}
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
-                    
-                    <li class="dropend cursor">
-                      <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">SubFamilia</a>
-                      <ul class="dropdown-menu p-2">
-                          <input type="text" class="form-control" formControlName="producto" placeholder="Introduzca la subfamilia" *ngIf="listasFiltradas.subfamilias.length >= 20">
-                          <li *ngFor="let subfamilias of subfamilias" class="cursor">
-                            <a class="dropdown-item" (click)="onFilter('SubFamilia', subfamilias.subfamily)">{{ subfamilias.subfamily || 'Vacío' }}</a>
-                          </li>
-                      </ul>
-                    </li>
-                  </form>
-                </ul>
-             </div> -->
-             <div class="btn-group" #dropdownWrapper>
-              <a type="button" class="dropdown-toggle fw-semibold text-decoration-none color-text" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" id="dropdownMenuButton">+ Filtros</a>
-              <ul class="dropdown-menu">
-                <form [formGroup]="form">
-                  <app-date-filter></app-date-filter>
-                  <app-multi-select-filter [title]="'Estado'" [options]="estados" (selectionChange)="onFilter('Estados', $event)"></app-multi-select-filter>
-                  <app-search-filter [title]="'Cliente'" (searchChange)="onFilter('Cliente', $event)"></app-search-filter>
-                  <app-multi-select-filter [title]="'Provincia'" [options]="provincias" (selectionChange)="onFilter('Provincias', $event)"></app-multi-select-filter>
-                  <app-multi-select-filter [title]="'Población'" [options]="poblacion" (selectionChange)="onFilter('Poblaciones', $event)"></app-multi-select-filter>
-                  <app-search-filter [title]="'Producto'" (searchChange)="onFilter('Producto', $event)"></app-search-filter>
-                  <app-multi-select-filter [title]="'Familia'" [options]="familias" (selectionChange)="onFilter('Provincias', $event)"></app-multi-select-filter>
-                  <app-multi-select-filter [title]="'SubFamilia'" [options]="subfamilias" (selectionChange)="onFilter('Poblaciones', $event)"></app-multi-select-filter>
-                  <app-range-filter></app-range-filter>
-                </form>
-              </ul>
-            </div>
-            
-         </div>
+        <!-- buscado -->
+        <div class="input-group" id="busqueda">
+          <input class="form-control border-end-0 border col-4" type="search" placeholder="Buscar..."
+            id="example-search-input">
+          <span class="">
+            <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5"
+              type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </span>
         </div>
+        <!-- boton de filtros aplicados o limpiar -->
+        <app-filter-container [componentId]="'lista-rechazos'" (filtersChanged)="onFiltersChanged($event)">
+        </app-filter-container>
+      </div>
       <!-- botones y filtros -->
       <div class="d-flex align-items-center gap-2">
         <div class="btn-group" role="group">
@@ -445,7 +304,7 @@
     </div>
     <!-- Paginador -->
     <app-pagination [totalItems]="dataSource.length" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
-        (pageChange)="onPageChange($event)">
+      (pageChange)="onPageChange($event)">
     </app-pagination>
   </div>
 

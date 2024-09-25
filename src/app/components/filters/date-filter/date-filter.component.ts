@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-date-filter',
@@ -6,6 +6,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./date-filter.component.css']
 })
 export class DateFilterComponent {
+  @Input() id: string = '';
   @Output() dateSelection = new EventEmitter<string>();
 
 
@@ -13,5 +14,9 @@ export class DateFilterComponent {
 
   selectDate(option: string) {
     this.dateSelection.emit(option);
+  }
+
+  reset(){
+    
   }
 }

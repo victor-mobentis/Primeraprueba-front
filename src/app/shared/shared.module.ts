@@ -11,6 +11,7 @@ import { DateFilterComponent } from '../components/filters/date-filter/date-filt
 import { SearchFilterComponent } from '../components/filters/search-filter/search-filter.component';
 import { MultiSelectFilterComponent } from '../components/filters/multi-select-filter/multi-select-filter.component';
 import { RangeFilterComponent } from '../components/filters/range-filter/range-filter.component';
+import { FilterContainerComponent } from '../components/filters/filter-container/filter-container.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { RangeFilterComponent } from '../components/filters/range-filter/range-f
     SearchFilterComponent,
     MultiSelectFilterComponent,
     RangeFilterComponent,
+    FilterContainerComponent
   ],
   imports: [
     CommonModule,
@@ -38,6 +40,7 @@ import { RangeFilterComponent } from '../components/filters/range-filter/range-f
     SearchFilterComponent,
     MultiSelectFilterComponent,
     RangeFilterComponent,
+    FilterContainerComponent
   ]
 })
 export class SharedModule { }

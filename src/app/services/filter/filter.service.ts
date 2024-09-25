@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginService } from '../auth/login.service';
-import { Observable, map } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 import { IPoblacion } from 'src/app/models/poblaciones.model';
 import { IProvincia } from 'src/app/models/provincias.model';
 import  { IEstado } from'src/app/models/estados.model';
 import { ISimbolo } from 'src/app/models/simbolos.model';
-import { IRechazo } from 'src/app/models/rechazos.model';
 import { ICompetidor } from 'src/app/models/competidor.model';
 import { IMotivoRechazo } from 'src/app/models/motivoRechazo.model';
 import { IFamilia } from 'src/app/models/familia.mode';
 import { ISubFamilia } from 'src/app/models/subFamilia.model';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,8 +21,118 @@ export class FilterService {
     private _loginServices: LoginService
   ) { }
 
+
+  getFiltersForComponent(componentId: string | undefined): Observable<any> {
+    let baseUrl = localStorage.getItem('baseUrl');
+    let port = localStorage.getItem('port');
+    let options = {
+      headers: new HttpHeaders().set(
+        'Authorization',
+        `Bearer ${this._loginServices.getToken()}`
+      ),
+    };
+    /*return this._http.get(`${baseUrl}:${port}/api/filtro/${componentId}`,options).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );*/
+    return of ([
+      {
+        "id": "date",
+        "type": "date",
+        "title": "Fecha"
+      },
+      {
+        "id": "state",
+        "type": "multi-select",
+        "title": "Estados",
+        "optionsEndpoint": "estados"
+      },
+      {
+        "id": "reason_rejection",
+        "type": "multi-select",
+        "title": "Motivo",
+        "optionsEndpoint": "motivos-rechazo"
+      },
+      {
+        "id": "selectCompetidores",
+        "type": "multi-select",
+        "title": "Competidores",
+        "optionsEndpoint": "competidores"
+      },
+      
+      {
+        "id": "searchClient",
+        "type": "search",
+        "title": "Cliente"
+      },
+      {
+        "id": "selectProvince",
+        "type": "multi-select",
+        "title": "Provincia",
+        "optionsEndpoint": "provincias"
+      },
+      {
+        "id": "selectCity",
+        "type": "multi-select",
+        "title": "Población",
+        "optionsEndpoint": "poblaciones"
+      },
+      {
+        "id": "selects1",
+        "type": "multi-select",
+        "title": "Potencialidad",
+        "optionsEndpoint": "segmentacion/1"
+      },
+      {
+        "id": "selects2",
+        "type": "multi-select",
+        "title": "Tipología",
+        "optionsEndpoint": "segmentacion/2"
+      },
+      {
+        "id": "selects3",
+        "type": "multi-select",
+        "title": "Imagen",
+        "optionsEndpoint": "segmentacion/3"
+      },
+      {
+        "id": "searchProduct",
+        "type": "search",
+        "title": "Producto"
+      },
+      {
+        "id": "selectFamily",
+        "type": "multi-select",
+        "title": "Familia",
+        "optionsEndpoint": "familias"
+      },
+      {
+        "id": "selectSubfamily",
+        "type": "multi-select",
+        "title": "Subfamilia",
+        "optionsEndpoint": "subfamilias"
+      },
+    ])
+  } 
+
+  getFilterOptions(endpoint: string): Observable<any[]> {
+    let baseUrl = localStorage.getItem('baseUrl');
+    let port = localStorage.getItem('port');
+    let options = {
+      headers: new HttpHeaders().set(
+        'Authorization',
+        `Bearer ${this._loginServices.getToken()}`
+      ),
+    };
+    return this._http.get(`${baseUrl}:${port}/api/filtro/${endpoint}`,options).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  } 
+
   getProvincias(): Observable<IProvincia[]> {
-    let schema = localStorage.getItem('schema');
     let baseUrl = localStorage.getItem('baseUrl');
     let port = localStorage.getItem('port');
     let options = {
@@ -43,7 +153,6 @@ export class FilterService {
       );
   }
   getPoblaciones(): Observable<IPoblacion[]> {
-    let schema = localStorage.getItem('schema');
     let baseUrl = localStorage.getItem('baseUrl');
     let port = localStorage.getItem('port');
     let options = {

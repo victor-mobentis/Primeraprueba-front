@@ -1,0 +1,45 @@
+<div>
+    <!-- boton de filtros aplicados o limpiar -->
+    <div class="d-flex gap-2 align-items-center">
+        <div class="d-flex gap-2 align-items-center">
+            <!-- Botón para cada filtro aplicado -->
+            <button class="d-flex m-0 btn btn-outline-danger btn-sm align-items-center"
+                *ngFor="let filtro of filtrosAplicados" (click)="removeFilter(filtro)">
+                <div class="d-flex align-items-center" *ngIf="filtro.tipo === 'search' || filtro.tipo === 'date' ">
+                    <p class="m-0">{{ filtro.nombre }}: {{ filtro.valor || 'Vacío' }}</p>
+                    <i class="ps-2 bi bi-x-circle-fill"></i>
+                </div>
+
+                <div class="d-flex align-items-center" *ngIf="filtro.tipo === 'multi-select'">
+                    <p class="m-0">{{ filtro.nombre }}: {{ getMultiSelectDisplay(filtro.valor) }}</p>
+                    <i class="ps-2 bi bi-x-circle-fill"></i>
+                </div>
+            </button>
+            <!-- Botón "Limpiar" solo si hay filtros aplicados -->
+            <button *ngIf="filtrosAplicados.length > 0" class="btn btn-outline-danger btn-sm" (click)="filtroReset()">
+                Limpiar
+            </button>
+        </div>
+        <div class="btn-group" #dropdownWrapper>
+            <a type="button" class="dropdown-toggle fw-semibold text-decoration-none color-text"
+                data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" id="dropdownMenuButton">+
+                Filtros</a>
+            <ul class="dropdown-menu">
+                <div *ngFor="let filter of filters">
+                    <app-date-filter *ngIf="filter.type === 'date'" [id]="filter.id"
+                        (dateSelection)="handleFilterChange(filter.id, $event)"></app-date-filter>
+
+                    <app-search-filter *ngIf="filter.type === 'search'" [title]="filter.title" [id]="filter.id"
+                        (searchChange)="handleFilterChange(filter.id, $event)"></app-search-filter>
+
+                    <app-multi-select-filter *ngIf="filter.type === 'multi-select'" [title]="filter.title"
+                        [endpoint]="filter.optionsEndpoint" [id]="filter.id"
+                        (selectionChange)="handleFilterChange(filter.id, $event)"></app-multi-select-filter>
+
+                    <app-range-filter *ngIf="filter.type === 'range'" [id]="filter.id"
+                        (rangeSelected)="handleFilterChange(filter.id, $event)"></app-range-filter>
+                </div>
+            </ul>
+        </div>
+    </div>
+</div>
