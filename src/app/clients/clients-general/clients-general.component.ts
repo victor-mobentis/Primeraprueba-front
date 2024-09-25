@@ -605,4 +605,8 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
   }
 
   /* para filtrar las opciones de filtrar */
+  onFiltersChanged(selectedFilters: { [key: string]: any }) {
+    console.log('Filtros seleccionados:', selectedFilters);
+    // Aquí puedes manejar los filtros seleccionados según sea necesario
+  }
 }

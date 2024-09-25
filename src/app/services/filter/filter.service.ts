@@ -31,89 +31,11 @@ export class FilterService {
         `Bearer ${this._loginServices.getToken()}`
       ),
     };
-    /*return this._http.get(`${baseUrl}:${port}/api/filtro/${componentId}`,options).pipe(
+    return this._http.get(`${baseUrl}:${port}/api/filtro/${componentId}`,options).pipe(
       map((data: any) => {
         return data;
       })
-    );*/
-    return of ([
-      {
-        "id": "date",
-        "type": "date",
-        "title": "Fecha"
-      },
-      {
-        "id": "state",
-        "type": "multi-select",
-        "title": "Estados",
-        "optionsEndpoint": "estados"
-      },
-      {
-        "id": "reason_rejection",
-        "type": "multi-select",
-        "title": "Motivo",
-        "optionsEndpoint": "motivos-rechazo"
-      },
-      {
-        "id": "selectCompetidores",
-        "type": "multi-select",
-        "title": "Competidores",
-        "optionsEndpoint": "competidores"
-      },
-      
-      {
-        "id": "searchClient",
-        "type": "search",
-        "title": "Cliente"
-      },
-      {
-        "id": "selectProvince",
-        "type": "multi-select",
-        "title": "Provincia",
-        "optionsEndpoint": "provincias"
-      },
-      {
-        "id": "selectCity",
-        "type": "multi-select",
-        "title": "Población",
-        "optionsEndpoint": "poblaciones"
-      },
-      {
-        "id": "selects1",
-        "type": "multi-select",
-        "title": "Potencialidad",
-        "optionsEndpoint": "segmentacion/1"
-      },
-      {
-        "id": "selects2",
-        "type": "multi-select",
-        "title": "Tipología",
-        "optionsEndpoint": "segmentacion/2"
-      },
-      {
-        "id": "selects3",
-        "type": "multi-select",
-        "title": "Imagen",
-        "optionsEndpoint": "segmentacion/3"
-      },
-      {
-        "id": "searchProduct",
-        "type": "search",
-        "title": "Producto"
-      },
-      {
-        "id": "selectFamily",
-        "type": "multi-select",
-        "title": "Familia",
-        "optionsEndpoint": "familias"
-      },
-      {
-        "id": "selectSubfamily",
-        "type": "multi-select",
-        "title": "Subfamilia",
-        "optionsEndpoint": "subfamilias"
-      },
-    ])
+    )
   } 
 
   getFilterOptions(endpoint: string): Observable<any[]> {
