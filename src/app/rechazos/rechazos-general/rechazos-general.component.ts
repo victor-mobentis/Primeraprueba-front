@@ -385,7 +385,7 @@ toDate: NgbDateStruct | null = null;
 
   getMotivoRechazo(id: number): string {
     const rechazo = this.motivos_rechazo.find((c) => c.id == id);
-    return rechazo ? rechazo.rejection : 'No encontrado';
+    return rechazo ? rechazo.name : 'No encontrado';
   }
 
   getEstado(id: number): string {
@@ -568,7 +568,7 @@ toDate: NgbDateStruct | null = null;
       const dataSourceIndex = this.dataSource.indexOf(row);
 
       this.dataSource[dataSourceIndex].reason_rejection_id = newReasonId;
-      this.dataSource[dataSourceIndex].reason_rejection = newReasonName?.rejection ?? "No encontrado";
+      this.dataSource[dataSourceIndex].reason_rejection = newReasonName?.name ?? "No encontrado";
     }
   }
 

@@ -18,8 +18,8 @@
                 <span *ngIf="editingReasonId !== row.id">{{row.rejection_code}}</span>             
             </td>
             <td>
-                <input *ngIf="editingReasonId === row.id" [(ngModel)]="row.rejection" class="form-control">  <!-- Cambiado a [(ngModel)] -->
-                <span *ngIf="editingReasonId !== row.id">{{row.rejection}}</span>
+                <input *ngIf="editingReasonId === row.id" [(ngModel)]="row.name" class="form-control">  <!-- Cambiado a [(ngModel)] -->
+                <span *ngIf="editingReasonId !== row.id">{{row.name}}</span>
             </td>
             <td>
                 <div class="d-flex justify-content-center gap-3">

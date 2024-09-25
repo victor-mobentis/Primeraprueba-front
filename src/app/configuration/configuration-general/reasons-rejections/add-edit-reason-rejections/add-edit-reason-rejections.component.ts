@@ -17,7 +17,7 @@ export class AddEditReasonRejectionsComponent {
   motivoRechazo: IMotivoRechazo = {
     id: 0,
     rejection_code: '',
-    rejection: '',
+    name: '',
     internal_id: 0,
   };
   operacion: string = 'Agregar ';
@@ -48,7 +48,7 @@ export class AddEditReasonRejectionsComponent {
             this.motivoRechazo = data;
             this.reasonForm.patchValue({
               codigo: this.motivoRechazo.rejection_code,
-              nombre: this.motivoRechazo.rejection,
+              nombre: this.motivoRechazo.name,
             });
             this.cargando = false;
           },
@@ -67,7 +67,7 @@ export class AddEditReasonRejectionsComponent {
       const nuevosDatos = this.reasonForm.value;
       /* Actualiza los el objeto IMotivosRechazo con los nuevos valores del formnulario */
       this.motivoRechazo.rejection_code = nuevosDatos.codigo;
-      this.motivoRechazo.rejection = nuevosDatos.nombre;
+      this.motivoRechazo.name = nuevosDatos.nombre;
       if (this.motivoRechazo.id === 0 || !this.motivoRechazo.id) {
         /* Si el ID es 0 o no está definido, es un nuevo motivo de rechazo, asi que insertamos */
         this._motivoRechazoService

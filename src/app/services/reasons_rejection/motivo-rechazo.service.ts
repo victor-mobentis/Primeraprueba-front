@@ -72,7 +72,7 @@ export class MotivoRechazoService {
         `${this.baseUrl}:${this.port}/api/motivos-rechazo/update/${motivoRechazo.id}`,
         {
           codigo: motivoRechazo.rejection_code,
-          nombre: motivoRechazo.rejection,
+          nombre: motivoRechazo.name,
         },
         options
       )
@@ -97,7 +97,7 @@ export class MotivoRechazoService {
         `${this.baseUrl}:${this.port}/api/motivos-rechazo/add`,
         {
           codigo: motivoRechazo.rejection_code,
-          nombre: motivoRechazo.rejection,
+          nombre: motivoRechazo.name,
         },
         options
       )
