@@ -3,18 +3,27 @@
 }
 
 .btnEdit,
-.btnDelete {
+.btnDelete,
+.btnSave,
+.btnClear {
     cursor: pointer;
 }
 
-.btnDelete {
+.btnDelete,
+.btnClear {
     color: #B0304B;
 }
 
 .btnEdit {
     color: darkgrey;
 }
+.btnSave{
+    color: rgb(7, 170, 7);
+}
 
 th {
     color: #4e5eba;
+}
+i{
+    font-size: 20px;
 }

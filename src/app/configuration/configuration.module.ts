@@ -23,6 +23,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
+/* bootstrap */
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 /**
  * IMPORT COMPONENTS
  */
@@ -70,7 +72,8 @@ import { AddCompetitorComponent } from './configuration-general/add-competitor/a
     MatSidenavModule,
     MatSelectModule,
     MatAutocompleteModule,
-    SharedModule
+    SharedModule,
+    NgbTooltipModule
 ],
 })
 export class ConfigurationModule {}

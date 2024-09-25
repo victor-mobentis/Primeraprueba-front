@@ -7,6 +7,7 @@ import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confir
 import { timeout } from 'rxjs';
 import { MotivoRechazoService } from 'src/app/services/reasons_rejection/motivo-rechazo.service';
 import { IMotivoRechazo } from 'src/app/models/motivoRechazo.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-reasons-rejections',
@@ -17,6 +18,9 @@ export class ReasonsRejectionsComponent {
   rejectList: IMotivoRechazo[] = [];
   cargando: boolean = false;
 
+  editingReasonId: number | null = null;
+  originalReason: IMotivoRechazo | null = null;
+
   newRejectionCode: string = '';
   newRejectionName: string = '';
 
@@ -25,7 +29,7 @@ export class ReasonsRejectionsComponent {
     private router: Router,
     public dialogRef: MatDialogRef<ReasonsRejectionsComponent>,
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar,
+    private toastr: ToastrService,
   ) {}
 
   ngOnInit(): void {
@@ -50,20 +54,34 @@ export class ReasonsRejectionsComponent {
   }
 
   /* editar un motivo de rechazo */
-  addEditRechazo(id?: Number) {
-    const dialogRef = this.dialog.open(AddEditReasonRejectionsComponent, {
-      width: '500px',
-      disableClose: true,
-      data: { id: id },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.cargaRechazos();
-      }
-    });
+  toogleEdit(reasonId: number){
+    const reason = this.rejectList.find(r => r.id === reasonId);
+    if(reason){
+      this.originalReason = {...reason};
+      this.editingReasonId = reasonId;
+    }
+  }
+  saveChanges(reason: IMotivoRechazo){
+    this.editingReasonId = null;
+    this.originalReason = null;
   }
 
+  cancelEdit(){
+    if (this.originalReason) {
+      const index = this.rejectList.findIndex(r => r.id === this.originalReason!.id);
+      if (index !== -1) {
+        this.rejectList[index] = { ...this.originalReason };
+      }
+    }
+    this.editingReasonId = null;
+    this.originalReason = null;
+  }
+  
+  /* Limpiar los campos del nuevo motivo de rechazo */
+  clearNewRechazo() {
+    this.newRejectionCode = '';
+    this.newRejectionName = '';
+  }
   deleteRechazo(id: Number) {
     this.dialog
       .open(ConfirmDialogComponent, {
@@ -83,8 +101,8 @@ export class ReasonsRejectionsComponent {
   }
 
   mensajeExito() {
-    this._snackBar.open('Motivo eliminado con exito', '', {
-      duration: 2000,
+    this.toastr.success('Motivo eliminado con exito', '', {
+      timeOut: 2000,
     });
   }
 
@@ -93,10 +111,4 @@ export class ReasonsRejectionsComponent {
     this.dialogRef.close();
   }
 
-  /* New row */
-    /* Limpiar los campos del nuevo motivo de rechazo */
-    clearNewRechazo() {
-      this.newRejectionCode = '';
-      this.newRejectionName = '';
-    }
 }

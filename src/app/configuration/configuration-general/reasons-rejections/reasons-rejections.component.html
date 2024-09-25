@@ -3,7 +3,7 @@
 </div>
 
 <mat-dialog-content class="mat-typography py-0">
-  <table class="table ">
+  <table class="table">
       <thead>
           <tr>
               <th scope="col">Código</th>
@@ -13,28 +13,38 @@
       </thead>
       <tbody>
           <tr *ngFor="let row of rejectList">
-              <td>{{row.rejection_code}}</td>
-              <td>{{row.rejection}}</td>
-              <td class="text-center">
-                  <mat-icon *ngIf="row.internal_id!=-1" (click)="addEditRechazo(row.id)" class="btnEdit"
-                            matTooltip="Editar">edit</mat-icon>
-                  <mat-icon *ngIf="row.internal_id!=-1" (click)="deleteRechazo(row.id)" class="btnDelete"
-                            matTooltip="Eliminar">delete</mat-icon>
-              </td>
+            <td>
+                <input *ngIf="editingReasonId === row.id" [(ngModel)]="row.rejection_code" class="form-control">
+                <span *ngIf="editingReasonId !== row.id">{{row.rejection_code}}</span>             
+            </td>
+            <td>
+                <input *ngIf="editingReasonId === row.id" [(ngModel)]="row.rejection" class="form-control">  <!-- Cambiado a [(ngModel)] -->
+                <span *ngIf="editingReasonId !== row.id">{{row.rejection}}</span>
+            </td>
+            <td>
+                <div class="d-flex justify-content-center gap-3">
+                    <i *ngIf="editingReasonId !== row.id" (click)="toogleEdit(row.id)" class="bi bi-pencil-fill btnEdit" ngbTooltip="Editar"></i>
+                    <i *ngIf="editingReasonId === row.id" (click)="saveChanges(row)" class="bi bi-check-lg btnSave" ngbTooltip="Guardar"></i>
+
+                    <i *ngIf="editingReasonId !== row.id" (click)="deleteRechazo(row.id)" class=" bi bi-trash-fill btnDelete" ngbTooltip="Eliminar"></i>
+                    <i *ngIf="editingReasonId === row.id" (click)="cancelEdit()" class="bi bi-x-lg btnClear" ngbTooltip="Cancelar"></i>
+                </div>
+            </td>
+          </tr>
+          <tr *ngIf="rejectList.length === 0">
+            <td colspan="3" class="text-center">No se han encontrado datos</td>
           </tr>
           <tr>
             <td><input type="text" class="form-control" [(ngModel)]="newRejectionCode" placeholder="Código"></td>
             <td><input type="text" class="form-control" [(ngModel)]="newRejectionName" placeholder="Nombre"></td>
             <td class="text-center">
-                <mat-icon  class="btnSave" matTooltip="Guardar">check</mat-icon> <!-- falta la logica para agregar un nuevo motivo de rechazo hacer que la falto -->
-                <mat-icon (click)="clearNewRechazo()" class="btnClear" matTooltip="Limpiar">clear</mat-icon>
+                <div class="d-flex justify-content-center gap-3">
+                    <i class="bi bi bi-check-lg btnSave" ngbTooltip="Guardar"></i>
+                    <i class="bi bi-x-lg btnClear" ngbTooltip="Limpiar" (click)="clearNewRechazo()"></i>
+                </div>
             </td>
-        </tr>
-          <tr *ngIf="rejectList.length === 0">
-              <td colspan="3" class="text-center">No se han encontrado datos</td>
-          </tr>
+        </tr>        
       </tbody>
   </table>
   <app-pagination></app-pagination>
 </mat-dialog-content>
-
