@@ -20,14 +20,10 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,
     ConfirmDialogComponent,
-
-    
-
     /* lo unico que se declarara sera los componentes creados en la carpeta componentes paginas no */
 
   ],

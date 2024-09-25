@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProfileEditPopupComponent } from 'src/app/configuration/configuration-general/profile-edit-popup/profile-edit-popup.component';
 import { ReasonsRejectionsComponent } from 'src/app/configuration/configuration-general/reasons-rejections/reasons-rejections.component';
 import { ConfigurationContainer } from 'src/app/models/configurationContainer.model';
+import { AddCompetitorComponent } from 'src/app/configuration/configuration-general/add-competitor/add-competitor.component';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,14 @@ export class ListItemService {
         width: 'auto',
         disableClose: true
       });
+    },
+    openCompetitor: () =>{
+      const dialogRef = this.dialog.open(AddCompetitorComponent,{
+        width: 'auto',
+        disableClose: true
+      })
     }
+    
   };
 
   executeFunction(functionName: string) {

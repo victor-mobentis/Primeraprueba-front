@@ -40,7 +40,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ClientsContactComponent } from './clients-general/clients-contact/clients-contact.component';
 import { ClientContactListComponent } from './clients-general/client-contact-list/client-contact-list.component';
 import { SharedModule } from '../shared/shared.module';
-import { PaginationComponent } from '../components/pagination/pagination.component';
 
 @NgModule({
     declarations:[

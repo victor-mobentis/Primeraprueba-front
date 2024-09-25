@@ -1,0 +1,47 @@
+<div>
+    <app-popup-header [title]="'Competidores'" [icon]="'/assets/images/iconos/configuracion-icon-dark.svg'" (close)="cerrarPopup()"></app-popup-header>
+</div>
+
+<mat-dialog-content class="mat-typography py-0">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col" class="text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of competitorList">
+                <!-- Mostrar input si la fila está en modo de edición -->
+                <td>
+                    <input *ngIf="editingCompetitorId === row.id" [(ngModel)]="row.name" class="form-control" />
+                    <span *ngIf="editingCompetitorId !== row.id">{{ row.name }}</span>
+                </td>
+                <td >
+                    <div class="d-flex justify-content-center gap-3">
+                        <!-- Mostrar lápiz si no está en modo de edición, y check si está en modo de edición -->
+                        <i *ngIf="editingCompetitorId !== row.id" (click)="toggleEdit(row.id)" class="bi bi-pencil-fill btnEdit" ngbTooltip="Editar"></i>
+                        <i *ngIf="editingCompetitorId === row.id" (click)="saveChanges(row)" class="bi bi-check-lg btnSave" ngbTooltip="Guardar"></i>
+                        
+                        <!-- Mostrar X si está en edición y trash si no está en modo de edición -->
+                        <i *ngIf="editingCompetitorId !== row.id" class="bi bi-trash-fill btnDelete" ngbTooltip="Eliminar"></i>
+                        <i *ngIf="editingCompetitorId === row.id" (click)="cancelEdit()" class="bi bi-x-lg btnClear" ngbTooltip="Cancelar"></i>
+                    </div>
+                </td>
+            </tr>
+            <tr *ngIf="competitorList.length === 0">
+                <td colspan="3" class="text-center">No se han encontrado datos</td>
+            </tr>
+            <tr>
+                <td><input type="text" class="form-control" [(ngModel)]="newCompetitonName" placeholder="Nombre"></td>
+                <td>
+                    <div class="d-flex justify-content-center gap-3">
+                        <i class="bi bi-check-lg btnSave" ngbTooltip="Guardar"></i>
+                        <i class="bi bi-x-lg btnClear" ngbTooltip="Limpiar" (click)="clearNewCompetitor()"></i>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <app-pagination></app-pagination>
+</mat-dialog-content>

@@ -7,11 +7,6 @@
     font-size: larger;
 }
 
-.tituloKPI {
-    font-size: small;
-    font-weight: lighter;
-}
-
 .kpis {
     border-radius: 1em;
 }
@@ -19,4 +14,21 @@
 span.font-dashboard {
     font-size: 12px;
     color: #6D6D6D;
+}
+
+.rechazos {
+
+    color: #3F51B5;
+}
+
+.pendientes {
+    color: #ff76c8;
+}
+
+.oportunidades {
+    color: #ff9500;
+}
+
+.smaller{
+    font-size: smaller;
 }

@@ -23,6 +23,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
+/* bootstrap */
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 /**
  * IMPORT COMPONENTS
  */
@@ -34,6 +36,8 @@ import { ReasonsRejectionsComponent } from './configuration-general/reasons-reje
 import { AddEditReasonRejectionsComponent } from './configuration-general/reasons-rejections/add-edit-reason-rejections/add-edit-reason-rejections.component';
 import { ListItemComponent } from '../components/list-item/list-item.component';
 import { ConfigurationListItemContainerComponent } from '../components/configuration-list-item-container/configuration-list-item-container.component';
+import { SharedModule } from "../shared/shared.module";
+import { AddCompetitorComponent } from './configuration-general/add-competitor/add-competitor.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +48,7 @@ import { ConfigurationListItemContainerComponent } from '../components/configura
     ReasonsRejectionsComponent,
     AddEditReasonRejectionsComponent,
     ListItemComponent, // A futuro igual mover a shared
-    ConfigurationListItemContainerComponent,
+    ConfigurationListItemContainerComponent, AddCompetitorComponent,
   ],
   imports: [
     CommonModule,
@@ -68,6 +72,8 @@ import { ConfigurationListItemContainerComponent } from '../components/configura
     MatSidenavModule,
     MatSelectModule,
     MatAutocompleteModule,
-  ],
+    SharedModule,
+    NgbTooltipModule
+],
 })
 export class ConfigurationModule {}

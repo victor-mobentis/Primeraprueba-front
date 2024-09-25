@@ -1,30 +1,26 @@
-mat-form-field {
-    width: 100%;
+ .modal-content {
+  border-color: #3f51b5;
 }
 
-.row {
-    padding-bottom: .5em;
+.nav-tabs .nav-link.active {
+  background-color: #3f51b5;
+  color: white;
+}
+.nav-item button{
+  color: #3f51b5;
+}
+.btn-outline-secondary {
+  border-color: #3f51b5;
+  color: #3f51b5;
 }
 
-h2 {
-    text-align: center;
+.btn-outline-secondary:hover {
+  background-color: #3f51b5;
+  color: white;
 }
 
-.btnContacts {
-    cursor: pointer;
-    color: #3c27c5;
+.nav-link{
+  font-size: 14px;
 }
 
-.icon-title {
-    width: 40px;
-    height: 40px;
-    margin-right: 5px;
-}
 
-.color-dark {
-    color: #6D6D6D;
-}
-
-.mat-mdc-progress-spinner {
-    --mdc-circular-progress-active-indicator-color: #3f51b5;
-  }
