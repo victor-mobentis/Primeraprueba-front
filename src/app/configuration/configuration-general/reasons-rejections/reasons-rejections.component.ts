@@ -45,6 +45,7 @@ export class ReasonsRejectionsComponent {
         (data: IMotivoRechazo[]) => {
           this.rejectList = data;
           this.cargando = false;
+          console.log(this.rejectList)
         },
         (error) => {
           console.error('Error al cargar los motivos de rechazo', error);
