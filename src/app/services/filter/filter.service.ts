@@ -184,7 +184,7 @@ export class FilterService {
     };
     return this._http.get<IEstado[]>(`${baseUrl}:${port}/api/filtro/estados`, options)
   }
-
+  /* eliminar esta funcion porque se repite en competidores.service.ts */
   getCompetidores(): Observable<ICompetidor[]> {
     let baseUrl = localStorage.getItem('baseUrl');
     let port = localStorage.getItem('port');

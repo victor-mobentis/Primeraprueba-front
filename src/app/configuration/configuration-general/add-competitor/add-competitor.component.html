@@ -20,11 +20,13 @@
                 <td >
                     <div class="d-flex justify-content-center gap-3">
                         <!-- Mostrar lápiz si no está en modo de edición, y check si está en modo de edición -->
-                        <i *ngIf="editingCompetitorId !== row.id" (click)="toggleEdit(row.id)" class="bi bi-pencil-fill btnEdit" ngbTooltip="Editar"></i>
+                        <i *ngIf="editingCompetitorId !== row.id && row.id" (click)="toggleEdit(row.id)" class="bi bi-pencil-fill btnEdit" ngbTooltip="Editar"></i>
                         <i *ngIf="editingCompetitorId === row.id" (click)="saveChanges(row)" class="bi bi-check-lg btnSave" ngbTooltip="Guardar"></i>
                         
                         <!-- Mostrar X si está en edición y trash si no está en modo de edición -->
-                        <i *ngIf="editingCompetitorId !== row.id" class="bi bi-trash-fill btnDelete" ngbTooltip="Eliminar"></i>
+                        <i *ngIf="editingCompetitorId !== row.id && row.id !== undefined" class="bi bi-trash-fill btnDelete" 
+                        ngbTooltip="Eliminar" 
+                        (click)="deleteCompetidor(row.id)"></i>
                         <i *ngIf="editingCompetitorId === row.id" (click)="cancelEdit()" class="bi bi-x-lg btnClear" ngbTooltip="Cancelar"></i>
                     </div>
                 </td>
@@ -36,8 +38,20 @@
                 <td><input type="text" class="form-control" [(ngModel)]="newCompetitonName" placeholder="Nombre"></td>
                 <td>
                     <div class="d-flex justify-content-center gap-3">
-                        <i class="bi bi-check-lg btnSave" ngbTooltip="Guardar"></i>
-                        <i class="bi bi-x-lg btnClear" ngbTooltip="Limpiar" (click)="clearNewCompetitor()"></i>
+                        <button 
+                        ngbTooltip="Guardar" 
+                        (click)="insertCompetitor()"
+                        [ngClass]="{'btnSave': true, 'disabled-icon': !newCompetitonName}"
+                        >
+                            <i class="bi bi-check-lg"></i>
+                        </button>
+                        <button
+                            ngbTooltip="Limpiar"
+                            (click)="clearNewCompetitor()"
+                            [ngClass]="{'btnDelete':true, 'disabled-icon': !newCompetitonName}"
+                        >
+                            <i class="bi bi-x-lg"></i>
+                        </button>
                     </div>
                 </td>
             </tr>

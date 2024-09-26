@@ -1,4 +1,4 @@
 export interface ICompetidor{
-    id: number;
+    id?: number;
     name: string;
 }
