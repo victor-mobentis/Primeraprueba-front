@@ -210,10 +210,6 @@ toDate: NgbDateStruct | null = null;
   }
 
 
-  getMotivoRechazo(id: number): string {
-    const rechazo = this.motivos_rechazo.find((c) => c.id == id);
-    return rechazo ? rechazo.name : 'No encontrado';
-  }
 
   getEstado(id: number): string {
     const estado = this.estados.find((c) => c.id == id);
@@ -242,10 +238,6 @@ toDate: NgbDateStruct | null = null;
       : this.dataSource.forEach((row) => this.selection.select(row));
   }
 
-  getSimboloName(symbolId: number): string {
-    const symbol = this.simbolos.find((s) => s.id === symbolId);
-    return symbol ? symbol.symbol : '';
-  }
 
   verEnMapa() {
     if (this.selection.selected.length === 0) {
@@ -437,40 +429,8 @@ toDate: NgbDateStruct | null = null;
     this.currentPage = 1;
     this.paginate()
   }
-  /* para la fecha */
-  Fechascapturadas() {
-    
-    // Aquí va la lógica de filtrado
-  }
-  /* para filtrar las opciones de busqueda */
-    // Método genérico para buscar en cualquier lista dinámica
-  onBuscar(event: any, categoria: 'estados' | 'provincias' | 'poblacion') {
-      const valor = event.target.value.toLowerCase();
-  
-      if (valor === '') {
-        // Restaurar la lista original si no hay búsqueda
-        this.listasFiltradas[categoria] = this[categoria];
-      } else {
-        // Filtrar la lista correspondiente
-        this.listasFiltradas[categoria] = this[categoria].filter(item =>
-          item.name.toLowerCase().includes(valor)
-        );
-      }
-    }
-  
-    // Método para restaurar las listas cuando se abre el dropdown
-    onAbrirDropdown(categoria: 'estados' | 'provincias' | 'poblacion') {
-      this.listasFiltradas[categoria] = this[categoria]; 
-    }
-     // Método para cerrar el dropdown
-    @ViewChild('dropdownWrapper') dropdownWrapper!: ElementRef;
-    closeDropdown() {
-      const dropdownToggle = this.dropdownWrapper.nativeElement.querySelector('.dropdown-toggle');
-      const dropdown = new bootstrap.Dropdown(dropdownToggle);
-      dropdown.hide();  // Cierra el dropdown de Bootstrap
-  }
 
-  //Funcion nuevos filtros
+  //Funcion filtros
   onFiltersChanged(selectedFilters: { [key: string]: any }) {
     console.log('Filtros seleccionados:', selectedFilters);
     this.selectedFilters = selectedFilters;
