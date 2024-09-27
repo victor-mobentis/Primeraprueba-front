@@ -185,13 +185,26 @@
               <!-- Población Column -->
               <td class="">{{ row.city }}</td>
               <!-- Cliente Column -->
-              <td class="row_cliente">{{ row.customer_name }}</td>
+              <td class="row_cliente">
+                <span
+                [ngbTooltip]="tooltipText" 
+                (mouseover)="applyTooltipIfTruncated($event, row.customer_name)" 
+                class="truncate-text"
+                >
+                {{ row.customer_name }}
+                </span>
+              </td>
               <!-- Subfamilia Column -->
               <td class="">{{ row.subfamily }}</td>
               <!-- Producto Column -->
               <td class="row_producto">
-                <span [ngbTooltip]="row.product.length > 23 ? 'tooltip' : null"
-                  [ngbTooltip]="row.product.length > 23 ? row.product : ''">{{ row.product }}</span>
+                <span 
+                [ngbTooltip]="tooltipText" 
+                (mouseover)="applyTooltipIfTruncated($event, row.product)" 
+                class="truncate-text"
+                >
+                  {{ row.product }}
+                </span>
               </td>
               <!-- Motivo Column -->
               <td class="text-center">
@@ -269,6 +282,7 @@
                 </button>
               </td>
             </tr>
+            
 
             <!-- Row Expanded Detail -->
             <ng-container *ngIf="expandedElement === row">
@@ -299,6 +313,11 @@
               </tr>
             </ng-container>
           </ng-container>
+          <tr *ngIf="paginatedData.length === 0" >
+            <td colspan="20" class="text-center">
+              No hay datos
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

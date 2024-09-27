@@ -374,3 +374,12 @@ input[type="number"]::-webkit-inner-spin-button {
   -moz-appearance: textfield;
   text-align: right;
 } */
+
+/* estilo para que aparezca el tooltip al pasar el mouse si es muy grande el texto */
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 100%; /* O ajusta según el tamaño de la columna */
+}

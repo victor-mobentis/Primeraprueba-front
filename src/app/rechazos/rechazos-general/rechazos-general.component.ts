@@ -4,7 +4,8 @@ import {
   ViewChild,
   OnInit,
   ChangeDetectorRef,
-  ElementRef
+  ElementRef,
+  Renderer2
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -83,6 +84,10 @@ toDate: NgbDateStruct | null = null;
   selectedOption: string = 'Excel';
   filtrosAplicados: Array<{nombre: string, valor: any}> = [];
 
+  // Variable para manejar si el texto está truncado
+  isTooltipVisible: boolean = false;
+  tooltipText: string | null = null; 
+
   listasFiltradas = {
     estados: [] as IEstado[],
     provincias: [] as IProvincia[],
@@ -93,7 +98,7 @@ toDate: NgbDateStruct | null = null;
 
   selectedFilters: { [key: string]: any } = {}
   constructor(
-    
+    private renderer: Renderer2,
     public dialog: MatDialog,
     private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef,
@@ -475,5 +480,23 @@ toDate: NgbDateStruct | null = null;
     console.log('Filtros seleccionados:', selectedFilters);
     this.selectedFilters = selectedFilters;
     this.loadRechazos()
+  }
+  /* logica para que aparezca tooltip cuando el texto es muy grande */
+  isTextTruncated(element: HTMLElement): boolean {
+    return element.offsetWidth < element.scrollWidth;
+  }
+
+  applyTooltipIfTruncated(event: Event, text: string) {
+    const element = event.target as HTMLElement;
+    this.isTooltipVisible = this.isTextTruncated(element);
+
+    // Solo asigna el texto del tooltip si el texto está truncado
+    if (this.isTooltipVisible) {
+      this.tooltipText = text;
+      this.renderer.setStyle(element, 'cursor', 'pointer'); // Añade el cursor tipo pointer
+    } else {
+      this.tooltipText = null;
+      this.renderer.removeStyle(element, 'cursor'); // Remueve el cursor tipo pointer
+    }
   }
 }
