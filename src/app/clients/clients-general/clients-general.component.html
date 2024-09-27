@@ -34,10 +34,6 @@
             (click)="verEnMapa()">
             <mat-icon>location_on</mat-icon>
           </button>
-<!--           <button ngbTooltip="Ver filtros" class="btn btn-secondary d-flex align-items-center" data-bs-toggle="modal"
-            data-bs-target="#filtroModal">
-            <mat-icon class="p-0 m-0">filter_list_alt</mat-icon>
-          </button> -->
         </div>
 
       </div>
@@ -46,7 +42,7 @@
         <table class="table table-hover table-sm">
           <!-- Checkbox Column -->
           <thead>
-            <tr>
+            <tr class="w-100">
               <th class="th-checkbox row_column_checkbox text-center px-2">
                 <div class="d-flex align-items-center">
                   <input type="checkbox" (change)="masterToggle()" [checked]="selection.hasValue() && isAllSelected()"
@@ -90,18 +86,40 @@
                   </div>
                 </td>
                 <td>{{ row.customer_ERP_id }}</td>
-                <td [title]="row.name">
-                  {{ row.name }}
+                <td >
+                  <span 
+                  [ngbTooltip]="tooltipText" 
+                  (mouseover)="applyTooltipIfTruncated($event, row.name)" 
+                  class="truncate-text"
+                  >{{ row.name }}</span>
                 </td>
                 <td [title]="row.province">
-                  {{ row.province }}
+                  <span
+                  [ngbTooltip]="tooltipText" 
+                  (mouseover)="applyTooltipIfTruncated($event, row.province)" 
+                  class="truncate-text"
+                  >
+                    {{ row.province }}
+                  </span>
                 </td>
                 <td [title]="row.city">
-                  {{ row.city }}
+                  <span
+                  [ngbTooltip]="tooltipText" 
+                  (mouseover)="applyTooltipIfTruncated($event, row.city)" 
+                  class="truncate-text">
+                    {{ row.city }}
+                  </span>
                 </td>
-                <td>{{ row.pc != 0 ? row.pc : "" }}</td>
-                <td [title]="row.address">
-                  {{ row.address }}
+                <td>
+                    {{ row.pc != 0 ? row.pc : "" }}
+                </td>
+                <td>
+                  <span
+                  [ngbTooltip]="tooltipText" 
+                  (mouseover)="applyTooltipIfTruncated($event, row.address)" 
+                  class="truncate-text">
+                    {{ row.address }}
+                  </span>
                 </td>
                 <td class="text-center">
                   <button class="btn btn-link p-0" (click)="editClient(row.id)" title="Ficha">

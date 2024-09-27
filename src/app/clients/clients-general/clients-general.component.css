@@ -15,6 +15,7 @@ table {
   width: 100%;
   font-size: small;
   overflow: visible;
+  table-layout: fixed;
 }
 
 .mat-mdc-form-field {
@@ -121,7 +122,7 @@ ng-select {
 
 /* columnas medidas */
 .row_column_checkbox {
-  width: 40px;
+  width: 1.5%;
 }
 
 .spinner-border {
@@ -129,19 +130,21 @@ ng-select {
   font-size: large;
 }
 
+/* Asignar anchos fijos a las columnas */
 .row_column_sm {
-  width: 100px;
+  width: 4%; 
 }
 
 .row_column_md {
-  width: 200px;
+  width: 9%; 
 }
 
-.row_column_lg{
-  width: 400px;
+.row_column_lg {
+  width: 15%; 
 }
-.row_column_xl{
-  width: 600px;
+
+.row_column_xl {
+  width: 22%; 
 }
 
 .sort-asc::after {
@@ -268,8 +271,10 @@ th {
   /* Texto blanco */
 }
 
-.poblacion {
+.truncate-text {
+  white-space: nowrap;
   overflow: hidden;
-  overflow-y: auto;
-  max-height: calc(100vh - 150px);
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 100%; /* O ajusta según el tamaño de la columna */
 }
