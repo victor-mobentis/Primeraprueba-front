@@ -137,10 +137,11 @@ ng-select {
   width: 200px;
 }
 
-.row_column_lg{
+.row_column_lg {
   width: 400px;
 }
-.row_column_xl{
+
+.row_column_xl {
   width: 600px;
 }
 
@@ -158,11 +159,6 @@ ng-select {
 
 .mat-mdc-progress-spinner {
   --mdc-circular-progress-active-indicator-color: #3f51b5;
-}
-
-.screen {
-  min-height: 100vh;
-  background-color: #f3f4f6;
 }
 
 th {
@@ -241,10 +237,6 @@ th {
 .icon-title {
   width: 40px;
   height: 40px;
-}
-
-.color-dark {
-  color: #6d6d6d;
 }
 
 .icon-svg {

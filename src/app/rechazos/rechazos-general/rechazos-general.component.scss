@@ -1,8 +1,3 @@
-.screen {
-  min-height: 100vh;
-  background-color: #f3f4f6;
-}
-
 .separador-superior {
   height: 64px;
 }
@@ -15,10 +10,6 @@
 
 #busqueda {
   width: 300px;
-}
-
-.color-dark {
-  color: #6D6D6D;
 }
 
 .main {
@@ -60,11 +51,11 @@ th {
   cursor: pointer;
 }
 
-.btn-azul-claro{
+.btn-azul-claro {
   background-color: #bac1e9;
 }
 
-.btn-gris-claro{
+.btn-gris-claro {
   background-color: lightgray;
 }
 
@@ -357,7 +348,8 @@ th {
   background-color: #4e62d121;
   color: white;
 }
-.w-max{
+
+.w-max {
   width: max-content;
 }
 

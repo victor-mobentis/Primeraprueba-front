@@ -38,3 +38,27 @@ body {
 @import 'ngx-toastr/toastr';
 @import '~@ng-select/ng-select/themes/default.theme.css';
 @import "~daterangepicker/daterangepicker.css";
+
+
+/* Variables de colores */
+$light-gray: #f3f4f6;
+$background-login: #f4dec5;
+$title-dark-gray: #6D6D6D;
+
+
+/*clases con colores*/
+.background-light-gray {
+    background-color: $light-gray !important;
+}
+
+.background-white {
+    background-color: white !important;
+}
+
+.background-login {
+    background-color: $background-login !important;
+}
+
+.dark-gray{
+    color: $title-dark-gray !important;
+}
