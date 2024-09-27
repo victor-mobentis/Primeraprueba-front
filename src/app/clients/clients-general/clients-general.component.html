@@ -23,93 +23,9 @@
               </button>
             </span>
           </div>
-          <!-- boton de filtos aplicados o limpiar -->
-          <div class="d-flex gap-2 align-items-center">
-              <button class="d-flex m-0 btn btn-outline-danger btn-sm align-items-center" *ngFor="let filtro of filtrosAplicados" (click)="removeFilter(filtro)">
-                <p class="m-0">{{ filtro.nombre }}: {{ filtro.valor }}</p>
-                <i class="ps-2 bi bi-x-circle-fill"></i>
-              </button>
-        
-            <!-- Botón "Limpiar" solo si hay filtros aplicados -->
-            <button *ngIf="filtrosAplicados.length > 0" class="btn btn-outline-danger btn-sm" (click)="filtroReset()">
-              Limpiar
-            </button>
-          </div>
-          <!-- filtros --> 
-          <div   class="btn-group" #dropdownWrapper>
-            <a type="button" class=" dropdown-toggle fw-semibold text-decoration-none color-text" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" id="dropdownMenuButton">
-              + Filtros
-            </a>
-            <ul class="dropdown-menu cursor">
-              <form [formGroup]="form" (ngSubmit)="applyComplexFilter()">
-                <!-- Segmentacion 1 Potenciabilidad -->
-                <li class="dropend">
-                  <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Potenciabilidad</a>
-                  <ul class="dropdown-menu">
-                    <li *ngFor="let item of s1" class="cursor">
-                      <a class="dropdown-item" [ngClass]="{'selected-item': form.get('segmentacion1FilterControl')?.value?.includes(item.segmentation_value_id)}"  (click)="onFilterSelect(item.segmentation_value_id, 1)">
-                        {{ item.segmentation_value }}
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <!-- Segementacion 2 Tipologia -->
-                <li class="dropend">
-                  <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Tipologia</a>
-                  <ul class="dropdown-menu">
-                    <li *ngFor="let item of s2" class="cursor">
-                      <a class="dropdown-item" [ngClass]="{'selected-item': form.get('segmentacion2FilterControl')?.value?.includes(item.segmentation_value_id)}"  (click)="onFilterSelect(item.segmentation_value_id, 2)">
-                        {{ item.segmentation_value }}
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <!-- Segementacion 3 Imagen -->
-                <li class="dropend">
-                  <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Imagen</a>
-                  <ul class="dropdown-menu">
-                    <li *ngFor="let item of s3" class="cursor">
-                      <a class="dropdown-item" [ngClass]="{'selected-item': form.get('segmentacion3FilterControl')?.value?.includes(item.segmentation_value_id)}"  (click)="onFilterSelect(item.segmentation_value_id, 3)">
-                        {{ item.segmentation_value }}
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <!-- Cliente -->
-                <li class="dropend">
-                  <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Cliente</a>
-                  <ul class="dropdown-menu p-2">
-                      <input type="text" class="form-control" formControlName="cliente" placeholder="Introduzca el nombre del cliente">
-                  </ul>
-                </li>
-                <!-- Provincia -->
-                <li class="dropend">
-                  <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Provincia</a>
-                  <ul class="dropdown-menu">
-                    <li *ngFor="let item of provinciaList" class="cursor" >
-                      <a 
-                        class="dropdown-item"
-                        (click)="onFilterLocationSelect('Provincia', item)"
-                      >
-                        {{item}}
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <!-- Población -->
-                <li class="dropend">
-                  <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Población</a>
-                  <ul class="dropdown-menu poblacion">
-                    <li *ngFor="let item of poblacionList" class="cursor">
-                      <a class="dropdown-item" (click)="onFilterLocationSelect('Población', item)">
-                        {{item}}
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              </form>
-            </ul>
-          </div>
+          <!-- boton de filtros aplicados o limpiar -->
+        <app-filter-container [componentId]="'clients-general'" (filtersChanged)="onFiltersChanged($event)">
+        </app-filter-container>
         </div>
 
         <!-- botones de  filtros y mapa -->
