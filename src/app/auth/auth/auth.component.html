@@ -1,17 +1,17 @@
 <div class="d-flex align-items-center justify-content-center contenedor">
   <div class="row">
-    <div class="col border border-terciary justify-content-center">
+    <div class="col border border-terciary justify-content-center p-0">
       <img id="sideImage" src="{{selectedImage}}">
     </div>
-    <div class="col content border border-terciary justify-content-center">
-      <div class="login-fomrs d-flex flex-column justify-content-center align-items-center">
+    <div class="col border border-terciary justify-content-center d-flex p-4">
+      <div class="d-flex flex-column justify-content-center align-items-center">
         <!-- Logo AppInWahts-->
         <img class="logo mb-3" src="../../../assets/images/mobentisLogo.png" alt="logo">
         <div id="titulo" class="pb-2">CONVERTER</div>
         <div id="subtitulo">DE RECHAZO A OPORTUNIDAD</div>
         <!--formulario Material-->
-        <form class="mt-4 login-fomrs d-flex flex-column align-items-center">
-          <mat-form-field class="full-width">
+        <form class="mt-4 w-100 d-flex flex-column align-items-center">
+          <mat-form-field class="w-100">
             <mat-label>Email</mat-label>
             <input type="email" matInput [formControl]="emailFormControl" [errorStateMatcher]="matcher"
               placeholder="Ex.pat@example.com">
@@ -27,7 +27,7 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field class="full-width">
+          <mat-form-field class="w-100">
             <mat-label>Password</mat-label>
             <input matInput [formControl]="passFormControl" [errorStateMatcher]="matcher"
               [type]="hide ? 'password' : 'text'">
@@ -46,10 +46,10 @@
           <div class="error" *ngIf="errorLogin">
             {{messageError}}
           </div>
-          <a class="align-self-start decoration-none">¿Has olvidado la contraseña?</a>
-          <button mat-raised-button color="primary" type="submit" (click)="login()" class="full-width mt-3">Iniciar
+          <a class="align-self-start">¿Has olvidado la contraseña?</a>
+          <button mat-raised-button color="primary" type="submit" (click)="login()" class="w-100 mt-3">Iniciar
             Sesión</button>
-          <a class="align-self-end pt-3" href="https://mobentis.com/">mobentis.com</a>
+          <a class="align-self-center pt-3" href="https://mobentis.com/">mobentis.com</a>
         </form>
       </div>
     </div>
