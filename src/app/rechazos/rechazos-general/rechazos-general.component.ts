@@ -4,7 +4,8 @@ import {
   ViewChild,
   OnInit,
   ChangeDetectorRef,
-  ElementRef
+  ElementRef,
+  Renderer2
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -43,10 +44,6 @@ declare var bootstrap: any;
 })
 export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
-  fromDate: NgbDateStruct | null = null;
-toDate: NgbDateStruct | null = null;
-
-  form: any;
   displayedColumns: string[] = [
     'select',
     'estado',
@@ -77,47 +74,30 @@ toDate: NgbDateStruct | null = null;
   competidores: ICompetidor[] = [];
   motivos_rechazo: IMotivoRechazo[] = [];
   simbolos: ISimbolo[] = [];
-  familias: IFamilia[] =[];
-  subfamilias: ISubFamilia[] =[];
+
   expandedElement?: IRechazo | null;
   selectedOption: string = 'Excel';
   filtrosAplicados: Array<{nombre: string, valor: any}> = [];
 
-  listasFiltradas = {
-    estados: [] as IEstado[],
-    provincias: [] as IProvincia[],
-    poblacion: [] as IPoblacion[],
-    familias: [] as IFamilia[],
-    subfamilias: [] as ISubFamilia[],
-  };
-
+  // Variable para manejar si el texto está truncado
+  isTooltipVisible: boolean = false;
+  tooltipText: string | null = null; 
+  selectedFilters: { [key: string]: any } = {}
   constructor(
-    
+    private renderer: Renderer2,
     public dialog: MatDialog,
-    private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef,
     private rechazadosService: RechazadosService,
     private filterService: FilterService,
     private _exportService: ExportService,
     private toastr: ToastrService
   ) {
-    this.form = this.formBuilder.group({
-      EstadoFilterControl: [''],
-      PoblacionFilterControl: [''],
-      ProvinciaFilterControl: [''],
-      ProductoFilterControl: [''],
-      FamiliaFilterControl: [''],
-      SubFamiliaFilterControl: [''],
-    });
+    
 
   }
   
   ngOnInit() {
     this.loadRechazos();
-    this.loadSubFamilias();
-    this.loadEstadosRechazos();
     this.loadEstados();
-    this.loadFamilias();
     this.loadProvincias();
     this.loadSimbolos();
     this.loadGoogleMapsScript();
@@ -136,7 +116,7 @@ toDate: NgbDateStruct | null = null;
   }
 
   private loadRechazos() {
-    this.rechazadosService.getRechazos().subscribe((rechazos: IRechazo[]) => {
+    this.rechazadosService.getRechazos(this.selectedFilters).subscribe((rechazos: IRechazo[]) => {
       console.log('Rechazos cargados:', rechazos);
       this.dataSource = rechazos;
       this.rechazoList = rechazos;
@@ -148,18 +128,8 @@ toDate: NgbDateStruct | null = null;
       this.provincias = provincias;
     });
   }
-  private loadFamilias(){
-    this.filterService.getFamilias().subscribe((familias: IFamilia[]) =>{
-      this.familias = familias;
-      console.log(familias);
-    });
-  }
-  private loadSubFamilias(){
-    this.filterService.getSubFamilias().subscribe((subfamilias: ISubFamilia[]) =>{
-      this.subfamilias = subfamilias;
-      console.log(subfamilias);
-    });
-  }
+
+  
 
   private loadPoblacion(){
     this.filterService.getPoblaciones().subscribe((poblacion: IPoblacion[]) =>{
@@ -167,7 +137,7 @@ toDate: NgbDateStruct | null = null;
     })
   }
 
-  private loadEstadosRechazos() { }
+
 
   private loadEstados() {
     this.filterService.getEstados().subscribe((estados: IEstado[]) => {
@@ -208,195 +178,9 @@ toDate: NgbDateStruct | null = null;
     }
   }
 
-  applyComplexFilter(){
-    this.filtrosAplicados = [];
-
-    // Obtener el valor del filtro de Estados
-    const estadoValue = this.form.get('EstadoFilterControl')?.value;
-    if (estadoValue && estadoValue.length > 0) {
-      const estadoNames = estadoValue.map((id: number) => this.getEstado(id)).join(', ');
-      this.filtrosAplicados.push({
-        nombre: 'Estado',
-        valor: estadoNames
-      });
-    }
-
-    const provinciaValue = this.form.get('ProvinciaFilterControl')?.value;
-    if (provinciaValue && provinciaValue.length > 0) {
-      const provinciaNames = provinciaValue.map((id: number) => this.getProvincia(id)).join(', ');
-      this.filtrosAplicados.push({
-        nombre: 'Provincia', 
-        valor: provinciaNames // Aquí se muestra el nombre de la provincia en lugar del ID
-      });
-    }
-
-    const poblacionValue = this.form.get('PoblacionFilterControl')?.value;
-    if(poblacionValue && poblacionValue.length > 0){
-      const poblacionNames = poblacionValue.map((id: number) => this.getPoblacion(id)).join(', ');
-      this.filtrosAplicados.push({
-        nombre: 'Poblacion',
-        valor: poblacionNames // Aquí se muestra el nombre de la población en lugar del ID
-      });
-    }
-
-    const productoValue = this.form.get('ProductoFilterControl')?.value;
-    if (productoValue && productoValue.length > 0) {
-      this.filtrosAplicados.push({
-        nombre: 'Producto',
-        valor: this.form.get('ProductoFilterControl')?.value
-      });
-    }
-
-    const familiaValue = this.form.get('FamiliaFilterControl')?.value;
-    if (familiaValue && familiaValue.length > 0){
-      this.filtrosAplicados.push({
-        nombre: 'Familia',
-        valor: familiaValue.join(', ')
-      });
-    }
-
-    const subfamiliaValue = this.form.get('SubFamiliaFilterControl')?.value;
-    if (subfamiliaValue && subfamiliaValue.length > 0){
-      this.filtrosAplicados.push({
-        nombre: 'SubFamilia',
-        valor: subfamiliaValue.join(', ')
-      });
-    }
-
-    this.applyFilterLogic();
-  }
-
-  onFilter(filterType: string, value: any) {
-    // Obtener el control de formulario dinámicamente basado en el tipo de filtro
-    const filterControlName = this.getFilterControlName(filterType);
-    let currentSelection: any[] = this.form.get(filterControlName)?.value || [];
-  
-    // Comprobar si el valor ya está en la selección y actualizarla
-    if (currentSelection.includes(value)) {
-      currentSelection = currentSelection.filter(v => v !== value);
-    } else {
-      currentSelection.push(value);
-    }
-  
-    // Actualizar el formulario con la nueva selección
-    this.form.get(filterControlName)?.setValue(currentSelection);
-  
-    // Aplicar la lógica del filtro actualizado
-    this.applyComplexFilter();
-  }
-
-  // Método auxiliar para obtener el nombre del control de formulario basado en el tipo de filtro
-  getFilterControlName(filterType: string): string {
-    switch (filterType) {
-      case 'Estados': return 'EstadoFilterControl';
-      case 'Provincias': return 'ProvinciaFilterControl';
-      case 'Poblaciones': return 'PoblacionFilterControl';
-      case 'Familia': return 'FamiliaFilterControl';
-      case 'SubFamilia': return 'SubFamiliaFilterControl';
-      default: 
-        console.warn('Tipo de filtro no válido');
-        return '';
-    }
-  }
-  
-  // Método para eliminar un filtro específico
-  removeFilter(filtro: { nombre: string, valor: any }) {
-    // Elimina el filtro de la lista de filtros aplicados
-    this.filtrosAplicados = this.filtrosAplicados.filter(f => f.nombre !== filtro.nombre || f.valor !== filtro.valor);
-  
-    // Resetea el control del formulario según el filtro que se elimina
-    switch (filtro.nombre) {
-      case 'Estado':
-        this.form.get('EstadoFilterControl')?.reset();
-        break;
-      case 'Provincia':
-        this.form.get('ProvinciaFilterControl')?.reset();
-        break;
-      case 'Poblacion':
-        this.form.get('PoblacionFilterControl')?.reset();
-        break;
-      case 'Producto':
-        this.form.get('ProductoFilterControl')?.reset();
-        break;
-      case 'Familia':
-        this.form.get('FamiliaFilterControl')?.reset();
-        break;
-      case 'SubFamilia':
-        this.form.get('SubFamiliaFilterControl')?.reset();
-        break;
-    }
-  
-    // Actualiza el formulario y los datos
-    this.applyComplexFilter();
-  }
-
-  applyFilterLogic() {
-
-    let auxList: IRechazo[] = this.rechazoList;
-  
-    // Filtrar por Estados (IDs numéricos)
-    if (this.form.value.EstadoFilterControl?.length) {
-      auxList = auxList.filter(rechazo =>
-        this.form.value.EstadoFilterControl.includes(rechazo.status_id)
-      );
-    }
-  
-    // Filtrar por Provincias (IDs numéricos)
-    if (this.form.value.ProvinciaFilterControl?.length) {
-      auxList = auxList.filter(rechazo =>
-        this.form.value.ProvinciaFilterControl.includes(rechazo.province_id)
-      );
-    }
-  
-    // Filtrar por Poblaciones (IDs numéricos)
-    if (this.form.value.PoblacionFilterControl?.length) {
-      auxList = auxList.filter(rechazo =>
-        this.form.value.PoblacionFilterControl.includes(rechazo.city_id)
-      );
-    }
-    
-    // Filtrar por Producto
-    const productoValue = this.form.value.ProductoFilterControl?.toLowerCase();
-    if (productoValue && productoValue.length) {
-      auxList = auxList.filter(rechazo =>
-        rechazo.product?.toLowerCase().includes(productoValue)
-      );
-    }
-
-    // Filtrar por Familias (comparación de texto)
-    if (this.form.value.FamiliaFilterControl?.length) {
-      auxList = auxList.filter(rechazo =>
-        this.form.value.FamiliaFilterControl.includes(rechazo.family)
-      );
-    }
-  
-    // Filtrar por SubFamilias (comparación de texto)
-    if (this.form.value.SubFamiliaFilterControl?.length) {
-      auxList = auxList.filter(rechazo =>
-        this.form.value.SubFamiliaFilterControl.includes(rechazo.subfamily)
-      );
-    }
-    
-    this.dataSource = auxList;
-    this.currentPage = 1;
-    this.paginate();
-    this.closeDropdown();
-  }
-
-  getMotivoRechazo(id: number): string {
-    const rechazo = this.motivos_rechazo.find((c) => c.id == id);
-    return rechazo ? rechazo.name : 'No encontrado';
-  }
-
   getEstado(id: number): string {
     const estado = this.estados.find((c) => c.id == id);
     return estado ? estado.name : 'No encontrado';
-  }
-
-  filtroReset() {
-    this.filtrosAplicados = [];
-    this.form.reset();
-    this.applyFilterLogic();
   }
 
   ngAfterViewInit() {
@@ -417,11 +201,6 @@ toDate: NgbDateStruct | null = null;
     this.isAllSelected()
       ? this.selection.clear()
       : this.dataSource.forEach((row) => this.selection.select(row));
-  }
-
-  getSimboloName(symbolId: number): string {
-    const symbol = this.simbolos.find((s) => s.id === symbolId);
-    return symbol ? symbol.symbol : '';
   }
 
   verEnMapa() {
@@ -531,26 +310,21 @@ toDate: NgbDateStruct | null = null;
   currentSortColumn: string = '';
   sortData(column: string) {
     const isAsc = this.currentSortColumn === column && this.sortDirection === 'asc';
-
     // Ordenar la fuente de datos dependiendo del tipo de dato
     this.dataSource.sort((a, b) => {
       const compareA = a[this.currentSortColumn as keyof IRechazo];
       const compareB = b[this.currentSortColumn as keyof IRechazo];
-
       // Verificar si los valores son de tipo cadena (string)
       if (typeof compareA === 'string' && typeof compareB === 'string') {
         return compareA.localeCompare(compareB) * (isAsc ? 1 : -1);
       }
-
       // Si son números, simplemente restar
       if (typeof compareA === 'number' && typeof compareB === 'number') {
         return (compareA - compareB) * (isAsc ? 1 : -1);
       }
-
       // Agregar soporte para otras comparaciones según sea necesario
       return 0;
     });
-
     // Actualizar la columna actual y alternar la dirección
     this.currentSortColumn = column;
     this.sortDirection = isAsc ? 'desc' : 'asc';
@@ -564,9 +338,7 @@ toDate: NgbDateStruct | null = null;
     if (selectElement) {
       const newReasonId = Number(selectElement.value);
       const newReasonName = this.motivos_rechazo.find(rechazo => rechazo.id === newReasonId);
-
       const dataSourceIndex = this.dataSource.indexOf(row);
-
       this.dataSource[dataSourceIndex].reason_rejection_id = newReasonId;
       this.dataSource[dataSourceIndex].reason_rejection = newReasonName?.name ?? "No encontrado";
     }
@@ -574,7 +346,6 @@ toDate: NgbDateStruct | null = null;
 
   changeEstado(event: Event, row: IRechazo) {
     const selectElement = event.target as HTMLSelectElement;
-
     if (selectElement) {
       const newStatusId = Number(selectElement.value);
       const newStatusName = this.estados.find(estado => estado.id === newStatusId);
@@ -614,42 +385,29 @@ toDate: NgbDateStruct | null = null;
     this.currentPage = 1;
     this.paginate()
   }
-  /* para la fecha */
-  Fechascapturadas() {
-    
-    // Aquí va la lógica de filtrado
-  }
-  /* para filtrar las opciones de busqueda */
-    // Método genérico para buscar en cualquier lista dinámica
-  onBuscar(event: any, categoria: 'estados' | 'provincias' | 'poblacion') {
-      const valor = event.target.value.toLowerCase();
-  
-      if (valor === '') {
-        // Restaurar la lista original si no hay búsqueda
-        this.listasFiltradas[categoria] = this[categoria];
-      } else {
-        // Filtrar la lista correspondiente
-        this.listasFiltradas[categoria] = this[categoria].filter(item =>
-          item.name.toLowerCase().includes(valor)
-        );
-      }
-    }
-  
-    // Método para restaurar las listas cuando se abre el dropdown
-    onAbrirDropdown(categoria: 'estados' | 'provincias' | 'poblacion') {
-      this.listasFiltradas[categoria] = this[categoria]; 
-    }
-     // Método para cerrar el dropdown
-    @ViewChild('dropdownWrapper') dropdownWrapper!: ElementRef;
-    closeDropdown() {
-      const dropdownToggle = this.dropdownWrapper.nativeElement.querySelector('.dropdown-toggle');
-      const dropdown = new bootstrap.Dropdown(dropdownToggle);
-      dropdown.hide();  // Cierra el dropdown de Bootstrap
-  }
 
-  //Funcion nuevos filtros
+  //Funcion filtros
   onFiltersChanged(selectedFilters: { [key: string]: any }) {
     console.log('Filtros seleccionados:', selectedFilters);
-    // Aquí puedes manejar los filtros seleccionados según sea necesario
+    this.selectedFilters = selectedFilters;
+    this.loadRechazos()
+  }
+  /* logica para que aparezca tooltip cuando el texto es muy grande */
+  isTextTruncated(element: HTMLElement): boolean {
+    return element.offsetWidth < element.scrollWidth;
+  }
+
+  applyTooltipIfTruncated(event: Event, text: string) {
+    const element = event.target as HTMLElement;
+    this.isTooltipVisible = this.isTextTruncated(element);
+
+    // Solo asigna el texto del tooltip si el texto está truncado
+    if (this.isTooltipVisible) {
+      this.tooltipText = text;
+      this.renderer.setStyle(element, 'cursor', 'pointer'); // Añade el cursor tipo pointer
+    } else {
+      this.tooltipText = null;
+      this.renderer.removeStyle(element, 'cursor'); // Remueve el cursor tipo pointer
+    }
   }
 }
