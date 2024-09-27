@@ -11,7 +11,6 @@ import { ISegmentacion } from 'src/app/models/segmentacion.model';
 import { IFiltroAgente } from 'src/app/models/filtroAgente.model';
 import { Observable, timeout } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
-import { FilterService } from 'src/app/services/filter/filter.service';
 import { ClientContactListComponent } from './client-contact-list/client-contact-list.component';
 import { ToastrService } from 'ngx-toastr';
 
@@ -92,6 +91,8 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
     provinciaList: [] as string[],
   }
 
+  selectedFilters: { [key: string]: any } = {}
+
   ngOnInit(): void {
     this.cargando = true;
     this.loadGoogleMapsScript().then(() => {
@@ -100,8 +101,9 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
   }
 
   private loadData(){
+    this.cargando = true;
     this._clientsServices
-    .getClients()
+    .getClients(this.selectedFilters)
     .pipe(timeout(20000))
     .subscribe(
       (data: any) => {
@@ -609,6 +611,8 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
   /* para filtrar las opciones de filtrar */
   onFiltersChanged(selectedFilters: { [key: string]: any }) {
     console.log('Filtros seleccionados:', selectedFilters);
+    this.selectedFilters = selectedFilters
+    this.loadData()
     // Aquí puedes manejar los filtros seleccionados según sea necesario
   }
   /* logica para que aparezca el tooltip cuando el texto es muy grande */
