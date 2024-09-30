@@ -73,7 +73,7 @@ export class FilterContainerComponent implements OnInit {
         .saveFilter(
           this.componentId,
           this.nombreFiltroGuardado,
-          this.filtrosGuardados
+          this.filtrosAplicados
         )
         .subscribe((filtroGuardado) => {
           console.log(filtroGuardado);
@@ -81,13 +81,14 @@ export class FilterContainerComponent implements OnInit {
             this.filtrosGuardados.push({
               id: filtroGuardado.data.insertId,
               nombre: this.nombreFiltroGuardado.trim(),
-              filtros: [...this.filtrosGuardados],
+              filtros: [...this.filtrosAplicados],
             });
             this.nombreFiltroGuardado = '';
           }
         });
     }
   }
+  
 
   eliminarFiltroGuardado(filtroGuardado: any) {
     this.dialog

@@ -63,8 +63,6 @@ export class MultiSelectFilterComponent {
     } else {
       this.selectedOptions.push(option);
     }
-    console.log(this.title);
-    console.log(this.selectedOptions);
     let shadersOptions = this.selectedOptions; 
     this.selectionChange.emit(shadersOptions);
   }
@@ -91,7 +89,21 @@ export class MultiSelectFilterComponent {
     this.searchTerm = '';
     /* this.selectionChange.emit(this.selectedOptions); */
   }
-  update(filtroAplicado: { id: string; nombre: string; valor: any; tipo: string }){
-    /// dar los valores seleccionado a la lista de multiselect se marque los filtros seleccionados
+  update(filtroAplicado: { id: number, name: string, selected: boolean }[]) {
+    if (filtroAplicado && filtroAplicado.length > 0) {
+      this.selectedOptions = []; 
+  
+      this.options.forEach(option => {
+        const match = filtroAplicado.find(selected => selected.id === option.id);
+        
+        if (match) {
+          option.selected = true; 
+          this.selectedOptions.push(option); 
+        } else {
+          option.selected = false; 
+        }
+      });
+    }
   }
+  
 }
