@@ -167,7 +167,7 @@ export class FilterContainerComponent implements OnInit {
       },
       {}
     );
-    this.filtersChanged.emit(this.selectedFilters);
+    this.filtersChanged.emit(this.filtrosAplicados);
     this.actualizarComponentesHijos();
   }
 
