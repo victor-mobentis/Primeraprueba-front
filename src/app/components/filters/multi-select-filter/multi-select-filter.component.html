@@ -1,14 +1,19 @@
 <li class="dropend">
   <a class="dropdown-item dropdown-toggle cursor" data-bs-toggle="dropdown" aria-expanded="false">{{ title }}</a>
   <ul class="dropdown-menu p-2 w-max h-max">
-    <div class="input-group input-group-sm search-style">
-      <input type="text" class="form-control border border-end-0" placeholder="Buscar..." [(ngModel)]="searchTerm"
-        (keydown.enter)="onSearchChange()">
-      <button class="btn border border-start-0" type="button" id="button-addon2" (click)="onSearchChange()"><i
-          class="bi bi-search"></i></button>
+    <div class="d-flex align-items-center gap-1">
+      <div class="input-group input-group-sm search-style">
+        <input type="text" class="form-control border border-end-0" placeholder="Buscar..." [(ngModel)]="searchTerm"
+          (keydown.enter)="onSearchChange()">
+        <button class="btn border border-start-0" type="button" id="button-addon2" (click)="onSearchChange()"><i
+            class="bi bi-search"></i></button>
+      </div>
     </div>
-    <li *ngFor="let option of filteredOptions" class="cursor ">
+    <li *ngFor="let option of filteredOptions" class="cursor d-flex align-items-center">
+      <!-- Opción clickable para selección única -->
       <a class="dropdown-item" (click)="toggleSelection(option)">{{ option.name || 'Vacío' }}</a>
+      <!-- Checkbox -->
+      <input type="checkbox" class="card border-left-primary" [(ngModel)]="option.selected" (change)="onCheckboxChange(option)">
     </li>
   </ul>
 </li>

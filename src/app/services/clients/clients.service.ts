@@ -27,6 +27,7 @@ export class ClientsService {
     sortColumn: string,
     sortDirection: string
   ): Observable<IClient[]> {
+    console.log(selectedFilters)
     let options = {
       headers: new HttpHeaders().set(
         'Authorization',

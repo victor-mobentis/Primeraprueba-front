@@ -56,6 +56,7 @@ export class MultiSelectFilterComponent {
   }
 
   toggleSelection(option: any) {
+    option.selected = !option.selected;
     const index = this.selectedOptions.indexOf(option);
     if (index > -1) {
       this.selectedOptions.splice(index, 1);
@@ -64,16 +65,33 @@ export class MultiSelectFilterComponent {
     }
     console.log(this.title);
     console.log(this.selectedOptions);
+    let shadersOptions = this.selectedOptions; 
+    this.selectionChange.emit(shadersOptions);
+  }
+
+  // Método para manejar selección múltiple con checkboxes
+  onCheckboxChange(option: any) {
+    const index = this.selectedOptions.indexOf(option);
+    if (index > -1) {
+      this.selectedOptions.splice(index, 1);
+    } else {
+      this.selectedOptions.push(option);
+    }
+
     this.selectionChange.emit(this.selectedOptions);
   }
 
+
   reset() {
     this.selectedOptions = [];
+    this.options.forEach(option => {
+      option.selected = false;
+    });
     this.filteredOptions = this.options;
     this.searchTerm = '';
-    //this.selectionChange.emit(this.selectedOptions);
+    /* this.selectionChange.emit(this.selectedOptions); */
   }
   update(filtroAplicado: { id: string; nombre: string; valor: any; tipo: string }){
-    
+    /// dar los valores seleccionado a la lista de multiselect se marque los filtros seleccionados
   }
 }
