@@ -59,6 +59,7 @@ export class FilterContainerComponent implements OnInit {
     this.filterService.getSavedFilters(this.componentId).subscribe(
       (response) => {
         this.filtrosGuardados = response;
+        console.log(this.filtrosGuardados);
       },
       (error) => {
         console.error('Error al cargar los filtros guardados:', error);
@@ -72,7 +73,7 @@ export class FilterContainerComponent implements OnInit {
         .saveFilter(
           this.componentId,
           this.nombreFiltroGuardado,
-          this.filtrosAplicados
+          this.filtrosGuardados
         )
         .subscribe((filtroGuardado) => {
           console.log(filtroGuardado);
@@ -80,7 +81,7 @@ export class FilterContainerComponent implements OnInit {
             this.filtrosGuardados.push({
               id: filtroGuardado.data.insertId,
               nombre: this.nombreFiltroGuardado.trim(),
-              filtros: [...this.filtrosAplicados],
+              filtros: [...this.filtrosGuardados],
             });
             this.nombreFiltroGuardado = '';
           }

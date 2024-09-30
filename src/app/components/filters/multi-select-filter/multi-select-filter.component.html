@@ -8,10 +8,6 @@
         <button class="btn border border-start-0" type="button" id="button-addon2" (click)="onSearchChange()"><i
             class="bi bi-search"></i></button>
       </div>
-      <!-- Mostrar el botón de filtrar solo cuando haya alguna opción seleccionada -->
-      <div class="d-flex justify-content-end" *ngIf="showFilterButton">
-        <button class="btn btn-primary btn-sm" (click)="applyFilter()">Filtrar</button>
-      </div>
     </div>
     <li *ngFor="let option of filteredOptions" class="cursor d-flex align-items-center">
       <!-- Opción clickable para selección única -->

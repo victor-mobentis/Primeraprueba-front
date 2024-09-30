@@ -22,7 +22,6 @@ export class MultiSelectFilterComponent {
   filteredOptions: any[] = [];
   selectedOptions: any[] = [];
   searchTerm: string = '';
-  showFilterButton: boolean = false; 
 
   constructor(private _filterService: FilterService) {
   }
@@ -57,7 +56,7 @@ export class MultiSelectFilterComponent {
   }
 
   toggleSelection(option: any) {
-    option.selected = true;
+    option.selected = !option.selected;
     const index = this.selectedOptions.indexOf(option);
     if (index > -1) {
       this.selectedOptions.splice(index, 1);
@@ -66,10 +65,11 @@ export class MultiSelectFilterComponent {
     }
     console.log(this.title);
     console.log(this.selectedOptions);
-    this.selectionChange.emit(this.selectedOptions);
+    let shadersOptions = this.selectedOptions; 
+    this.selectionChange.emit(shadersOptions);
   }
 
-    // Método para manejar selección múltiple con checkboxes
+  // Método para manejar selección múltiple con checkboxes
   onCheckboxChange(option: any) {
     const index = this.selectedOptions.indexOf(option);
     if (index > -1) {
@@ -78,15 +78,9 @@ export class MultiSelectFilterComponent {
       this.selectedOptions.push(option);
     }
 
-    // Mostrar el botón de filtrar si hay al menos una opción seleccionada
-    this.showFilterButton = this.selectedOptions.length > 0;
+    this.selectionChange.emit(this.selectedOptions);
   }
 
-  // Filtrar cuando se presione el botón de filtrar
-  applyFilter() {
-    const selected = this.selectedOptions;
-    this.selectionChange.emit(selected);
-  }
 
   reset() {
     this.selectedOptions = [];
@@ -95,7 +89,6 @@ export class MultiSelectFilterComponent {
     });
     this.filteredOptions = this.options;
     this.searchTerm = '';
-    this.showFilterButton = false;
     /* this.selectionChange.emit(this.selectedOptions); */
   }
   update(filtroAplicado: { id: string; nombre: string; valor: any; tipo: string }){
