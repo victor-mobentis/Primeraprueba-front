@@ -22,6 +22,7 @@ export class MultiSelectFilterComponent {
   filteredOptions: any[] = [];
   selectedOptions: any[] = [];
   searchTerm: string = '';
+  showFilterButton: boolean = false; 
 
   constructor(private _filterService: FilterService) {
   }
@@ -56,6 +57,7 @@ export class MultiSelectFilterComponent {
   }
 
   toggleSelection(option: any) {
+    option.selected = true;
     const index = this.selectedOptions.indexOf(option);
     if (index > -1) {
       this.selectedOptions.splice(index, 1);
@@ -67,13 +69,36 @@ export class MultiSelectFilterComponent {
     this.selectionChange.emit(this.selectedOptions);
   }
 
+    // Método para manejar selección múltiple con checkboxes
+  onCheckboxChange(option: any) {
+    const index = this.selectedOptions.indexOf(option);
+    if (index > -1) {
+      this.selectedOptions.splice(index, 1);
+    } else {
+      this.selectedOptions.push(option);
+    }
+
+    // Mostrar el botón de filtrar si hay al menos una opción seleccionada
+    this.showFilterButton = this.selectedOptions.length > 0;
+  }
+
+  // Filtrar cuando se presione el botón de filtrar
+  applyFilter() {
+    const selected = this.selectedOptions;
+    this.selectionChange.emit(selected);
+  }
+
   reset() {
     this.selectedOptions = [];
+    this.options.forEach(option => {
+      option.selected = false;
+    });
     this.filteredOptions = this.options;
     this.searchTerm = '';
-    //this.selectionChange.emit(this.selectedOptions);
+    this.showFilterButton = false;
+    /* this.selectionChange.emit(this.selectedOptions); */
   }
   update(filtroAplicado: { id: string; nombre: string; valor: any; tipo: string }){
-    
+    /// dar los valores seleccionado a la lista de multiselect se marque los filtros seleccionados
   }
 }

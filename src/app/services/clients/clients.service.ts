@@ -21,6 +21,7 @@ export class ClientsService {
 
   //Obtenemos la lista de clientes
   getClients(selectedFilters: { [key: string]: any }, searchTerm: string): Observable<IClient[]> {
+    console.log(selectedFilters)
     let options = {
       headers: new HttpHeaders().set(
         'Authorization',

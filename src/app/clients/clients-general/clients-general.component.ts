@@ -69,7 +69,6 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
           this.clientsList = this.dataSource.data;
           this.paginate();
           // Forzar la detección de cambios
-          this.cdr.detectChanges();
           this.cargando = false;
         },
         (error) => {

@@ -115,7 +115,17 @@ export class FilterContainerComponent implements OnInit {
     const filterInfo = this.filters.find((filter) => filter.id === filterId);
 
     if (existingFilter) {
-      existingFilter.valor = value;
+      console.log('Filtro existente: ')
+      console.log(existingFilter.valor);
+      if (existingFilter.valor.length > 0) {
+        existingFilter.valor = value;
+      }else{
+        delete this.selectedFilters[existingFilter.id];
+        this.filtrosAplicados = this.filtrosAplicados.filter(
+          (filtro) => filtro.id !== existingFilter.id
+        );
+        this.resetChildFilter(existingFilter.id);
+      }
     } else if (filterInfo) {
       this.filtrosAplicados.push({
         id: filterId,
