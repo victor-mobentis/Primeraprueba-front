@@ -46,14 +46,13 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
 
   cargando: boolean = true;
 
-  
   //filtrado
   filtrosAplicados: Array<{ nombre: string; valor: any }> = [];
-  
+
   //ordeanacion
   sortColumn: string = '';
   sortDirection: string = 'asc';
-  
+
   // Variable para manejar si el texto está truncado
   isTooltipVisible: boolean = false;
   tooltipText: string | null = null;
@@ -86,14 +85,15 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
         this.itemsPerPage,
         this.sortColumn,
         this.sortDirection
-      ) 
+      )
       .pipe(timeout(20000))
       .subscribe(
         (data: any) => {
           const clientsData: any[] = data.items;
           this.dataSource.data = clientsData;
-          this.totalItems = data.totalItems; 
+          this.totalItems = data.totalItems;
           this.cargando = false;
+          this.updateSelectionFromCurrentPage()
         },
         (error) => {
           console.error('Error al asignar el dataSource:', error);
@@ -106,7 +106,7 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
     this.currentPage = page;
     this.loadData();
   }
-  
+
   onItemsPerPageChanged(itemsPerPage: number) {
     this.itemsPerPage = itemsPerPage;
     this.currentPage = 1;
@@ -154,7 +154,7 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
       this.sortDirection = 'asc';
     }
     this.currentPage = 1;
-    this.loadData()
+    this.loadData();
   }
 
   editContact(id_Cliente?: number) {
@@ -171,18 +171,17 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
 
   masterToggle(): void {
     if (this.isAllSelected()) {
-      this.dataSource.data.forEach(row => {
-        this.selection.deselect(row);
-        this.selectedClients = this.selectedClients.filter(selected => selected.id !== row.id);
-      });
+      this.selection.clear();
+      this.selectedClients = [];
     } else {
-      this.dataSource.data.forEach(row => {
+      this.dataSource.data.forEach((row) => {
         if (!this.isCheckboxDisabled(row) && !this.isSelected(row)) {
           this.selection.select(row);
           this.selectedClients.push(row);
         }
       });
     }
+    this.updateHeaderSelection();
   }
 
   isSelected(row: IClient): boolean {
@@ -192,48 +191,77 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
   onRowToggle(row: IClient): void {
     if (this.isSelected(row)) {
       this.selectedClients = this.selectedClients.filter(selected => selected.id !== row.id);
+      this.selection.deselect(row);
     } else {
       this.selectedClients.push(row);
+      this.selection.select(row);
     }
-    this.selection.toggle(row);
+    this.updateHeaderSelection(); 
   }
 
- isAllSelected(): boolean {
-  const numVisibleRows = this.dataSource.data.length;
-  return numVisibleRows > 0 && this.dataSource.data.every(row => this.isSelected(row));
-}
+  updateHeaderSelection() {
+    const totalSelected = this.selectedClients.length;
+    const totalVisible = this.dataSource.data.length;
+    const allSelected = totalVisible > 0 && this.dataSource.data.every(row => this.isSelected(row));
+
+    if (totalSelected === 0) {
+      this.selection.clear(); // No hay filas seleccionadas
+    } else {
+      this.selection.clear();
+      this.dataSource.data.forEach(row => {
+        if (this.isSelected(row)) {
+          this.selection.select(row);
+        }
+      });
+    }
+    if (totalSelected > 0 && !allSelected) {
+      this.selection.select(this.dataSource.data[0]);
+    }
+  }
+
+  isAllSelected(): boolean {
+    const numVisibleRows = this.dataSource.data.length;
+    return numVisibleRows > 0 && this.dataSource.data.every(row => this.isSelected(row));
+  }
 
   isCheckboxDisabled(row: any): boolean {
     return (
       !row.latitude ||
       !row.longitude ||
-      (row.latitude == 0 && row.longitude == 0)
+      (row.latitude === 0 && row.longitude === 0)
     );
+  }
+
+  private updateSelectionFromCurrentPage() {
+    this.selection.clear(); 
+    this.selectedClients.forEach((client) => {
+      if (this.dataSource.data.some((row) => row.id === client.id)) {
+        this.selection.select(client); 
+      }
+    });
+    this.updateHeaderSelection()
   }
 
   //Método para ver el popup del mapa
   verEnMapa() {
-    if (
-      this.selection.selected.length > 0 &&
-      this.selection.selected.length < 200
-    ) {
+    if (this.selectedClients.length > 0 && this.selectedClients.length < 200) {
       const dialogRef = this.dialog.open(PopupMapClientsComponent, {
         width: '80%',
         height: '80%',
         disableClose: true,
         data: {
-          clients: this.selection.selected,
+          clients: this.selectedClients,
         },
       });
     } else {
-      if (this.selection.selected.length <= 0) {
+      if (this.selectedClients.length <= 0) {
         this.toastr.warning(
           'Por favor, seleccione al menos 1 cliente para ver en el mapa.',
           'Seleccionar cliente'
         );
-      } else if (this.selection.selected.length > 200) {
+      } else if (this.selectedClients.length > 200) {
         this.toastr.error(
-          'Se han seleccionado ' + this.selection.selected.length + ' clientes',
+          'Se han seleccionado ' + this.selectedClients.length + ' clientes',
           'Límite superado (200 clientes)'
         );
       }
@@ -243,7 +271,7 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
   onFiltersChanged(selectedFilters: { [key: string]: any }) {
     console.log('Filtros seleccionados:', selectedFilters);
     this.selectedFilters = selectedFilters;
-    this.currentPage = 1
+    this.currentPage = 1;
     this.loadData();
   }
   /* logica para que aparezca el tooltip cuando el texto es muy grande */
@@ -266,7 +294,7 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
   }
 
   buscar() {
-    this.currentPage = 1
+    this.currentPage = 1;
     this.loadData();
   }
 
