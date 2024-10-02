@@ -23,12 +23,12 @@
                 </div>
             </button>
             <!-- Botón "Limpiar" solo si hay filtros aplicados -->
-            <button *ngIf="filtrosAplicados.length > 0" class="btn btn-outline-danger btn-sm" (click)="filtroReset()">
+            <button *ngIf="filtrosAplicados.length > 0" class="btn btn-outline-danger btn-sm" (click)="filtroReset()"  ngbTooltip="Eliminar">
                 <i class="bi bi-trash-fill"></i>
             </button>
             <!-- Botón "Guardar" -->
             <button *ngIf="filtrosAplicados.length > 0" class="btn btn-outline-success btn-sm"
-                (click)="mostrarInputParaGuardar()">
+                (click)="mostrarInputParaGuardar()" ngbTooltip="Guardar">
                 <i class="bi bi-save"></i>
             </button>
 
