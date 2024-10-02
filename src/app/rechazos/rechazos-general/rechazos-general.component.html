@@ -49,10 +49,6 @@
         <button class="btn btn-color d-flex justify-content-center align-items-center" (click)="verEnMapa()">
           <i class="bi bi-geo-alt-fill"></i>
         </button>
-        <button class="btn btn-secondary d-flex align-items-center" data-bs-toggle="modal"
-          data-bs-target="#filtroModal">
-          <i class="bi bi-funnel-fill"></i>
-        </button>
       </div>
     </div>
     <div class="table-responsive">
@@ -69,15 +65,15 @@
             <!-- Acción Correctora Column -->
             <th scope="col" class="text-center header-correctora">Convertir en oportunidad (% ó € + Promo)</th>
             <!-- Estado Column -->
-            <th scope="col" class="text-center cursor" (click)="sortData('status_id')">
+            <th scope="col" class="text-center cursor" (click)="sortData('status')">
               Estado
-              <i *ngIf="sortColumn === 'status_id'" class="bi"
+              <i *ngIf="sortColumn === 'status'" class="bi"
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <!-- Primer Rechazo Fecha Column -->
-            <th scope="col" class="cursor" (click)="sortData('last_rejection_date')">
+            <th scope="col" class="cursor" (click)="sortData('r.last_rejection_date')">
               Fecha
-              <i *ngIf="sortColumn === 'last_rejection_date'" class="bi"
+              <i *ngIf="sortColumn === 'r.last_rejection_date'" class="bi"
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <!-- Población Column -->
@@ -99,15 +95,15 @@
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <!-- Motivo Column -->
-            <th scope="col" (click)="sortData('reason_rejection_id')" class="cursor">
+            <th scope="col" (click)="sortData('reason_rejection')" class="cursor">
               Motivo
-              <i *ngIf="sortColumn === 'reason_rejection_id'" class="bi"
+              <i *ngIf="sortColumn === 'reason_rejection'" class="bi"
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <!-- Interés Column -->
-            <th scope="col" (click)="sortData('interest_date')" class="cursor text-center column-interes">
+            <th scope="col" (click)="sortData('r.interest_date')" class="cursor text-center column-interes">
               <i class="bi bi-calendar-check" [ngbTooltip]="'Interés'"></i>
-              <i *ngIf="sortColumn === 'interest_date'" class="bi"
+              <i *ngIf="sortColumn === 'r.interest_date'" class="bi"
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <!-- Precio Column -->
@@ -128,8 +124,8 @@
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <!-- Promo Competidor Column -->
-            <th scope="col" class="text-center cursor" (click)="sortData('promo_competencia')">
-              <i *ngIf="sortColumn === 'promo_competencia'" class="bi"
+            <th scope="col" class="text-center cursor" (click)="sortData('competitor_promo')">
+              <i *ngIf="sortColumn === 'competitor_promo'" class="bi"
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <!-- Competidor Column -->
