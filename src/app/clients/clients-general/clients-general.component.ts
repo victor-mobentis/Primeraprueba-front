@@ -255,8 +255,7 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
     if (this.selectedClients.length > 0 && this.selectedClients.length < 200) {
       const dialogRef = this.dialog.open(PopupMapClientsComponent, {
         width: '80%',
-        height: '80%',
-        disableClose: true,
+        height: '75%',
         data: {
           clients: this.selectedClients,
         },
