@@ -71,7 +71,6 @@ import { SharedModule } from '../shared/shared.module';
         MatRadioModule,
         FormsModule,
         MatSidenavModule,
-        GoogleMapsModule,
         MatSnackBarModule,
         MatProgressSpinnerModule,
         NgbTooltipModule,
