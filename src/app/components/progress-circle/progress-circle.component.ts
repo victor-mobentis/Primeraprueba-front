@@ -10,7 +10,7 @@ export class ProgressCircleComponent {
   @Input() total: number = 1;
   @Input() value: number = 0;
   @Input() size: string = "50px";
-  @Input() color: Color = '#87CEFA';
+  @Input() color: Color = "";
   @Input() text: string = "";
   @Input() backgroundColor: Color = '#f3f4f6';
   percentage: number = 0;

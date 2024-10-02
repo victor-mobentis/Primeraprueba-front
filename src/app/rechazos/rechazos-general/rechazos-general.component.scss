@@ -8,14 +8,13 @@
   font-weight: 300;
 }
 
-#busqueda {
-  width: 300px;
-}
 
 .main {
   height: 50%;
 }
-
+.input-group{
+  width: 200px;
+}
 
 table {
   width: 100%;
@@ -152,7 +151,16 @@ th {
   color: #4CAF50;
   display: inline-flex;
   align-items: center;
+  width: 24px;
+  height: 24px;
+}
+.promo-icon-p {
+  font-size: 14px;
+  font-weight: bold;
+  color: #4CAF50;
+  display: inline-flex;
   justify-content: center;
+  align-items: center;
   width: 24px;
   height: 24px;
 
@@ -185,8 +193,9 @@ th {
   min-width: 120px;
 }
 
-.column-interes {
-  min-width: 40px;
+.row_interes {
+  min-width: 35px;
+  width: 35px;
 }
 
 .row_poblacion {
@@ -210,16 +219,19 @@ th {
   /* Oculta el desbordamiento */
   text-overflow: ellipsis;
 }
-
+.row_promocion_propia{
+  width: 32px;
+}
 .select_rechazo {
   width: 115px;
 }
 
 .row_precio_producto,
 .row_precio_competidor {
-  min-width: 85px;
+  min-width: 83px;
+  width: 83px;
 }
-
+.row_motivo,
 .row_select_competidor {
   width: 120px;
 }
@@ -229,12 +241,8 @@ th {
 }
 
 .row_propuesta_agente {
-  min-width: 40px;
-  white-space: nowrap;
-  /* Evita el salto de línea */
-  overflow: hidden;
-  /* Oculta el desbordamiento */
-  text-overflow: ellipsis;
+  min-width: 35px !important;
+  width: 35px !important;
 }
 
 .table-responsive {
