@@ -18,6 +18,8 @@ import { SearchFilterComponent } from '../components/filters/search-filter/searc
 import { MultiSelectFilterComponent } from '../components/filters/multi-select-filter/multi-select-filter.component';
 import { RangeFilterComponent } from '../components/filters/range-filter/range-filter.component';
 import { FilterContainerComponent } from '../components/filters/filter-container/filter-container.component';
+import { MapComponent } from '../components/map/map.component';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   declarations: [
@@ -35,12 +37,14 @@ import { FilterContainerComponent } from '../components/filters/filter-container
     SearchFilterComponent,
     MultiSelectFilterComponent,
     RangeFilterComponent,
-    FilterContainerComponent
+    FilterContainerComponent,
+    MapComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule 
+    ReactiveFormsModule,
+    GoogleMapsModule 
 
   ],
   exports: [
@@ -58,7 +62,8 @@ import { FilterContainerComponent } from '../components/filters/filter-container
     SearchFilterComponent,
     MultiSelectFilterComponent,
     RangeFilterComponent,
-    FilterContainerComponent
+    FilterContainerComponent,
+    MapComponent,
   ]
 })
 export class SharedModule { }
