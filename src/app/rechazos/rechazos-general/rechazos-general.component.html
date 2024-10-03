@@ -33,9 +33,9 @@
       <!-- botones y filtros -->
       <div class="d-flex align-items-center gap-2">
         <div class="btn-group" role="group">
-          <button type="button" class="btn btn-azul-claro dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              Exportar
-          </button>
+          <a type="button" class="dropdown-toggle fw-semibold text-decoration-none color-text"
+                data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" >
+                Exportar</a>
           <ul class="dropdown-menu">
               <li><button class="dropdown-item" (click)="exportData('Excel')">Excel</button></li>
               <li><button class="dropdown-item" (click)="exportData('CSV')">CSV</button></li>
