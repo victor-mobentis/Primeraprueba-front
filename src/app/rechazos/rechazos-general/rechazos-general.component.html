@@ -27,7 +27,7 @@
             </button>
         </div>
         <!-- boton de filtros aplicados o limpiar -->
-        <app-filter-container [componentId]="'rechazos-general'" (filtersChanged)="onFiltersChanged($event)">
+        <app-filter-container [componentId]="'rechazos-general'" [selectedFilters]="selectedFilters" (filtersChanged)="onFiltersChanged($event)">
         </app-filter-container>
       </div>
       <!-- botones y filtros -->

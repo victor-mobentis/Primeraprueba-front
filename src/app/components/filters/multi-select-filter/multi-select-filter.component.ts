@@ -23,8 +23,7 @@ export class MultiSelectFilterComponent {
   selectedOptions: any[] = [];
   searchTerm: string = '';
 
-  constructor(private _filterService: FilterService) {
-  }
+  constructor(private _filterService: FilterService) {}
 
   ngOnInit() {
     if (this.endpoint) {
@@ -41,7 +40,7 @@ export class MultiSelectFilterComponent {
   loadOptions(endpoint: string) {
     this._filterService.getFilterOptions(endpoint).subscribe(
       (options) => {
-        this.options = options;
+        this.options = options
         this.filteredOptions = options;
       },
       (error) => {
@@ -58,52 +57,56 @@ export class MultiSelectFilterComponent {
   toggleSelection(option: any) {
     option.selected = !option.selected;
     const index = this.selectedOptions.indexOf(option);
-    if (index > -1) {
-      this.selectedOptions.splice(index, 1);
+    if (option.selected) {
+      if (index === -1) {
+        this.selectedOptions.push(option);
+      }
     } else {
-      this.selectedOptions.push(option);
+      if (index > -1) {
+        this.selectedOptions.splice(index, 1);
+      }
     }
-    let shadersOptions = this.selectedOptions; 
-    this.selectionChange.emit(shadersOptions);
-  }
-
-  // Método para manejar selección múltiple con checkboxes
-  onCheckboxChange(option: any) {
-    const index = this.selectedOptions.indexOf(option);
-    if (index > -1) {
-      this.selectedOptions.splice(index, 1);
-    } else {
-      this.selectedOptions.push(option);
-    }
-
     this.selectionChange.emit(this.selectedOptions);
   }
 
+  onCheckboxChange(option: any) {
+    const index = this.selectedOptions.indexOf(option);
+    if (option.selected) {
+      if (index === -1) {
+        this.selectedOptions.push(option);
+      }
+    } else {
+      if (index > -1) {
+        this.selectedOptions.splice(index, 1);
+      }
+    }
+    this.selectionChange.emit(this.selectedOptions);
+  }
 
   reset() {
     this.selectedOptions = [];
-    this.options.forEach(option => {
+    this.options.forEach((option) => {
       option.selected = false;
     });
     this.filteredOptions = this.options;
     this.searchTerm = '';
     /* this.selectionChange.emit(this.selectedOptions); */
   }
-  update(filtroAplicado: { id: number, name: string, selected: boolean }[]) {
-    if (filtroAplicado && filtroAplicado.length > 0) {
-      this.selectedOptions = []; 
+  update(filtroAplicado: { id: number; name: string; selected: boolean }[]) {
+    this.selectedOptions = [];
   
-      this.options.forEach(option => {
-        const match = filtroAplicado.find(selected => selected.id === option.id);
-        
-        if (match) {
-          option.selected = true; 
-          this.selectedOptions.push(option); 
-        } else {
-          option.selected = false; 
-        }
-      });
-    }
+    this.options.forEach((option) => {
+      const match = filtroAplicado.find(
+        (selected) => selected.id === option.id
+      );
+  
+      if (match) {
+        option.selected = true;
+        this.selectedOptions.push(option);
+      } else {
+        option.selected = false;
+      }
+    });
+    this.selectionChange.emit(this.selectedOptions.length > 0 ? this.selectedOptions : []);
   }
-  
 }

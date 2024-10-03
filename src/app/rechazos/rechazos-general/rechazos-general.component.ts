@@ -60,12 +60,25 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   simbolos: ISimbolo[] = [];
 
   expandedElement?: IRechazo | null;
-  filtrosAplicados: Array<{ nombre: string; valor: any }> = [];
+ 
 
   // Variable para manejar si el texto está truncado
   isTooltipVisible: boolean = false;
   tooltipText: string | null = null;
-  selectedFilters: { [key: string]: any } = {};
+  selectedFilters: { [key: string]: any } = [
+    {
+        "id": "status_id",
+        "nombre": "Estados",
+        "valor": [
+            {
+                "id": 5,
+                "name": "Pendiente",
+                "selected": true
+            }
+        ],
+        "tipo": "multi-select"
+    }
+];
   searchTerm: string = '';
 
   //ordeanacion

@@ -26,7 +26,7 @@ export class FilterContainerComponent implements OnInit {
   
 
   filters: any[] = [];
-  selectedFilters: { [key: string]: any } = {};
+  @Input() selectedFilters: { [key: string]: any } = {};
   filtrosAplicados: { id: string; nombre: string; valor: any; tipo: string }[] =
     [];
   filtrosGuardados: { id: number; nombre: string; filtros: any[] }[] = [];
@@ -176,7 +176,7 @@ export class FilterContainerComponent implements OnInit {
       );
       return;
     }
-    this.filtrosAplicados = [...filtroGuardado.filtros];
+    this.filtrosAplicados = JSON.parse(JSON.stringify(filtroGuardado.filtros));
     this.selectedFilters = this.filtrosAplicados.reduce(
       (acc: { [key: string]: any }, filtro) => {
         acc[filtro.id] = filtro.valor;
