@@ -14,7 +14,6 @@ import { DateFilterComponent } from '../date-filter/date-filter.component';
 import { RangeFilterComponent } from '../range-filter/range-filter.component';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
 declare const bootstrap: any;
 @Component({
   selector: 'app-filter-container',
@@ -244,13 +243,9 @@ export class FilterContainerComponent implements OnInit {
   // Actualizar los componentes hijos con los filtros seleccionados
   actualizarComponentesHijos() {
     // Solo actualiza los filtros que tienen valores seleccionados
-    console.log('sdsdsad');
     this.multiSelectComponents?.forEach((component) => {
-      console.log('component');
       const selectedValue = this.selectedFilters[component.id];
-      console.log(selectedValue);
       if (selectedValue && selectedValue.length > 0) {
-        // Asegúrate de que el valor no esté vacío
         component.update(selectedValue);
       }
     });
