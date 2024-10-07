@@ -1,16 +1,6 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { GraficaClientesComponent } from 'src/app/components/grafica-clientes/grafica-clientes.component';
-import { GraficaPedidosDiaComponent } from 'src/app/components/grafica-pedidos-dia/grafica-pedidos-dia.component';
-import { GraficaMotivosComponent } from 'src/app/components/grafica-motivos/grafica-motivos.component';
-import { GraficaPedidosFamiliasProductosComponent } from 'src/app/components/grafica-pedidos-familias-productos/grafica-pedidos-familias-productos.component';
-import { GraficaPedidosMesComponent } from 'src/app/components/grafica-pedidos-mes/grafica-pedidos-mes.component';
-import { GraficaPedidosSegmentacion1Component } from 'src/app/components/grafica-pedidos-segmentacion1/grafica-pedidos-segmentacion1.component';
-import { GraficaPedidosSegmentacion2Component } from 'src/app/components/grafica-pedidos-segmentacion2/grafica-pedidos-segmentacion2.component';
-import { GraficaPedidosSegmentacion3Component } from 'src/app/components/grafica-pedidos-segmentacion3/grafica-pedidos-segmentacion3.component';
-import { GraficaProductosTopComponent } from 'src/app/components/grafica-productos-top/grafica-productos-top.component';
 import { ITablaDashboard } from 'src/app/models/tablaDashboard.model';
-import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-dashboard-general',
@@ -18,22 +8,10 @@ import { DateAdapter } from '@angular/material/core';
   styleUrls: ['./dashboard-general.component.scss'],
 })
 export class DashboardGeneralComponent {
-
   //Filtros
   selectedFilters: { [key: string]: any } = {};
 
-  constructor(
-    private graficaClientes: GraficaClientesComponent,
-    private graficaPedidos: GraficaMotivosComponent,
-    private graficaPedidosDia: GraficaPedidosDiaComponent,
-    private graficaPedidosSegmentacion1: GraficaPedidosSegmentacion1Component,
-    private graficaPedidosSegmentacion2: GraficaPedidosSegmentacion2Component,
-    private graficaPedidosSegmentacion3: GraficaPedidosSegmentacion3Component,
-    private graficaPedidosFamiliasProductos: GraficaPedidosFamiliasProductosComponent,
-    private graficaPedidosMes: GraficaPedidosMesComponent,
-    private graficaTopProductos: GraficaProductosTopComponent
-  ) {
-
+  constructor() {
     this.data = this.valoresTablas[0];
   }
 
@@ -96,184 +74,354 @@ export class DashboardGeneralComponent {
       {
         nombre: 'OCIO (Deporte,Cines,Teatro,Salon Juegos,..)',
         total: 10,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Tienda Alimentacion Minorista(Super,China,Panad..)',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Bar/Tapas (No especializado)',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Mayoristas (Distribuidores, Cash, por mayor)',
         total: 10,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Personal Empresa / Autoconsumo',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
     ],
     [
       {
         nombre: 'Moderna',
         total: 10,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Emblemática',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Tradicional',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
     ],
     [
       {
         nombre: 'ANTONIO II - BAR',
         total: 10,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'CUESTA - BAR',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'MANOLO - CAFETERIA PASTELERIA',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'MONCAYO - RTE.',
         total: 10,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'MONTANA - CAFETERIA',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'NIBUR - CAFETERIA',
         total: 10,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'RENAULT TRES CANTOS - BAR',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'SEVILLA - BAR',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
     ],
     [
       {
         nombre: 'MADRID',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
     ],
     [
       {
         nombre: 'ALCOBENDAS',
         total: 10,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'SAN SEBASTIAN DE LOS REYES',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'TRES CANTOS',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'COLMENAR VIEJO',
         total: 10,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'MADRID',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
     ],
     [
       {
         nombre: 'Aceites',
         total: 10,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Conservas Pescado',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Miel',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Fiambres / Embutidos',
         total: 10,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Leche GLP',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Pasta',
         total: 10,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Sal',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Vinagres',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'Zumos / Néctares',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
     ],
     [
       {
         nombre: 'MERCEDES MUÑIZ ALONSO',
         total: 10,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'FELIPE GARCILASO RIBERA',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
       {
         nombre: 'MIRIAM ALVAREZ MAS	',
         total: 20,
-        rechazos: { Packaging: 2, 'Mala Calidad': 0, Precio: 0, 'No aplica': 0 },
+        rechazos: {
+          Packaging: 2,
+          'Mala Calidad': 0,
+          Precio: 0,
+          'No aplica': 0,
+        },
       },
     ],
   ];
@@ -299,7 +447,6 @@ export class DashboardGeneralComponent {
 
   ngOnInit(): void {
     this.loadTableData();
-    
   }
 
   ngAfterViewInit() {
@@ -336,32 +483,6 @@ export class DashboardGeneralComponent {
     this.totalVentas = Math.floor(6);
 
     // Carga Grafica Clientes
-
-    this.graficaClientes.pintarGrafica();
-    this.graficaPedidos.pintarGrafica();
-    this.graficaPedidosSegmentacion1.pintarGrafica();
-    this.graficaPedidosSegmentacion2.pintarGrafica();
-    this.graficaPedidosSegmentacion3.pintarGrafica();
-    this.graficaPedidosFamiliasProductos.pintarGrafica();
-    this.graficaTopProductos.pintarGrafica();
-    this.graficaPedidosMes.pintarGrafica();
-    this.graficaPedidosDia.pintarGrafica();
-  }
-  
-  onResize() {
-    this.resizeGraficas();
-  }
-
-  resizeGraficas() {
-    this.graficaClientes.resize();
-    this.graficaPedidos.resize();
-    this.graficaPedidosDia.resize();
-    this.graficaPedidosSegmentacion1.resize();
-    this.graficaPedidosSegmentacion2.resize();
-    this.graficaPedidosSegmentacion3.resize();
-    this.graficaPedidosFamiliasProductos.resize();
-    this.graficaPedidosMes.resize();
-    this.graficaTopProductos.resize();
   }
 
   loadTableData() {
@@ -401,8 +522,7 @@ export class DashboardGeneralComponent {
     this.paginate();
   }
 
-  paginate
-  () {
+  paginate() {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
     this.paginadorData = this.dataSource.data.slice(start, end);
@@ -411,7 +531,7 @@ export class DashboardGeneralComponent {
   onItemsPerPageChanged(itemsPerPage: number) {
     this.itemsPerPage = itemsPerPage;
     this.currentPage = 1;
-    this.loadTableData()
+    this.loadTableData();
   }
 
   onFiltersChanged(selectedFilters: { [key: string]: any }) {
