@@ -22,6 +22,10 @@ import { MapComponent } from '../components/map/map.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { BigIntPipe } from '../pipes/big-int.pipe';
 import { NgbModule, NgbTooltipModule, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { GraficaBarraVerticalComponent } from '../components/graficas/grafica-barra-vertical/grafica-barra-vertical.component';
+import { GraficaBarraHorizontalComponent } from '../components/graficas/grafica-barra-horizontal/grafica-barra-horizontal.component';
+import { GraficaPastelComponent } from '../components/graficas/grafica-pastel/grafica-pastel.component';
+import { GraficaSemiCirculoComponent } from '../components/graficas/grafica-semi-circulo/grafica-semi-circulo.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +46,10 @@ import { NgbModule, NgbTooltipModule, NgbDatepickerModule } from '@ng-bootstrap/
     RangeFilterComponent,
     FilterContainerComponent,
     MapComponent,
+    GraficaBarraVerticalComponent,
+    GraficaBarraHorizontalComponent,
+    GraficaPastelComponent,
+    GraficaSemiCirculoComponent,
   ],
   imports: [
     NgbModule,
@@ -70,6 +78,10 @@ import { NgbModule, NgbTooltipModule, NgbDatepickerModule } from '@ng-bootstrap/
     RangeFilterComponent,
     FilterContainerComponent,
     MapComponent,
+    GraficaBarraVerticalComponent,
+    GraficaBarraHorizontalComponent,
+    GraficaPastelComponent,
+    GraficaSemiCirculoComponent,
   ]
 })
 export class SharedModule { }
