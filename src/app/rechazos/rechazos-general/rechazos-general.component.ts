@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit, Renderer2 } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupMapComponent } from './popup-map-rechazos/popup-map-rechazos.component';
 import { IRechazo } from 'src/app/models/rechazos.model';
@@ -14,6 +15,9 @@ import { ICompetidor } from 'src/app/models/competidor.model';
 import { IMotivoRechazo } from 'src/app/models/motivoRechazo.model';
 import { IProvincia } from 'src/app/models/provincias.model';
 import { IPoblacion } from 'src/app/models/poblaciones.model';
+import { ReasonsRejectionsComponent } from 'src/app/configuration/configuration-general/reasons-rejections/reasons-rejections.component';
+import { AddCompetitorComponent } from 'src/app/configuration/configuration-general/add-competitor/add-competitor.component';
+
 
 @Component({
   selector: 'app-rechazos-general',
@@ -91,7 +95,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     private rechazadosService: RechazadosService,
     private filterService: FilterService,
     private _exportService: ExportService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router,
+    
   ) {}
 
   ngOnInit() {
@@ -380,8 +386,25 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   changeMotivo(event: Event, row: IRechazo) {
     const selectElement = event.target as HTMLSelectElement;
 
+    // Verificar si se selecciona "Añadir Motivo" (asumiendo que el valor es 0 o un valor que defines)
+
     if (selectElement) {
       const newReasonId = Number(selectElement.value);
+      
+      if(newReasonId === 0){
+        this.openReasonsRejections();
+        /// que le cambie el valor a -1
+
+        setTimeout(() => {
+          selectElement.value = '-1'; // Cambia aquí el valor según lo que desees
+          const dataSourceIndex = this.dataSource.indexOf(row);
+          this.dataSource[dataSourceIndex].reason_rejection_id = -1;
+          this.dataSource[dataSourceIndex].reason_rejection = 'Seleccione el motivo';
+        }, 0);
+        
+        return; // Evitar que continúe actualizando con el valor 0
+      }
+      
       const newReasonName = this.motivos_rechazo.find(
         (rechazo) => rechazo.id === newReasonId
       );
@@ -390,6 +413,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       this.dataSource[dataSourceIndex].reason_rejection =
         newReasonName?.name ?? 'No encontrado';
     }
+    
   }
 
   changeEstado(event: Event, row: IRechazo) {
@@ -413,6 +437,22 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
     if (selectElement) {
       const newCompetidorId = Number(selectElement.value);
+
+      if(newCompetidorId === 0){
+        this.openCompetitor();
+        /// que le cambie el valor a -1
+
+        setTimeout(() => {
+          selectElement.value = '-1'; // Cambia aquí el valor según lo que desees
+          const dataSourceIndex = this.dataSource.indexOf(row);
+          this.dataSource[dataSourceIndex].competitor_id = -1;
+          this.dataSource[dataSourceIndex].competitor_name = 'Seleccione Copetidor';
+        }, 0);
+        
+        return; // Evitar que continúe actualizando con el valor 0
+      }
+
+
       const newCompetidorName = this.competidores.find(
         (competidor) => competidor.id === newCompetidorId
       );
@@ -472,5 +512,19 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     if (this.searchTerm === '') {
       this.buscar();
     }
+  }
+
+  openReasonsRejections(){
+    const dialogRef = this.dialog.open(ReasonsRejectionsComponent, {
+      width: 'auto',
+      disableClose: true
+    });
+  }
+
+  openCompetitor(){
+    const dialogRef = this.dialog.open(AddCompetitorComponent,{
+      width: 'auto',
+      disableClose: true
+    })
   }
 }

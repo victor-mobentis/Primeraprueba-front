@@ -193,16 +193,21 @@ select.column_motivo{
 }
 
 .select_estado {
-  min-width: 120px;
+  width: 153px;
+  min-width: 153px;
 }
 
 .row_interes {
   min-width: 35px;
   width: 35px;
 }
-
+.row_fecha{
+  min-width: 75px;
+  width: 75px;
+}
 .row_poblacion {
-  min-width: 90px;
+  min-width: 110px;
+  width: 110px;
 }
 
 .row_cliente {
@@ -212,7 +217,10 @@ select.column_motivo{
 .row_subfamilia {
   min-width: 90px;
 }
-
+.row_checkbox{
+  width: 30px;
+  min-width: 30px;
+}
 .row_producto {
   min-width: 160px;
   max-width: 160px;
@@ -240,7 +248,8 @@ select.column_motivo{
 }
 
 .row_accion_correctora {
-  min-width: 160px;
+  min-width: 267px;
+  width: 267px;
 }
 
 .row_propuesta_agente {
@@ -279,16 +288,17 @@ select.column_motivo{
   background-color: white;
   /* Mantiene el fondo blanco para la columna fija */
 }
-.table-responsive table thead th:nth-child(2),
-.table-responsive table tbody td:nth-child(2) {
+.table-responsive table thead th:nth-child(2){
   position: sticky;
   left: 29px;
   z-index: 3;
   background-color: #dfe2f2;
-  /* Asegura que el encabezado esté sobre el contenido */
-  /* Mantiene el fondo blanco para la columna fija */
 }
-
+.table-responsive table tbody td:nth-child(2) {
+  position: sticky;
+  left: 29px;
+  z-index: 1;
+}
 /* Estilo para la columna fija de expand */
 .table-responsive table thead th:last-child,
 .table-responsive table tbody td:last-child {
@@ -392,7 +402,7 @@ input[type="number"]::-webkit-inner-spin-button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: inline-block;
+
   max-width: 100%; /* O ajusta según el tamaño de la columna */
 }
 
