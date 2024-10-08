@@ -26,6 +26,8 @@ import { GraficaBarraVerticalComponent } from '../components/graficas/grafica-ba
 import { GraficaBarraHorizontalComponent } from '../components/graficas/grafica-barra-horizontal/grafica-barra-horizontal.component';
 import { GraficaPastelComponent } from '../components/graficas/grafica-pastel/grafica-pastel.component';
 import { GraficaSemiCirculoComponent } from '../components/graficas/grafica-semi-circulo/grafica-semi-circulo.component';
+import { ClienteContactosComponent } from '../components/cliente-contactos/cliente-contactos.component';
+import { ClienteDireccionesComponent } from '../components/cliente-direcciones/cliente-direcciones.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { GraficaSemiCirculoComponent } from '../components/graficas/grafica-semi
     ClienteDatosGeneralesComponent,
     ClienteEconomicosComponent,
     ClienteMasInfoComponent,
+    ClienteContactosComponent,
+    ClienteDireccionesComponent,
     PopupHeaderComponent,
     DateFilterComponent,
     SearchFilterComponent,
@@ -71,6 +75,8 @@ import { GraficaSemiCirculoComponent } from '../components/graficas/grafica-semi
     ClienteDatosGeneralesComponent,
     ClienteEconomicosComponent,
     ClienteMasInfoComponent,
+    ClienteContactosComponent,
+    ClienteDireccionesComponent,
     PopupHeaderComponent,
     DateFilterComponent,
     SearchFilterComponent,

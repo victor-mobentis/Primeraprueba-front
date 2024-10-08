@@ -38,6 +38,10 @@ body {
     /* Color de advertencia de Bootstrap */
 }
 
+p {
+    font-size: small;
+  }
+
 /* estilo para el funcionamiento de toast */
 @import 'ngx-toastr/toastr';
 @import '~@ng-select/ng-select/themes/default.theme.css';

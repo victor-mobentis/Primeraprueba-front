@@ -1,19 +1,14 @@
 <div>
   <app-popup-header [title]="'Cliente'" [icon]="'/assets/images/iconos/clientes-icon-dark.svg'"
     (close)="cerrarPopup()"></app-popup-header>
-</div>
-<mat-dialog-content class="container pt-0">
-
-
-
-  <div class="d-flex justify-content-start mb-2 flex-wrap">
+  <div class="d-flex justify-content-start mb-2 flex-wrap p-1">
     <!-- <button class="btn btn-sm btn-outline-secondary me-2 mb-2">
-      <i class="bi bi-x-circle me-1"></i> Cerrar
-    </button>
-    <button class="btn btn-sm btn-outline-secondary me-2 mb-2">
-      <i class="bi bi-save me-1"></i> Guardar
-    </button> 
-    -->
+        <i class="bi bi-x-circle me-1"></i> Cerrar
+      </button>
+      <button class="btn btn-sm btn-outline-secondary me-2 mb-2">
+        <i class="bi bi-save me-1"></i> Guardar
+      </button> 
+      -->
     <button class="btn btn-sm btn-outline-secondary me-2 mb-2">
       <i class="bi bi-bar-chart-line me-1"></i> Estadísticas
     </button>
@@ -42,11 +37,9 @@
     <button ngbTooltip="Ver en Mapa" class="btn btn-sm btn-outline-secondary me-2 mb-2" (click)="verEnMapa()">
       <i class="bi bi-geo-alt me-1"></i>
     </button>
-    <button [disabled]="contacts == 0" class="btn btn-sm btn-outline-secondary me-2 mb-2" type="button"
-      (click)="editContact()">
-      <i class="bi bi-people me-1"></i> Contactos
-    </button>
   </div>
+</div>
+<mat-dialog-content class="container pt-0">
 
   <!-- Tabs -->
   <ul class="nav nav-tabs" id="clienteTabs" role="tablist">
@@ -67,19 +60,23 @@
         role="tab">CRM</button>
     </li>
   </ul>
+
   <!-- Tab content -->
-  <div class="tab-content p-3 ">
+  <div class="tab-content">
     <!-- Datos Generales -->
-    <div class="tab-pane fade show active d-flex flex-column gap-2" id="datos" role="tabpanel">
-      <div>
-        <app-cliente-datos-generales [cliente]="this.cliente"></app-cliente-datos-generales>
+    <div class="tab-pane fade show active" id="datos" role="tabpanel">
+      <div class="d-flex flex-column gap-2">
+        <div>
+          <app-cliente-datos-generales [cliente]="this.cliente"></app-cliente-datos-generales>
+        </div>
+        <div>
+          <app-cliente-economicos [cliente]="this.cliente"></app-cliente-economicos>
+        </div>
+        <div>
+          <app-cliente-mas-info [cliente]="this.cliente"></app-cliente-mas-info>
+        </div>
       </div>
-      <div>
-        <app-cliente-economicos [cliente]="this.cliente"></app-cliente-economicos>
-      </div>
-      <div>
-        <app-cliente-mas-info [cliente]="this.cliente"></app-cliente-mas-info>
-      </div>
+
     </div>
 
     <!-- Otros tabs (vacíos por ahora) -->
@@ -87,7 +84,12 @@
       <p>Contenido de Horarios de Visita</p>
     </div>
     <div class="tab-pane fade" id="contactos" role="tabpanel">
-      <p>Contenido de Contactos y Direcciones</p>
+      <div>
+        <app-cliente-contactos [id_cliente]="this.id_cliente"></app-cliente-contactos>
+      </div>
+      <div>
+        <app-cliente-direcciones [id_cliente]="this.id_cliente"></app-cliente-direcciones>
+      </div>
     </div>
     <div class="tab-pane fade" id="crm" role="tabpanel">
       <p>Contenido de CRM</p>
