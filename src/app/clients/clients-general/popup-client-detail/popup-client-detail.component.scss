@@ -23,4 +23,13 @@
   font-size: 14px;
 }
 
+.tab-pane {
+  display: none; /* Oculta todas las pestañas por defecto */
+}
+
+.tab-pane.show.active {
+  display: block; /* Muestra solo la pestaña activa */
+}
+
+
 
