@@ -33,7 +33,6 @@ import { ProfileEditPopupComponent } from './configuration-general/profile-edit-
 import { ChangePasswordComponent } from './configuration-general/change-password/change-password.component';
 import { UpdatePhotoComponent } from './configuration-general/update-photo/update-photo.component';
 import { ReasonsRejectionsComponent } from './configuration-general/reasons-rejections/reasons-rejections.component';
-import { AddEditReasonRejectionsComponent } from './configuration-general/reasons-rejections/add-edit-reason-rejections/add-edit-reason-rejections.component';
 import { ListItemComponent } from '../components/list-item/list-item.component';
 import { ConfigurationListItemContainerComponent } from '../components/configuration-list-item-container/configuration-list-item-container.component';
 import { SharedModule } from "../shared/shared.module";
@@ -46,7 +45,6 @@ import { AddCompetitorComponent } from './configuration-general/add-competitor/a
     ChangePasswordComponent,
     UpdatePhotoComponent,
     ReasonsRejectionsComponent,
-    AddEditReasonRejectionsComponent,
     ListItemComponent, // A futuro igual mover a shared
     ConfigurationListItemContainerComponent, AddCompetitorComponent,
   ],
