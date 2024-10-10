@@ -117,9 +117,7 @@
                   </span>
                 </td>
                 <td class="text-center">
-                  <button class="btn btn-link p-0" (click)="editClient(row.id)" title="Ficha">
-                    <i class="bi bi-eye-fill fs-5 icon_color cursor"></i>
-                  </button>
+                  <app-btn-icon-file (btnClicked)="editClient(row.id)"></app-btn-icon-file>
                 </td>
               </tr>
 

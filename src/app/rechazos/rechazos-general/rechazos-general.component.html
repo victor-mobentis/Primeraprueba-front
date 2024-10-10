@@ -32,16 +32,7 @@
       </div>
       <!-- botones y filtros -->
       <div class="d-flex align-items-center gap-2">
-        <div class="btn-group" role="group">
-          <a type="button" class="dropdown-toggle fw-semibold text-decoration-none color-secondary"
-            data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-            Exportar</a>
-          <ul class="dropdown-menu">
-            <li><button class="dropdown-item" (click)="exportData('Excel')">Excel</button></li>
-            <li><button class="dropdown-item" (click)="exportData('CSV')">CSV</button></li>
-            <li><button class="dropdown-item" (click)="exportData('Json')">Json</button></li>
-          </ul>
-        </div>
+        <app-btn-export (formatSelected)="exportData($event)"></app-btn-export>
         <button class="btn btn-primary d-flex justify-content-center align-items-center" (click)="verEnMapa()">
           <i class="bi bi-geo-alt-fill"></i>
         </button>
@@ -59,7 +50,8 @@
               </div>
             </th>
             <!-- Acción Correctora Column -->
-            <th scope="col" class="text-center row_accion_correctora header-correctora background-color-primary">Convertir en oportunidad (% ó €
+            <th scope="col" class="text-center row_accion_correctora header-correctora background-color-primary">
+              Convertir en oportunidad (% ó €
               + Promo)</th>
             <!-- Estado Column -->
             <th scope="col" class="text-center cursor select_estado color-primary" (click)="sortData('status')">
@@ -110,7 +102,8 @@
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <!-- Promo Propia Column -->
-            <th scope="col" class="text-center row_promocion_propia cursor color-primary" (click)="sortData('own_promo')">
+            <th scope="col" class="text-center row_promocion_propia cursor color-primary"
+              (click)="sortData('own_promo')">
               <i *ngIf="sortColumn === 'own_promo'" class="bi"
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
@@ -121,7 +114,8 @@
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <!-- Promo Competidor Column -->
-            <th scope="col" class="text-center cursor row_promocion_propia color-primary" (click)="sortData('competitor_promo')">
+            <th scope="col" class="text-center cursor row_promocion_propia color-primary"
+              (click)="sortData('competitor_promo')">
               <i *ngIf="sortColumn === 'competitor_promo'" class="bi"
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
@@ -132,7 +126,8 @@
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <!-- Propuesta Agente Column -->
-            <th scope="col" (click)="sortData('salesman_proposal')" class="cursor row_propuesta_agente pr-0 color-primary">
+            <th scope="col" (click)="sortData('salesman_proposal')"
+              class="cursor row_propuesta_agente pr-0 color-primary">
               <i class="bi bi-card-text" [ngbTooltip]="'Propuesta Agente'"></i>
               <i *ngIf="sortColumn === 'salesman_proposal'" class="bi"
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
@@ -253,14 +248,12 @@
 
               <!-- ficha column -->
               <td class="text-center">
-                <i class="bi bi-eye-fill fs-5 icon_color cursor px-0" (click)="viewRechazo(row.customer_id)"></i>
+                <app-btn-icon-file (btnClicked)="viewRechazo(row.customer_id)"></app-btn-icon-file>
               </td>
               <!-- Expand Column -->
               <td class="text-center">
-                <button class="btn btn-primary py-0 px-1 text-white"
-                  (click)="expandedElement = (expandedElement === row ? null : row)">
-                  <i class="bi" [ngClass]="expandedElement === row ? 'bi-chevron-up' : 'bi bi-three-dots'"></i>
-                </button>
+                <app-btn-icon-expand [isExpanded]="expandedElement === row"
+                  (toggle)="expandedElement = (expandedElement === row ? null : row)"></app-btn-icon-expand>
               </td>
             </tr>
 

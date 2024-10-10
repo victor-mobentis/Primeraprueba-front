@@ -31,6 +31,11 @@ import { ClienteDireccionesComponent } from '../components/cliente-direcciones/c
 import { ChangeImageComponent } from '../components/change-image/change-image.component';
 import { ConfirmDialogComponent } from '../components/confirm-dialog/confirm-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { BtnExportComponent } from '../components/buttons/btn-export/btn-export.component';
+import { BtnIconEditComponent } from '../components/buttons/btn-icons/btn-icon-edit/btn-icon-edit.component';
+import { BtnIconDeleteComponent } from '../components/buttons/btn-icons/btn-icon-delete/btn-icon-delete.component';
+import { BtnIconFileComponent } from '../components/buttons/btn-icons/btn-icon-file/btn-icon-file.component';
+import { BtnIconExpandComponent } from '../components/buttons/btn-icons/btn-icon-expand/btn-icon-expand.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +64,11 @@ import { MatDialogModule } from '@angular/material/dialog';
     GraficaSemiCirculoComponent,
     ChangeImageComponent,
     ConfirmDialogComponent,
+    BtnIconEditComponent,
+    BtnIconDeleteComponent,
+    BtnIconFileComponent,
+    BtnIconExpandComponent,
+    BtnExportComponent
 
   ],
   imports: [
@@ -97,6 +107,11 @@ import { MatDialogModule } from '@angular/material/dialog';
     GraficaSemiCirculoComponent,
     ChangeImageComponent,
     ConfirmDialogComponent,
+    BtnIconEditComponent,
+    BtnIconDeleteComponent,
+    BtnIconFileComponent,
+    BtnIconExpandComponent,
+    BtnExportComponent
   ]
 })
 export class SharedModule { }
