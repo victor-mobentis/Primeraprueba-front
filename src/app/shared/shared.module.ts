@@ -29,6 +29,8 @@ import { GraficaSemiCirculoComponent } from '../components/graficas/grafica-semi
 import { ClienteContactosComponent } from '../components/cliente-contactos/cliente-contactos.component';
 import { ClienteDireccionesComponent } from '../components/cliente-direcciones/cliente-direcciones.component';
 import { ChangeImageComponent } from '../components/change-image/change-image.component';
+import { ConfirmDialogComponent } from '../components/confirm-dialog/confirm-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { ChangeImageComponent } from '../components/change-image/change-image.co
     GraficaPastelComponent,
     GraficaSemiCirculoComponent,
     ChangeImageComponent,
+    ConfirmDialogComponent,
+
   ],
   imports: [
     NgbModule,
@@ -65,6 +69,7 @@ import { ChangeImageComponent } from '../components/change-image/change-image.co
     ReactiveFormsModule,
     GoogleMapsModule,
     NgbTooltipModule, 
+    MatDialogModule,
 
   ],
   exports: [
@@ -91,6 +96,7 @@ import { ChangeImageComponent } from '../components/change-image/change-image.co
     GraficaPastelComponent,
     GraficaSemiCirculoComponent,
     ChangeImageComponent,
+    ConfirmDialogComponent,
   ]
 })
 export class SharedModule { }
