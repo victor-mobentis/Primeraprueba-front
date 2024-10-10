@@ -1,21 +1,25 @@
 import { Component, EventEmitter, Inject, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { UpdatePhotoComponent } from './../update-photo/update-photo.component';
-import { ChangePasswordComponent } from './../change-password/change-password.component';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { LoginService } from 'src/app/services/auth/login.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-profile-edit-popup',
   templateUrl: './profile-edit-popup.component.html',
-  styleUrls: ['./profile-edit-popup.component.scss']
+  styleUrls: ['./profile-edit-popup.component.scss'],
 })
 export class ProfileEditPopupComponent {
-
   @Output() actualizarPerfil = new EventEmitter<boolean>();
   form: FormGroup;
   cargando: boolean = false;
@@ -27,19 +31,17 @@ export class ProfileEditPopupComponent {
   errorChangePass: boolean = false;
   messageError: string = '';
 
-
- // Formulario de Contraseña
- passForm = this.formBuilder.group({
-  currentPassword: ['', Validators.required],
-  newPassword: ['', Validators.required],
-  confirmNewPassword: ['', Validators.required],
-});
+  // Formulario de Contraseña
+  passForm = this.formBuilder.group({
+    currentPassword: ['', Validators.required],
+    newPassword: ['', Validators.required],
+    confirmNewPassword: ['', Validators.required],
+  });
 
   progress = 0;
   message = '';
 
-
-  img: string|null = 'assets/images/user.png'; // Imagen de usuario por defecto
+  img: string | null = 'assets/images/user.png'; // Imagen de usuario por defecto
   imageInfos?: Observable<any>;
   imgSelected = false;
 
@@ -49,7 +51,7 @@ export class ProfileEditPopupComponent {
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
-    private _loginServices: LoginService,
+    private _loginServices: LoginService
   ) {
     this.form = this.fb.group({
       usuario: [''],
@@ -68,22 +70,22 @@ export class ProfileEditPopupComponent {
       usuario: localStorage.getItem('user') || '',
       cargo: localStorage.getItem('cargo') || '',
     });
-    this.email = localStorage.getItem('email') || ''
+    this.email = localStorage.getItem('email') || '';
     this.img = localStorage.getItem('img');
   }
 
   cancelar(): void {
     if (this.form.dirty || this.imgSelected || this.passForm.dirty) {
       this.dialog
-      .open(ConfirmDialogComponent, {
-        data: `Hay cambios sin guardar, ¿deseas salir sin guardar?`,
-      })
-      .afterClosed()
-      .subscribe((confirmado: boolean) =>{
-        if(confirmado){
-          this.dialogRef.close();
-        }
-      })
+        .open(ConfirmDialogComponent, {
+          data: `Hay cambios sin guardar, ¿deseas salir sin guardar?`,
+        })
+        .afterClosed()
+        .subscribe((confirmado: boolean) => {
+          if (confirmado) {
+            this.dialogRef.close();
+          }
+        });
     } else {
       this.dialogRef.close();
     }
@@ -95,37 +97,29 @@ export class ProfileEditPopupComponent {
       localStorage.setItem('cargo', this.form.value.cargo);
       console.log('Actualizado:', this.form.value);
       this.form.markAsPristine();
-    
     }
   }
-
-  editarImg(): void {
-    const dialogRef = this.dialog.open(UpdatePhotoComponent, {
-      disableClose: true,
-    });
-    dialogRef.afterClosed().subscribe(() => {
-      this.img = localStorage.getItem('img');
-    });
-  }
-
+  
   changePassword() {
-    console.log('camibar')
+    console.log('camibar');
     if (this.passForm.valid) {
-      const { currentPassword, newPassword, confirmNewPassword } = this.passForm.value;
+      const { currentPassword, newPassword, confirmNewPassword } =
+        this.passForm.value;
       if (newPassword !== confirmNewPassword) {
         this.errorChangePass = true;
         this.messageError = 'La nueva contraseña no coincide.';
       } else if (newPassword === currentPassword) {
         this.errorChangePass = true;
-        this.messageError = 'La nueva contraseña no puede ser la misma que la actual.';
+        this.messageError =
+          'La nueva contraseña no puede ser la misma que la actual.';
       } else {
         this.errorChangePass = false;
         this.messageError = '';
         this.passForm.patchValue({
-          currentPassword:'',
-          newPassword:'',
-          confirmNewPassword:''
-        })
+          currentPassword: '',
+          newPassword: '',
+          confirmNewPassword: '',
+        });
         this.passForm.markAsPristine();
         /*
         this._loginServices.changePassword(currentPassword, newPassword).subscribe(
@@ -151,9 +145,9 @@ export class ProfileEditPopupComponent {
   }
 
   onFileSelected(selected: boolean): void {
-    this.imgSelected = selected; 
+    this.imgSelected = selected;
   }
-  handleUpload(file: File): void  {
+  handleUpload(file: File): void {
     if (file) {
       this.progress = 0;
       /*
@@ -174,7 +168,6 @@ export class ProfileEditPopupComponent {
 
         }
       });*/
-
     }
   }
 
@@ -188,5 +181,4 @@ export class ProfileEditPopupComponent {
       });*/
     }
   }
-
 }

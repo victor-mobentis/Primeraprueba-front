@@ -42,7 +42,8 @@ p {
     font-size: small;
 }
 
-input {
+input[type="text"].form-control,
+input[type="password"].form-control{
     font-size: small;
 }
 
