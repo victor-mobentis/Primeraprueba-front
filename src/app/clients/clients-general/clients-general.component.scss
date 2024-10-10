@@ -1,3 +1,5 @@
+@import "../../../styles.scss";
+
 .separador-superior {
   height: 64px;
 }
@@ -6,10 +8,10 @@
   width: 200px;
 }
 
-.table-responsive {
-  /* la tabla ocupa de alto el 100% de la pantalla - el alto de lo que tiene encima - el alto de lo que tiene por debajo */
-  //height: calc(100vh - 220px - 43px)
-}
+// .table-responsive {
+//   /* la tabla ocupa de alto el 100% de la pantalla - el alto de lo que tiene encima - el alto de lo que tiene por debajo */
+//   //height: calc(100vh - 220px - 43px)
+// }
 
 table {
   width: 100%;
@@ -169,11 +171,6 @@ th {
 
 .cursor {
   cursor: pointer;
-}
-
-.btn-color {
-  background-color: #3F51B5;
-  color: white;
 }
 
 .icon_color {
