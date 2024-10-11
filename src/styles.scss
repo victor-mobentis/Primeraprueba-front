@@ -70,9 +70,16 @@ $color-secondary: #17a6ff;
 $color-tertiary: #B3BE77;
 $color-quaternary: #F56473;
 
+/* fondo de contenedor elementos de la ficha */
+$color-content-ficha-client: #e6eaf5; 
+.bg-content-ficha-client{
+    background-color: $color-content-ficha-client;
+}
+/* fin de contendor elementos de la ficha */
+
 /*clases con colores*/
 .background-light-gray {
-    background-color: $light-gray  ;
+    background-color: $light-gray;
 }
 
 .gray {
