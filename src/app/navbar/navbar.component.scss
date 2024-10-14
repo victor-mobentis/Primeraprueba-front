@@ -40,7 +40,6 @@
 }
 
 .name {
-    color: white;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -54,7 +53,6 @@
     font-weight: 400;
     line-height: 16px;
     letter-spacing: .25px;
-    color: white;
 }
 
 ul.list-style{
@@ -72,6 +70,9 @@ ul.list-style{
 
 .btn-profile:hover{
     background-color: #44484981;
+}
+.dropdown-toggle::after{
+    display: none;
 }
 
 @media (max-width: 991.98px) {
