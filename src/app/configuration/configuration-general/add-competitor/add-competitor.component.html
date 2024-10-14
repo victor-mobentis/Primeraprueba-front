@@ -2,11 +2,12 @@
     <app-popup-header [title]="'Competidores'" [icon]="'/assets/images/iconos/configuracion-icon-dark.svg'" (close)="cerrarPopup()"></app-popup-header>
 </div>
 
-<mat-dialog-content class="mat-typography py-0">
-    <table class="table">
+<mat-dialog-content class="mat-typography py-0" >
+    <table class="table table-hover " style="max-height: 400px; overflow-y: auto;">
         <thead>
             <tr>
                 <th scope="col">Nombre</th>
+                <th scope="col">Familia</th>
                 <th scope="col" class="text-center">Acciones</th>
             </tr>
         </thead>
@@ -14,9 +15,16 @@
             <tr *ngFor="let row of competitorList">
                 <!-- Mostrar input si la fila está en modo de edición -->
                 <td>
-                    <input *ngIf="editingCompetitorId === row.id" [(ngModel)]="row.name" class="form-control" />
+                    <input *ngIf="editingCompetitorId === row.id" [(ngModel)]="row.name" class="form-control" type="text"/>
                     <span *ngIf="editingCompetitorId !== row.id">{{ row.name }}</span>
                 </td>
+                <td>
+                    <select *ngIf="editingCompetitorId === row.id" [(ngModel)]="row.segmentation_value_id" class="form-control">
+                      <option [ngValue]="-1">Todas</option>
+                      <option *ngFor="let family of familyList" [ngValue]="family.id">{{ family.name }}</option>
+                    </select>
+                    <span *ngIf="editingCompetitorId !== row.id">{{ getFamilyName(row.segmentation_value_id) }}</span>
+                  </td>
                 <td >
                     <div class="d-flex justify-content-center gap-3">
                         <!-- Mostrar lápiz si no está en modo de edición, y check si está en modo de edición -->
@@ -34,6 +42,10 @@
             </tr>
             <tr>
                 <td><input type="text" class="form-control form-control-sm" [(ngModel)]="newCompetitonName" placeholder="Nombre"></td>
+                <select [(ngModel)]="newSegmentation_value_id" class="form-control">
+                    <option [ngValue]="-1">Todas</option>
+                    <option *ngFor="let family of familyList" [ngValue]="family.id">{{ family.name }}</option>
+                  </select>
                 <td>
                     <div class="d-flex justify-content-center gap-3">
                         <button 
