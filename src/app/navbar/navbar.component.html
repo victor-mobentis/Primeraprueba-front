@@ -16,10 +16,11 @@
                 <a class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="assets/images/user.png" alt="Perfil" width="35" height="35" class="avatar" />
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                    <li></li>
-                    <li><a class="dropdown-item" (click)="openProfileEditPopup()">Perfil</a></li>
-                    <li><a class="dropdown-item" (click)="logout()">Salir</a></li>
+                <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="profileDropdown">
+                    <h3 class="m-0">{{_loginServices.user}}</h3>
+                    h6
+                    <li> <a class="dropdown-item" (click)="openProfileEditPopup()"><i class="bi bi-person-fill"></i> Mi Perfil</a></li>
+                    <li><a class="dropdown-item" (click)="logout()"><i class="bi bi-box-arrow-in-left"></i>Desconectar</a></li>
                 </ul>
             </li>
         </ul>
