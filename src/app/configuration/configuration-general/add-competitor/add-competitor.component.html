@@ -1,5 +1,6 @@
 <div>
-    <app-popup-header [title]="'Competidores'" [icon]="'/assets/images/iconos/configuracion-icon-dark.svg'" (close)="cerrarPopup()"></app-popup-header>
+    <app-popup-header [title]="'Competidores'" [icon]="'/assets/images/iconos/configuracion-icon-dark.svg'"
+        (close)="cerrarPopup()"></app-popup-header>
 </div>
 
 <mat-dialog-content class="mat-typography py-0">
@@ -15,25 +16,31 @@
             <tr *ngFor="let row of competitorList">
                 <!-- Mostrar input si la fila está en modo de edición -->
                 <td>
-                    <input *ngIf="editingCompetitorId === row.id" [(ngModel)]="row.name" class="form-control" type="text"/>
+                    <input *ngIf="editingCompetitorId === row.id" [(ngModel)]="row.name" class="form-control"
+                        type="text" />
                     <span *ngIf="editingCompetitorId !== row.id">{{ row.name }}</span>
                 </td>
                 <td>
-                    <select *ngIf="editingCompetitorId === row.id" [(ngModel)]="row.segmentation_value_id" class="form-control">
-                      <option [ngValue]="-1">Todas</option>
-                      <option *ngFor="let family of familyList" [ngValue]="family.id">{{ family.name }}</option>
+                    <select *ngIf="editingCompetitorId === row.id" [(ngModel)]="row.segmentation_value_id"
+                        class="form-select form-select-sm">
+                        <option [ngValue]="-1">Todas</option>
+                        <option *ngFor="let family of familyList" [ngValue]="family.id">{{ family.name }}</option>
                     </select>
                     <span *ngIf="editingCompetitorId !== row.id">{{ getFamilyName(row.segmentation_value_id) }}</span>
-                  </td>
-                <td >
+                </td>
+                <td>
                     <div class="d-flex justify-content-center gap-3">
                         <!-- Mostrar lápiz si no está en modo de edición, y check si está en modo de edición -->
-                        <app-btn-icon-edit *ngIf="editingCompetitorId !== row.id && row.id" (btnClicked)="toggleEdit(row.id)"></app-btn-icon-edit>
-                        <i *ngIf="editingCompetitorId === row.id" (click)="saveChanges(row)" class="bi bi-check-lg btnSave" ngbTooltip="Guardar"></i>
-                        
+                        <app-btn-icon-edit *ngIf="editingCompetitorId !== row.id && row.id"
+                            (btnClicked)="toggleEdit(row.id)"></app-btn-icon-edit>
+                        <i *ngIf="editingCompetitorId === row.id" (click)="saveChanges(row)"
+                            class="bi bi-check-lg btnSave" ngbTooltip="Guardar"></i>
+
                         <!-- Mostrar X si está en edición y trash si no está en modo de edición -->
-                        <app-btn-icon-delete *ngIf="editingCompetitorId !== row.id && row.id !== undefined" (btnClicked)="deleteCompetidor(row.id)"></app-btn-icon-delete>
-                        <i *ngIf="editingCompetitorId === row.id" (click)="cancelEdit()" class="bi bi-x-lg btnClear" ngbTooltip="Cancelar"></i>
+                        <app-btn-icon-delete *ngIf="editingCompetitorId !== row.id && row.id !== undefined"
+                            (btnClicked)="deleteCompetidor(row.id)"></app-btn-icon-delete>
+                        <i *ngIf="editingCompetitorId === row.id" (click)="cancelEdit()" class="bi bi-x-lg btnClear"
+                            ngbTooltip="Cancelar"></i>
                     </div>
                 </td>
             </tr>
@@ -41,25 +48,23 @@
                 <td colspan="3" class="text-center">No se han encontrado datos</td>
             </tr>
             <tr>
-                <td><input type="text" class="form-control form-control-sm" [(ngModel)]="newCompetitonName" placeholder="Nombre"></td>
-                <select [(ngModel)]="newSegmentation_value_id" class="form-control">
-                    <option [ngValue]="-1">Todas</option>
-                    <option *ngFor="let family of familyList" [ngValue]="family.id">{{ family.name }}</option>
-                  </select>
+                <td><input type="text" class="form-control form-control-sm" [(ngModel)]="newCompetitonName"
+                        placeholder="Nombre"></td>
+                <td>
+                    <select [(ngModel)]="newSegmentation_value_id" class="form-select form-select-sm">
+                        <option [ngValue]="-1">Todas</option>
+                        <option *ngFor="let family of familyList" [ngValue]="family.id">{{ family.name }}</option>
+                    </select>
+                </td>
+
                 <td>
                     <div class="d-flex justify-content-center gap-3">
-                        <button 
-                        ngbTooltip="Guardar" 
-                        (click)="insertCompetitor()"
-                        [ngClass]="{'btnSave': true, 'disabled-icon': !newCompetitonName}"
-                        >
+                        <button ngbTooltip="Guardar" (click)="insertCompetitor()"
+                            [ngClass]="{'btnSave': true, 'disabled-icon': !newCompetitonName}">
                             <i class="bi bi-check-lg"></i>
                         </button>
-                        <button
-                            ngbTooltip="Limpiar"
-                            (click)="clearNewCompetitor()"
-                            [ngClass]="{'btnDelete':true, 'disabled-icon': !newCompetitonName}"
-                        >
+                        <button ngbTooltip="Limpiar" (click)="clearNewCompetitor()"
+                            [ngClass]="{'btnDelete':true, 'disabled-icon': !newCompetitonName}">
                             <i class="bi bi-x-lg"></i>
                         </button>
                     </div>
@@ -67,5 +72,6 @@
             </tr>
         </tbody>
     </table>
-    <app-pagination [totalItems]="competitorList.length" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage" (pageChange)="onPageChange($event)" (itemsPerPageChanged)="onItemsPerPageChanged($event)"></app-pagination>
+    <app-pagination [totalItems]="competitorList.length" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
+        (pageChange)="onPageChange($event)" (itemsPerPageChanged)="onItemsPerPageChanged($event)"></app-pagination>
 </mat-dialog-content>
