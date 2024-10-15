@@ -5,7 +5,7 @@ import { FilterService } from 'src/app/services/filter/filter.service';
 import { CompetidoresService } from 'src/app/services/competitors/competidores.service';
 import { timeout } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
-import { ToastrService } from 'ngx-toastr';
+import { NotificationService } from 'src/app/services/notification/notification.service';
 
 
 @Component({
@@ -32,7 +32,7 @@ export class AddCompetitorComponent {
     private filterService: FilterService,
     public dialogRef: MatDialogRef<AddCompetitorComponent>,
     public dialog: MatDialog,
-    public toastr: ToastrService,
+    private _notifactionService: NotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -82,19 +82,19 @@ export class AddCompetitorComponent {
       this.competitorsService.insertCompetitor(newCompetitor).subscribe(
         (status) =>{
           if(status === 'Success'){
-            this.toastr.success('Competidor añadido con exito');
+            this._notifactionService.showSuccess('Competidor añadido con exito');
             this.cargarCompetitors();
             this.clearNewCompetitor();
           }
         },
         (error) =>{
           console.error('Error al añadir el competidor', error);
-          this.toastr.error('Error al añadir el competidor', 'Error');
+          this._notifactionService.showError('Error al añadir el competidor');
         }
       );
     }else{
       /// aqui mostramos el error
-      this.toastr.error('Por favor complete todos los campos.', 'Error');
+      this._notifactionService.showError('Por favor complete todos los campos.');
     }
   }
   // Activar modo de edición para un competidor específico y guardar los datos originales
@@ -113,7 +113,7 @@ export class AddCompetitorComponent {
       this.competitorsService.updateCompetitors(competitor).subscribe(
         (status) =>{
           if(status === 'Success'){
-            this.toastr.success('Competidor actualizado con éxito');
+            this._notifactionService.showSuccess('Competidor actualizado con éxito');
             this.cargarCompetitors();
             this.editingCompetitorId = null;
             this.originalCompetitor = null;
@@ -121,12 +121,12 @@ export class AddCompetitorComponent {
         },
         (error) =>{
           console.error('Error al actualizar el competidor', error);
-          this.toastr.error('Error al actualizar al competidor', 'Error');
+          this._notifactionService.showError('Error al actualizar al competidor');
           this.cancelEdit();
         }
       );
     }else{
-      this.toastr.error('Por favor complete todos los campos.', 'Error');
+      this._notifactionService.showError('Por favor complete todos los campos.');
     }
   }
 
@@ -168,9 +168,7 @@ export class AddCompetitorComponent {
 
   /* mesanje de exito */
   mensajeExito(){
-    this.toastr.success('Competidor eliminado correctamente', 'Exito',{
-      timeOut: 2000,
-    });
+    this._notifactionService.showSuccess('Competidor eliminado correctamente')
   }
   /* paginator */
   paginate() {
