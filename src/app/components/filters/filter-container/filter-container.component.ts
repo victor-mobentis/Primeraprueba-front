@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -43,7 +44,7 @@ export class FilterContainerComponent implements OnInit {
 
   private hijosCargados: boolean = false;
 
-  constructor(private filterService: FilterService, public dialog: MatDialog) {}
+  constructor(private filterService: FilterService, public dialog: MatDialog, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.filterService.getFiltersForComponent(this.componentId).subscribe(
@@ -103,6 +104,7 @@ export class FilterContainerComponent implements OnInit {
       },
       {}
     );
+    this.cdr.detectChanges();
     console.log(this.filtrosAplicados);
     console.log(this.selectedFilters);
     //this.actualizarComponentesHijos()
