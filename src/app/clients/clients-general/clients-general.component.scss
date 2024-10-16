@@ -6,7 +6,7 @@
 
 .table-responsive {
   /* la tabla ocupa de alto el 100% de la pantalla - el alto de lo que tiene encima - el alto de lo que tiene por debajo */
-   height: calc(100vh - 220px - 60px)
+   height: calc(100vh - 68px - 88px - 32px - 54px - 58px)
 }
 
 table {
@@ -14,11 +14,6 @@ table {
   font-size: small;
   overflow: visible;
   table-layout: fixed;
-}
-
-.mat-mdc-form-field {
-  font-size: 14px;
-  width: 100%;
 }
 
 .page-heading {
