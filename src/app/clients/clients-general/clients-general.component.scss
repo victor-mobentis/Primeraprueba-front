@@ -6,7 +6,7 @@
 
 .table-responsive {
   /* la tabla ocupa de alto el 100% de la pantalla - el alto de lo que tiene encima - el alto de lo que tiene por debajo */
-   height: calc(100vh - 220px - 60px)
+   max-height: calc(100vh - 220px - 60px)
 }
 
 table {
@@ -120,7 +120,7 @@ ng-select {
 
 /* columnas medidas */
 .row_column_checkbox {
-  width: 1.5%;
+  width: 35px;
 }
 
 .spinner-border {
@@ -130,22 +130,22 @@ ng-select {
 
 /* Asignar anchos fijos a las columnas */
 .row_column_sm {
-  width: 4%; 
+  width: 75px; 
 }
 
 .row_column_md {
-  width: 9%; 
+  width: 205px; 
 }
 
 .row_column_lg {
-  width: 15%; 
+  width: 230px; 
 }
 
 .row_column_xl {
-  width: 22%; 
+  width: 230px; 
 }
 .row_ficha{
-  width: 3%;
+  width: 50px;
 }
 
 .sort-asc::after {
