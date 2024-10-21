@@ -21,10 +21,6 @@ table {
   overflow: visible;
 }
 
-td {
-  vertical-align: middle;
-}
-
 .char-count {
   font-size: 0.9rem;
   color: #666;
@@ -134,27 +130,14 @@ td {
   color: #FF5757;
 }
 
-
-.promo-icon {
-  font-size: 14px;
-  font-weight: bold;
-  color: #4CAF50;
-  display: inline-flex;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-}
-
 .promo-icon-p {
   font-size: 14px;
   font-weight: bold;
-  color: #4CAF50;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   width: 24px;
   height: 24px;
-
 }
 
 /* barara de busqueda */

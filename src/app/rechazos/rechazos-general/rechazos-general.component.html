@@ -1,6 +1,6 @@
-<div class="screen background-light-gray d-flex flex-column">
+<div class="background-light-gray d-flex flex-column">
   <div
-    class="d-flex flex-column gap-2 flex-xl-row justify-content-between align-items-center  p-1 titulo bg-white w-100">
+    class="d-flex flex-column gap-2 flex-xl-row justify-content-between align-items-center p-2 titulo bg-white ">
     <!-- titulo y icono -->
     <div class="d-flex align-items-center justify-content-start ">
       <!-- <mat-icon class="dark-gray">broken_image</mat-icon> -->
@@ -220,13 +220,13 @@
               <td class="text-end row_precio_producto centrado_column">{{ row.pvp | decimales }} €</td>
               <!-- Promo Propia Column -->
               <td class="text-center centrado_column">
-                <i *ngIf="row.has_own_promo" class="promo-icon-p" [ngbTooltip]="row.own_promo">P</i>
+                <div *ngIf="row.has_own_promo" class="promo-icon-p color-tertiary" [ngbTooltip]="row.own_promo">P</div>
               </td>
               <!-- Precio Competidor Column -->
               <td class="text-end row_precio_competidor centrado_column">{{ row.pvp_competitor | decimales }} €</td>
               <!-- Promo Competidor Column -->
               <td class="text-center centrado_column">
-                <i *ngIf="row.has_competitor_promo" class="promo-icon-p" [ngbTooltip]="row.competitor_promo">P</i>
+                <div *ngIf="row.has_competitor_promo" class="promo-icon-p color-tertiary" [ngbTooltip]="row.competitor_promo">P</div>
               </td>
               <!-- Competidor Column -->
               <td>
@@ -298,5 +298,4 @@
     </app-pagination>
   </div>
   <!-- END TABLA -->
-</div>
 </div>

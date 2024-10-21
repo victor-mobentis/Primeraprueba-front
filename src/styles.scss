@@ -20,8 +20,16 @@ input[type="search"],
 .dropdown-item,
 th,
 td,
-select, a {
+select,
+a {
     font-size: small;
+}
+
+th,
+td {
+    height: 40px;
+    vertical-align: middle;
+
 }
 
 .dropdown-menu,
