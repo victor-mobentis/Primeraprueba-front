@@ -27,8 +27,8 @@ td,
 select {
     font-size: small;
 }
-.tooltip .tooltip-inner{
-    z-index: 4 !important;
+::ng-deep .tooltip .tooltip-inner{
+    z-index: 99999 !important;
 }
 .dropdown-menu,
 .dropdown-item {
