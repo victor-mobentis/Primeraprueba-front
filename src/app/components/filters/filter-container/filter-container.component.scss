@@ -7,3 +7,6 @@
 .bordes-redondeados{
     border-radius: 0.25rem; 
 }
+::ng-deep ngb-datepicker.dropdown-menu{
+    transform: translate(-10px, 33px) !important;
+}
