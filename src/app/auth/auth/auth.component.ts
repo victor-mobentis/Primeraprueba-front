@@ -1,17 +1,8 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/auth/login.service';
 import { LoginRequest } from 'src/app/services/auth/login.request';
-import {
-  FormControl,
-  FormGroupDirective,
-  NgForm,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-auth',
@@ -19,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent {
-  imagesArray: string[] = ["assets/images/login/WhyNot.png"]
+  imagesArray: string[] = ["assets/images/login/WhyNot.png"];
   selectedImage: string = '';
   hide = true;
   errorLogin: boolean = false;
@@ -27,7 +18,7 @@ export class AuthComponent {
 
   loginError: string = '';
   loginForm = this.formBuilder.group({
-    emailFormControl: ['', [Validators.required, Validators.email]], //validador de email
+    emailFormControl: ['', [Validators.required, Validators.email]],
     passFormControl: ['', [Validators.required]]
   });
 
@@ -35,16 +26,14 @@ export class AuthComponent {
     private formBuilder: FormBuilder,
     private router: Router,
     private _loginServices: LoginService,
-    public dialog: MatDialog,
   ) { }
 
-  //!!! añadir: Validators.pattern('.+@[a-zA-Z0-9]+\.[a-zA-Z]{2,10}')
   emailFormControl = new FormControl('', [
     Validators.required,
     Validators.email,
-  ]);// Validators.email
+  ]);
+
   passFormControl = new FormControl('', [Validators.required]);
-  matcher = new MyErrorStateMatcher();
 
   ngOnInit(): void {
     this.selectedImage = this.seccionarImagen();
@@ -64,41 +53,20 @@ export class AuthComponent {
     if (this.emailFormControl.status === 'VALID' && this.passFormControl.status === 'VALID') {
       this._loginServices.login(login).subscribe(
         (data) => {
-          console.log(data);
           this.router.navigateByUrl('mobentis/dashboard/global');
-          this.loginForm.reset;
           this.errorLogin = false;
           this.messageError = '';
         },
         (error) => {
           this.errorLogin = true;
           this.messageError = error.error.msg;
-          console.log(error.error.msg);
-          console.error("Error al asignar dataSource: ", error);
         }
       );
     }
   }
 
-
   seccionarImagen(): string {
     const position = Math.round(Math.random() * (this.imagesArray.length - 1));
-    console.log(position)
-    console.log(this.imagesArray[position])
     return this.imagesArray[position];
-  }
-}
-
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(
-    control: FormControl | null,
-    form: FormGroupDirective | NgForm | null
-  ): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(
-      control &&
-      control.invalid &&
-      (control.dirty || control.touched || isSubmitted)
-    );
   }
 }

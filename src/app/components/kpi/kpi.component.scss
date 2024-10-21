@@ -10,7 +10,32 @@
 .kpis {
     border-radius: 1em;
 }
+/* ancho de las graficas de mtivos de rechazos */
+.min-w-reasonReject{
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+/* configuracion del scroll de los graficos de motivos de rechazos */
+.min-w-reasonReject::-webkit-scrollbar {
+    height: 4px; /* Ajusta el grosor del scroll horizontal */
+}
 
+.min-w-reasonReject::-webkit-scrollbar-thumb {
+    background-color: #888; /* Color del scroll */
+    border-radius: 10px;
+}
+
+.min-w-reasonReject::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Color del scroll al pasar el mouse */
+}
+
+.min-w-reasonReject::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Color de la pista del scroll */
+}
+#kpis_centrales{
+    height: 80px;
+}
 span.font-dashboard {
     font-size: 12px;
     color: #6D6D6D;
@@ -42,6 +67,14 @@ span.font-dashboard {
     font-weight: bold;
     font-size: small;
 }
-.padding-rechazos-kpi{
-    padding-top: 19px;
+
+/* barra para separar los titulos en kpi */
+.h-90{
+    height: 90%;
+    border: 0.1px solid #ebebeb;
+}
+
+.bg-color-kpi-element{
+    background-color: #f5f5f5;
+    border-radius: 14px;
 }

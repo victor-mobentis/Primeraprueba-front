@@ -1,7 +1,7 @@
 <div>
     <!-- boton de filtros aplicados o limpiar -->
     <div class="d-flex gap-2 align-items-center">
-        <div class="d-flex gap-2 align-items-center">
+        <div class="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center">
             <!-- Botón para cada filtro aplicado -->
             <button class="d-flex m-0 btn btn-outline-primary btn-sm align-items-center"
                 *ngFor="let filtro of filtrosAplicados" (click)="removeFilter(filtro)">
@@ -54,49 +54,50 @@
                     </div>
                 </div>
             </div>
+            <div class="btn-group" #dropdownWrapper>
+                <a type="button" class="dropdown-toggle fw-semibold text-decoration-none color-secondary text-center"
+                    data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" id="dropdownMenuButton">+
+                    Filtros</a>
+                <ul class="dropdown-menu">
+                    <!-- Selección de filtros guardados -->
+                    <div *ngIf="filtrosGuardados.length > 0">
+                        <li class="dropend">
+                            <a class="dropdown-item dropdown-toggle cursor" data-bs-toggle="dropdown" aria-expanded="false">
+                                Filtros guardados
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li *ngFor="let filtroGuardado of filtrosGuardados" class="cursor">
+                                    <div class="d-flex justify-content-between p-1">
+                                        <a class="dropdown-item " (click)="seleccionarFiltrosGuardados(filtroGuardado)">
+                                            {{ filtroGuardado.nombre }}
+                                        </a>
+                                        <button class="btn btn-outline-quaternary btn-sm ms-2"
+                                            (click)="eliminarFiltroGuardado(filtroGuardado)">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <hr class="my-1"/>
+                    </div>
+                    <div *ngFor="let filter of filters">
+                        <app-date-filter *ngIf="filter.type === 'date'" [id]="filter.id"
+                            (dateSelection)="handleFilterChange(filter.id, $event)"></app-date-filter>
+    
+                        <app-search-filter *ngIf="filter.type === 'search'" [title]="filter.title" [id]="filter.id"
+                            (searchChange)="handleFilterChange(filter.id, $event)"></app-search-filter>
+    
+                        <app-multi-select-filter *ngIf="filter.type === 'multi-select'" [title]="filter.title"
+                            [endpoint]="filter.optionsEndpoint" [id]="filter.id"
+                            (selectionChange)="handleFilterChange(filter.id, $event)"></app-multi-select-filter>
+    
+                        <app-range-filter *ngIf="filter.type === 'range'" [id]="filter.id"
+                            (rangeSelected)="handleFilterChange(filter.id, $event)"></app-range-filter>
+                    </div>
+                </ul>
+            </div>
         </div>
-        <div class="btn-group" #dropdownWrapper>
-            <a type="button" class="dropdown-toggle fw-semibold text-decoration-none color-secondary"
-                data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" id="dropdownMenuButton">+
-                Filtros</a>
-            <ul class="dropdown-menu">
-                <!-- Selección de filtros guardados -->
-                <div *ngIf="filtrosGuardados.length > 0">
-                    <li class="dropend">
-                        <a class="dropdown-item dropdown-toggle cursor" data-bs-toggle="dropdown" aria-expanded="false">
-                            Filtros guardados
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li *ngFor="let filtroGuardado of filtrosGuardados" class="cursor">
-                                <div class="d-flex justify-content-between p-1">
-                                    <a class="dropdown-item " (click)="seleccionarFiltrosGuardados(filtroGuardado)">
-                                        {{ filtroGuardado.nombre }}
-                                    </a>
-                                    <button class="btn btn-outline-quaternary btn-sm ms-2"
-                                        (click)="eliminarFiltroGuardado(filtroGuardado)">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <hr class="my-1"/>
-                </div>
-                <div *ngFor="let filter of filters">
-                    <app-date-filter *ngIf="filter.type === 'date'" [id]="filter.id"
-                        (dateSelection)="handleFilterChange(filter.id, $event)"></app-date-filter>
-
-                    <app-search-filter *ngIf="filter.type === 'search'" [title]="filter.title" [id]="filter.id"
-                        (searchChange)="handleFilterChange(filter.id, $event)"></app-search-filter>
-
-                    <app-multi-select-filter *ngIf="filter.type === 'multi-select'" [title]="filter.title"
-                        [endpoint]="filter.optionsEndpoint" [id]="filter.id"
-                        (selectionChange)="handleFilterChange(filter.id, $event)"></app-multi-select-filter>
-
-                    <app-range-filter *ngIf="filter.type === 'range'" [id]="filter.id"
-                        (rangeSelected)="handleFilterChange(filter.id, $event)"></app-range-filter>
-                </div>
-            </ul>
-        </div>
+        
     </div>
 </div>
