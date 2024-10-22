@@ -6,12 +6,23 @@
   font-weight: 300;
 }
 
+.title-icon{
+  font-size: 24px;
+}
+
 .input-group {
   width: 200px;
 }
 
-td {
-  vertical-align: middle;
+
+.max-w-kpi {
+  max-width: 100%;
+}
+
+table {
+  width: 100%;
+  font-size: small;
+  overflow: visible;
 }
 
 .char-count {
@@ -31,7 +42,7 @@ td {
   width: 267px;
 }
 
-.row_checkboxy{
+.row_checkboxy {
   width: 29px;
 }
 
@@ -123,27 +134,14 @@ td {
   color: #FF5757;
 }
 
-
-.promo-icon {
-  font-size: 14px;
-  font-weight: bold;
-  color: #4CAF50;
-  display: inline-flex;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-}
-
 .promo-icon-p {
   font-size: 14px;
   font-weight: bold;
-  color: #4CAF50;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   width: 24px;
   height: 24px;
-
 }
 
 /* barara de busqueda */
@@ -235,13 +233,23 @@ td {
   width: 35px !important;
 }
 
+.row_client {
+  width: 70px;
+}
+
+.row_expand{
+  width: 60px;
+}
+
 .table-responsive {
-  max-height: 600px;
+  height: calc(100vh - 220px - 60px);
   /* Ajusta según sea necesario */
   max-width: 100%;
   /* Asegura que el contenedor no exceda el ancho de su contenedor padre */
   margin: 0 auto;
   /* Centra la tabla en el contenedor */
+  margin-top: 17px;
+
 }
 
 .table thead th {
@@ -249,6 +257,7 @@ td {
   /* Para Safari */
   position: sticky;
   top: 0;
+  z-index: 3;
   /* Fija el encabezado en la parte superior */
 }
 
@@ -263,7 +272,7 @@ td {
 .table-responsive table thead th:nth-child(2) {
   position: sticky;
   left: 29px;
-  z-index: 3;
+  z-index: 4;
 }
 
 .table-responsive table tbody td:nth-child(2) {
@@ -370,4 +379,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
   max-width: 100%;
   /* O ajusta según el tamaño de la columna */
+}
+
+@media (min-width: 1200px) {
+  .max-w-kpi {
+    max-width: 84%;
+  }
 }

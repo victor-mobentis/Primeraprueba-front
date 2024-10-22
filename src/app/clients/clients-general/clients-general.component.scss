@@ -6,7 +6,7 @@
 
 .table-responsive {
   /* la tabla ocupa de alto el 100% de la pantalla - el alto de lo que tiene encima - el alto de lo que tiene por debajo */
-   height: calc(100vh - 220px - 60px)
+  height: calc(100vh - 220px - 60px)
 }
 
 table {
@@ -14,11 +14,6 @@ table {
   font-size: small;
   overflow: visible;
   table-layout: fixed;
-}
-
-.mat-mdc-form-field {
-  font-size: 14px;
-  width: 100%;
 }
 
 .page-heading {
@@ -120,7 +115,7 @@ ng-select {
 
 /* columnas medidas */
 .row_column_checkbox {
-  width: 1.5%;
+  width: 35px;
 }
 
 .spinner-border {
@@ -130,22 +125,22 @@ ng-select {
 
 /* Asignar anchos fijos a las columnas */
 .row_column_sm {
-  width: 4%; 
+  width: 75px; 
 }
 
 .row_column_md {
-  width: 9%; 
+  width: 205px; 
 }
 
 .row_column_lg {
-  width: 15%; 
+  width: 230px; 
 }
 
 .row_column_xl {
-  width: 22%; 
+  width: 230px; 
 }
 .row_ficha{
-  width: 3%;
+  width: 50px;
 }
 
 .sort-asc::after {
@@ -266,4 +261,26 @@ th {
   max-width: 100%; /* O ajusta según el tamaño de la columna */
   height: 14px;
 }
+.table-responsive table thead th:first-child{
+  z-index: 3;
+}
 
+.table-responsive table thead th:first-child,
+.table-responsive table tbody td:first-child{
+  position: sticky;
+  left: 0;
+}
+.table thead th {
+  position: -webkit-sticky;
+  /* Para Safari */
+  position: sticky;
+  top: 0;
+  /* Fija el encabezado en la parte superior */
+}
+
+
+.table-responsive table thead th:last-child,
+.table-responsive table tbody td:last-child{
+  position: sticky;
+  right: 0;
+}

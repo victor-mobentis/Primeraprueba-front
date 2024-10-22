@@ -3,12 +3,8 @@
 /* @import '~@ng-select/ng-select/themes/default.theme.css';*/
 
 /* You can add global styles to this file, and also import other style files */
-body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
-.screen {
-  height: calc(100vh - 64px);
+* {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .pointer {
@@ -24,8 +20,20 @@ input[type="search"],
 .dropdown-item,
 th,
 td,
-select {
-  font-size: small;
+select,
+a {
+    font-size: small;
+}
+
+.tooltip .tooltip-inner {
+    z-index: 4 !important;
+}
+
+th,
+td {
+    height: 40px;
+    vertical-align: middle;
+
 }
 
 .dropdown-menu,
