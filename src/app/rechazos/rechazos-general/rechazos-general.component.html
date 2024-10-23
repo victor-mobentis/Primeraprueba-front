@@ -209,7 +209,7 @@
                 <select (change)="changeMotivo($event, row)" (mousedown)="capturePreviousValueReasonId(row)"
                   class="form-select form-select-sm column_motivo select_rechazo color-quaternary"
                   [(ngModel)]="row.reason_rejection_id" [ngbTooltip]="row.reason_rejection">
-                  <option class="color-quaternary" *ngFor="let motivo of motivos_rechazo" [value]="motivo.id">{{
+                  <option class="color-quaternary" *ngFor="let motivo of motivos_rechazo;trackBy: trackByFn" [value]="motivo.id">{{
                     motivo.name }}</option>
                   <option class="color-quaternary" [value]="0">Añadir Motivo</option>
                 </select>
@@ -236,7 +236,7 @@
                 <select (change)="changeCompetidor($event, row)" (mousedown)="capturePreviousValueCompetitorId(row)"
                   class="form-select form-select-sm row_select_competidor" [(ngModel)]="row.competitor_id"
                   [ngbTooltip]="row.competitor_name">
-                  <option *ngFor="let competidor of row.competitors" [value]="competidor.id">{{ competidor.name }}
+                  <option *ngFor="let competidor of row.competitors; trackBy: trackByFn" [value]="competidor.id">{{ competidor.name }}
                   </option>
                   <option value="0">Añadir Competidor</option>
                 </select>

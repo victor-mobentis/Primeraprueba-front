@@ -108,7 +108,6 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.loadProvincias();
     this.loadSimbolos();
     this.loadGoogleMapsScript();
-    //this.loadCompetidores();
     this.loadTiposRechazo();
     this.loadPoblacion();
     this.cargando = true;
@@ -147,13 +146,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         const rechazosData: IRechazo[] = data.items;
         this.dataSource = rechazosData;
         this.totalItems = data.totalItems;
+        this.loadCompetidores()
         this.cargando_filtros = false;
         this.cargando = false;
-        this.dataSource.forEach((row) => {
-          this._competidoresService.getCompetidoresPorFamilia(row.family_id).subscribe((competitors) => {
-            row.competitors = competitors;
-          });
-        });
         this.updateSelectionFromCurrentPage();
       });
   }
@@ -176,11 +171,11 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   }
 
   private loadCompetidores() {
-    this.filterService
-      .getCompetidores()
-      .subscribe((competidores: ICompetidor[]) => {
-        //this.competidores = competidores;
+    this.dataSource.forEach((row) => {
+      this._competidoresService.getCompetidoresPorFamilia(row.family_id).subscribe((competitors) => {
+        row.competitors = competitors;
       });
+    });
   }
 
   private loadTiposRechazo() {
@@ -410,13 +405,12 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
           .afterClosed()
           .subscribe((result) => {
             if (result) {
-              this.motivos_rechazo.push(result);
-              //this.loadTiposRechazo();
               row.reason_rejection_id = result.id;
               row.reason_rejection = result.name;
             } else {
               selectElement.value = String(this.previousReasonId);
             }
+            this.loadTiposRechazo();
           });
         return;
       }
@@ -460,12 +454,12 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
           .afterClosed()
           .subscribe((result) => {
             if (result) {
-              row.competitors.push(result);
               row.competitor_id = result.id;
               row.competitor_name = result.name;
             } else {
               selectElement.value = String(this.previousCompetitorId);
             }
+            this.loadCompetidores()
           });
         return;
       }
@@ -544,5 +538,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       data: { autoClose: true },
     });
     return dialogRef;
+  }
+
+  trackByFn(item:any) {
+    return item.value; 
   }
 }
