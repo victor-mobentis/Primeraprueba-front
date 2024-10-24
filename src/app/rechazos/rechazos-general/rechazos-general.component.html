@@ -39,7 +39,7 @@
     </div>
   </div>
   <!-- TABLA -->
-    <div class="table-responsive">
+    <div class="table-responsive {{cargando?'d-none':''}}">
       <table class="table table-sm">
         <thead>
           <tr class="">
@@ -163,9 +163,9 @@
                   </select>
 
                   <!-- Campo para acción correctora -->
-                  <input type="text" class="form-control form-control-sm text-success"
+                  <input type="text" class="truncate-text form-control form-control-sm text-success"
                     [(ngModel)]="row.corrective_action_text" maxlength="50" placement="top" placeholder="Promoción"
-                    [ngbTooltip]="row.corrective_action_text" />
+                    [ngbTooltip]="tooltipText" (mouseover)="applyTooltipIfTruncated($event, row.corrective_action_text)" />
                   <div class=" d-flex align-items-center justify-self-center">
                     <input type="checkbox" (click)="$event.stopPropagation()" [checked]="row.corrective_action_sent" />
                   </div>
@@ -206,11 +206,16 @@
               <!-- Motivo Column -->
               <td class="text-center">
                 <select (change)="changeMotivo($event, row)"
-                  class="form-select form-select-sm column_motivo select_rechazo color-quaternary"
-                  [(ngModel)]="row.reason_rejection_id" [ngbTooltip]="row.reason_rejection">
-                  <option class="color-quaternary" *ngFor="let motivo of motivos_rechazo" [value]="motivo.id">{{
-                    motivo.name }}</option>
-                  <option class="color-quaternary" [value]="0">Añadir Motivo</option>
+                        class="form-select form-select-sm column_motivo select_rechazo color-quaternary truncate-select"
+                        [(ngModel)]="row.reason_rejection_id"
+                        [ngbTooltip]="tooltipText"
+                        (mouseenter)="showTooltipForSelect($event, motivos_rechazo, 'id', 'name')"
+                        (mouseleave)="tooltipText = null"
+                        #selectElement>
+                  <option *ngFor="let motivo of motivos_rechazo" [value]="motivo.id">
+                    {{ motivo.name }}
+                  </option>
+                  <option [value]="0">Añadir Motivo</option>
                 </select>
               </td>
               <!-- Fecha Interés Column -->
@@ -233,8 +238,12 @@
               <!-- Competidor Column -->
               <td>
                 <select (change)="changeCompetidor($event, row)"
-                  class="form-select form-select-sm row_select_competidor" [(ngModel)]="row.competitor_id"
-                  [ngbTooltip]="row.competitor_name">
+                  class="form-select form-select-sm row_select_competidor truncate-select" 
+                  [(ngModel)]="row.competitor_id"
+                  [ngbTooltip]="tooltipText"
+                  (mouseenter)="showTooltipForSelect($event, competidores, 'id', 'name')"
+                        (mouseleave)="tooltipText = null"
+                  >
                   <option *ngFor="let competidor of competidores" [value]="competidor.id">{{ competidor.name }}</option>
                   <option value="0">Añadir Competidor</option>
                 </select>

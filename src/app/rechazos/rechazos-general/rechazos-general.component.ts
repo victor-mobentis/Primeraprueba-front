@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Renderer2, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupMapComponent } from './popup-map-rechazos/popup-map-rechazos.component';
@@ -97,7 +97,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     private _exportService: ExportService,
     private _notifactionService: NotificationService,
     private router: Router,
-    
+    private cdr: ChangeDetectorRef
     
   ) {}
 
@@ -506,6 +506,50 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       this.renderer.removeStyle(element, 'cursor'); // Remueve el cursor tipo pointer
     }
   }
+
+  // Función reutilizable para mostrar tooltip en selects
+  showTooltipForSelect(event: MouseEvent, optionsList: any[], idKey: string, nameKey: string, minLength: number = 13) {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedIndex = selectElement.selectedIndex;
+    const selectedOption = selectElement.options[selectedIndex];
+
+    // Obtener el id seleccionado
+    const selectedId = Number(selectedOption.value);
+
+    // Buscar el texto correspondiente en la lista de opciones (motivos o competidores)
+    const selectedItem = optionsList.find(option => option[idKey] === selectedId);
+
+    // Si encontramos el elemento correspondiente, obtenemos su nombre
+    const textoOpcion = selectedItem ? selectedItem[nameKey] : '';
+
+    // Crear un span temporal para medir el ancho del texto de la opción
+    const tempSpan = document.createElement('span');
+    tempSpan.style.visibility = 'hidden';
+    tempSpan.style.position = 'absolute';
+    tempSpan.style.whiteSpace = 'nowrap';
+    tempSpan.textContent = textoOpcion;
+
+    document.body.appendChild(tempSpan);
+
+    const optionWidth = tempSpan.offsetWidth;
+    const selectWidth = selectElement.offsetWidth;
+
+    // Limpiar el span temporal
+    document.body.removeChild(tempSpan);
+
+    // Verificar si el texto está truncado o si es mayor a minLength caracteres
+    if (optionWidth > selectWidth || textoOpcion.length > 9) {
+      this.tooltipText = textoOpcion; // Aquí obtendrás el texto del elemento seleccionado
+      this.renderer.setStyle(selectElement, 'cursor', 'pointer'); // Cambia el cursor
+    } else {
+      this.tooltipText = null;
+      this.renderer.removeStyle(selectElement, 'cursor'); // Cambia el cursor
+    }
+
+    // Forzar actualización para asegurar que el tooltip se muestre correctamente
+    this.cdr.detectChanges();
+  }
+
 
   onSearch(term: string): void {
     this.searchTerm = term;
