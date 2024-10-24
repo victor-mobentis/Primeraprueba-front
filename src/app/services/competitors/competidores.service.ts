@@ -83,10 +83,9 @@ export class CompetidoresService {
     console.log(competidores);
     return this._http
       .post(
-        `${this.baseUrl}:${this.port}/api/competidores/update/${competidores.id}`,
+        `${this.baseUrl}:${this.port}/api/competidores/update/name/${competidores.id}`,
         {
-          nombre: competidores.name,
-          product_segmentation_id: competidores.segmentation_value_id,
+          nombre: competidores.name
         },
         options
       )
@@ -98,7 +97,30 @@ export class CompetidoresService {
       );
   }
 
-  insertCompetitor(competidores: ICompetidor) {
+  updateCompetitorsSegmentations(id:number,product_segmentation_ids:number[] ) {
+    let options = {
+      headers: new HttpHeaders().set(
+        'Authorization',
+        `Bearer ${this._loginServices.getToken()}`
+      ),
+    };
+    return this._http
+      .post(
+        `${this.baseUrl}:${this.port}/api/competidores/update/segmentations/${id}`,
+        {
+          product_segmentation_ids: product_segmentation_ids
+        },
+        options
+      )
+      .pipe(
+        map((data: any) => {
+          console.log(data);
+          return data.status;
+        })
+      );
+  }
+
+  insertCompetitor(competidores: ICompetidor, product_segmentation_ids:number[]) {
     let options = {
       headers: new HttpHeaders().set(
         'Authorization',
@@ -110,7 +132,7 @@ export class CompetidoresService {
         `${this.baseUrl}:${this.port}/api/competidores/add`,
         {
           nombre: competidores.name,
-          product_segmentation_id: competidores.segmentation_value_id,
+          product_segmentation_ids: product_segmentation_ids,
         },
         options
       )

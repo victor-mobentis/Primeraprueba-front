@@ -94,7 +94,7 @@ export class AddCompetitorComponent {
 
   initializeSelectedFamilies(): void {
     this.competitorList.forEach((competitor) => {
-      const segmentationValueId = competitor.segmentation_value_id; // Suponiendo que este es un string
+      const segmentationValueId = competitor.segmentation_value_ids;
       this.selectedFamiliesMap[competitor.id!] = {};
 
       if (segmentationValueId === '-1') {
@@ -103,12 +103,11 @@ export class AddCompetitorComponent {
           this.selectedFamiliesMap[competitor.id!][family.id] = true;
         });
       } else {
-        // De lo contrario, dividir la cadena y marcar las familias seleccionadas
         const familyIds = segmentationValueId
           .split(',')
-          .map((id) => parseInt(id.trim(), 10)); // Convertir a números
+          .map((id) => parseInt(id.trim(), 10));
         familyIds.forEach((familyId) => {
-          this.selectedFamiliesMap[competitor.id!][familyId] = true; // Marcamos como seleccionada
+          this.selectedFamiliesMap[competitor.id!][familyId] = true;
         });
       }
     });
@@ -117,10 +116,9 @@ export class AddCompetitorComponent {
     if (this.newCompetitonName) {
       const newCompetitor = {
         name: this.newCompetitonName,
-        segmentation_value_id: this.newSegmentation_value_id.toString(),
-        segmentation_value: '',
+        segmentation_value_ids: '',
       };
-      this.competitorsService.insertCompetitor(newCompetitor).subscribe(
+      this.competitorsService.insertCompetitor(newCompetitor, [-1]).subscribe(
         (data) => {
           if (data.status === 'Success') {
             this._notifactionService.showSuccess(
@@ -130,7 +128,7 @@ export class AddCompetitorComponent {
             this.clearNewCompetitor();
             if (this.data.autoClose) {
               this.dialogRef.close({
-                id: data.data.insertId,
+                id: data.competidorId,
                 name: newCompetitor.name,
               });
             }
@@ -148,18 +146,16 @@ export class AddCompetitorComponent {
       );
     }
   }
-  // Activar modo de edición para un competidor específico y guardar los datos originales
+
   toggleEdit(competitorId: number) {
     const competitor = this.competitorList.find((c) => c.id === competitorId);
     if (competitor) {
-      this.originalCompetitor = { ...competitor }; // Hacer una copia de los datos originales
+      this.originalCompetitor = { ...competitor };
       this.editingCompetitorId = competitorId;
     }
   }
 
-  // Guardar cambios y salir del modo de edición
   saveChanges(competitor: ICompetidor) {
-    // Aquí puedes agregar lógica para guardar los cambios en el servidor
     if (competitor.name) {
       this.competitorsService.updateCompetitors(competitor).subscribe(
         (status) => {
@@ -187,24 +183,53 @@ export class AddCompetitorComponent {
     }
   }
 
-  // Cancelar la edición sin guardar los cambios, restaurar los valores originales
+  updateSgmentatios(competitor_id: number) {
+    const selectedFamiliesForCompetitor: { [key: string]: boolean } =
+      this.selectedFamiliesMap[competitor_id] || {};
+    let selectedFamilyIds = Object.keys(selectedFamiliesForCompetitor)
+      .filter((familyId: string) => selectedFamiliesForCompetitor[familyId])
+      .map((familyId) => parseInt(familyId, 10));
+    if (selectedFamilyIds.length === this.familyList.length) {
+      selectedFamilyIds = [-1];
+    }
+    console.log('IDs seleccionadas:', selectedFamilyIds);
+
+    this.competitorsService
+      .updateCompetitorsSegmentations(competitor_id, selectedFamilyIds)
+      .subscribe(
+        (status) => {
+          if (status === 'Success') {
+            this._notifactionService.showSuccess(
+              'Competidor actualizado con éxito'
+            );
+            this.cargarCompetitors();
+          }
+        },
+        (error) => {
+          console.error('Error al actualizar el competidor', error);
+          this._notifactionService.showError(
+            'Error al actualizar al competidor'
+          );
+        }
+      );
+  }
+
   cancelEdit() {
     if (this.originalCompetitor) {
       const index = this.competitorList.findIndex(
         (c) => c.id === this.originalCompetitor!.id
       );
       if (index !== -1) {
-        this.competitorList[index] = { ...this.originalCompetitor }; // Restaurar los valores originales
+        this.competitorList[index] = { ...this.originalCompetitor };
       }
     }
     this.editingCompetitorId = null;
-    this.originalCompetitor = null; // Limpiar la copia temporal después de cancelar
+    this.originalCompetitor = null;
   }
 
   /* limpiar el input */
   clearNewCompetitor() {
     this.newCompetitonName = '';
-    this.newSegmentation_value_id = 0;
   }
 
   deleteCompetidor(id: Number) {
@@ -274,6 +299,7 @@ export class AddCompetitorComponent {
     if (this.selectedCompetitor) {
       this.logPreviousSelectedFamilies();
       //REALIZAR EL UPDATE DE LA SELECCION???
+      this.updateSgmentatios(this.selectedCompetitor.id!);
       console.log('update');
     }
     this.selectedCompetitor = competitor;
@@ -303,12 +329,11 @@ export class AddCompetitorComponent {
     this.updateSelectAllCheckbox();
   }
 
-  // Ordenar las familias para que las seleccionadas aparezcan primero
   sortSelectedFamilies(): void {
     this.filteredFamilyList.sort((a, b) => {
-      const aSelected = a.selected ? 1 : 0; // 1 si está seleccionado, 0 si no
-      const bSelected = b.selected ? 1 : 0; // 1 si está seleccionado, 0 si no
-      return bSelected - aSelected; // Ordena de mayor a menor, primero seleccionados
+      const aSelected = a.selected ? 1 : 0;
+      const bSelected = b.selected ? 1 : 0;
+      return bSelected - aSelected;
     });
   }
 
@@ -325,13 +350,6 @@ export class AddCompetitorComponent {
       family.selected = isSelected;
       this.updateSelectAllCheckbox();
     }
-  }
-
-  updateGeneralCheckboxState(): void {
-    // Se puede usar para otras lógicas relacionadas con el checkbox general
-    console.log(
-      `¿Todas las familias seleccionadas? ${this.allFamiliesSelected}`
-    );
   }
 
   toggleSelectAll(event: any): void {
@@ -352,7 +370,7 @@ export class AddCompetitorComponent {
     );
 
     this.allFamiliesSelected = allSelected;
-    this.isSomeSelected = someSelected && !allSelected; // Indeterminado si solo algunas están seleccionadas
+    this.isSomeSelected = someSelected && !allSelected;
   }
 
   updateSelectAllCheckbox(): void {
