@@ -183,7 +183,7 @@ export class AddCompetitorComponent {
     }
   }
 
-  updateSgmentatios(competitor_id: number) {
+  getSelectedFamiliesIds(competitor_id: number){
     const selectedFamiliesForCompetitor: { [key: string]: boolean } =
       this.selectedFamiliesMap[competitor_id] || {};
     let selectedFamilyIds = Object.keys(selectedFamiliesForCompetitor)
@@ -192,6 +192,11 @@ export class AddCompetitorComponent {
     if (selectedFamilyIds.length === this.familyList.length) {
       selectedFamilyIds = [-1];
     }
+    return selectedFamilyIds
+  }
+
+  updateSgmentatios(competitor_id: number) {
+    let  selectedFamilyIds = this.getSelectedFamiliesIds(competitor_id)
     console.log('IDs seleccionadas:', selectedFamilyIds);
 
     this.competitorsService
@@ -298,9 +303,16 @@ export class AddCompetitorComponent {
   selectCompetitor(competitor: ICompetidor): void {
     if (this.editingCompetitorId !== null) {
       return;
-  }
+    }
+
     if (this.selectedCompetitor) {
       this.logPreviousSelectedFamilies();
+      if (this.getSelectedFamiliesIds(this.selectedCompetitor.id!).length ===0){
+        this._notifactionService.showWarning(
+          'Por favor seleccione al menos 1 familia.'
+        );
+        return;
+      }
       //REALIZAR EL UPDATE DE LA SELECCION???
       this.updateSgmentatios(this.selectedCompetitor.id!);
       console.log('update');
