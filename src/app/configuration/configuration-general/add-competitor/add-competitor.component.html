@@ -27,7 +27,7 @@
                                  >
                                 <td [ngClass]="{'selected-row': selectedCompetitor?.id === row.id}">
                                     <input *ngIf="editingCompetitorId === row.id" [(ngModel)]="row.name"
-                                        class="form-control" type="text" />
+                                        class="form-control" type="text" (keyup.enter)="saveChanges(row)"/>
                                     <p *ngIf="editingCompetitorId !== row.id" [ngbTooltip]="tooltipText"
                                         (mouseover)="applyTooltipIfTruncated($event, row.name)"
                                         class="truncate-text m-0">
@@ -55,7 +55,7 @@
                             <tr class="sticky-footer">
                                 <td>
                                     <input type="text" class="form-control form-control-sm"
-                                        [(ngModel)]="newCompetitonName" placeholder="Nombre">
+                                        [(ngModel)]="newCompetitonName" placeholder="Nombre" (keyup.enter)="insertCompetitor()"/>
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content-center gap-1">
