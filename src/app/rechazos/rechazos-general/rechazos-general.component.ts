@@ -59,7 +59,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   estados: IEstado[] = [];
   provincias: IProvincia[] = [];
   poblacion: IPoblacion[] = [];
-  competidores: ICompetidor[] = [];
+  //competidores: ICompetidor[] = [];
   motivos_rechazo: IMotivoRechazo[] = [];
   simbolos: ISimbolo[] = [];
 

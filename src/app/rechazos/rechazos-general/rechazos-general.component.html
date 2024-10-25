@@ -246,7 +246,7 @@
                   class="form-select form-select-sm row_select_competidor truncate-select" 
                   [(ngModel)]="row.competitor_id"
                   [ngbTooltip]="tooltipText"
-                  (mouseenter)="showTooltipForSelect($event, competidores, 'id', 'name')"
+                  (mouseenter)="showTooltipForSelect($event, row.competitors, 'id', 'name')"
                   (mouseleave)="tooltipText = null"
                   >
                   <option *ngFor="let competidor of row.competitors; trackBy: trackByFn" [value]="competidor.id">{{ competidor.name }}

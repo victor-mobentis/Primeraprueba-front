@@ -55,6 +55,9 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
   tooltipText: string | null = null;
   searchTerm: string = '';
 
+  //variable para mostrar mensaje de error
+  mostrarError: boolean = false;
+
   constructor(
     private renderer: Renderer2,
     public dialog: MatDialog,
