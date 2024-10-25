@@ -59,7 +59,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   estados: IEstado[] = [];
   provincias: IProvincia[] = [];
   poblacion: IPoblacion[] = [];
-  //competidores: ICompetidor[] = [];
+  competidores: ICompetidor[] = [];
   motivos_rechazo: IMotivoRechazo[] = [];
   simbolos: ISimbolo[] = [];
 
@@ -518,7 +518,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   }
 
 // Función reutilizable para mostrar tooltip en selects
-showTooltipForSelect(event: MouseEvent, optionsList: any[], idKey: string, nameKey: string, minLength: number = 13) {
+showTooltipForSelect(event: MouseEvent, optionsList: any[], idKey: string, nameKey: string, minLength: number = 9) {
   const selectElement = event.target as HTMLSelectElement;
   const selectedIndex = selectElement.selectedIndex;
   
@@ -561,7 +561,7 @@ showTooltipForSelect(event: MouseEvent, optionsList: any[], idKey: string, nameK
   document.body.removeChild(tempSpan);
 
   // Verificar si el texto está truncado o si es mayor a minLength caracteres
-  if (optionWidth > selectWidth || textoOpcion.length > 9) {
+  if (optionWidth > selectWidth || textoOpcion.length > minLength) {
     this.tooltipText = textoOpcion; // Aquí obtendrás el texto del elemento seleccionado
     this.renderer.setStyle(selectElement, 'cursor', 'pointer'); // Cambia el cursor
   } else {

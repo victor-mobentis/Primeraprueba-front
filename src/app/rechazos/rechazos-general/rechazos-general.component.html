@@ -247,7 +247,7 @@
                   [(ngModel)]="row.competitor_id"
                   [ngbTooltip]="tooltipText"
                   (mouseenter)="showTooltipForSelect($event, competidores, 'id', 'name')"
-                        (mouseleave)="tooltipText = null"
+                  (mouseleave)="tooltipText = null"
                   >
                   <option *ngFor="let competidor of row.competitors; trackBy: trackByFn" [value]="competidor.id">{{ competidor.name }}
                   </option>
