@@ -48,6 +48,7 @@ export class AddCompetitorComponent {
   showNewNameError: boolean = false;
   showEditNameError: boolean = false;
 
+
   constructor(
     private renderer: Renderer2,
     private competitorsService: CompetidoresService,
@@ -59,9 +60,15 @@ export class AddCompetitorComponent {
   ) {}
 
   ngOnInit(): void {
-    this.cargarCompetitors();
-    this.cargarFamilias();
+    this.loadData();
   }
+
+  /* metodo para que se ejecute bien las familias */
+  async loadData() {
+    await this.cargarFamilias(); // Espera a que esta función termine.
+    this.cargarCompetitors(); // Una vez que se completó cargarFamilias, procede con cargarCompetitors.
+  }
+
   /* cargar los datos */
   cargarCompetitors(): void {
     this.cargando = true;
@@ -84,20 +91,36 @@ export class AddCompetitorComponent {
       );
   }
 
-  cargarFamilias(): void {
-    this.filterService
-      .getFilterOptions('segmentacion-productos/1')
-      .subscribe((families: { id: number; name: string }[]) => {
-        this.familyList = families.map((family) => ({
-          ...family,
-          selected: false,
-        }));
-        this.filteredFamilyList = [...this.familyList];
-      });
+  cargarFamilias(): Promise<void> {
+
+    return new Promise((resolve, reject) =>{
+      this.filterService
+        .getFilterOptions('segmentacion-productos/1')
+        .subscribe((families: { id: number; name: string }[]) => {
+          this.familyList = families.map((family) => ({
+            ...family,
+            selected: false,
+          }));
+          this.filteredFamilyList = [...this.familyList];
+          resolve();
+        },
+        (error) => {
+          console.error('Error al cargar las familias', error);
+          reject(error);
+        }
+
+      );
+
+    })
   }
 
   initializeSelectedFamilies(): void {
+    if (!this.familyList.length) {
+      console.warn("La lista de familias no está cargada.");
+      return; // Si la lista de familias no está cargada, salimos de la función
+    }
     this.competitorList.forEach((competitor) => {
+      console.log(this.familyList);
       const segmentationValueId = competitor.segmentation_value_ids;
       this.selectedFamiliesMap[competitor.id!] = {};
 
@@ -114,7 +137,12 @@ export class AddCompetitorComponent {
           this.selectedFamiliesMap[competitor.id!][familyId] = true;
         });
       }
+      console.log(
+        `Familias seleccionadas para competidor ${competitor.id}:`,
+        this.selectedFamiliesMap[competitor.id!]
+      );
     });
+
   }
 
   /* Metodo de validacion de caracteres prohibidos */
