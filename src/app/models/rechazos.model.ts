@@ -1,4 +1,5 @@
 import { ICompetidor } from './competidor.model';
+import { IMotivoRechazo } from './motivoRechazo.model';
 
 export interface IRechazo {
   id: number;
@@ -25,7 +26,7 @@ export interface IRechazo {
   competitor_promo: string;
   competitor_id: number;
   competitor_name: string;
-  corrective_action_value: string;
+  corrective_action_value: number;
   corrective_action_symbol_id: number;
   corrective_action_symbol: string;
   corrective_action_text: string;
@@ -41,4 +42,5 @@ export interface IRechazo {
   corrective_action_sent: boolean;
   deleted: boolean;
   competitors: ICompetidor[];
+  reasons: IMotivoRechazo[];
 }

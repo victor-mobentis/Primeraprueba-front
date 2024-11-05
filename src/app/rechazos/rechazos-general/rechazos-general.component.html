@@ -33,6 +33,12 @@
           <span class="sr-only">Loading...</span>
         </div>
       </div>
+      <!-- mensaje de guardar -->
+      <button *ngIf="hasUnsavedChanges" class="btn btn-primary btn-sm d-flex align-items-center gap-2" >
+        <span>Cambios no guardados</span>
+        <i class="bi bi-cloud-slash-fill" style="height: 18px;"></i>
+      </button>
+      <!-- boton de exportar -->
       <app-btn-export (formatSelected)="exportData($event)"></app-btn-export>
       <button class="btn btn-primary d-flex justify-content-center align-items-center" (click)="verEnMapa()">
         <i class="bi bi-geo-alt-fill"></i>
@@ -157,11 +163,13 @@
                 <div class="d-flex align-items-center gap-1">
                   <!-- Campo para precio de promoción -->
                   <input type="number" class="form-control form-control-sm accion_correctora_precio text-success"
-                    [(ngModel)]="row.corrective_action_value" placeholder="0" min="0" />
+                    [(ngModel)]="row.corrective_action_value" placeholder="0" min="0"
+                    (input)="changeNumber($event, row)"
+                    />
 
                   <!-- Campo para símbolo de promoción -->
                   <select class="form-select form-select-sm accion_correctora_simbolo"
-                    [(ngModel)]="row.corrective_action_symbol_id" (change)="updateSymbol(row)">
+                    [(ngModel)]="row.corrective_action_symbol_id" (change)="changeSymbol($event, row)">
                     <option *ngFor="let simbolo of simbolos" [value]="simbolo.id">
                       {{ simbolo.symbol }}
                     </option>
@@ -170,6 +178,7 @@
                   <!-- Campo para acción correctora -->
                   <input type="text" class="truncate-text form-control form-control-sm text-success"
                     [(ngModel)]="row.corrective_action_text" maxlength="50" placement="top" placeholder="Promoción"
+                    (ngModelChange)="changeText($event, row)"
                     [ngbTooltip]="tooltipText" (mouseover)="applyTooltipIfTruncated($event, row.corrective_action_text)" />
                   <div class=" d-flex align-items-center justify-self-center">
                     <input type="checkbox" (click)="$event.stopPropagation()" [checked]="row.corrective_action_sent" />
@@ -245,6 +254,7 @@
                 <select (change)="changeCompetidor($event, row)" (mousedown)="capturePreviousValueCompetitorId(row)"
                   class="form-select form-select-sm row_select_competidor truncate-select" 
                   [(ngModel)]="row.competitor_id"
+                  
                   [ngbTooltip]="tooltipText"
                   (mouseenter)="showTooltipForSelect($event, row.competitors, 'id', 'name')"
                   (mouseleave)="tooltipText = null"

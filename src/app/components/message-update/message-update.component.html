@@ -1,0 +1,7 @@
+<div class="cambio-estado"
+[ngClass]="estadoClase"
+(click)="enviarCambios()"
+(mouseover)="hoverEnviar()"
+(mouseleave)="hoverSalir()">
+<i class="{{ iconoClase }}"></i> {{ mensaje }}
+</div>
