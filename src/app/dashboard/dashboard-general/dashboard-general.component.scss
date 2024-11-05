@@ -14,6 +14,16 @@
 .max-w-kpi{
   max-width: 100%;
 }
+
+.max-w-kpi {
+  max-width: 100%;
+}
+@media screen and (min-width: 1200px) {
+  .max-w-kpi{
+    max-width: 81%;
+  }
+}
+
 span.font-dashboard {
   font-size: small;
   color: #6D6D6D;
