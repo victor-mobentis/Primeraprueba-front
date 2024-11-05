@@ -15,6 +15,7 @@
 p,
 label,
 .tooltip .tooltip-inner,
+input[type="email"].form-control,
 input[type="text"].form-control,
 input[type="password"].form-control,
 input[type="search"],
@@ -56,7 +57,7 @@ $color-tertiary: #b3be77;
 $color-quaternary: #ff419a;
 
 /* fondo de contenedor elementos de la ficha */
-$color-content-ficha-client: #e6eaf5;
+$color-content-ficha-client: #fafbfc;
 
 .bg-content-ficha-client {
   background-color: $color-content-ficha-client;
