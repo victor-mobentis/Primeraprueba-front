@@ -66,7 +66,44 @@ export class RechazadosService {
       options
     );
   }
+  /* nueva funcion para actualizar rechazos */
+  updateRechazo(rechazo: IRechazo ) {
+    let baseUrl = localStorage.getItem('baseUrl');
+    let port = localStorage.getItem('port');
+    let options = {
+      headers: new HttpHeaders().set(
+        'Authorization',
+        `Bearer ${this._loginServices.getToken()}`
+      ),
+    };
+    console.log(rechazo);
+    return this._http
+      .post(
+        `${baseUrl}:${port}/api/rechazo/update/${rechazo.id}`,
+        {
+          status: rechazo.status,
+          status_id: rechazo.status_id,
+          reason_rejection: rechazo.reason_rejection,
+          reason_rejection_id: rechazo.reason_rejection_id,
+          competitor_id: rechazo.competitor_id,
+          competitor_name: rechazo.competitor_name ,
+          corrective_action_value: rechazo.corrective_action_value,
+          corrective_action_symbol_id: rechazo.corrective_action_symbol_id,
+          corrective_action_symbol: rechazo.corrective_action_symbol,
+          corrective_action_text: rechazo.corrective_action_text,
+        },
+        options
+      )
+      .pipe(
+        map((data: any) => {
+          console.log('Respuesta del servidor:', data);
+          return data.status;
+        })
+      );
+  }
 
+
+  /* posiblemente se elimine */
   // Nueva función para actualizar precio y símbolo de promoción
   actualizarPrecioSimboloPromocion(
     id_rechazo: number,

@@ -38,6 +38,8 @@ import { BtnIconFileComponent } from '../components/buttons/btn-icons/btn-icon-f
 import { BtnIconExpandComponent } from '../components/buttons/btn-icons/btn-icon-expand/btn-icon-expand.component';
 import { EtiquetaValorVerticalComponent } from '../components/etiqueta-valor-vertical/etiqueta-valor-vertical.component';
 import { SearchInputComponent } from '../components/search-input/search-input.component';
+import { MessageUpdateComponent } from '../components/message-update/message-update.component';
+
 
 @NgModule({
   declarations: [
@@ -73,7 +75,7 @@ import { SearchInputComponent } from '../components/search-input/search-input.co
     BtnExportComponent,
     EtiquetaValorVerticalComponent,
     SearchInputComponent,
-
+    MessageUpdateComponent
   ],
   imports: [
     NgbModule,
@@ -118,6 +120,7 @@ import { SearchInputComponent } from '../components/search-input/search-input.co
     BtnIconExpandComponent,
     BtnExportComponent,
     SearchInputComponent,
+    MessageUpdateComponent
   ]
 })
 export class SharedModule { }
