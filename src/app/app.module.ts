@@ -21,7 +21,7 @@ import { SharedModule } from "./shared/shared.module";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
     /* lo unico que se declarara sera los componentes creados en la carpeta componentes paginas no */
 
   ],

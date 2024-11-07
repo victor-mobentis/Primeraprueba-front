@@ -103,7 +103,7 @@
             </th>
             <!-- Interés Column -->
             <th scope="col" (click)="sortData('r.interest_date')" class="cursor row_interes color-primary">
-              <i class="bi bi-calendar-check" [ngbTooltip]="'Interés'"></i>
+              <i class="bi bi-calendar-check" [ngbTooltip]="'Interés'" placement="left"></i>
               <i *ngIf="sortColumn === 'r.interest_date'" class="bi"
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
@@ -140,7 +140,7 @@
             <!-- Propuesta Agente Column -->
             <th scope="col" (click)="sortData('salesman_proposal')"
               class="cursor row_propuesta_agente pr-0 color-primary">
-              <i class="bi bi-card-text" [ngbTooltip]="'Propuesta Agente'"></i>
+              <i class="bi bi-card-text" [ngbTooltip]="'Propuesta Agente'" placement="left"></i>
               <i *ngIf="sortColumn === 'salesman_proposal'" class="bi"
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
@@ -180,9 +180,14 @@
                     [(ngModel)]="row.corrective_action_text" maxlength="50" placement="top" placeholder="Promoción"
                     (ngModelChange)="changeText($event, row)"
                     [ngbTooltip]="tooltipText" (mouseover)="applyTooltipIfTruncated($event, row.corrective_action_text)" />
-                  <!-- campo de checkbox de estado -->
+                  <!-- campo de estado -->
                   <div class=" d-flex align-items-center justify-self-center">
-                    <input type="checkbox" (click)="$event.stopPropagation()" [checked]="row.corrective_action_sent" />
+                    <app-corrective-action-status
+                    [statusId]="row.corrective_action_status_id"
+                    [statusText]="row.corrective_action_status"
+                    [rejectionId]="row.id"
+                    (statusChange)="onStatusChange($event, row)"
+                  ></app-corrective-action-status>
                   </div>
                 </div>
               </td>

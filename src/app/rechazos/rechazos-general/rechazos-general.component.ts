@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, OnInit, Renderer2, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupMapComponent } from './popup-map-rechazos/popup-map-rechazos.component';
 import { IRechazo } from 'src/app/models/rechazos.model';
@@ -672,5 +671,10 @@ showTooltipForSelect(event: MouseEvent, optionsList: any[], idKey: string, nameK
 
   trackByFn(item:any) {
     return item.value; 
+  }
+
+  onStatusChange(event: { statusId: number; statusText: string }, row: IRechazo) {
+    row.corrective_action_status_id = event.statusId;
+    row.corrective_action_status = event.statusText
   }
 }

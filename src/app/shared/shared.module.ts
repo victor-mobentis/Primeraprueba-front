@@ -39,6 +39,7 @@ import { BtnIconExpandComponent } from '../components/buttons/btn-icons/btn-icon
 import { EtiquetaValorVerticalComponent } from '../components/etiqueta-valor-vertical/etiqueta-valor-vertical.component';
 import { SearchInputComponent } from '../components/search-input/search-input.component';
 import { MessageUpdateComponent } from '../components/message-update/message-update.component';
+import { CorrectiveActionStatusComponent } from '../components/corrective-action-status/corrective-action-status.component';
 
 
 @NgModule({
@@ -75,7 +76,8 @@ import { MessageUpdateComponent } from '../components/message-update/message-upd
     BtnExportComponent,
     EtiquetaValorVerticalComponent,
     SearchInputComponent,
-    MessageUpdateComponent
+    MessageUpdateComponent,
+    CorrectiveActionStatusComponent
   ],
   imports: [
     NgbModule,
@@ -120,7 +122,8 @@ import { MessageUpdateComponent } from '../components/message-update/message-upd
     BtnIconExpandComponent,
     BtnExportComponent,
     SearchInputComponent,
-    MessageUpdateComponent
+    MessageUpdateComponent,
+    CorrectiveActionStatusComponent
   ]
 })
 export class SharedModule { }

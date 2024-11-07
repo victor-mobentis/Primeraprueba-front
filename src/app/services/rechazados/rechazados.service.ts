@@ -9,6 +9,7 @@ import { IEstadosRechazoCount } from 'src/app/models/count.model';
   providedIn: 'root',
 })
 export class RechazadosService {
+  
   constructor(
     private _http: HttpClient,
     private _loginServices: LoginService
@@ -102,87 +103,32 @@ export class RechazadosService {
       );
   }
 
-
-  /* posiblemente se elimine */
-  // Nueva función para actualizar precio y símbolo de promoción
-  actualizarPrecioSimboloPromocion(
-    id_rechazo: number,
-    pvp_es_promocion_precio: number,
-    id_simbolo: number
-  ) {
-    let schema = localStorage.getItem('schema');
-    const baseUrl = localStorage.getItem('baseUrl');
-    const port = localStorage.getItem('port');
-    const options = {
+  updateEstadoAccionCorrectora(newStatus: { statusId: number; statusText: string; }, id_rechazo:number) {
+    let baseUrl = localStorage.getItem('baseUrl');
+    let port = localStorage.getItem('port');
+    let options = {
       headers: new HttpHeaders().set(
         'Authorization',
         `Bearer ${this._loginServices.getToken()}`
       ),
     };
-    return this._http
-      .post(`${baseUrl}:${port}/api/rechazo/actualizarPrecioSimboloPromocion`, {
-        schema: schema,
-        id_rechazo: id_rechazo,
-        pvp_es_promocion_precio: pvp_es_promocion_precio,
-        id_simbolo: id_simbolo,
-      })
-      .pipe(
-        map((data: any) => {
-          return data.status;
-        })
-      );
-  }
-
-  ////Nueva funcion para accion correctora
-
-  actualizarAccionCorrectora(id_rechazo: number, accion_correctora: string) {
-    let schema = localStorage.getItem('schema');
-    const baseUrl = localStorage.getItem('baseUrl');
-    const port = localStorage.getItem('port');
-    const options = {
-      headers: new HttpHeaders().set(
-        'Authorization',
-        `Bearer ${this._loginServices.getToken()}`
-      ),
-    };
-
+    console.log(id_rechazo)
     return this._http
       .post(
-        `${baseUrl}:${port}/api/rechazo/actualizarAccionCorrectora`,
+        `${baseUrl}:${port}/api/rechazo/corrective-action/update/${id_rechazo}`,
         {
-          schema: schema,
-          id_rechazo: id_rechazo,
-          accion_correctora: accion_correctora,
+          corrective_action_status_id: newStatus.statusId,
+          corrective_action_status: newStatus.statusText
         },
         options
       )
       .pipe(
         map((data: any) => {
+          console.log('Respuesta del servidor:', data);
           return data.status;
         })
       );
   }
-  /* actualizar estados */
-  actualizarEstados(id_rechazo: number, id_estado: number) {
-    let schema = localStorage.getItem('schema');
-    const baseUrl = localStorage.getItem('baseUrl');
-    const port = localStorage.getItem('port');
-    const options = {
-      headers: new HttpHeaders().set(
-        'Authorization',
-        `Bearer ${this._loginServices.getToken()}`
-      ),
-    };
-    return this._http
-      .post(`${baseUrl}:${port}/api/rechazo/actualizarEstados`, {
-        schema: schema,
-        id_rechazo: id_rechazo,
-        id_estado: id_estado,
-      })
-      .pipe(
-        map((data: any) => {
-          return data.status;
-        })
-      );
-  }
+
+  
 }
