@@ -1,17 +1,11 @@
 @import "src/styles.scss";
 
-.page-heading {
-  text-transform: uppercase;
-  letter-spacing: .2em;
-  font-weight: 300;
-}
-
 .hide {
   visibility: hidden;
   transition: all 1s ease-out;
   opacity: 0;
 }
-.max-w-kpi{
+.max-w-kpi {
   max-width: 100%;
 }
 
@@ -19,14 +13,14 @@
   max-width: 100%;
 }
 @media screen and (min-width: 1200px) {
-  .max-w-kpi{
+  .max-w-kpi {
     max-width: 81%;
   }
 }
 
 span.font-dashboard {
   font-size: small;
-  color: #6D6D6D;
+  color: #6d6d6d;
 }
 
 .abajo {
@@ -49,13 +43,6 @@ span.font-dashboard {
   height: 618px;
 }
 
-
-.icon-title {
-  width: 40px;
-  height: 40px;
-  display: block;
-}
-
 //Estilos tabla
 
 .table-responsive {
@@ -72,8 +59,7 @@ td {
 }
 
 th {
-  color: #3F51B5;
-
+  color: #3f51b5;
 }
 
 /* Fijar las columnas a la izquierda */
@@ -88,7 +74,6 @@ th {
 /* Ancho para la columna 'nombre' */
 .sticky-left:first-child {
   min-width: 400px;
-
 }
 
 /* Ancho para la columna 'total' */
@@ -96,7 +81,6 @@ th {
   min-width: 180px;
   left: 400px;
   padding-right: 10px;
-
 }
 
 .column-rechazos {

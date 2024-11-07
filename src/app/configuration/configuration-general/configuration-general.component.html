@@ -1,8 +1,8 @@
 <div class="background-light-gray screen">
-  <div class="d-flex align-items-center justify-content-start p-3">
-    <i class="bi bi-wrench title-icon dark-gray"></i>
-    <h1 class="mb-0 ps-2 dark-gray page-heading">Configuración</h1>
+  <div class="p-3">
+    <app-page-title [icon]="'wrench'" [isBootstrapIcon]="true" [title]="'Configuración'"></app-page-title>
   </div>
+  
   <div class="container">
     <div class="row">
       <div class="col-lg-4 col-md-6 col-sm-12 align-items-stretch my-3 px-0" *ngFor="let container of containers">
