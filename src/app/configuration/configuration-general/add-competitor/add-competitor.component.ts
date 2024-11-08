@@ -427,25 +427,35 @@ export class AddCompetitorComponent {
     this.filteredFamilyList.forEach((family) => {
       family.selected = !!selectedFamiliesForCompetitor[family.id];
     });
-    this.updateSelectAllCheckbox();
+    this.updateHeaderCheckboxState();
+/*     this.updateSelectAllCheckbox(); */
   }
 
   sortSelectedFamilies(): void {
-    this.filteredFamilyList.sort((a, b) => a.name.localeCompare(b.name));
+    // Primero, se agrupan las familias seleccionadas y no seleccionadas
+    const selectedFamilies = this.filteredFamilyList.filter(family => family.selected);
+    const unselectedFamilies = this.filteredFamilyList.filter(family => !family.selected);
+  
+    // Luego, se ordenan alfabéticamente dentro de cada grupo
+    selectedFamilies.sort((a, b) => a.name.localeCompare(b.name)); // Cambia 'name' por el nombre de la propiedad correcta
+    unselectedFamilies.sort((a, b) => a.name.localeCompare(b.name)); // Cambia 'name' por el nombre de la propiedad correcta
+  
+    // Finalmente, se concatena ambos grupos para devolver la lista ordenada
+    this.filteredFamilyList = [...selectedFamilies, ...unselectedFamilies];
   }
 
   toggleFamilySelection(familyId: number): void {
     const family = this.filteredFamilyList.find((f) => f.id === familyId);
     if (family) {
       family.selected = !family.selected;
-      this.updateSelectAllCheckbox();
+      this.updateHeaderCheckboxState();
     }
   }
   toggleFamilySelectionCheckbox(familyId: number, isSelected: boolean) {
     const family = this.filteredFamilyList.find((f) => f.id === familyId);
     if (family) {
       family.selected = isSelected;
-      this.updateSelectAllCheckbox();
+      this.updateHeaderCheckboxState();
     }
   }
 
