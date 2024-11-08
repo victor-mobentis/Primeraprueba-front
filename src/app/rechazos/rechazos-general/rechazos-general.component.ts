@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, Renderer2, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Renderer2, ChangeDetectorRef, HostListener, ViewChild, ElementRef,OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupMapComponent } from './popup-map-rechazos/popup-map-rechazos.component';
 import { IRechazo } from 'src/app/models/rechazos.model';
@@ -93,6 +93,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
   //mensaje de no guardado
   hasUnsavedChanges: boolean = false;
+  // Variable para hacer referencia a la tabla de rechazos
+  @ViewChild('tablaRechazos') tablaRechazos!: ElementRef;
 
   //select de fila
   selectedRowId: number | null = null;
@@ -120,7 +122,19 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.cargando = true;
 
     this.dataSource = this.dataSource.map(row => ({ ...row, modified: false }));
+
+    this.renderer.listen('document', 'click', (event) => this.onDocumentClick(event));
   }
+
+  onDocumentClick(event: MouseEvent) {
+    if (!this.tablaRechazos.nativeElement.contains(event.target)) {
+      // Si hay cambios no guardados, se ejecuta el guardarCambios
+      if (this.hasUnsavedChanges) {
+        this.guardarCambios();
+      }
+    }
+  }
+
   getProvincia(id: number): string {
     const provincia = this.provincias.find((c) => c.id == id);
     return provincia ? provincia.name : 'No encontrado';
