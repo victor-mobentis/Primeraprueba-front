@@ -4,6 +4,7 @@ import {
   Input,
   OnChanges,
   Output,
+  HostListener 
 } from '@angular/core';
 
 @Component({
@@ -21,16 +22,31 @@ export class PaginationComponent implements OnChanges {
 
   totalPages: number = 0;
   pages: (number | string)[] = [];
-  maxVisiblePages: number = 9;
+  maxVisiblePages: number = 7;
 
   itemsPerPageOptions: number[] = [5, 10, 20, 50]; // Opciones para el selector
+  // Variable para saber si estamos en móvil
+  isMobile: boolean = false;
 
   ngOnInit() {
+    this.detectMobile();
     this.updatePagination();
   }
 
   ngOnChanges() {
+    this.detectMobile(); // Detectamos el tamaño de la pantalla cada vez que cambia algo
     this.updatePagination();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.detectMobile();
+    this.updatePagination();  // Actualizamos la paginación cuando el tamaño cambia
+  }
+
+  // Detectamos el tamaño de la pantalla
+  detectMobile() {
+    this.isMobile = window.innerWidth <= 768;  // Umbral para determinar si es móvil, ajusta según tus necesidades
   }
 
   updatePagination() {
@@ -41,32 +57,38 @@ export class PaginationComponent implements OnChanges {
   generatePages() {
     const pagesArray: (number | string)[] = [];
 
-    if (this.totalPages <= this.maxVisiblePages) {
+    // Ajustar la lógica según si estamos en móvil o escritorio
+    const maxVisible = this.isMobile ? 6 : this.maxVisiblePages; // Menos páginas en móvil
+
+
+    if (this.totalPages <= maxVisible) {
       for (let i = 1; i <= this.totalPages; i++) {
         pagesArray.push(i);
       }
     } else {
-      const startPage = Math.max(3, this.currentPage - 2);
-      const endPage = Math.min(this.totalPages - 2, this.currentPage + 2);
+      const startPage = Math.max(3, this.currentPage - 1);
+      const endPage = Math.min(this.totalPages - 1, this.currentPage + 1);
 
       pagesArray.push(1);
 
       if (this.currentPage <= 3) {
-        for (let i = 2; i <= 7; i++) {
+        for (let i = 2; i <= maxVisible - 2 ; i++) {
           pagesArray.push(i);
         }
         pagesArray.push('...');
       } else if (this.currentPage >= this.totalPages - 2) {
         pagesArray.push('...');
-        for (let i = this.totalPages - 6; i < this.totalPages; i++) {
+        for (let i = this.totalPages - maxVisible + 3 ; i < this.totalPages; i++) {
           pagesArray.push(i);
         }
+        
       } else {
         pagesArray.push('...');
         for (let i = startPage; i <= endPage; i++) {
           pagesArray.push(i);
         }
         pagesArray.push('...');
+        console.log('5')
       }
 
       pagesArray.push(this.totalPages);
