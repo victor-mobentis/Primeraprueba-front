@@ -114,7 +114,8 @@ export class LoginService {
   }
 
   resetPassword(email: string) {
-
+    console.log((this.baseUrl));
+    console.log((this.port));
     return this.http
       .post<User>(`${this.baseUrl}:${this.port}/api/users/reset-password`, {
         email: email,
