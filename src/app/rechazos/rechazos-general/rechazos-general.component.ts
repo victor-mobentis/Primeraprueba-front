@@ -17,6 +17,8 @@ import { ReasonsRejectionsComponent } from 'src/app/configuration/configuration-
 import { AddCompetitorComponent } from 'src/app/configuration/configuration-general/add-competitor/add-competitor.component';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { CompetidoresService } from 'src/app/services/competitors/competidores.service';
+import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
+
 
 @Component({
   selector: 'app-rechazos-general',
@@ -24,6 +26,7 @@ import { CompetidoresService } from 'src/app/services/competitors/competidores.s
   styleUrls: ['./rechazos-general.component.scss'],
 })
 export class RechazosGeneralComponent implements AfterViewInit, OnInit {
+
   displayedColumns: string[] = [
     'select',
     'estado',
@@ -100,6 +103,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   selectedRowId: number | null = null;
   modifiedRow: number | null = null;
 
+
+  dialogOpen: boolean = false; // Inicializa en false
+
   constructor(
     private renderer: Renderer2,
     public dialog: MatDialog,
@@ -168,6 +174,17 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         console.log('Rechazos cargados:', data.items);
         const rechazosData: IRechazo[] = data.items;
         this.dataSource = rechazosData;
+
+         // Guarda los valores originales en el Map
+        this.originalValues.clear(); // Limpia valores anteriores
+        rechazosData.forEach(row => {
+          this.originalValues.set(row.id, {
+            corrective_action_value: row.corrective_action_value,
+            corrective_action_symbol_id: row.corrective_action_symbol_id,
+            corrective_action_text: row.corrective_action_text,
+          });
+        });
+
         this.totalItems = data.totalItems;
         this.loadCompetidores()
         this.cargando_filtros = false;
@@ -225,6 +242,13 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       document.head.appendChild(script);
     }
   }
+
+  /* para guardar los valores originales de oportunidad */
+  private originalValues = new Map<number, { 
+    corrective_action_value: number; 
+    corrective_action_symbol_id: number; 
+    corrective_action_text: string; 
+  }>();
 
   getEstado(id: number): string {
     const estado = this.estados.find((c) => c.id == id);
@@ -439,6 +463,22 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     // Marca cambios no guardados
     this.hasUnsavedChanges = true;
   }
+
+  onStatusChange(event: { statusId: number; statusText: string }, row: IRechazo) {
+    row.corrective_action_status_id = event.statusId;
+    row.corrective_action_status = event.statusText
+
+    // Si el estado cambia a 2, guarda los valores actuales como originales
+    if (event.statusId === 2) {
+      this.originalValues.set(row.id, {
+        corrective_action_value: row.corrective_action_value,
+        corrective_action_symbol_id: row.corrective_action_symbol_id,
+        corrective_action_text: row.corrective_action_text,
+      });
+    }
+
+  }
+
   changeEstado(event: Event, row: IRechazo) {
     const selectElement = event.target as HTMLSelectElement;
     if (selectElement) {
@@ -530,20 +570,84 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     if (this.modifiedRow !== null) {
       const row = this.dataSource.find(item => item.id === this.modifiedRow);
       if (row) {
-
         // Verifica si el campo `corrective_action_text` contiene caracteres prohibidos
         if (this.hayCaracteresProhibidos(row.corrective_action_text)) {
-          // Muestra advertencia y no envía los cambios
           this._notifactionService.showWarning("La promoción contiene caracteres no permitidos. No se pueden guardar los cambios.");
-          return; // Sale de la función sin enviar
+          return;
         }
+  
+        // Recupera los valores originales si el estado está en 2
+        const original = this.originalValues.get(row.id);
+  
+      // Si el estado está en 2 o 3, verifica si hubo cambios
+      if ((row.corrective_action_status_id === 2 || row.corrective_action_status_id === 3) && original) {
+        const hasChanges =
+          row.corrective_action_value !== original.corrective_action_value ||
+          row.corrective_action_symbol_id !== original.corrective_action_symbol_id ||
+          row.corrective_action_text !== original.corrective_action_text;
 
+        if (hasChanges) {
+          if (row.corrective_action_status_id === 2) {
+            // Cambia directamente a 1 si el estado está en 2
+            const newStatus = { statusId: 1, statusText: 'Sin activar' };
+            this.rechazadosService.updateEstadoAccionCorrectora(newStatus, row.id).subscribe(
+              (status) => {
+                if (status === 'Success') {
+                  this._notifactionService.showSuccess('Estado actualizado correctamente.');
+                  row.corrective_action_status_id = newStatus.statusId;
+                  row.corrective_action_status = newStatus.statusText;
+                }
+              },
+              (error) => {
+                console.error('Error al actualizar el estado:', error);
+                this._notifactionService.showError('Error al actualizar el estado.');
+              }
+            );
+          } else if (row.corrective_action_status_id === 3 && !this.dialogOpen) {
+            this.dialogOpen = true;
+            // Confirma el cambio si el estado está en 3
+            this.dialog
+              .open(ConfirmDialogComponent, {
+                data: `¿Está seguro de cambiar el estado a "Sin activar"? Esto indicará que la acción requiere revisión nuevamente.`,
+              })
+              .afterClosed()
+              .subscribe((confirmado: boolean) => {
+                this.dialogOpen = false;
+                if (confirmado) {
+                  const newStatus = { statusId: 1, statusText: 'Sin activar' };
+                  this.rechazadosService.updateEstadoAccionCorrectora(newStatus, row.id).subscribe(
+                    (status) => {
+                      if (status === 'Success') {
+                        this._notifactionService.showSuccess('Estado actualizado correctamente.');
+                        row.corrective_action_status_id = newStatus.statusId;
+                        row.corrective_action_status = newStatus.statusText;
+                      }
+                    },
+                    (error) => {
+                      console.error('Error al actualizar el estado:', error);
+                      this._notifactionService.showError('Error al actualizar el estado.');
+                    }
+                  );
+                }
+              });
+          }
+        }
+      }
+        
+  
+        // Guarda los cambios
         this.rechazadosService.updateRechazo(row).subscribe(
           (status) => {
             console.log('Rechazo actualizado:', status);
             this._notifactionService.showSuccess('Cambios guardados correctamente.');
-            this.modifiedRow = null; // Reinicia después de guardar
+            this.modifiedRow = null;
             this.hasUnsavedChanges = false;
+            // Actualiza los valores originales después de guardar
+            this.originalValues.set(row.id, {
+              corrective_action_value: row.corrective_action_value,
+              corrective_action_symbol_id: row.corrective_action_symbol_id,
+              corrective_action_text: row.corrective_action_text,
+            });
           },
           (error) => {
             console.error('Error al actualizar el rechazo:', error);
@@ -552,9 +656,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         );
       }
     }
-  }
+}
 
-  selectReject(rowId: number) {
+selectReject(rowId: number) {
   if (this.modifiedRow !== null && this.modifiedRow !== rowId) {
     this.guardarCambios(); // Guarda cambios de la fila anterior
   }
@@ -687,8 +791,5 @@ showTooltipForSelect(event: MouseEvent, optionsList: any[], idKey: string, nameK
     return item.value; 
   }
 
-  onStatusChange(event: { statusId: number; statusText: string }, row: IRechazo) {
-    row.corrective_action_status_id = event.statusId;
-    row.corrective_action_status = event.statusText
-  }
+  
 }

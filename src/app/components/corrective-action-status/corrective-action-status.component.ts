@@ -12,6 +12,12 @@ export class CorrectiveActionStatusComponent {
   @Input() statusId!: number;
   @Input() statusText!: string;
   @Input() rejectionId!: number;
+
+  @Input() correctiveActionValue!: number; // Valor de la acción correctora
+  @Input() correctiveActionSymbolId!: number; // Símbolo seleccionado
+  @Input() correctiveActionText!: string; // Texto de la acción correctora
+
+  @Output() beforeStatusChange = new EventEmitter<void>();
   @Output() statusChange = new EventEmitter<{
     statusId: number;
     statusText: string;
@@ -23,10 +29,26 @@ export class CorrectiveActionStatusComponent {
   ) {}
 
   handleStatusClick() {
-    if (this.statusId === 1) {
-      const newStatus = { statusId: 2, statusText: 'Pendiente de envío' };
-      this.updateStatus(newStatus);
+    // Validar los tres campos necesarios
+    if (this.isRowComplete()) {
+      if (this.statusId === 1) {
+        const newStatus = { statusId: 2, statusText: 'Pendiente de activar' };
+        this.updateStatus(newStatus);
+      } else {
+        this._notifactionService.showWarning('El estado actual no permite cambios.');
+      }
+    } else {
+      this._notifactionService.showWarning('Por favor, complete todos los campos antes de cambiar el estado.');
     }
+  }
+
+  // Función que valida los tres campos específicos
+  isRowComplete(): boolean {
+    return (
+      this.correctiveActionValue > 0 && // El valor numérico es mayor a 0
+      !!this.correctiveActionSymbolId && // El símbolo está seleccionado
+      this.correctiveActionText?.trim().length > 0 // El texto no está vacío
+    );
   }
 
   updateStatus(newStatus: { statusId: number; statusText: string }) {

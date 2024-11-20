@@ -155,7 +155,7 @@
               <td class="fondo_accionCorrectora">
                 <div class="d-flex align-items-center gap-1">
                   <!-- Campo para precio de promoción -->
-                  <input type="number" class="form-control form-control-sm accion_correctora_precio text-success"
+                  <input type="number" class="form-control form-control-sm accion_correctora_precio color-primary"
                     [(ngModel)]="row.corrective_action_value" placeholder="0" min="0"
                     (input)="changeNumber($event, row)" />
 
@@ -168,15 +168,17 @@
                   </select>
 
                   <!-- Campo para acción correctora -->
-                  <input type="text" class="truncate-text form-control form-control-sm text-success"
+                  <input type="text" class="truncate-text form-control form-control-sm color-primary"
                     [(ngModel)]="row.corrective_action_text" maxlength="50" placement="top" placeholder="Promoción"
                     (ngModelChange)="changeText($event, row)" [ngbTooltip]="tooltipText"
                     (mouseover)="applyTooltipIfTruncated($event, row.corrective_action_text)" />
                   <!-- campo de estado -->
                   <div class=" d-flex align-items-center justify-self-center">
                     <app-corrective-action-status [statusId]="row.corrective_action_status_id"
-                      [statusText]="row.corrective_action_status" [rejectionId]="row.id"
-                      (statusChange)="onStatusChange($event, row)"></app-corrective-action-status>
+                      [statusText]="row.corrective_action_status" [rejectionId]="row.id" 
+                      (statusChange)="onStatusChange($event, row)" [correctiveActionValue]="row.corrective_action_value"
+                      [correctiveActionSymbolId]="row.corrective_action_symbol_id"
+                      [correctiveActionText]="row.corrective_action_text"></app-corrective-action-status>
                   </div>
                 </div>
               </td>
