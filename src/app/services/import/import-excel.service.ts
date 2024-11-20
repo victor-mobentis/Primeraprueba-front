@@ -8,16 +8,10 @@ import { LoginService } from '../auth/login.service';
 })
 export class ImportExcelService {
 
-  private baseUrl = "";
-  private puerto_integracion = "";
-
   constructor(
     private _http: HttpClient,
     private _loginServices: LoginService
-  ) {
-    this.baseUrl = String(localStorage.getItem('baseUrl'));
-    this.puerto_integracion = String(localStorage.getItem('puerto_integracion'));
-  }
+  ) {}
 
 
   importExcel(recarga: any) {

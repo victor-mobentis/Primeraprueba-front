@@ -23,8 +23,6 @@ export class RechazadosService {
     sortColumn: string,
     sortDirection: string
   ): Observable<IRechazo[]> {
-    let baseUrl = localStorage.getItem('baseUrl');
-    let port = localStorage.getItem('port');
     let options = {
       headers: new HttpHeaders().set(
         'Authorization',
@@ -34,7 +32,7 @@ export class RechazadosService {
     console.log(searchTerm);
     return this._http
       .post<IRechazo[]>(
-        `${baseUrl}:${port}/api/rechazo`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/rechazo`,
         {
           selectedFilters,
           searchTerm,
@@ -54,8 +52,6 @@ export class RechazadosService {
   }
 
   countEstadosRechazos(): Observable<IEstadosRechazoCount[]> {
-    let baseUrl = localStorage.getItem('baseUrl');
-    let port = localStorage.getItem('port');
     let options = {
       headers: new HttpHeaders().set(
         'Authorization',
@@ -63,14 +59,12 @@ export class RechazadosService {
       ),
     };
     return this._http.get<IEstadosRechazoCount[]>(
-      `${baseUrl}:${port}/api/rechazo/count`,
+      `${this._loginServices.baseUrl}:${this._loginServices.port}/api/rechazo/count`,
       options
     );
   }
   /* nueva funcion para actualizar rechazos */
   updateRechazo(rechazo: IRechazo ) {
-    let baseUrl = localStorage.getItem('baseUrl');
-    let port = localStorage.getItem('port');
     let options = {
       headers: new HttpHeaders().set(
         'Authorization',
@@ -80,7 +74,7 @@ export class RechazadosService {
     console.log(rechazo);
     return this._http
       .post(
-        `${baseUrl}:${port}/api/rechazo/update/${rechazo.id}`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/rechazo/update/${rechazo.id}`,
         {
           status: rechazo.status,
           status_id: rechazo.status_id,
@@ -104,8 +98,6 @@ export class RechazadosService {
   }
 
   updateEstadoAccionCorrectora(newStatus: { statusId: number; statusText: string; }, id_rechazo:number) {
-    let baseUrl = localStorage.getItem('baseUrl');
-    let port = localStorage.getItem('port');
     let options = {
       headers: new HttpHeaders().set(
         'Authorization',
@@ -115,7 +107,7 @@ export class RechazadosService {
     console.log(id_rechazo)
     return this._http
       .post(
-        `${baseUrl}:${port}/api/rechazo/corrective-action/update/${id_rechazo}`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/rechazo/corrective-action/update/${id_rechazo}`,
         {
           corrective_action_status_id: newStatus.statusId,
           corrective_action_status: newStatus.statusText

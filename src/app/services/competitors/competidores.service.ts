@@ -9,18 +9,11 @@ import { LoginService } from '../auth/login.service';
   providedIn: 'root',
 })
 export class CompetidoresService {
-  private baseUrl = '';
-  private port = '';
 
-  constructor(private _http: HttpClient, private _loginServices: LoginService) {
-    this.baseUrl = String(localStorage.getItem('baseUrl'));
-    this.port = String(localStorage.getItem('port'));
-  }
+  constructor(private _http: HttpClient, private _loginServices: LoginService) {}
 
   /* llama a todos los competidores */
   getCompetidores(): Observable<ICompetidor[]> {
-    let baseUrl = localStorage.getItem('baseUrl');
-    let port = localStorage.getItem('port');
     let options = {
       headers: new HttpHeaders().set(
         'Authorization',
@@ -28,7 +21,7 @@ export class CompetidoresService {
       ),
     };
     return this._http
-      .get<ICompetidor[]>(`${baseUrl}:${port}/api/competidores/`, options)
+      .get<ICompetidor[]>(`${this._loginServices.baseUrl}:${this._loginServices.port}/api/competidores/`, options)
       .pipe(
         map((data: any) => {
           return data;
@@ -45,7 +38,7 @@ export class CompetidoresService {
     };
     return this._http
       .get<ICompetidor>(
-        `${this.baseUrl}:${this.port}/api/competidores/${id}`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/competidores/${id}`,
         options
       )
       .pipe(
@@ -56,8 +49,6 @@ export class CompetidoresService {
   }
 
   getCompetidoresPorFamilia(family_id: number): Observable<ICompetidor[]> {
-    let baseUrl = localStorage.getItem('baseUrl');
-    let port = localStorage.getItem('port');
     let options = {
       headers: new HttpHeaders().set(
         'Authorization',
@@ -65,7 +56,7 @@ export class CompetidoresService {
       ),
     };
     return this._http
-      .get<ICompetidor[]>(`${baseUrl}:${port}/api/competidores/family/${family_id}`, options)
+      .get<ICompetidor[]>(`${this._loginServices.baseUrl}:${this._loginServices.port}/api/competidores/family/${family_id}`, options)
       .pipe(
         map((data: any) => {
           return data;
@@ -83,7 +74,7 @@ export class CompetidoresService {
     console.log(competidores);
     return this._http
       .post(
-        `${this.baseUrl}:${this.port}/api/competidores/update/name/${competidores.id}`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/competidores/update/name/${competidores.id}`,
         {
           nombre: competidores.name
         },
@@ -106,7 +97,7 @@ export class CompetidoresService {
     };
     return this._http
       .post(
-        `${this.baseUrl}:${this.port}/api/competidores/update/segmentations/${id}`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/competidores/update/segmentations/${id}`,
         {
           product_segmentation_ids: product_segmentation_ids
         },
@@ -129,7 +120,7 @@ export class CompetidoresService {
     };
     return this._http
       .post(
-        `${this.baseUrl}:${this.port}/api/competidores/add`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/competidores/add`,
         {
           nombre: competidores.name,
           product_segmentation_ids: product_segmentation_ids,
@@ -151,7 +142,7 @@ export class CompetidoresService {
     };
     return this._http
       .delete(
-        `${this.baseUrl}:${this.port}/api/competidores/delete/${id}`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/competidores/delete/${id}`,
         options
       )
       .pipe(

@@ -10,13 +10,8 @@ import { Contact } from 'src/app/models/clientContact.model';
   providedIn: 'root',
 })
 export class ClientsService {
-  private baseUrl = '';
-  private port = '';
 
-  constructor(private _http: HttpClient, private _loginServices: LoginService) {
-    this.baseUrl = String(localStorage.getItem('baseUrl'));
-    this.port = String(localStorage.getItem('port'));
-  }
+  constructor(private _http: HttpClient, private _loginServices: LoginService) {}
 
   //Obtenemos la lista de clientes
   getClients(
@@ -36,7 +31,7 @@ export class ClientsService {
     };
     return this._http
       .post<IClient[]>(
-        `${this.baseUrl}:${this.port}/api/clients`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/clients`,
         {
           selectedFilters,
           searchTerm,
@@ -65,7 +60,7 @@ export class ClientsService {
     };
     return this._http
       .post<IClient[]>(
-        `${this.baseUrl}:${this.port}/api/clients/${id}`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/clients/${id}`,
         {},
         options
       )
@@ -86,7 +81,7 @@ export class ClientsService {
     };
     return this._http
       .post(
-        `${this.baseUrl}:${this.port}/api/clients/contacts/:id${id}`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/clients/contacts/:id${id}`,
         {},
         options
       )

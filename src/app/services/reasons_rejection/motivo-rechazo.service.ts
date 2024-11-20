@@ -10,18 +10,11 @@ import { LoginService } from '../auth/login.service';
 })
 export class MotivoRechazoService {
 
-  private baseUrl = "";
-  private port = "";
-
 
   constructor(
     private _http: HttpClient,
     private _loginServices: LoginService
-  ) {
-    this.baseUrl = String(localStorage.getItem('baseUrl'));
-    this.port = String(localStorage.getItem('port'));
-  
-  }
+  ) {}
 
   getReasons(): Observable<IMotivoRechazo[]> {
     let options = {
@@ -32,7 +25,7 @@ export class MotivoRechazoService {
     };
     return this._http
       .get<IMotivoRechazo[]>(
-        `${this.baseUrl}:${this.port}/api/motivos-rechazo`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/motivos-rechazo`,
         options
       )
       .pipe(
@@ -50,7 +43,7 @@ export class MotivoRechazoService {
     };
     return this._http
       .get<IMotivoRechazo>(
-        `${this.baseUrl}:${this.port}/api/motivos-rechazo/${id}`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/motivos-rechazo/${id}`,
         options
       )
       .pipe(
@@ -69,7 +62,7 @@ export class MotivoRechazoService {
     };
     return this._http
       .post(
-        `${this.baseUrl}:${this.port}/api/motivos-rechazo/update/${motivoRechazo.id}`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/motivos-rechazo/update/${motivoRechazo.id}`,
         {
           codigo: motivoRechazo.rejection_code,
           nombre: motivoRechazo.name,
@@ -94,7 +87,7 @@ export class MotivoRechazoService {
     };
     return this._http
       .post(
-        `${this.baseUrl}:${this.port}/api/motivos-rechazo/add`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/motivos-rechazo/add`,
         {
           codigo: motivoRechazo.rejection_code,
           nombre: motivoRechazo.name,
@@ -116,7 +109,7 @@ export class MotivoRechazoService {
     };
     return this._http
       .post(
-        `${this.baseUrl}:${this.port}/api/motivos-rechazo/delete/${id}`,
+        `${this._loginServices.baseUrl}:${this._loginServices.port}/api/motivos-rechazo/delete/${id}`,
         {},
         options
       )

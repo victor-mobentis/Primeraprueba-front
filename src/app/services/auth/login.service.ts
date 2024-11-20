@@ -30,13 +30,13 @@ export class LoginService {
     cargo: '',
   });
 
-  private baseUrl = "";
-  private port = "";
+  public baseUrl = "";
+  public port = "";
   private puerto_archivos = "";
 
 
   user: string | null = localStorage.getItem('user');
-  cargo: string | null = localStorage.getItem('position_company');
+  cargo: string | null = localStorage.getItem('cargo');
   lastname: string | null = localStorage.getItem('lastname');
 
 
@@ -46,7 +46,7 @@ export class LoginService {
   ) {
     this.user = localStorage.getItem('user');
     this.lastname = localStorage.getItem('lastname');
-    this.cargo = localStorage.getItem('position_company');
+    this.cargo = localStorage.getItem('cargo');
     this.inicializar();
   }
 

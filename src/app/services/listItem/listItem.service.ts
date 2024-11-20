@@ -13,19 +13,11 @@ import { AddCompetitorComponent } from 'src/app/configuration/configuration-gene
   providedIn: 'root',
 })
 export class ListItemService {
-  private baseUrl = '';
-  private puerto_integracion = '';
-
   constructor(
     private _http: HttpClient,
     private _loginServices: LoginService,
     public dialog: MatDialog
-  ) {
-    this.baseUrl = String(localStorage.getItem('baseUrl'));
-    this.puerto_integracion = String(
-      localStorage.getItem('puerto_integracion')
-    );
-  }
+  ) {}
 
   private functionRegistry: { [key: string]: () => void } = {
     openProfileEditPopup: () => {
@@ -58,8 +50,6 @@ export class ListItemService {
     }
   }
   getConfigContainers(): Observable<ConfigurationContainer[]> {
-    let baseUrl = localStorage.getItem('baseUrl');
-    let port = localStorage.getItem('port');
     let options = {
       headers: new HttpHeaders().set(
         'Authorization',
@@ -67,7 +57,7 @@ export class ListItemService {
       ),
     };
     return this._http.get<ConfigurationContainer[]>(
-      `${baseUrl}:${port}/api/lista-navegable/configuracion`,
+      `${this._loginServices.baseUrl}:${this._loginServices.port}/api/lista-navegable/configuracion`,
       options
     );
   }
