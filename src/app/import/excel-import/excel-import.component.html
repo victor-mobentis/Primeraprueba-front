@@ -6,11 +6,22 @@
       <button class="btn btn-link" (click)="volverAConfig()">
         <i class="bi bi-arrow-left dadrk-gray"></i>
       </button>
-      <h2 *ngIf="selectedSheet" class="m-0 ps-3">{{ selectedSheet.name }} -</h2>
+      <div class="d-flex gap-2 p-1" *ngIf="ExcelData.length > 1">
+        <select
+          id="sheetSelector"
+          class="form-select form-select-sm"
+          [(ngModel)]="selectedSheet"
+          (change)="showTable(selectedSheet.name)">
+          <option *ngFor="let sheet of ExcelData" [ngValue]="sheet">
+            {{ sheet.name }}
+          </option>
+        </select>
+      </div>
+      <h2 *ngIf="selectedSheet" class="m-0 px-3">-</h2>
       <!-- Contenedor para el selector y el icono -->
       <div class="d-flex align-items-center ps-1">
         <!-- Selector de tabla -->
-        <select class="form-select form-select-sm" [(ngModel)]="tablaActiva" (change)="cambiarTablaCabecera()">
+        <select class="form-select form-select-sm" [(ngModel)]="tablaActiva" (change)="cambiarTablaCabecera()" [disabled]="!selectedSheet">
           <option *ngFor="let tabla of tablasMobentis; let i = index" [value]="i">
             {{ tabla }}
           </option>
@@ -61,12 +72,5 @@
   </div>
 
   <!-- Botones para cada hoja del Excel -->
-  <div class="d-flex gap-2 p-1" *ngIf="ExcelData.length > 1">
-    <div *ngFor="let sheet of ExcelData">
-      <button class="btn btn-sm btn-outline-primary" (click)="showTable(sheet.name)"
-        [class.active]="selectedSheet.name === sheet.name">
-        {{ sheet.name }}
-      </button>
-    </div>
-  </div>
+  
 </div>

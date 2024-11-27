@@ -29,3 +29,11 @@ th {
   margin: 3px;
   color: gray;
 }
+
+th {
+  cursor: move;
+}
+
+th.dragging {
+  opacity: 0.5;
+}
