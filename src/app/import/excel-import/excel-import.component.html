@@ -6,48 +6,57 @@
       <button class="btn btn-link" (click)="volverAConfig()">
         <i class="bi bi-arrow-left dadrk-gray"></i>
       </button>
-      <!-- select para seleccionar hoja de la tabla de excel -->
-      <div class="d-flex gap-2 p-1" *ngIf="ExcelData.length > 1">
-        <select
-          id="sheetSelector"
-          class="form-select form-select-sm"
-          [(ngModel)]="selectedSheet"
-          (change)="showTable(selectedSheet.name)">
-          <option *ngFor="let sheet of ExcelData" [ngValue]="sheet">
-            {{ sheet.name }}
-          </option>
-        </select>
-      </div>
+      <!-- Apartado: nombre de las hojas, seleccion de tablas y boton de seleccionar archivo -->
+      <div *ngIf="selectedSheet" class="d-flex align-items-center">
+        <!-- select para seleccionar hoja de la tabla de excel -->
+        <div class="d-flex gap-2 p-1" *ngIf="ExcelData.length > 1">
+          <select
+            id="sheetSelector"
+            class="form-select form-select-sm"
+            [(ngModel)]="selectedSheet"
+            (change)="showTable(selectedSheet.name)">
+            <option *ngFor="let sheet of ExcelData" [ngValue]="sheet">
+              {{ sheet.name }}
+            </option>
+          </select>
+        </div>
+        
+        <!-- Si hay solo una hoja, mostrar su nombre en un H2 -->
+        <h2 *ngIf="ExcelData.length === 1" class="m-0">{{ ExcelData[0]?.name }}</h2>
       
-      <!-- Si hay solo una hoja, mostrar su nombre en un H2 -->
-      <h2 *ngIf="ExcelData.length === 1" class="m-0">{{ ExcelData[0]?.name }}</h2>
-    
-      <h2 *ngIf="selectedSheet" class="m-0 px-3">-</h2>
-      <!-- Contenedor para el selector y el icono -->
-      <div class="d-flex align-items-center ps-1">
-        <!-- Selector de tabla -->
-        <select class="form-select form-select-sm" [(ngModel)]="tablaActiva" (change)="cambiarTablaCabecera()" [disabled]="!selectedSheet">
-          <option [value]="-1" disabled hidden>-- Seleccione una tabla --</option>
-          <option *ngFor="let tabla of tablasMobentis; let i = index" [value]="i">
-            {{ tabla }}
-          </option>
-        </select>
-        <!-- Icono de información con tooltip -->
-        <i class="bi bi-info-circle ms-2"
-          ngbTooltip="Selecciona el tipo de dato que contiene el archivo seleccionado y que deseas importar"></i>
+        <h2 *ngIf="selectedSheet" class="m-0 px-3">-</h2>
+        <!-- Contenedor para el selector y el icono -->
+        <div class="d-flex align-items-center ps-1">
+          <!-- Selector de tabla -->
+          <select class="form-select form-select-sm" [(ngModel)]="tablaActiva" (change)="cambiarTablaCabecera()" [disabled]="!selectedSheet">
+            <option [value]="-1" disabled hidden>-- Seleccione una tabla --</option>
+            <option *ngFor="let tabla of tablasMobentis; let i = index" [value]="i">
+              {{ tabla }}
+            </option>
+          </select>
+          <!-- Icono de información con tooltip -->
+          <i class="bi bi-info-circle ms-2"
+            ngbTooltip="Selecciona el tipo de dato que contiene el archivo seleccionado y que deseas importar"></i>
+        </div>
+        <!-- Botón para seleccionar archivo -->
+        <button class="btn btn-sm btn-primary ms-3" (click)="abrirInput()">Seleccionar archivo</button>
       </div>
-      <!-- Botón para seleccionar archivo -->
-      <button class="btn btn-sm btn-primary ms-3" (click)="abrirInput()">Seleccionar archivo</button>
     </div>
-
     <!-- Botón de importación -->
     <button class="btn  btn-sm btn-primary" [disabled]="!selectedSheet" (click)="importar()">Importar
       Selección</button>
-  </div>
+    </div>
 
-  <div *ngIf="!selectedSheet" class="placeholder-box d-flex justify-content-center align-items-center flex-column">
+  <div 
+    *ngIf="!selectedSheet" 
+    class="placeholder-box d-flex justify-content-center align-items-center flex-column"
+    [class.drag-over]="isDragging"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave()"
+    (drop)="onFileDrop($event)"  
+  >
     <i class="bi bi-cloud-upload-fill mb-4" style="font-size: 40px;"></i>
-    <h2 class="mb-2">Seleccione un archivo .xlsx<br/> o</h2>
+    <h2 class="mb-2">Seleccione un archivo Excel<br/>o</h2>
     <button class="btn btn-sm btn-primary " (click)="abrirInput()">Seleccionar archivo</button>
   </div>
 
@@ -83,8 +92,4 @@
       </tbody>
     </table>
   </div>
-  <!-- Mensaje cuando la hoja está vacía -->
-<div *ngIf="isSheetEmpty" class=" d-flex justify-content-center align-items-center">
-  No hay datos en el archivo.
-</div>
 </div>

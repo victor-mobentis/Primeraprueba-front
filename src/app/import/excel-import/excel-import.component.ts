@@ -13,6 +13,9 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./excel-import.component.scss'],
 })
 export class ExcelImportComponent {
+
+  isDragging = false;
+
   tablaActiva: number= -1;
   tablasMobentis: any[] = ['Clientes', 'Vendedores', 'Rechazos'];
   tablasMobentisReales: any[] = ['customers', 'salesmen', 'rechazos'];
@@ -132,6 +135,36 @@ export class ExcelImportComponent {
     this.cambiarTablaCabecera();
     this.dropdownVisible = {};
   }
+  /// Para lograr el arrastreado de archivos excel a la pagina
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = true;
+  }
+
+  onDragLeave(): void {
+    this.isDragging = false;
+  }
+
+  onFileDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = false;
+  
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+  
+      // Validar el tipo de archivo
+      if (
+        file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+        file.type === 'application/vnd.ms-excel'
+      ) {
+        this.ReadExcel({ target: { files: [file] } }); // Reutiliza tu lógica existente
+      } else {
+        this._notifactionService.showError('Por favor, arrastre un archivo Excel válido.');
+      }
+  
+      event.dataTransfer.clearData();
+    }
+  }
 
   ngAfterContentInit(): void {
     window.scrollTo(0, 0);
@@ -154,16 +187,28 @@ export class ExcelImportComponent {
       // Reiniciar ExcelData al cargar un nuevo archivo
       this.ExcelData = [];
       this.selectedSheet = null;
+      let hojasVacias: string[] = [];
       
-      // Iterar sobre cada nombre de hoja
+      /* Se pondra el nombre de las hojas */
       sheetNames.forEach((sheetName) => {
-        // Convertir cada hoja en un objeto JSON y agregarlo a la matriz ExcelData
         let jsonData = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName]);
-        this.ExcelData.push({ sheetName: jsonData, name: sheetName }); // Añadir el nombre de la hoja junto con los datos
-        this.dropdownVisible[sheetName] = false; // Inicializar la visibilidad del menú desplegable como falso para cada hoja
+
+        /* se pone en el array las hojas si esta vacias */
+        if (jsonData.length === 0) {
+          hojasVacias.push(sheetName);
+        } else {
+          this.ExcelData.push({ sheetName: jsonData, name: sheetName }); /* se añade las hojas  */
+          this.dropdownVisible[sheetName] = false; // Inicializar la visibilidad del menú desplegable como falso para cada hoja
+        }
       });
 
-      // Establecer la primera hoja como la hoja seleccionada automáticamente
+      // Mostrar mensaje de advertencia si hay hojas vacías
+      if (hojasVacias.length > 0) {
+        this._notifactionService.showWarning(
+          `Las siguientes hojas están vacías y no serán procesadas: ${hojasVacias.join(', ')}`
+        );
+      }
+
       // Establecer la primera hoja como seleccionada automáticamente
       if (this.ExcelData.length > 0) {
         this.selectedSheet = this.ExcelData[0];
