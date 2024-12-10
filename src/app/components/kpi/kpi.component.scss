@@ -118,3 +118,13 @@ span.font-dashboard {
     border-radius: 14px;
 }
 
+.min-w-reasonReject,
+.min-w-convertidor {
+    cursor: grab;
+    user-select: none; // Evita que el texto sea seleccionado al arrastrar
+}
+
+.min-w-reasonReject:active,
+.min-w-convertidor:active {
+    cursor: grabbing;
+}
