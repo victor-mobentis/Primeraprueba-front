@@ -33,12 +33,8 @@
             <div class="form-group w-100">
               <label for="password">Password</label>
               <div class="input-group">
-                <input [type]="hide ? 'password' : 'text'" id="password" class="form-control" [formControl]="passFormControl">
-                <div class="input-group-append">
-                  <button type="button" class="btn btn-outline-secondary" (click)="hide = !hide">
-                    <i class="bi" [ngClass]="hide ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
-                  </button>
-                </div>
+                <input [type]="hide ? 'password' : 'text'" id="password" class="form-control rounded" [formControl]="passFormControl">
+                <i class="bi position-absolute top-50 translate-middle-y me-2 end-0" [ngClass]="hide ? 'bi-eye-slash-fill' : 'bi-eye-fill'" (click)="hide = !hide" style="cursor: pointer;"></i>
               </div>
               <div *ngIf="passFormControl.invalid && (passFormControl.dirty || passFormControl.touched)" class="invalid-feedback d-block">
                 <div *ngIf="passFormControl.hasError('required')">
