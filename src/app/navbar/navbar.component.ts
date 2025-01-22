@@ -1,10 +1,10 @@
-import { Component, ViewChild, ElementRef  } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../services/auth/login.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileEditPopupComponent } from '../configuration/configuration-general/profile-edit-popup/profile-edit-popup.component'; // Ajusta la ruta
 import { MenuService } from '../services/menu/menu.service';
-import { MenuItem }  from 'src/app/models/menuItem.model';
+import { MenuItem } from 'src/app/models/menuItem.model';
 
 @Component({
   selector: 'app-navbar',
@@ -12,12 +12,53 @@ import { MenuItem }  from 'src/app/models/menuItem.model';
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
-
   @ViewChild('navbarNav', { static: false }) navbarNav!: ElementRef;
   menuOpen = false;
-  profileMenuOpen = false; 
-
+  profileMenuOpen = false;
   menuItems: any[] = [];
+
+  /* apartado de navbar vertical */
+  isToggled = false; /* Indica si el navbar está fijo */
+  isHovered = false; /* Indica si el mouse está sobre el navbar */
+  isCollapsed = true; /* Indica si el navbar está colapsado */
+  isHovering = false;
+  isButtonHovered = false;
+
+  handleToggleButton() {
+    this.isToggled = !this.isToggled; /* Alterna entre fijo y comprimido */
+    this.updateNavbarState();
+  }
+
+  onMouseEnter() {
+    if (!this.isToggled) {
+      this.isHovered = true;
+      this.updateNavbarState();
+    }
+  }
+  onMouseLeave() {
+    if (!this.isToggled && this.isButtonHovered == false) {
+      this.isHovered = false;
+      this.updateNavbarState();
+    }
+  }
+  /** Maneja cuando el mouse entra al botón */
+  onButtonMouseEnter() {
+    this.isButtonHovered = true;
+    this.updateNavbarState();
+  }
+  /** Maneja cuando el mouse sale del botón */
+  onButtonMouseLeave() {
+    this.isButtonHovered = false;
+    this.updateNavbarState();
+  }
+  updateNavbarState() {
+    // Si está fijado o el mouse está sobre el navbar o el botón, el navbar se expande
+    this.isCollapsed = !(
+      this.isToggled ||
+      this.isHovered ||
+      this.isButtonHovered
+    );
+  }
 
   constructor(
     public _loginServices: LoginService,
@@ -39,22 +80,23 @@ export class NavbarComponent {
         }
       },
       (error) => {
-        this.menuItems = []; 
+        this.menuItems = [];
       }
     );
   }
 
   mapItems(items: any[], parentId: number | null): any[] {
-    const filteredItems = items.filter(item => item.parent_menu_id === parentId);
-  
+    const filteredItems = items.filter(
+      (item) => item.parent_menu_id === parentId
+    );
+
     // Recursión para submenús
-    return filteredItems.map(item => ({
+    return filteredItems.map((item) => ({
       ...item,
       isSubmenuOpen: false,
-      submenuItems: this.mapItems(items, item.id)
+      submenuItems: this.mapItems(items, item.id),
     }));
   }
-
 
   profilePicSize() {
     return '40'; // Tamaño del perfil, puedes ajustar esto si es necesario
@@ -77,7 +119,9 @@ export class NavbarComponent {
     const navbar = this.navbarNav?.nativeElement; // Usa `?` para evitar el error de inicialización
     if (navbar && navbar.classList.contains('show')) {
       // Aquí cerramos el colapso del menú
-      const navbarToggler = document.querySelector('.navbar-toggler') as HTMLElement;
+      const navbarToggler = document.querySelector(
+        '.navbar-toggler'
+      ) as HTMLElement;
       if (navbarToggler) {
         navbarToggler.click(); // Simula un clic en el toggler para cerrarlo
       }
