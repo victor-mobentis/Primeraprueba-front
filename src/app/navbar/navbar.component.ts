@@ -26,6 +26,7 @@ export class NavbarComponent {
 
   handleToggleButton() {
     this.isToggled = !this.isToggled; /* Alterna entre fijo y comprimido */
+    this.isHovered = false;
     this.updateNavbarState();
   }
 
@@ -40,13 +41,18 @@ export class NavbarComponent {
     this.updateNavbarState();
   }
   /** Maneja cuando el mouse entra al botón */
-  onButtonMouseEnter() {
+  onButtonMouseEnter(event: MouseEvent) {
+    const elementoOrigen = event.relatedTarget as HTMLElement;
+    if (elementoOrigen.id == "sidenav") {
+      this.isHovered = true;
+    }
     this.isButtonHovered = true;
     this.updateNavbarState();
   }
   /** Maneja cuando el mouse sale del botón */
   onButtonMouseLeave() {
     this.isButtonHovered = false;
+    this.isHovered = false;
     this.updateNavbarState();
   }
   updateNavbarState() {
@@ -63,7 +69,7 @@ export class NavbarComponent {
     public _menuService: MenuService,
     private router: Router,
     public dialog: MatDialog
-  ) {}
+  ) { }
   ngAfterViewInit() {
     this.closeNavbar();
   }
