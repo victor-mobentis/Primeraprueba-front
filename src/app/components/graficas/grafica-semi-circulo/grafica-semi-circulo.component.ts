@@ -6,6 +6,7 @@ import {
   HostListener,
   OnDestroy,
   AfterViewInit,
+  ElementRef,
 } from '@angular/core';
 import * as echarts from 'echarts/core';
 import {
@@ -36,6 +37,7 @@ type EChartsOption = echarts.ComposeOption<
   | LegendComponentOption
   | PieSeriesOption
 >;
+
 @Component({
   selector: 'app-grafica-semi-circulo',
   templateUrl: './grafica-semi-circulo.component.html',
@@ -43,13 +45,24 @@ type EChartsOption = echarts.ComposeOption<
 })
 export class GraficaSemiCirculoComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() titulo: string = '';
-  @Input() valores: { value: number; name: string }[] = []; 
-  @Input() elementoId: string = ''; 
+  @Input() valores: { value: number; name: string }[] = [];
+  @Input() elementoId: string = '';
 
+  private resizeObserver!: ResizeObserver;
   chart: echarts.ECharts | undefined;
+
+  constructor(private el: ElementRef) { }
 
   ngAfterViewInit() {
     this.pintarGrafica();
+
+    const parentElement = this.el.nativeElement.parentElement;
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.resizeChart();
+    });
+
+    this.resizeObserver.observe(parentElement);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -58,18 +71,15 @@ export class GraficaSemiCirculoComponent implements AfterViewInit, OnChanges, On
     }
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.resizeChart();
-  }
-
   ngOnDestroy() {
-    window.removeEventListener('resize', this.resizeChart);
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
   }
 
   resizeChart() {
     if (this.chart) {
-      this.chart.resize(); 
+      this.chart.resize();
     }
   }
 
@@ -79,11 +89,11 @@ export class GraficaSemiCirculoComponent implements AfterViewInit, OnChanges, On
 
     const option: EChartsOption = {
       color: [
-        '#FADADD', 
-        '#F7A1C4', 
-        '#FBD3E0', 
-        '#EBA0B3', 
-        '#F3A6C9', 
+        '#FADADD',
+        '#F7A1C4',
+        '#FBD3E0',
+        '#EBA0B3',
+        '#F3A6C9',
         '#F9CFE0'
       ],
       title: {

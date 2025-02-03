@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, AfterViewInit, HostListener, OnDestroy } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, AfterViewInit, HostListener, OnDestroy, ElementRef } from '@angular/core';
 import * as echarts from 'echarts/core';
 import { GridComponent, GridComponentOption } from 'echarts/components';
 import { BarChart, BarSeriesOption } from 'echarts/charts';
@@ -14,16 +14,27 @@ type EChartsOption = echarts.ComposeOption<GridComponentOption | BarSeriesOption
   styleUrls: ['./grafica-barra-vertical.component.css'],
 })
 export class GraficaBarraVerticalComponent implements OnChanges, AfterViewInit, OnDestroy {
-  
-  @Input() titulo: string = ''; 
-  @Input() categorias: string[] = []; 
-  @Input() valores: number[] = []; 
-  @Input() elementoId: string = ''; 
 
+  @Input() titulo: string = '';
+  @Input() categorias: string[] = [];
+  @Input() valores: number[] = [];
+  @Input() elementoId: string = '';
+
+  private resizeObserver!: ResizeObserver;
   chart: echarts.ECharts | undefined;
+
+  constructor(private el: ElementRef) { }
 
   ngAfterViewInit() {
     this.pintarGrafica();
+    
+    const parentElement = this.el.nativeElement.parentElement;
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.resizeChart();
+    });
+
+    this.resizeObserver.observe(parentElement);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -31,19 +42,16 @@ export class GraficaBarraVerticalComponent implements OnChanges, AfterViewInit, 
       this.actualizarGrafica();
     }
   }
-
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.resizeChart();
-  }
-
+  
   ngOnDestroy() {
-    window.removeEventListener('resize', this.resizeChart);
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
   }
 
   resizeChart() {
     if (this.chart) {
-      this.chart.resize(); 
+      this.chart.resize();
     }
   }
 

@@ -5,17 +5,9 @@
   transition: all 1s ease-out;
   opacity: 0;
 }
-.max-w-kpi {
-  max-width: 100%;
-}
 
 .max-w-kpi {
   max-width: 100%;
-}
-@media screen and (min-width: 1200px) {
-  .max-w-kpi {
-    max-width: 81%;
-  }
 }
 
 span.font-dashboard {
