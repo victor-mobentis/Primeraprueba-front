@@ -67,17 +67,16 @@ export class LoginService {
       })
       .pipe(
         map((data: any) => {
-          console.log(data)
+          console.log(data);
+          this.setToken(data.token);
           localStorage.setItem('dir', 'db_rechazos');
           localStorage.setItem('email', credential.email);
-          this.setToken(data.token);
           localStorage.setItem('user', data.name);
-          localStorage.setItem('lastname', data.lastname)
-          localStorage.setItem('cargo', data.cargo)
-          localStorage.setItem('user_id', data.id)
+          localStorage.setItem('user_id', data.id);
           this.user = data.name;
-          this.lastname = data.lastname;
-          this.cargo = data.cargo;
+          localStorage.setItem('cargo', data.cargo != null ? data.cargo : '');
+          localStorage.setItem('lastname', data.lastname != null ? data.lastname : '');
+
           return data;
         })
       );

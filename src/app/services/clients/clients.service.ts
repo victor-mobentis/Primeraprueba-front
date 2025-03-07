@@ -54,6 +54,10 @@ export class ClientsService {
       .pipe(
         map((data: any) => {
           console.log("Respuesta recibida:", data);
+          data.items.map((client : any) => {
+            client.longitude = Number(client.longitude);
+            client.latitude = Number(client.latitude);
+          });
           return data;
         })
       );
@@ -73,6 +77,8 @@ export class ClientsService {
       )
       .pipe(
         map((data: any) => {
+          data.longitude = Number(data.longitude);
+          data.latitude = Number(data.latitude);
           console.log(data)
           // Aquí puedes realizar cualquier transformación necesaria en los datos
           return data;
