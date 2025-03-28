@@ -536,7 +536,7 @@ export class DashboardGeneralComponent {
 
   onFiltersChanged(selectedFilters: { [key: string]: any }) {
     console.log('Filtros seleccionados:', selectedFilters);
-    this.selectedFilters = selectedFilters;
+    this.selectedFilters = Object.values(selectedFilters);
     this.currentPage = 1;
     this.loadTableData();
   }
