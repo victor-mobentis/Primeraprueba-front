@@ -81,6 +81,10 @@ export class RechazadosService {
       )
       .pipe(
         map((data: any) => {
+          data.items.map((rejection : any) => {
+            rejection.longitude = Number(rejection.longitude);
+            rejection.latitude = Number(rejection.latitude);
+          });
           console.log(data);
           return data;
         })
