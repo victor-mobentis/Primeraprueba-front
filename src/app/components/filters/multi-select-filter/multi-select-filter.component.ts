@@ -13,8 +13,9 @@ export class MultiSelectFilterComponent {
   @Output() selectionChange = new EventEmitter<any[]>();
 
   options: any[] = [];
+  filteredOptions: any[] = [];
   displayedOptions: any[] = [];
-  selectedOptions = new Map<number, any>(); // Usamos Map para mejor gestión de selección
+  selectedOptions = new Map<number, any>();
   searchTerm: string = '';
 
   itemsPerPage = 50;
@@ -26,14 +27,17 @@ export class MultiSelectFilterComponent {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['endpoint'] && changes['endpoint'].currentValue) {
       this.resetData();
+      this.loadOptions(this.endpoint);
     }
   }
 
   private resetData() {
     this.options = [];
+    this.filteredOptions = [];
     this.displayedOptions = [];
     this.currentPage = 1;
     this.selectedOptions.clear();
+    this.searchTerm = '';
   }
 
   onDropdownOpen() {
@@ -47,7 +51,8 @@ export class MultiSelectFilterComponent {
     this._filterService.getFilterOptions(endpoint).subscribe(
       (options) => {
         this.options = options;
-        this.displayedOptions = options.slice(0, this.itemsPerPage);
+        this.filteredOptions = [...options];
+        this.displayedOptions = this.filteredOptions.slice(0, this.itemsPerPage);
         this.restoreSelectedOptions();
         this.loading = false;
       },
@@ -67,20 +72,23 @@ export class MultiSelectFilterComponent {
 
   loadMoreItems() {
     const startIndex = this.currentPage * this.itemsPerPage;
-    const newItems = this.options.slice(startIndex, startIndex + this.itemsPerPage);
-    this.displayedOptions = [...this.displayedOptions, ...newItems];
-    this.currentPage++;
+    const newItems = this.filteredOptions.slice(startIndex, startIndex + this.itemsPerPage);
+    if (newItems.length > 0) {
+      this.displayedOptions = [...this.displayedOptions, ...newItems];
+      this.currentPage++;
+    }
   }
 
   oninputChange() {
     if (this.searchTerm.length >= 3) {
-      this._filterService.getFilterOptions(`${this.endpoint}?search=${this.searchTerm}`)
-        .subscribe((options) => {
-          this.displayedOptions = options;
-        });
+      this.filteredOptions = this.options.filter(option => 
+        option.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
     } else {
-      this.displayedOptions = this.options.slice(0, this.itemsPerPage);
+      this.filteredOptions = [...this.options];
     }
+    this.currentPage = 1;
+    this.displayedOptions = this.filteredOptions.slice(0, this.itemsPerPage);
   }
 
   toggleSelection(option: any) {
@@ -97,7 +105,8 @@ export class MultiSelectFilterComponent {
   reset() {
     this.selectedOptions.clear();
     this.options.forEach((option) => (option.selected = false));
-    this.displayedOptions = this.options.slice(0, this.itemsPerPage);
+    this.filteredOptions = [...this.options];
+    this.displayedOptions = this.filteredOptions.slice(0, this.itemsPerPage);
     this.searchTerm = '';
   }
 
@@ -105,6 +114,7 @@ export class MultiSelectFilterComponent {
     if (this.options.length === 0) {
       this._filterService.getFilterOptions(this.endpoint).subscribe((options) => {
         this.options = options;
+        this.filteredOptions = [...options];
         this.applyFilter(filtroAplicado);
       });
     } else {
@@ -123,7 +133,8 @@ export class MultiSelectFilterComponent {
       }
     });
 
-    this.displayedOptions = this.options.slice(0, this.itemsPerPage);
+    this.filteredOptions = [...this.options];
+    this.displayedOptions = this.filteredOptions.slice(0, this.itemsPerPage);
     this.selectionChange.emit(Array.from(this.selectedOptions.values()));
   }
 
