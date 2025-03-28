@@ -115,27 +115,36 @@ export class MultiSelectFilterComponent {
       this._filterService.getFilterOptions(this.endpoint).subscribe((options) => {
         this.options = options;
         this.filteredOptions = [...options];
-        this.applyFilter(filtroAplicado);
+        this.applyFilter(filtroAplicado, false); // No emitir evento al actualizar
       });
     } else {
-      this.applyFilter(filtroAplicado);
+      this.applyFilter(filtroAplicado, false); // No emitir evento al actualizar
     }
   }
 
-  private applyFilter(filtroAplicado: { id: number; name: string; selected: boolean }[]) {
+  private applyFilter(filtroAplicado: { id: number; name: string; selected: boolean }[], emitChange: boolean = true) {
     const appliedIds = new Set(filtroAplicado.map((f) => f.id));
-
+    let hasChanged = false;
+  
     this.selectedOptions.clear();
     this.options.forEach((option) => {
+      const wasSelected = option.selected;
       option.selected = appliedIds.has(option.id);
       if (option.selected) {
         this.selectedOptions.set(option.id, option);
       }
+      if (wasSelected !== option.selected) {
+        hasChanged = true;
+      }
     });
-
+  
     this.filteredOptions = [...this.options];
     this.displayedOptions = this.filteredOptions.slice(0, this.itemsPerPage);
-    this.selectionChange.emit(Array.from(this.selectedOptions.values()));
+  
+    // Solo emitir si se especifica o si hubo cambios
+    if (emitChange && hasChanged) {
+      this.selectionChange.emit(Array.from(this.selectedOptions.values()));
+    }
   }
 
   private restoreSelectedOptions() {

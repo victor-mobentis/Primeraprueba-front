@@ -230,7 +230,6 @@ export class FilterContainerComponent implements OnInit {
       );
       return;
     }
-    this.filtroReset()
     this.filtrosAplicados = JSON.parse(JSON.stringify(filtroGuardado.filtros));
     this.selectedFilters = this.filtrosAplicados.reduce(
       (acc: { [key: string]: any }, filtro) => {
