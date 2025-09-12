@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, Renderer2, ChangeDetectorRef, HostListener, ViewChild, ElementRef,OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Renderer2, ChangeDetectorRef, HostListener, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupMapComponent } from './popup-map-rechazos/popup-map-rechazos.component';
 import { IRechazo } from 'src/app/models/rechazos.model';
@@ -107,6 +107,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
   dialogOpen: boolean = false; // Inicializa en false
 
+  private documentClickListener!: () => void;
+
   constructor(
     private renderer: Renderer2,
     public dialog: MatDialog,
@@ -116,7 +118,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     private _notifactionService: NotificationService,
     private _competidoresService: CompetidoresService,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadRechazos();
@@ -130,7 +132,13 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
     this.dataSource = this.dataSource.map(row => ({ ...row, modified: false }));
 
-    this.renderer.listen('document', 'click', (event) => this.onDocumentClick(event));
+    this.documentClickListener = this.renderer.listen('document', 'click', (event) => this.onDocumentClick(event));
+  }
+
+  ngOnDestroy() {
+    if (this.documentClickListener) {
+      this.documentClickListener(); // elimina el listener
+    }
   }
 
   onDocumentClick(event: MouseEvent) {
@@ -176,7 +184,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         const rechazosData: IRechazo[] = data.items;
         this.dataSource = rechazosData;
 
-         // Guarda los valores originales en el Map
+        // Guarda los valores originales en el Map
         this.originalValues.clear(); // Limpia valores anteriores
         rechazosData.forEach(row => {
           this.originalValues.set(row.id, {
@@ -245,10 +253,10 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   }
 
   /* para guardar los valores originales de oportunidad */
-  private originalValues = new Map<number, { 
-    corrective_action_value: number; 
-    corrective_action_symbol_id: number; 
-    corrective_action_text: string; 
+  private originalValues = new Map<number, {
+    corrective_action_value: number;
+    corrective_action_symbol_id: number;
+    corrective_action_text: string;
   }>();
 
   getEstado(id: number): string {
@@ -346,19 +354,25 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   }
 
   verEnMapa() {
-    if (this.selectedRechazos.length === 0) {
-      this._notifactionService.showWarning(
-        'Debe seleccionar al menos 1 rechazo antes de ver en el mapa.'
-      );
-      return;
-    }
-
-    const dialogRef = this.dialog.open(PopupMapComponent, {
-      width: '80%',
-      height: '75%',
-      data: { selectedRows: this.selectedRechazos },
-    });
+  if (!this.canVerEnMapa()) {
+    this._notifactionService.showWarning(
+      'Debe seleccionar al menos 1 rechazo con coordenadas antes de ver en el mapa.'
+    );
+    return;
   }
+
+  const dialogRef = this.dialog.open(PopupMapComponent, {
+    width: '80%',
+    height: '75%',
+    data: { selectedRows: this.selectedRechazos.filter(row => row.latitude && row.longitude) },
+  });
+}
+
+  canVerEnMapa(): boolean {
+  return this.selectedRechazos.some(
+    row => row.latitude && row.longitude && !(row.latitude === 0 && row.longitude === 0)
+  );
+}
 
   /* popup-rechazo-detail */
   viewRechazo(id_Cliente?: any) {
@@ -406,7 +420,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   }
 
 
-/* cambios detectados en la fila */
+  /* cambios detectados en la fila */
 
   hayCaracteresProhibidos(termino: string): boolean {
     const caracteresProhibidos = /["'`]/g;
@@ -427,7 +441,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.hasUnsavedChanges = true;
   }
 
-  changeSymbol(event:Event, row: IRechazo) {
+  changeSymbol(event: Event, row: IRechazo) {
     const selectElement = event.target as HTMLSelectElement;
     if (selectElement) {
       const newSymbolId = Number(selectElement.value);
@@ -437,8 +451,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
       const dataSourceIndex = this.dataSource.indexOf(row);
       this.dataSource[dataSourceIndex].corrective_action_symbol_id = newSymbolId;
-      this.dataSource[dataSourceIndex].corrective_action_symbol = 
-      newSymbolName?.symbol ?? 'No encontrado';
+      this.dataSource[dataSourceIndex].corrective_action_symbol =
+        newSymbolName?.symbol ?? 'No encontrado';
 
       console.log('ID de Rechazo seleccionado:', row.id);
       this.modifiedRow = row.id;
@@ -457,7 +471,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
     // Encuentra el índice de la fila en `dataSource`
     const dataSourceIndex = this.dataSource.indexOf(row);
-  
+
     // Actualiza el texto de `corrective_action_text`
     this.dataSource[dataSourceIndex].corrective_action_text = newValue;
     this.modifiedRow = row.id;
@@ -494,7 +508,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       this.dataSource[dataSourceIndex].status =
         newStatusName?.name ?? 'No encontrado';
 
-        this.modifiedRow = row.id;
+      this.modifiedRow = row.id;
     }
     this.hasUnsavedChanges = true;
   }
@@ -532,10 +546,10 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
   changeCompetidor(event: Event, row: IRechazo): void {
     const selectElement = event.target as HTMLSelectElement;
-  
+
     if (selectElement) {
       const newCompetidorId = Number(selectElement.value);
-  
+
       if (newCompetidorId === 0) {
         this.openCompetitor().afterClosed().subscribe((result) => {
           if (result) {
@@ -549,7 +563,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         });
         return;
       }
-  
+
       // Buscar el nombre del competidor seleccionado
       const newCompetidor = row.competitors.find(
         (competidor) => competidor.id === newCompetidorId
@@ -561,8 +575,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     }
     this.hasUnsavedChanges = true;
   }
-/* fin de la decteccion de cambios en la fila */
-/* funcion para hacer un UPDATE a laa fila de rechazo */
+  /* fin de la decteccion de cambios en la fila */
+  /* funcion para hacer un UPDATE a laa fila de rechazo */
   onRowEdit(row: IRechazo) {
     this.selectedRowId = row.id;
   }
@@ -574,68 +588,74 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         // Verifica si el campo `corrective_action_text` contiene caracteres prohibidos
         if (this.hayCaracteresProhibidos(row.corrective_action_text)) {
           this._notifactionService.showWarning("La promoción contiene caracteres no permitidos. No se pueden guardar los cambios.");
+          this.hasUnsavedChanges = false;
+          this.modifiedRow = null;
           return;
         }
-  
+
         // Recupera los valores originales si el estado está en 2
         const original = this.originalValues.get(row.id);
-  
-      // Si el estado está en 2 o 3, verifica si hubo cambios
-      if ((row.corrective_action_status_id === 2 || row.corrective_action_status_id === 3) && original) {
-        const hasChanges =
-          row.corrective_action_value !== original.corrective_action_value ||
-          row.corrective_action_symbol_id !== original.corrective_action_symbol_id ||
-          row.corrective_action_text !== original.corrective_action_text;
 
-        if (hasChanges) {
-          if (row.corrective_action_status_id === 2) {
-            // Cambia directamente a 1 si el estado está en 2
-            const newStatus = { statusId: 1, statusText: 'Sin activar' };
-            this.rechazadosService.updateEstadoAccionCorrectora(newStatus, row.id).subscribe(
-              (status) => {
-                if (status === 'Success') {
-                  this._notifactionService.showSuccess('Estado actualizado correctamente.');
-                  row.corrective_action_status_id = newStatus.statusId;
-                  row.corrective_action_status = newStatus.statusText;
+        // Si el estado está en 2 o 3, verifica si hubo cambios
+        if ((row.corrective_action_status_id === 2 || row.corrective_action_status_id === 3) && original) {
+          const hasChanges =
+            row.corrective_action_value !== original.corrective_action_value ||
+            row.corrective_action_symbol_id !== original.corrective_action_symbol_id ||
+            row.corrective_action_text !== original.corrective_action_text;
+
+          if (hasChanges) {
+            if (row.corrective_action_status_id === 2) {
+              // Cambia directamente a 1 si el estado está en 2
+              const newStatus = { statusId: 1, statusText: 'Sin activar' };
+              this.rechazadosService.updateEstadoAccionCorrectora(newStatus, row.id).subscribe(
+                (status) => {
+                  if (status === 'Success') {
+                    this._notifactionService.showSuccess('Estado actualizado correctamente.');
+                    row.corrective_action_status_id = newStatus.statusId;
+                    row.corrective_action_status = newStatus.statusText;
+                  }
+                },
+                (error) => {
+                  console.error('Error al actualizar el estado:', error);
+                  this.hasUnsavedChanges = false;
+                  this.modifiedRow = null;
+                  this._notifactionService.showError('Error al actualizar el estado.');
                 }
-              },
-              (error) => {
-                console.error('Error al actualizar el estado:', error);
-                this._notifactionService.showError('Error al actualizar el estado.');
-              }
-            );
-          } else if (row.corrective_action_status_id === 3 && !this.dialogOpen) {
-            this.dialogOpen = true;
-            // Confirma el cambio si el estado está en 3
-            this.dialog
-              .open(ConfirmDialogComponent, {
-                data: `¿Está seguro de cambiar el estado a "Sin activar"? Esto indicará que la acción requiere revisión nuevamente.`,
-              })
-              .afterClosed()
-              .subscribe((confirmado: boolean) => {
-                this.dialogOpen = false;
-                if (confirmado) {
-                  const newStatus = { statusId: 1, statusText: 'Sin activar' };
-                  this.rechazadosService.updateEstadoAccionCorrectora(newStatus, row.id).subscribe(
-                    (status) => {
-                      if (status === 'Success') {
-                        this._notifactionService.showSuccess('Estado actualizado correctamente.');
-                        row.corrective_action_status_id = newStatus.statusId;
-                        row.corrective_action_status = newStatus.statusText;
+              );
+            } else if (row.corrective_action_status_id === 3 && !this.dialogOpen) {
+              this.dialogOpen = true;
+              // Confirma el cambio si el estado está en 3
+              this.dialog
+                .open(ConfirmDialogComponent, {
+                  data: `¿Está seguro de cambiar el estado a "Sin activar"? Esto indicará que la acción requiere revisión nuevamente.`,
+                })
+                .afterClosed()
+                .subscribe((confirmado: boolean) => {
+                  this.dialogOpen = false;
+                  if (confirmado) {
+                    const newStatus = { statusId: 1, statusText: 'Sin activar' };
+                    this.rechazadosService.updateEstadoAccionCorrectora(newStatus, row.id).subscribe(
+                      (status) => {
+                        if (status === 'Success') {
+                          this._notifactionService.showSuccess('Estado actualizado correctamente.');
+                          row.corrective_action_status_id = newStatus.statusId;
+                          row.corrective_action_status = newStatus.statusText;
+                        }
+                      },
+                      (error) => {
+                        console.error('Error al actualizar el estado:', error);
+                        this.hasUnsavedChanges = false;
+                        this.modifiedRow = null;
+                        this._notifactionService.showError('Error al actualizar el estado.');
                       }
-                    },
-                    (error) => {
-                      console.error('Error al actualizar el estado:', error);
-                      this._notifactionService.showError('Error al actualizar el estado.');
-                    }
-                  );
-                }
-              });
+                    );
+                  }
+                });
+            }
           }
         }
-      }
-        
-  
+
+
         // Guarda los cambios
         this.rechazadosService.updateRechazo(row).subscribe(
           (status) => {
@@ -652,19 +672,21 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
           },
           (error) => {
             console.error('Error al actualizar el rechazo:', error);
+            this.hasUnsavedChanges = false;
+            this.modifiedRow = null;
             this._notifactionService.showError('Error al guardar los cambios.');
           }
         );
       }
     }
-}
-
-selectReject(rowId: number) {
-  if (this.modifiedRow !== null && this.modifiedRow !== rowId) {
-    this.guardarCambios(); // Guarda cambios de la fila anterior
   }
-}
-/* fin de la funcion UPDATE */
+
+  selectReject(rowId: number) {
+    if (this.modifiedRow !== null && this.modifiedRow !== rowId) {
+      this.guardarCambios(); // Guarda cambios de la fila anterior
+    }
+  }
+  /* fin de la funcion UPDATE */
 
   capturePreviousValueCompetitorId(row: IRechazo) {
     this.previousCompetitorId = row.competitor_id;
@@ -708,61 +730,61 @@ selectReject(rowId: number) {
     }
   }
 
-// Función reutilizable para mostrar tooltip en selects
-showTooltipForSelect(event: MouseEvent, optionsList: any[], idKey: string, nameKey: string, minLength: number = 9) {
-  const selectElement = event.target as HTMLSelectElement;
-  const selectedIndex = selectElement.selectedIndex;
-  
-  // Verificar si hay un elemento seleccionado
-  if (selectedIndex === -1) {
-    this.tooltipText = null;
-    return; // Salir si no hay selección
+  // Función reutilizable para mostrar tooltip en selects
+  showTooltipForSelect(event: MouseEvent, optionsList: any[], idKey: string, nameKey: string, minLength: number = 9) {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedIndex = selectElement.selectedIndex;
+
+    // Verificar si hay un elemento seleccionado
+    if (selectedIndex === -1) {
+      this.tooltipText = null;
+      return; // Salir si no hay selección
+    }
+
+    const selectedOption = selectElement.options[selectedIndex];
+
+    // Obtener el id seleccionado
+    const selectedId = Number(selectedOption.value);
+
+    // Buscar el texto correspondiente en la lista de opciones (motivos o competidores)
+    const selectedItem = optionsList.find(option => option[idKey] === selectedId);
+
+    // Si encontramos el elemento correspondiente, obtenemos su nombre
+    const textoOpcion = selectedItem ? selectedItem[nameKey] : '';
+
+    // Si el texto está vacío, no hacer nada
+    if (!textoOpcion) {
+      this.tooltipText = null; // Asegurarse de que no haya tooltip
+      return; // Salir si el texto está vacío
+    }
+
+    // Crear un span temporal para medir el ancho del texto de la opción
+    const tempSpan = document.createElement('span');
+    tempSpan.style.visibility = 'hidden';
+    tempSpan.style.position = 'absolute';
+    tempSpan.style.whiteSpace = 'nowrap';
+    tempSpan.textContent = textoOpcion;
+
+    document.body.appendChild(tempSpan);
+
+    const optionWidth = tempSpan.offsetWidth;
+    const selectWidth = selectElement.offsetWidth;
+
+    // Limpiar el span temporal
+    document.body.removeChild(tempSpan);
+
+    // Verificar si el texto está truncado o si es mayor a minLength caracteres
+    if (optionWidth > selectWidth || textoOpcion.length > minLength) {
+      this.tooltipText = textoOpcion; // Aquí obtendrás el texto del elemento seleccionado
+      this.renderer.setStyle(selectElement, 'cursor', 'pointer'); // Cambia el cursor
+    } else {
+      this.tooltipText = null;
+      this.renderer.removeStyle(selectElement, 'cursor'); // Cambia el cursor
+    }
+
+    // Forzar actualización para asegurar que el tooltip se muestre correctamente
+    this.cdr.detectChanges();
   }
-
-  const selectedOption = selectElement.options[selectedIndex];
-
-  // Obtener el id seleccionado
-  const selectedId = Number(selectedOption.value);
-
-  // Buscar el texto correspondiente en la lista de opciones (motivos o competidores)
-  const selectedItem = optionsList.find(option => option[idKey] === selectedId);
-
-  // Si encontramos el elemento correspondiente, obtenemos su nombre
-  const textoOpcion = selectedItem ? selectedItem[nameKey] : '';
-
-  // Si el texto está vacío, no hacer nada
-  if (!textoOpcion) {
-    this.tooltipText = null; // Asegurarse de que no haya tooltip
-    return; // Salir si el texto está vacío
-  }
-
-  // Crear un span temporal para medir el ancho del texto de la opción
-  const tempSpan = document.createElement('span');
-  tempSpan.style.visibility = 'hidden';
-  tempSpan.style.position = 'absolute';
-  tempSpan.style.whiteSpace = 'nowrap';
-  tempSpan.textContent = textoOpcion;
-
-  document.body.appendChild(tempSpan);
-
-  const optionWidth = tempSpan.offsetWidth;
-  const selectWidth = selectElement.offsetWidth;
-
-  // Limpiar el span temporal
-  document.body.removeChild(tempSpan);
-
-  // Verificar si el texto está truncado o si es mayor a minLength caracteres
-  if (optionWidth > selectWidth || textoOpcion.length > minLength) {
-    this.tooltipText = textoOpcion; // Aquí obtendrás el texto del elemento seleccionado
-    this.renderer.setStyle(selectElement, 'cursor', 'pointer'); // Cambia el cursor
-  } else {
-    this.tooltipText = null;
-    this.renderer.removeStyle(selectElement, 'cursor'); // Cambia el cursor
-  }
-
-  // Forzar actualización para asegurar que el tooltip se muestre correctamente
-  this.cdr.detectChanges();
-}
 
 
   onSearch(term: string): void {
@@ -789,9 +811,9 @@ showTooltipForSelect(event: MouseEvent, optionsList: any[], idKey: string, nameK
     return dialogRef;
   }
 
-  trackByFn(item:any) {
-    return item.value; 
+  trackByFn(item: any) {
+    return item.value;
   }
 
-  
+
 }
