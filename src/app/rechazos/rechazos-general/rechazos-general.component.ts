@@ -95,6 +95,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   // Filtro local de Empresa (1-3 o 'all')
   selectedEmpresa: number | 'all' = 'all';
 
+  // Campo dinámico de empresa, obtiene de backend filters.controller.ts
+  empresaFieldName: string = 'r.empresa_id'; // valor por defecto
+
   // Lista de empresas para el selector múltiple (dropdown)
   empresasList: Empresa[] = [
     { id: 1, name: 'Sarigabo', selected: true },
@@ -136,13 +139,27 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     private _exportService: ExportService,
     private _notifactionService: NotificationService,
     private _competidoresService: CompetidoresService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
 
   ) { }
 
   ngOnInit() {
-    this.applyEmpresaFilter(); // Aplicar filtro inicial con todas las empresas seleccionadas
-    this.loadRechazos();
+    // Obtener la configuración de filtros desde el backend
+    this.filterService.getFilterConfig('rechazos-general').subscribe(
+      (config) => {
+        this.empresaFieldName = config.empresaFieldName;
+        console.log('Configuración de filtros obtenida:', config);
+        this.applyEmpresaFilter(); // Aplicar filtro inicial con todas las empresas seleccionadas
+        this.loadRechazos();
+      },
+      (error) => {
+        console.error('Error al obtener la configuración de filtros:', error);
+        // Si hay error, usar el valor por defecto y continuar
+        this.applyEmpresaFilter();
+        this.loadRechazos();
+      }
+    );
+    
     this.loadEstados();
     this.loadProvincias();
     this.loadSimbolos();
@@ -748,11 +765,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     // Normaliza selectedFilters como array
     const filters = Array.isArray(this.selectedFilters) ? [...this.selectedFilters] : Object.values(this.selectedFilters || {});
 
-    // El id de columna en SQL para empresa es r.empresa_id (idEmpresa)
-    const EMPRESA_FILTER_ID = 'r.empresa_id';
-
+    // Usar el campo dinámico obtenido del backend
     // Elimina cualquier filtro previo de empresa
-    const withoutEmpresa = filters.filter((f: any) => f?.id !== EMPRESA_FILTER_ID);
+    const withoutEmpresa = filters.filter((f: any) => f?.id !== this.empresaFieldName);
 
     // Obtener empresas seleccionadas
     const empresasSeleccionadas = this.empresasList.filter(e => e.selected);
@@ -761,7 +776,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     if (empresasSeleccionadas.length > 0 && empresasSeleccionadas.length < this.empresasList.length) {
       // Inserta el filtro de empresa en formato multi-select esperado por el backend
       withoutEmpresa.push({
-        id: EMPRESA_FILTER_ID,
+        id: this.empresaFieldName,
         nombre: 'Empresa',
         tipo: 'multi-select',
         valor: empresasSeleccionadas.map(e => ({

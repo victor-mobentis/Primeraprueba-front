@@ -198,7 +198,25 @@ export class FilterService {
     );
   }
 
-
+  /**
+   * Obtiene la configuración de filtros para un componente específico
+   * Incluye el nombre del campo de empresa_id correcto según el contexto
+   */
+  getFilterConfig(componentId: string): Observable<any> {
+    let options = {
+      headers: new HttpHeaders().set(
+        'Authorization',
+        `Bearer ${this._loginServices.getToken()}`
+      ),
+    };
+    return this._http
+      .get(`${this.apiUrl}/api/filters/config/${componentId}`, options)
+      .pipe(
+        map((data: any) => {
+          return data;
+        })
+      );
+  }
 
   
 }
