@@ -42,6 +42,8 @@ import { MessageUpdateComponent } from '../components/message-update/message-upd
 import { CorrectiveActionStatusComponent } from '../components/corrective-action-status/corrective-action-status.component';
 import { PageTitleComponent } from '../components/page-title/page-title.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { EmpresaSelectorComponent } from '../components/empresa-selector/empresa-selector.component';
+import { EmpresaDropdownComponent } from '../components/empresa-dropdown/empresa-dropdown.component';
 
 
 
@@ -82,6 +84,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MessageUpdateComponent,
     CorrectiveActionStatusComponent,
     PageTitleComponent,
+    EmpresaSelectorComponent,
+    EmpresaDropdownComponent,
   ],
   imports: [
     NgbModule,
@@ -131,6 +135,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MessageUpdateComponent,
     CorrectiveActionStatusComponent,
     PageTitleComponent,
+    EmpresaSelectorComponent,
+    EmpresaDropdownComponent,
   ]
 })
 export class SharedModule { }

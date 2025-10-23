@@ -2,9 +2,9 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ITablaDashboard } from 'src/app/models/tablaDashboard.model';
 import { RechazadosService } from 'src/app/services/rechazados/rechazados.service';
-import { EmpresaStateService } from 'src/app/services/empresa-state/empresa-state.service';
 import { forkJoin } from 'rxjs';
 import { firstValueFrom } from 'rxjs';
+import { Empresa } from 'src/app/components/empresa-dropdown/empresa-dropdown.component';
 
 @Component({
   selector: 'app-dashboard-general',
@@ -17,17 +17,9 @@ export class DashboardGeneralComponent {
 
   constructor(
     private rechazadosService: RechazadosService,
-    private cdr: ChangeDetectorRef,
-    private empresaStateService: EmpresaStateService
+    private cdr: ChangeDetectorRef
   ) {
     this.data = this.valoresTablas[0];
-
-    // Suscribirse a los cambios de empresa seleccionada
-    this.empresaStateService.selectedEmpresa$.subscribe((empresa) => {
-      this.selectedEmpresa = empresa === 'all' ? 'all' : Number(empresa);
-      this.applyEmpresaFilter();
-      this.loadDashboardData();
-    });
   }
 
   cargando_grafica_clientes: boolean = true;
@@ -486,6 +478,7 @@ export class DashboardGeneralComponent {
   dataSource = new MatTableDataSource<ITablaDashboard>(this.data);
 
   ngOnInit(): void {
+    this.applyEmpresaFilter(); // Aplicar filtro inicial con todas las empresas seleccionadas
     this.loadTableData();
   }
 
@@ -759,9 +752,17 @@ export class DashboardGeneralComponent {
 
   selectedEmpresa: string | number = 'all';
 
-  onEmpresaChange() {
-    this.empresaStateService.setSelectedEmpresa(this.selectedEmpresa.toString());
-    // Recargar las gráficas y tablas relevantes
+  // Lista de empresas para el selector múltiple
+  empresasList: Empresa[] = [
+    { id: 1, name: 'Sarigabo', selected: true },
+    { id: 2, name: 'Coca Cola', selected: true },
+    { id: 3, name: 'Mercadona', selected: true }
+  ];
+
+  // Método que se ejecuta cuando cambian las empresas seleccionadas
+  onEmpresasChange(empresas: Empresa[]): void {
+    this.empresasList = empresas;
+    this.applyEmpresaFilter();
     this.cargarGraficos();
     this.loadTableData();
   }
@@ -774,24 +775,22 @@ export class DashboardGeneralComponent {
 
     const withoutEmpresa = filters.filter((f: any) => f?.id !== EMPRESA_FILTER_ID);
 
-    if (this.selectedEmpresa !== 'all') {
+    // Obtener empresas seleccionadas
+    const empresasSeleccionadas = this.empresasList.filter(e => e.selected);
+
+    // Si no están todas seleccionadas, agregar el filtro
+    if (empresasSeleccionadas.length > 0 && empresasSeleccionadas.length < this.empresasList.length) {
       withoutEmpresa.push({
         id: EMPRESA_FILTER_ID,
         nombre: 'Empresa',
         tipo: 'multi-select',
-        valor: [
-          {
-            id: Number(this.selectedEmpresa),
-            name: `Empresa ${this.selectedEmpresa}`,
-          },
-        ],
+        valor: empresasSeleccionadas.map(e => ({
+          id: e.id,
+          name: e.name
+        }))
       });
     }
 
     this.selectedFilters = withoutEmpresa;
-  }
-
-  private loadDashboardData(): void {
-    // Implementar la lógica para recargar los datos del dashboard
   }
 }

@@ -19,7 +19,7 @@ import { NotificationService } from 'src/app/services/notification/notification.
 import { CompetidoresService } from 'src/app/services/competitors/competidores.service';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { css } from 'jquery';
-import { EmpresaStateService } from 'src/app/services/empresa-state/empresa-state.service';
+import { Empresa } from 'src/app/components/empresa-dropdown/empresa-dropdown.component';
 
 
 @Component({
@@ -95,6 +95,21 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   // Filtro local de Empresa (1-3 o 'all')
   selectedEmpresa: number | 'all' = 'all';
 
+  // Lista de empresas para el selector múltiple (dropdown)
+  empresasList: Empresa[] = [
+    { id: 1, name: 'Sarigabo', selected: true },
+    { id: 2, name: 'Coca Cola', selected: true },
+    { id: 3, name: 'Mercadona', selected: true }
+  ];
+
+  // Método que se ejecuta cuando cambian las empresas seleccionadas
+  onEmpresasChange(empresas: Empresa[]): void {
+    this.empresasList = empresas;
+    this.applyEmpresaFilter();
+    this.currentPage = 1;
+    this.loadRechazos();
+  }
+
   // Añadir motivos y competidores
   private previousReasonId?: number;
   private previousCompetitorId?: number;
@@ -121,12 +136,12 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     private _exportService: ExportService,
     private _notifactionService: NotificationService,
     private _competidoresService: CompetidoresService,
-    private cdr: ChangeDetectorRef,
-    private empresaStateService: EmpresaStateService // ← AGREGAR
+    private cdr: ChangeDetectorRef
 
   ) { }
 
   ngOnInit() {
+    this.applyEmpresaFilter(); // Aplicar filtro inicial con todas las empresas seleccionadas
     this.loadRechazos();
     this.loadEstados();
     this.loadProvincias();
@@ -135,14 +150,6 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.loadTiposRechazo();
     this.loadPoblacion();
     this.cargando = true;
-    this.empresaStateService.selectedEmpresa$.subscribe(empresa => {
-      // Actualiza el estado local
-      this.selectedEmpresa = empresa === 'all' ? 'all' : Number(empresa);
-      // Aplica/quita el filtro de empresa globalmente y recarga
-      this.applyEmpresaFilter();
-      this.currentPage = 1;
-      this.loadRechazos();
-    });
 
 
     this.dataSource = this.dataSource.map(row => ({ ...row, modified: false }));
@@ -194,8 +201,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         this.currentPage,
         this.itemsPerPage,
         this.sortColumn,
-        this.sortDirection,
-        this.selectedEmpresa
+        this.sortDirection
       )
       .subscribe((data: any) => {
         console.log('Rechazos cargados:', data.items);
@@ -737,12 +743,6 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   }
 
 
-  onEmpresaChange() {
-    // Propaga el cambio de empresa de forma global
-    this.empresaStateService.setSelectedEmpresa(this.selectedEmpresa.toString());
-    // El resto (aplicar filtro y recargar) se gestiona en la suscripción del estado
-  }
-
   // Añade o elimina el filtro de empresa dentro de selectedFilters para que aplique en TODAS las consultas
   private applyEmpresaFilter(): void {
     // Normaliza selectedFilters como array
@@ -754,18 +754,20 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     // Elimina cualquier filtro previo de empresa
     const withoutEmpresa = filters.filter((f: any) => f?.id !== EMPRESA_FILTER_ID);
 
-    if (this.selectedEmpresa !== 'all') {
+    // Obtener empresas seleccionadas
+    const empresasSeleccionadas = this.empresasList.filter(e => e.selected);
+
+    // Si no están todas seleccionadas, agregar el filtro
+    if (empresasSeleccionadas.length > 0 && empresasSeleccionadas.length < this.empresasList.length) {
       // Inserta el filtro de empresa en formato multi-select esperado por el backend
       withoutEmpresa.push({
         id: EMPRESA_FILTER_ID,
         nombre: 'Empresa',
         tipo: 'multi-select',
-        valor: [
-          {
-            id: Number(this.selectedEmpresa),
-            name: `Empresa ${this.selectedEmpresa}`
-          }
-        ]
+        valor: empresasSeleccionadas.map(e => ({
+          id: e.id,
+          name: e.name
+        }))
       });
     }
 

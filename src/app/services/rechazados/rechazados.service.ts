@@ -24,7 +24,7 @@ export class RechazadosService {
     itemsPerPage: number,
     sortColumn: string,
     sortDirection: string,
-    selectedEmpresa: number | 'all' //Añado parametro de empresa
+    selectedEmpresa: number | 'all' = 'all' //Añado parametro de empresa (opcional, por defecto 'all')
 
   ): Observable<IRechazo[]> {
     let options = {

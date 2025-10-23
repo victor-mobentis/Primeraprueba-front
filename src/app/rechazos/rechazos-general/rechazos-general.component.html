@@ -18,18 +18,11 @@
             (errorDeCaracteres)="mostrarError = $event"></app-search-input>
         </div>
 
-        <!-- Dropdown Empresa -->
-            <div class="d-flex align-items-center">
-              <label class="me-2 mb-0 color-primary">Empresa</label>
-              <select class="form-select form-select-sm w-auto" id="idEmpresa" 
-                      [(ngModel)]="selectedEmpresa" 
-                      (change)="onEmpresaChange()">
-                <option value="all">Todas</option>
-                <option [value]="1">Sarigabo</option>
-                <option [value]="2">Coca Cola</option>
-                <option [value]="3">Mercadona</option>
-              </select>
-            </div>
+        <!-- Selector de Empresas (Dropdown) -->
+        <app-empresa-dropdown 
+          [empresas]="empresasList" 
+          (empresasChange)="onEmpresasChange($event)">
+        </app-empresa-dropdown>
 
             
         <!-- boton de filtros aplicados o limpiar -->
