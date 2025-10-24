@@ -98,6 +98,12 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   // Campo dinámico de empresa, obtiene de backend filters.controller.ts
   empresaFieldName: string = 'r.empresa_id'; // valor por defecto
 
+  // Controlar visibilidad del dropdown de empresas
+  get isEmpresaDropdownVisible(): boolean {
+    const enabled = localStorage.getItem('empresaDropdownEnabled');
+    return enabled !== null ? enabled === 'true' : true;
+  }
+
   // Lista de empresas para el selector múltiple (dropdown)
   empresasList: Empresa[] = [
     { id: 1, name: 'Sarigabo', selected: true },

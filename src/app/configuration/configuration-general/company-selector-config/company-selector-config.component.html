@@ -1,0 +1,39 @@
+<app-popup-header 
+  [title]="'Configuración Selector de Empresas'" 
+  [icon]="'building-gear'" 
+  [isBootstrapIcon]="true" 
+  (close)="cerrar()">
+</app-popup-header>
+
+<div mat-dialog-content class="pt-3 pb-3 px-4">
+  <div class="config-container">
+    <div class="config-item">
+      <div class="config-label">
+        <i class="bi bi-building me-2"></i>
+        <div>
+          <h6 class="mb-1">Mostrar selector de empresas</h6>
+          <p class="text-muted small mb-0">
+            Activa o desactiva el dropdown de empresas en Dashboard y Rechazos
+          </p>
+        </div>
+      </div>
+      <mat-slide-toggle 
+        [(ngModel)]="isEnabled"
+        (change)="onToggleChange()"
+        color="primary">
+      </mat-slide-toggle>
+    </div>
+
+    <div class="alert alert-info mt-3" role="alert">
+      <i class="bi bi-info-circle me-2"></i>
+      <small>Los cambios se aplicarán inmediatamente en todas las vistas.</small>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-actions class="justify-content-end p-3">
+  <button class="btn btn-primary" (click)="cerrar()">
+    <i class="bi bi-check-lg me-1"></i>
+    Aceptar
+  </button>
+</div>

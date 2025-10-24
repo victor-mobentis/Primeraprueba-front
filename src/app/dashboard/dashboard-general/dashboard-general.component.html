@@ -20,6 +20,7 @@
             <div class="d-flex align-items-center gap-2">
               <!-- Selector de Empresas (Dropdown) -->
               <app-empresa-dropdown 
+                *ngIf="isEmpresaDropdownVisible"
                 [empresas]="empresasList" 
                 (empresasChange)="onEmpresasChange($event)">
               </app-empresa-dropdown>
@@ -28,7 +29,7 @@
             </div>
           </div>
         </div>
-
+        
         <div class="row ">
           <!-- Primera fila de gráficas -->
           <div class="col-md-4 mb-3">

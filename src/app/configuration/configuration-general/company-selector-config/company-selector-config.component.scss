@@ -1,0 +1,71 @@
+// Contenedor principal del diálogo
+:host ::ng-deep .mat-dialog-container {
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+// Contenido del diálogo
+mat-dialog-content {
+  min-width: 450px;
+  max-width: 550px;
+  padding: 24px 32px !important;
+  overflow: hidden !important;
+  box-sizing: border-box;
+}
+
+// Contenedor de configuración
+.config-container {
+  .config-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    gap: 16px;
+
+    .config-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      flex: 1;
+
+      i {
+        font-size: 20px;
+        color: #17A6FF;
+        margin-top: 2px;
+      }
+
+      h6 {
+        font-weight: 600;
+        color: #333;
+      }
+
+      p {
+        font-size: 13px;
+        line-height: 1.4;
+      }
+    }
+  }
+
+  .alert {
+    display: flex;
+    align-items: center;
+    border-left: 4px solid #17A6FF;
+
+    i {
+      font-size: 16px;
+    }
+  }
+}
+
+// Acciones del diálogo
+mat-dialog-actions {
+  border-top: 1px solid #e9ecef;
+  padding: 16px 24px !important;
+  margin: 0 !important;
+
+  button {
+    min-width: 100px;
+  }
+}
