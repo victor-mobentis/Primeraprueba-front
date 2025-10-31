@@ -38,7 +38,7 @@
           type="checkbox" 
           class="form-check-input me-2"
           [checked]="empresa.selected"
-          (click)="$event.stopPropagation()">
+          (click)="toggleEmpresa(empresa, $event); $event.stopPropagation()">
         <label class="mb-0">{{ empresa.name }}</label>
       </div>
     </div>
