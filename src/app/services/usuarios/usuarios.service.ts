@@ -70,4 +70,8 @@ export class UsuariosService {
     // Ambos usan POST
     return this.http.post(url, { userId, permissionId }, { headers: this.getHeaders() });
   }
+
+  deleteUser(userId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/api/users/${userId}`, { headers: this.getHeaders() });
+  }
 }

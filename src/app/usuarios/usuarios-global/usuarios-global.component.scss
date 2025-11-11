@@ -160,6 +160,59 @@
     tr.mat-row:hover {
       background-color: #f5f5f5;
     }
+
+    // Estilos para la columna de acciones
+    .actions-header {
+      text-align: center !important;
+    }
+
+    .actions-cell {
+      text-align: center;
+      vertical-align: middle;
+      
+      .delete-btn {
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        padding: 0;
+        min-width: 36px;
+        border-radius: 4px;
+        border-color: #bdbdbd;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        &:not(:disabled) {
+          background-color: transparent;
+          color: #757575;
+
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+            color: #424242;
+            transform: scale(1.05);
+          }
+
+          &:active {
+            transform: scale(0.95);
+          }
+        }
+
+        &:disabled {
+          background-color: transparent;
+          color: #bdbdbd;
+          cursor: not-allowed;
+          opacity: 0.5;
+        }
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
+        }
+      }
+    }
   }
 
   .info-panel {
@@ -191,6 +244,8 @@
       }
     }
   }
+
+  // Eliminado - estilos movidos dentro de .usuarios-table
 }
 
 @media (max-width: 768px) {

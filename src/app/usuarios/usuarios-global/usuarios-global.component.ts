@@ -3,6 +3,8 @@ import { UsuariosService } from '../../services/usuarios/usuarios.service';
 import { AuthorizationService } from '../../services/auth/authorization.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../../services/notification/notification.service';
+import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
 import { forkJoin } from 'rxjs';
 
 interface Usuario {
@@ -42,6 +44,7 @@ export class UsuariosGlobalComponent implements OnInit {
   // Permisos del usuario actual
   canAssignRoles = false;
   canAssignPermissions = false;
+  isAdmin = false;
 
   // Listas de roles y permisos disponibles
   allRoles: Role[] = [
@@ -56,7 +59,8 @@ export class UsuariosGlobalComponent implements OnInit {
     private usuariosService: UsuariosService,
     private authService: AuthorizationService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -68,6 +72,7 @@ export class UsuariosGlobalComponent implements OnInit {
   checkPermissions(): void {
     this.canAssignRoles = this.authService.hasPermission('ASIGNACION_ROLES_USUARIOS');
     this.canAssignPermissions = this.authService.hasPermission('ASIGNACION_PERMISOS_USUARIOS');
+    this.isAdmin = this.authService.hasRole('Admin');
   }
 
   loadUsuarios(): void {
@@ -111,6 +116,13 @@ export class UsuariosGlobalComponent implements OnInit {
     }
 
     const hasRole = this.hasRole(usuario, roleId);
+    
+    // Si intenta remover y solo tiene un rol, no permitir
+    if (hasRole && usuario.roles.length === 1) {
+      this.notificationService.showWarning('Se debe tener al menos un rol seleccionado');
+      return;
+    }
+
     const action = hasRole ? 'remove' : 'assign';
 
     this.usuariosService.toggleRole(usuario.id, roleId, action).subscribe({
@@ -278,5 +290,37 @@ export class UsuariosGlobalComponent implements OnInit {
     
     // Combinar y eliminar duplicados
     return [...new Set([...directPermissions, ...rolePermissions])];
+  }
+
+  /**
+   * Elimina un usuario (borrado lógico)
+   */
+  deleteUser(usuario: Usuario): void {
+    if (!this.isAdmin) {
+      this.notificationService.showWarning('Solo los administradores pueden eliminar usuarios');
+      return;
+    }
+
+    // Abrir diálogo de confirmación
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: `¿Está seguro de que desea eliminar al usuario "${usuario.name}"? Esta acción marcará al usuario como eliminado.`
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Usuario confirmó el borrado
+        this.usuariosService.deleteUser(usuario.id).subscribe({
+          next: () => {
+            this.notificationService.showSuccess('Usuario eliminado correctamente');
+            // Actualizar el usuario en la lista
+            this.updateSingleUser(usuario.id);
+          },
+          error: (error) => {
+            console.error('Error al eliminar usuario:', error);
+            this.notificationService.showError('Error al eliminar usuario');
+          }
+        });
+      }
+    });
   }
 }

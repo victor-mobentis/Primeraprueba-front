@@ -83,11 +83,16 @@
 
       <!-- Columna Acciones -->
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Estado</th>
-        <td mat-cell *matCellDef="let usuario">
-          <mat-icon [color]="usuario.deleted ? 'warn' : 'primary'">
-            {{ usuario.deleted ? 'block' : 'check_circle' }}
-          </mat-icon>
+        <th mat-header-cell *matHeaderCellDef class="actions-header">Acciones</th>
+        <td mat-cell *matCellDef="let usuario" class="actions-cell">
+          <button 
+            mat-icon-button 
+            class="delete-btn"
+            [disabled]="!isAdmin || usuario.deleted"
+            (click)="deleteUser(usuario)"
+            [matTooltip]="usuario.deleted ? 'Usuario ya eliminado' : 'Eliminar usuario'">
+            <mat-icon>{{ usuario.deleted ? 'delete_forever' : 'delete' }}</mat-icon>
+          </button>
         </td>
       </ng-container>
 
@@ -103,7 +108,7 @@
       </mat-card-header>
       <mat-card-content>
         <p><strong>Total de usuarios:</strong> {{ usuarios.length }}</p>
-        <p *ngIf="canAssignRoles"><mat-icon>info</mat-icon> Puedes asignar/quitar roles haciendo clic en los chips</p>
+        <p *ngIf="canAssignRoles"><mat-icon>info</mat-icon> Puedes asignar/quitar roles haciendo clic en ellos.</p>
         <p *ngIf="canAssignPermissions"><mat-icon>info</mat-icon> Usa el selector para asignar permisos. Los permisos con candado <mat-icon class="inline-icon">security</mat-icon> vienen del rol y no se pueden desmarcar</p>
         <p *ngIf="!canAssignRoles && !canAssignPermissions"><mat-icon>warning</mat-icon> No tienes permisos para modificar roles o permisos</p>
       </mat-card-content>
