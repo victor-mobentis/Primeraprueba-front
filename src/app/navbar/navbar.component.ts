@@ -116,6 +116,12 @@ export class NavbarComponent {
              this.authorizationService.hasPermission('VISUALIZADO_CONFIGURACION');
     }
     
+    // Si es el item de usuarios, verificar roles O permisos
+    if (item.route && (item.route.includes('usuarios') || item.label === 'Usuarios')) {
+      return this.authorizationService.hasRole('Admin') || 
+             this.authorizationService.hasPermission('VISUALIZADO_USUARIOS');
+    }
+    
     // Por defecto, mostrar el item
     return true;
   }
