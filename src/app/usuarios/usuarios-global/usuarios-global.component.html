@@ -141,13 +141,10 @@
                 </div>
               </td>
               <td class="text-center">
-                <button 
-                  class="btn btn-sm btn-outline-danger"
-                  [disabled]="!isAdmin || usuario.deleted"
-                  (click)="deleteUser(usuario)"
-                  [title]="usuario.deleted ? 'Usuario ya eliminado' : 'Eliminar usuario'">
-                  <i class="bi" [ngClass]="usuario.deleted ? 'bi-trash-fill' : 'bi-trash'"></i>
-                </button>
+                <app-btn-icon-delete 
+                  *ngIf="isAdmin && !usuario.deleted"
+                  (btnClicked)="deleteUser(usuario)">
+                </app-btn-icon-delete>
               </td>
             </tr>
           </ng-container>
