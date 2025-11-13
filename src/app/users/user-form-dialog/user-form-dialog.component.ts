@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UsersService } from '../../services/users/users.service';
 import { AuthorizationService } from '../../services/auth/authorization.service';
 import { NotificationService } from '../../services/notification/notification.service';
@@ -18,12 +18,23 @@ interface Permission {
   description: string;
 }
 
+interface User {
+  id?: number;
+  name: string;
+  email: string;
+  position_company: string;
+  image: string;
+  roles: Role[];
+  permissions: Permission[];
+  rolePermissions?: Permission[];
+}
+
 @Component({
-  selector: 'app-create-user-dialog',
-  templateUrl: './create-user-dialog.component.html',
-  styleUrls: ['./create-user-dialog.component.scss']
+  selector: 'app-user-form-dialog',
+  templateUrl: './user-form-dialog.component.html',
+  styleUrls: ['./user-form-dialog.component.scss']
 })
-export class CreateUserDialogComponent implements OnInit {
+export class UserFormDialogComponent implements OnInit {
   // Form fields
   name: string = '';
   email: string = '';
@@ -43,16 +54,54 @@ export class CreateUserDialogComponent implements OnInit {
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   imagePreview: string | null = null;
+  changePassword: boolean = false;
+
+  // Modo del diálogo
+  isEditMode: boolean = false;
+  userId?: number;
 
   constructor(
-    public dialogRef: MatDialogRef<CreateUserDialogComponent>,
-    private UsersService: UsersService,
+    public dialogRef: MatDialogRef<UserFormDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { user?: User },
+    private usersService: UsersService,
     private authorizationService: AuthorizationService,
     private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
+    // Detectar si es modo edición o creación
+    this.isEditMode = !!(this.data?.user?.id);
+    
     this.loadRolesAndPermissions();
+    
+    if (this.isEditMode) {
+      this.loadUserData();
+    }
+  }
+
+  loadUserData(): void {
+    if (!this.data?.user) return;
+    
+    const user = this.data.user;
+    this.userId = user.id;
+    this.name = user.name;
+    this.email = user.email;
+    this.positionCompany = user.position_company || '';
+    this.image = user.image || '';
+    this.imagePreview = user.image || null;
+    
+    // Cargar roles seleccionados
+    this.selectedRoleIds = user.roles.map(r => r.id);
+    
+    // Cargar solo permisos directos (no los heredados de roles)
+    this.selectedPermissionIds = user.permissions
+      .filter(p => !this.wasPermissionFromRole(user, p.id))
+      .map(p => p.id);
+  }
+
+  // Verifica si un permiso estaba heredado del rol en el usuario original (solo para carga inicial)
+  wasPermissionFromRole(user: User, permissionId: number): boolean {
+    return user.rolePermissions?.some(p => p.id === permissionId) || false;
   }
 
   loadRolesAndPermissions(): void {
@@ -66,7 +115,7 @@ export class CreateUserDialogComponent implements OnInit {
       }
     });
 
-    this.UsersService.getAllPermissions().subscribe({
+    this.usersService.getAllPermissions().subscribe({
       next: (permissions: Permission[]) => {
         this.allPermissions = permissions;
       },
@@ -78,17 +127,14 @@ export class CreateUserDialogComponent implements OnInit {
   }
 
   toggleRole(roleId: number): void {
-    const index = this.selectedRoleIds.indexOf(roleId);
-    if (index > -1) {
-      // Si es el último rol, no permitir quitarlo
-      if (this.selectedRoleIds.length === 1) {
-        this.notificationService.showWarning('Debe seleccionar al menos un rol');
-        return;
-      }
-      this.selectedRoleIds.splice(index, 1);
-    } else {
-      this.selectedRoleIds.push(roleId);
+    // Solo permitir un rol a la vez
+    // Si ya está seleccionado, no hacer nada (siempre debe haber un rol)
+    if (this.selectedRoleIds.includes(roleId)) {
+      return;
     }
+    
+    // Reemplazar el rol anterior con el nuevo
+    this.selectedRoleIds = [roleId];
   }
 
   togglePermission(permissionId: number): void {
@@ -113,16 +159,16 @@ export class CreateUserDialogComponent implements OnInit {
     return this.selectedPermissionIds.includes(permissionId);
   }
 
+  // Verifica si el permiso está heredado de alguno de los roles ACTUALMENTE seleccionados
   isPermissionFromRole(permissionId: number): boolean {
-    // Verificar si el permiso está incluido en alguno de los roles seleccionados
     return this.selectedRoleIds.some(roleId => {
       const role = this.allRoles.find(r => r.id === roleId);
       return role?.permissions?.some(p => p.id === permissionId) || false;
     });
   }
 
+  // Verifica si el permiso debe estar marcado (directo o heredado)
   isPermissionChecked(permissionId: number): boolean {
-    // Un permiso está marcado si está en la lista de permisos directos O heredado de un rol
     return this.selectedPermissionIds.includes(permissionId) || this.isPermissionFromRole(permissionId);
   }
 
@@ -156,15 +202,30 @@ export class CreateUserDialogComponent implements OnInit {
   }
 
   isFormValid(): boolean {
-    return (
+    const basicValidation = 
       this.name.trim() !== '' &&
       this.email.trim() !== '' &&
       this.isValidEmail(this.email) &&
+      this.selectedRoleIds.length > 0;
+
+    // Si es modo creación, la contraseña es obligatoria
+    if (!this.isEditMode) {
+      return basicValidation &&
+        this.password.trim() !== '' &&
+        this.password.length >= 6 &&
+        this.password === this.confirmPassword;
+    }
+
+    // Si es modo edición y NO se quiere cambiar contraseña
+    if (!this.changePassword) {
+      return basicValidation;
+    }
+
+    // Si es modo edición y SÍ se quiere cambiar contraseña
+    return basicValidation &&
       this.password.trim() !== '' &&
       this.password.length >= 6 &&
-      this.password === this.confirmPassword &&
-      this.selectedRoleIds.length > 0
-    );
+      this.password === this.confirmPassword;
   }
 
   isValidEmail(email: string): boolean {
@@ -173,6 +234,7 @@ export class CreateUserDialogComponent implements OnInit {
   }
 
   passwordsMatch(): boolean {
+    if (this.isEditMode && !this.changePassword) return true;
     return this.password === this.confirmPassword;
   }
 
@@ -188,7 +250,15 @@ export class CreateUserDialogComponent implements OnInit {
 
     this.loading = true;
 
-    // Encriptar la contraseña con MD5 (igual que en reset password)
+    if (this.isEditMode) {
+      this.updateUser();
+    } else {
+      this.createUser();
+    }
+  }
+
+  createUser(): void {
+    // Encriptar la contraseña con MD5
     const hashedPassword = Md5.hashStr(this.password);
 
     const userData = {
@@ -201,7 +271,7 @@ export class CreateUserDialogComponent implements OnInit {
       permissionIds: this.selectedPermissionIds
     };
 
-    this.UsersService.createUser(userData).subscribe({
+    this.usersService.createUser(userData).subscribe({
       next: (response: any) => {
         this.notificationService.showSuccess('Usuario creado exitosamente');
         this.dialogRef.close(response);
@@ -213,5 +283,43 @@ export class CreateUserDialogComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  updateUser(): void {
+    const userData: any = {
+      id: this.userId,
+      name: this.name.trim(),
+      email: this.email.trim().toLowerCase(),
+      position_company: this.positionCompany.trim() || null,
+      image: this.image || null,
+      roleIds: this.selectedRoleIds,
+      permissionIds: this.selectedPermissionIds
+    };
+
+    // Solo incluir password si se cambió
+    if (this.changePassword && this.password) {
+      userData.password = Md5.hashStr(this.password);
+    }
+
+    this.usersService.updateUser(userData).subscribe({
+      next: (response: any) => {
+        this.notificationService.showSuccess('Usuario actualizado exitosamente');
+        this.dialogRef.close(response);
+      },
+      error: (error: any) => {
+        console.error('Error actualizando usuario:', error);
+        const errorMessage = error?.error?.message || 'Error al actualizar el usuario';
+        this.notificationService.showError(errorMessage);
+        this.loading = false;
+      }
+    });
+  }
+
+  getDialogTitle(): string {
+    return this.isEditMode ? 'Editar Usuario' : 'Crear Nuevo Usuario';
+  }
+
+  getSubmitButtonText(): string {
+    return this.isEditMode ? 'Guardar cambios' : 'Crear Usuario';
   }
 }

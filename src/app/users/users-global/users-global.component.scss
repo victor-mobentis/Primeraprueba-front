@@ -21,8 +21,8 @@
 }
 
 .buscador {
-  min-width: 300px;
-  max-width: 500px;
+  min-width: 180px;
+  max-width: 300px;
   
   .search-input-wrapper {
     position: relative;
@@ -168,154 +168,65 @@
   text-align: center;
 }
 
-.roles-container {
-  position: static; // Cambiar de relative a static para que el dropdown no se corte
 
-  .dropdown {
-    position: relative; // El dropdown usa position relative
-  }
 
+.dropdown {
   .dropdown-toggle {
-    text-align: left;
-    font-size: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    min-width: 150px;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    
+    &:hover:not(:disabled) {
+      border-color: #86b7fe;
+    }
+    
+    &:focus {
+      border-color: #86b7fe;
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    
+    &:disabled {
+      background-color: #e9ecef;
+      opacity: 1;
+    }
   }
 
-  .dropdown-menu-roles {
-    max-height: 250px;
-    overflow-y: auto;
-    min-width: 220px;
-    padding: 8px 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-    position: absolute; // Asegurar posición absoluta
-    z-index: 1050; // z-index alto para que aparezca sobre otros elementos
-
-    li {
-      margin: 0;
-      padding: 0;
-    }
-
-    .dropdown-item-wrapper {
-      padding: 6px 16px;
+  .dropdown-menu {
+    .dropdown-item {
       cursor: pointer;
-      
-      &:hover {
-        background-color: lighten($light-gray, 3%);
-      }
-    }
-
-    .form-check {
-      margin: 0;
-      padding-left: 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      .form-check-input {
-        margin: 0;
-        cursor: pointer;
-        flex-shrink: 0;
-
-        &:disabled {
-          cursor: not-allowed;
-          opacity: 0.5;
-        }
-      }
-
-      .form-check-label {
-        font-size: 13px;
-        cursor: pointer;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        flex: 1;
-
-        &.text-muted {
-          cursor: not-allowed;
-        }
-
-        i.bi-shield-lock-fill {
-          font-size: 12px;
-          flex-shrink: 0;
-        }
-      }
-    }
-  }
-}
-
-.permissions-container {
-  position: static; // Cambiar de relative a static para que el dropdown no se corte
-
-  .dropdown {
-    position: relative; // El dropdown usa position relative
-  }
-
-  .dropdown-toggle {
-    text-align: left;
-    font-size: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    min-width: 180px;
-  }
-
-  .dropdown-menu-permissions {
-    max-height: 300px;
-    overflow-y: auto;
-    min-width: 280px;
-    padding: 8px 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-    position: absolute; // Asegurar posición absoluta
-    z-index: 1050; // z-index alto para que aparezca sobre otros elementos
-
-    li {
-      margin: 0;
-      padding: 0;
-    }
-
-    .dropdown-item-wrapper {
-      padding: 6px 16px;
+      padding: 0.25rem 1rem;
       
       &:hover {
         background-color: #f8f9fa;
       }
-    }
 
-    .form-check {
-      margin: 0;
-      padding-left: 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      .form-check-input {
-        margin: 0;
-        cursor: pointer;
-        flex-shrink: 0;
-
-        &:disabled {
-          cursor: not-allowed;
-        }
-      }
-
-      .form-check-label {
-        font-size: 13px;
-        cursor: pointer;
+      .form-check {
         margin: 0;
         display: flex;
         align-items: center;
-        flex: 1;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0;
 
-        &.text-muted {
-          color: #6c757d !important;
+        .form-check-input {
+          margin: 0;
+          cursor: pointer;
+          flex-shrink: 0;
+
+          &:disabled {
+            cursor: not-allowed;
+          }
         }
 
-        i.bi-lock-fill {
-          font-size: 11px;
-          flex-shrink: 0;
+        .form-check-label {
+          cursor: pointer;
+          margin: 0;
+          display: flex;
+          align-items: center;
+          flex: 1;
+          
+          &.text-muted {
+            cursor: not-allowed;
+          }
         }
       }
     }
@@ -357,7 +268,9 @@
 
 @media (max-width: 768px) {
   .buscador {
-    min-width: 100%;
+    min-width: auto;
+    max-width: 100%;
+    width: 100%;
   }
 
   .table {

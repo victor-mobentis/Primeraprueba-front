@@ -5,8 +5,7 @@ import { UsersService } from '../../services/users/users.service';
 import { AuthorizationService } from '../../services/auth/authorization.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
-import { CreateUserDialogComponent } from '../create-user-dialog/create-user-dialog.component';
-import { EditUserDialogComponent } from '../edit-user-dialog/edit-user-dialog.component';
+import { UserFormDialogComponent } from '../user-form-dialog/user-form-dialog.component';
 
 interface User {
   id: number;
@@ -170,6 +169,10 @@ export class UsersGlobalComponent implements OnInit {
     return user.roles.length;
   }
 
+  getSelectedRoleName(user: User): string {
+    return user.roles.length > 0 ? user.roles[0].name : 'Sin rol';
+  }
+
   hasPermission(user: User, permissionId: number): boolean {
     const hasDirectPermission = user.permissions.some(p => p.id === permissionId);
     const hasRolePermission = user.rolePermissions ? user.rolePermissions.some(p => p.id === permissionId) : false;
@@ -179,9 +182,8 @@ export class UsersGlobalComponent implements OnInit {
   toggleRoleCheckbox(user: User, roleId: number, event: any): void {
     const hasRole = this.hasRole(user, roleId);
     
-    // Si intenta desmarcar el único rol que tiene
-    if (hasRole && user.roles.length === 1) {
-      this.notification.showWarning('No se puede quitar todos los roles. Debe tener al menos uno asignado.');
+    // Si ya tiene este rol, no hacer nada (siempre debe tener un rol)
+    if (hasRole) {
       event.preventDefault();
       event.stopPropagation();
       return;
@@ -194,21 +196,41 @@ export class UsersGlobalComponent implements OnInit {
       return;
     }
 
-    const action = hasRole ? 'remove' : 'assign';
-    this.usersService.toggleRole(user.id, roleId, action).subscribe({
+    // Obtener el rol anterior para removerlo
+    const previousRoleId = user.roles.length > 0 ? user.roles[0].id : null;
+
+    // Asignar el nuevo rol
+    this.usersService.toggleRole(user.id, roleId, 'assign').subscribe({
       next: () => {
-        // Actualizar localmente sin recargar
-        if (action === 'assign') {
-          const roleToAdd = this.allRoles.find(r => r.id === roleId);
-          if (roleToAdd && !user.roles.some(r => r.id === roleId)) {
-            user.roles.push(roleToAdd);
-          }
+        // Remover el rol anterior si existe
+        if (previousRoleId && previousRoleId !== roleId) {
+          this.usersService.toggleRole(user.id, previousRoleId, 'remove').subscribe({
+            next: () => {
+              // Actualizar localmente: reemplazar el rol
+              const roleToAdd = this.allRoles.find(r => r.id === roleId);
+              if (roleToAdd) {
+                user.roles = [roleToAdd];
+              }
+              this.notification.showSuccess('Rol actualizado correctamente');
+            },
+            error: () => {
+              // Si falla al remover el anterior, recargar para mantener consistencia
+              this.loadUsers();
+              this.notification.showError('Error al actualizar rol');
+            }
+          });
         } else {
-          user.roles = user.roles.filter(r => r.id !== roleId);
+          // Si no había rol anterior, solo agregar el nuevo
+          const roleToAdd = this.allRoles.find(r => r.id === roleId);
+          if (roleToAdd) {
+            user.roles = [roleToAdd];
+          }
+          this.notification.showSuccess('Rol asignado correctamente');
         }
-        this.notification.showSuccess(`Rol ${hasRole ? 'removido' : 'asignado'} correctamente`);
       },
-      error: () => this.notification.showError('Error al modificar rol')
+      error: () => {
+        this.notification.showError('Error al asignar rol');
+      }
     });
   }
 
@@ -368,10 +390,12 @@ export class UsersGlobalComponent implements OnInit {
       return;
     }
 
-    const dialogRef = this.dialog.open(CreateUserDialogComponent, {
-      width: '600px',
+    const dialogRef = this.dialog.open(UserFormDialogComponent, {
+      width: '1100px',
+      maxWidth: '95vw',
       disableClose: true,
       panelClass: 'custom-dialog-container'
+      // No pasamos data, el componente detectará que es modo creación
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -388,8 +412,9 @@ export class UsersGlobalComponent implements OnInit {
       return;
     }
 
-    const dialogRef = this.dialog.open(EditUserDialogComponent, {
-      width: '600px',
+    const dialogRef = this.dialog.open(UserFormDialogComponent, {
+      width: '1100px',
+      maxWidth: '95vw',
       disableClose: true,
       panelClass: 'custom-dialog-container',
       data: { user: user }
