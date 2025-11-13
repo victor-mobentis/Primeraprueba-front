@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
-import { UsuariosService } from '../../services/usuarios/usuarios.service';
+import { UsersService } from '../../services/users/users.service';
 import { AuthorizationService } from '../../services/auth/authorization.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
 import { CreateUserDialogComponent } from '../create-user-dialog/create-user-dialog.component';
 
-interface Usuario {
+interface User {
   id: number;
   email: string;
   name: string;
@@ -26,12 +26,12 @@ interface Permission {
 }
 
 @Component({
-  selector: 'app-usuarios-global',
-  templateUrl: './usuarios-global.component.html',
-  styleUrls: ['./usuarios-global.component.scss']
+  selector: 'app-users-global',
+  templateUrl: './users-global.component.html',
+  styleUrls: ['./users-global.component.scss']
 })
-export class UsuariosGlobalComponent implements OnInit {
-  usuarios: Usuario[] = [];
+export class UsersGlobalComponent implements OnInit {
+  users: User[] = [];
   loading = false;
   canAssignRoles = false;
   canAssignPermissions = false;
@@ -52,12 +52,12 @@ export class UsuariosGlobalComponent implements OnInit {
   allRoles: Permission[] = [
     { id: 1, name: 'Admin', description: 'Administrador del sistema' },
     { id: 2, name: 'Editor', description: 'Puede editar información' },
-    { id: 3, name: 'Usuario', description: 'Usuario estándar' }
+    { id: 3, name: 'User', description: 'User estándar' }
   ];
   allPermissions: Permission[] = [];
 
   constructor(
-    private usuariosService: UsuariosService,
+    private usersService: UsersService,
     private authService: AuthorizationService,
     private dialog: MatDialog,
     private notification: NotificationService
@@ -67,7 +67,7 @@ export class UsuariosGlobalComponent implements OnInit {
     this.canAssignRoles = this.authService.hasPermission('ASIGNACION_ROLES_USUARIOS');
     this.canAssignPermissions = this.authService.hasPermission('ASIGNACION_PERMISOS_USUARIOS');
     this.isAdmin = this.authService.hasRole('Admin');
-    this.loadUsuarios();
+    this.loadUsers();
     this.loadPermissions();
   }
 
@@ -75,22 +75,22 @@ export class UsuariosGlobalComponent implements OnInit {
     return this.isAdmin || this.authService.hasPermission('VISUALIZADO_USUARIOS');
   }
 
-  loadUsuarios(): void {
+  loadUsers(): void {
     this.loading = true;
-    this.usuariosService.getUsuariosPaginated(
+    this.usersService.getUsersPaginated(
       this.searchTerm,
       this.currentPage,
       this.itemsPerPage,
       this.sortColumn,
       this.sortDirection
     ).subscribe({
-      next: (response) => {
-        this.usuarios = response.items;
+      next: (response: any) => {
+        this.users = response.items;
         this.totalItems = response.totalItems;
         this.loading = false;
       },
       error: () => {
-        this.notification.showError('Error al cargar usuarios');
+        this.notification.showError('Error al cargar Users');
         this.loading = false;
       }
     });
@@ -98,25 +98,25 @@ export class UsuariosGlobalComponent implements OnInit {
 
   onPageChange(page: number): void {
     this.currentPage = page;
-    this.loadUsuarios();
+    this.loadUsers();
   }
 
   onItemsPerPageChanged(itemsPerPage: number): void {
     this.itemsPerPage = itemsPerPage;
     this.currentPage = 1;
-    this.loadUsuarios();
+    this.loadUsers();
   }
 
   onSearch(searchTerm: string): void {
     this.searchTerm = searchTerm;
     this.currentPage = 1;
-    this.loadUsuarios();
+    this.loadUsers();
   }
 
   clearSearch(): void {
     this.searchTerm = '';
     this.currentPage = 1;
-    this.loadUsuarios();
+    this.loadUsers();
   }
 
   sortData(column: string): void {
@@ -126,35 +126,35 @@ export class UsuariosGlobalComponent implements OnInit {
       this.sortColumn = column;
       this.sortDirection = 'asc';
     }
-    this.loadUsuarios();
+    this.loadUsers();
   }
 
   loadPermissions(): void {
-    this.usuariosService.getAllPermissions().subscribe({
+    this.usersService.getAllPermissions().subscribe({
       next: (permissions) => this.allPermissions = permissions,
       error: () => console.error('Error al cargar permisos')
     });
   }
 
-  hasRole(usuario: Usuario, roleId: number): boolean {
-    return usuario.roles.some(role => role.id === roleId);
+  hasRole(user: User, roleId: number): boolean {
+    return user.roles.some(role => role.id === roleId);
   }
 
-  getSelectedRolesCount(usuario: Usuario): number {
-    return usuario.roles.length;
+  getSelectedRolesCount(user: User): number {
+    return user.roles.length;
   }
 
-  hasPermission(usuario: Usuario, permissionId: number): boolean {
-    const hasDirectPermission = usuario.permissions.some(p => p.id === permissionId);
-    const hasRolePermission = usuario.rolePermissions ? usuario.rolePermissions.some(p => p.id === permissionId) : false;
+  hasPermission(user: User, permissionId: number): boolean {
+    const hasDirectPermission = user.permissions.some(p => p.id === permissionId);
+    const hasRolePermission = user.rolePermissions ? user.rolePermissions.some(p => p.id === permissionId) : false;
     return hasDirectPermission || hasRolePermission;
   }
 
-  toggleRoleCheckbox(usuario: Usuario, roleId: number, event: any): void {
-    const hasRole = this.hasRole(usuario, roleId);
+  toggleRoleCheckbox(user: User, roleId: number, event: any): void {
+    const hasRole = this.hasRole(user, roleId);
     
     // Si intenta desmarcar el único rol que tiene
-    if (hasRole && usuario.roles.length === 1) {
+    if (hasRole && user.roles.length === 1) {
       this.notification.showWarning('No se puede quitar todos los roles. Debe tener al menos uno asignado.');
       event.preventDefault();
       event.stopPropagation();
@@ -169,16 +169,16 @@ export class UsuariosGlobalComponent implements OnInit {
     }
 
     const action = hasRole ? 'remove' : 'assign';
-    this.usuariosService.toggleRole(usuario.id, roleId, action).subscribe({
+    this.usersService.toggleRole(user.id, roleId, action).subscribe({
       next: () => {
         // Actualizar localmente sin recargar
         if (action === 'assign') {
           const roleToAdd = this.allRoles.find(r => r.id === roleId);
-          if (roleToAdd && !usuario.roles.some(r => r.id === roleId)) {
-            usuario.roles.push(roleToAdd);
+          if (roleToAdd && !user.roles.some(r => r.id === roleId)) {
+            user.roles.push(roleToAdd);
           }
         } else {
-          usuario.roles = usuario.roles.filter(r => r.id !== roleId);
+          user.roles = user.roles.filter(r => r.id !== roleId);
         }
         this.notification.showSuccess(`Rol ${hasRole ? 'removido' : 'asignado'} correctamente`);
       },
@@ -186,11 +186,11 @@ export class UsuariosGlobalComponent implements OnInit {
     });
   }
 
-  onRoleItemClick(usuario: Usuario, roleId: number, event: any): void {
-    const hasRole = this.hasRole(usuario, roleId);
+  onRoleItemClick(user: User, roleId: number, event: any): void {
+    const hasRole = this.hasRole(user, roleId);
     
     // Si es el único rol e intenta hacer clic en el item
-    if (hasRole && usuario.roles.length === 1) {
+    if (hasRole && user.roles.length === 1) {
       this.notification.showWarning('No se puede quitar todos los roles. Debe tener al menos uno asignado.');
       event.preventDefault();
       event.stopPropagation();
@@ -198,37 +198,37 @@ export class UsuariosGlobalComponent implements OnInit {
     }
   }
 
-  toggleRole(usuario: Usuario, roleId: number): void {
+  toggleRole(user: User, roleId: number): void {
     if (!this.canAssignRoles) {
       this.notification.showWarning('No tienes permiso para asignar roles');
       return;
     }
 
-    const hasRole = this.hasRole(usuario, roleId);
-    if (hasRole && usuario.roles.length === 1) {
+    const hasRole = this.hasRole(user, roleId);
+    if (hasRole && user.roles.length === 1) {
       this.notification.showWarning('Se debe tener al menos un rol seleccionado');
       return;
     }
 
     const action = hasRole ? 'remove' : 'assign';
-    this.usuariosService.toggleRole(usuario.id, roleId, action).subscribe({
+    this.usersService.toggleRole(user.id, roleId, action).subscribe({
       next: () => {
         this.notification.showSuccess(`Rol ${hasRole ? 'removido' : 'asignado'} correctamente`);
-        this.updateSingleUser(usuario.id);
+        this.updateSingleUser(user.id);
       },
       error: () => this.notification.showError('Error al modificar rol')
     });
   }
 
-  isPermissionFromRole(usuario: Usuario, permissionId: number): boolean {
-    return usuario.rolePermissions?.some(p => p.id === permissionId) || false;
+  isPermissionFromRole(user: User, permissionId: number): boolean {
+    return user.rolePermissions?.some(p => p.id === permissionId) || false;
   }
 
-  getSelectedPermissionsCount(usuario: Usuario): number {
-    return usuario.permissions.filter(p => !this.isPermissionFromRole(usuario, p.id)).length;
+  getSelectedPermissionsCount(user: User): number {
+    return user.permissions.filter(p => !this.isPermissionFromRole(user, p.id)).length;
   }
 
-  togglePermission(usuario: Usuario, permissionId: number, event: any): void {
+  togglePermission(user: User, permissionId: number, event: any): void {
     if (!this.canAssignPermissions) {
       this.notification.showWarning('No tienes permiso para asignar permisos');
       event.preventDefault();
@@ -237,25 +237,25 @@ export class UsuariosGlobalComponent implements OnInit {
     }
 
     // Si el permiso viene del rol, no se puede desmarcar
-    if (this.isPermissionFromRole(usuario, permissionId)) {
+    if (this.isPermissionFromRole(user, permissionId)) {
       event.preventDefault();
       event.stopPropagation();
       return;
     }
 
-    const hasPermission = usuario.permissions.some(p => p.id === permissionId);
+    const hasPermission = user.permissions.some(p => p.id === permissionId);
     const action = hasPermission ? 'remove' : 'assign';
 
-    this.usuariosService.togglePermission(usuario.id, permissionId, action).subscribe({
+    this.usersService.togglePermission(user.id, permissionId, action).subscribe({
       next: () => {
         // Actualizar localmente sin recargar
         if (action === 'assign') {
           const permissionToAdd = this.allPermissions.find(p => p.id === permissionId);
-          if (permissionToAdd && !usuario.permissions.some(p => p.id === permissionId)) {
-            usuario.permissions.push(permissionToAdd);
+          if (permissionToAdd && !user.permissions.some(p => p.id === permissionId)) {
+            user.permissions.push(permissionToAdd);
           }
         } else {
-          usuario.permissions = usuario.permissions.filter(p => p.id !== permissionId);
+          user.permissions = user.permissions.filter(p => p.id !== permissionId);
         }
         this.notification.showSuccess(`Permiso ${hasPermission ? 'removido' : 'asignado'} correctamente`);
       },
@@ -263,7 +263,7 @@ export class UsuariosGlobalComponent implements OnInit {
     });
   }
 
-  onPermissionsChange(usuario: Usuario, selectedOptions: any): void {
+  onPermissionsChange(user: User, selectedOptions: any): void {
     if (!this.canAssignPermissions) {
       this.notification.showWarning('No tienes permiso para asignar permisos');
       return;
@@ -274,9 +274,9 @@ export class UsuariosGlobalComponent implements OnInit {
       .filter((option: any) => option.selected && !option.disabled)
       .map((option: any) => parseInt(option.value));
 
-    const rolePermissions = usuario.rolePermissions?.map(p => p.id) || [];
-    const currentPermissions = usuario.permissions
-      .filter(p => !this.isPermissionFromRole(usuario, p.id))
+    const rolePermissions = user.rolePermissions?.map(p => p.id) || [];
+    const currentPermissions = user.permissions
+      .filter(p => !this.isPermissionFromRole(user, p.id))
       .map(p => p.id);
     const selectedDirect = selectedPermissions.filter(id => !rolePermissions.includes(id));
 
@@ -286,59 +286,59 @@ export class UsuariosGlobalComponent implements OnInit {
     if (toAdd.length === 0 && toRemove.length === 0) return;
 
     const operations = [
-      ...toAdd.map(id => this.usuariosService.togglePermission(usuario.id, id, 'assign')),
-      ...toRemove.map(id => this.usuariosService.togglePermission(usuario.id, id, 'remove'))
+      ...toAdd.map(id => this.usersService.togglePermission(user.id, id, 'assign')),
+      ...toRemove.map(id => this.usersService.togglePermission(user.id, id, 'remove'))
     ];
 
     forkJoin(operations).subscribe({
       next: () => {
         this.notification.showSuccess('Permisos actualizados correctamente');
-        this.updateSingleUser(usuario.id);
+        this.updateSingleUser(user.id);
       },
       error: () => {
         this.notification.showError('Error al actualizar permisos');
-        this.updateSingleUser(usuario.id);
+        this.updateSingleUser(user.id);
       }
     });
   }
 
-  getSelectedPermissions(usuario: Usuario): number[] {
-    const direct = usuario.permissions.map(p => p.id);
-    const fromRoles = usuario.rolePermissions?.map(p => p.id) || [];
+  getSelectedPermissions(user: User): number[] {
+    const direct = user.permissions.map(p => p.id);
+    const fromRoles = user.rolePermissions?.map(p => p.id) || [];
     return [...new Set([...direct, ...fromRoles])];
   }
 
-  deleteUser(usuario: Usuario): void {
+  deleteUser(user: User): void {
     if (!this.isAdmin) {
-      this.notification.showWarning('Solo los administradores pueden eliminar usuarios');
+      this.notification.showWarning('Solo los administradores pueden eliminar Users');
       return;
     }
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: `¿Está seguro de que desea eliminar al usuario "${usuario.name}"? Esta acción marcará al usuario como eliminado.`
+      data: `¿Está seguro de que desea eliminar al User "${user.name}"? Esta acción marcará al User como eliminado.`
     });
 
     dialogRef.afterClosed().subscribe(confirmed => {
       if (confirmed) {
-        this.usuariosService.deleteUser(usuario.id).subscribe({
+        this.usersService.deleteUser(user.id).subscribe({
           next: () => {
-            this.notification.showSuccess('Usuario eliminado correctamente');
-            this.updateSingleUser(usuario.id);
+            this.notification.showSuccess('User eliminado correctamente');
+            this.updateSingleUser(user.id);
           },
-          error: () => this.notification.showError('Error al eliminar usuario')
+          error: () => this.notification.showError('Error al eliminar User')
         });
       }
     });
   }
 
   private updateSingleUser(userId: number): void {
-    // Recargar la página actual después de actualizar un usuario
-    this.loadUsuarios();
+    // Recargar la página actual después de actualizar un User
+    this.loadUsers();
   }
 
   openCreateUserDialog(): void {
     if (!this.canCreateUser) {
-      this.notification.showWarning('No tienes permisos para crear usuarios');
+      this.notification.showWarning('No tienes permisos para crear Users');
       return;
     }
 
@@ -350,8 +350,8 @@ export class UsuariosGlobalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Usuario creado exitosamente, recargar la lista
-        this.loadUsuarios();
+        // User creado exitosamente, recargar la lista
+        this.loadUsers();
       }
     });
   }

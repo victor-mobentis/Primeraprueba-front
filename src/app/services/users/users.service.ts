@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-interface Usuario {
+interface User {
   id: number;
   email: string;
   name: string;
@@ -24,7 +24,7 @@ interface Permission {
 @Injectable({
   providedIn: 'root'
 })
-export class UsuariosService {
+export class UsersService {
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
@@ -41,13 +41,13 @@ export class UsuariosService {
     });
   }
 
-  getUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(`${this.apiUrl}/api/users`, {
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/api/users`, {
       headers: this.getHeaders()
     });
   }
 
-  getUsuariosPaginated(
+  getUsersPaginated(
     searchTerm: string = '',
     currentPage: number = 1,
     itemsPerPage: number = 10,

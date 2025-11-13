@@ -2,7 +2,7 @@
   <div class="p-3">
     <h1 class="page-title">
       <i class="bi bi-people-fill me-2"></i>
-      Gestión de Usuarios
+      Gestión de users
     </h1>
   </div>
   
@@ -29,15 +29,15 @@
         </div>
       </div>
 
-      <!-- Botón Crear Usuario -->
+      <!-- Botón Crear user -->
       <div>
         <button 
           class="btn btn-primary"
           (click)="openCreateUserDialog()"
           [disabled]="!canCreateUser"
-          title="Crear nuevo usuario">
+          title="Crear nuevo user">
           <i class="bi bi-person-plus-fill me-2"></i>
-          Nuevo Usuario
+          Nuevo user
         </button>
       </div>
     </div>
@@ -68,42 +68,42 @@
           </tr>
         </thead>
         <tbody class="w-100">
-          <ng-container *ngFor="let usuario of usuarios">
+          <ng-container *ngFor="let user of users">
             <tr>
-              <td>{{ usuario.name }}</td>
-              <td>{{ usuario.email }}</td>
-              <td>{{ usuario.position_company || 'N/A' }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.position_company || 'N/A' }}</td>
               <td>
                 <div class="roles-container">
                   <div class="dropdown">
                     <button 
                       class="btn btn-sm btn-outline-primary dropdown-toggle w-100" 
                       type="button" 
-                      [id]="'dropdownRoles' + usuario.id"
+                      [id]="'dropdownRoles' + user.id"
                       data-bs-toggle="dropdown" 
                       aria-expanded="false"
                       [disabled]="!canAssignRoles">
-                      Roles ({{ getSelectedRolesCount(usuario) }})
+                      Roles ({{ getSelectedRolesCount(user) }})
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-roles" [attr.aria-labelledby]="'dropdownRoles' + usuario.id" (click)="$event.stopPropagation()">
+                    <ul class="dropdown-menu dropdown-menu-roles" [attr.aria-labelledby]="'dropdownRoles' + user.id" (click)="$event.stopPropagation()">
                       <li *ngFor="let role of allRoles" (click)="$event.stopPropagation()">
-                        <div class="dropdown-item-wrapper" (click)="onRoleItemClick(usuario, role.id, $event)">
+                        <div class="dropdown-item-wrapper" (click)="onRoleItemClick(user, role.id, $event)">
                           <div class="form-check">
                             <input 
                               class="form-check-input" 
                               type="checkbox" 
-                              [id]="'role_' + usuario.id + '_' + role.id"
-                              [checked]="hasRole(usuario, role.id)"
-                              [disabled]="hasRole(usuario, role.id) && usuario.roles.length === 1"
-                              (change)="toggleRoleCheckbox(usuario, role.id, $event)">
+                              [id]="'role_' + user.id + '_' + role.id"
+                              [checked]="hasRole(user, role.id)"
+                              [disabled]="hasRole(user, role.id) && user.roles.length === 1"
+                              (change)="toggleRoleCheckbox(user, role.id, $event)">
                             <label 
                               class="form-check-label" 
-                              [for]="'role_' + usuario.id + '_' + role.id"
+                              [for]="'role_' + user.id + '_' + role.id"
                               [title]="role.description"
-                              [class.text-muted]="hasRole(usuario, role.id) && usuario.roles.length === 1"
+                              [class.text-muted]="hasRole(user, role.id) && user.roles.length === 1"
                               (click)="$event.stopPropagation()">
                               {{ role.name }}
-                              <span *ngIf="hasRole(usuario, role.id) && usuario.roles.length === 1" class="ms-1" title="Se requiere al menos un rol">
+                              <span *ngIf="hasRole(user, role.id) && user.roles.length === 1" class="ms-1" title="Se requiere al menos un rol">
                                 <i class="bi bi-shield-lock-fill text-warning"></i>
                               </span>
                             </label>
@@ -120,30 +120,30 @@
                     <button 
                       class="btn btn-sm btn-outline-secondary dropdown-toggle w-100" 
                       type="button" 
-                      [id]="'dropdownPermissions' + usuario.id"
+                      [id]="'dropdownPermissions' + user.id"
                       data-bs-toggle="dropdown" 
                       aria-expanded="false"
                       [disabled]="!canAssignPermissions">
-                      Permisos adicionales ({{ getSelectedPermissionsCount(usuario) }})
+                      Permisos adicionales ({{ getSelectedPermissionsCount(user) }})
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-permissions" [attr.aria-labelledby]="'dropdownPermissions' + usuario.id" (click)="$event.stopPropagation()">
+                    <ul class="dropdown-menu dropdown-menu-permissions" [attr.aria-labelledby]="'dropdownPermissions' + user.id" (click)="$event.stopPropagation()">
                       <li *ngFor="let permission of allPermissions" (click)="$event.stopPropagation()">
                         <div class="dropdown-item-wrapper">
                           <div class="form-check">
                             <input 
                               class="form-check-input" 
                               type="checkbox" 
-                              [id]="'perm_' + usuario.id + '_' + permission.id"
-                              [checked]="hasPermission(usuario, permission.id)"
-                              [disabled]="isPermissionFromRole(usuario, permission.id)"
-                              (change)="togglePermission(usuario, permission.id, $event)">
+                              [id]="'perm_' + user.id + '_' + permission.id"
+                              [checked]="hasPermission(user, permission.id)"
+                              [disabled]="isPermissionFromRole(user, permission.id)"
+                              (change)="togglePermission(user, permission.id, $event)">
                             <label 
                               class="form-check-label" 
-                              [for]="'perm_' + usuario.id + '_' + permission.id"
-                              [class.text-muted]="isPermissionFromRole(usuario, permission.id)"
+                              [for]="'perm_' + user.id + '_' + permission.id"
+                              [class.text-muted]="isPermissionFromRole(user, permission.id)"
                               (click)="$event.stopPropagation()">
                               {{ permission.description }}
-                              <i *ngIf="isPermissionFromRole(usuario, permission.id)" class="bi bi-lock-fill ms-1 text-primary" title="Heredado del rol"></i>
+                              <i *ngIf="isPermissionFromRole(user, permission.id)" class="bi bi-lock-fill ms-1 text-primary" title="Heredado del rol"></i>
                             </label>
                           </div>
                         </div>
@@ -154,15 +154,15 @@
               </td>
               <td class="text-center">
                 <app-btn-icon-delete 
-                  *ngIf="isAdmin && !usuario.deleted"
-                  (btnClicked)="deleteUser(usuario)">
+                  *ngIf="isAdmin && !user.deleted"
+                  (btnClicked)="deleteUser(user)">
                 </app-btn-icon-delete>
               </td>
             </tr>
           </ng-container>
-          <tr *ngIf="usuarios.length === 0">
+          <tr *ngIf="users.length === 0">
             <td colspan="6" class="text-center">
-              No hay usuarios disponibles
+              No hay users disponibles
             </td>
           </tr>
         </tbody>
@@ -188,7 +188,7 @@
 
    
      <!-- Panel de información -->
-    <div class="info-panel mt-3" *ngIf="!loading && usuarios.length > 0">
+    <div class="info-panel mt-3" *ngIf="!loading && users.length > 0">
       <div class="alert alert-info">
         <p *ngIf="canAssignRoles"><i class="bi bi-info-circle"></i> Haz clic en los roles para asignar/quitar</p>
         <p *ngIf="canAssignPermissions"><i class="bi bi-info-circle"></i> Los permisos con 🔒 vienen del rol</p>

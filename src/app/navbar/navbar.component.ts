@@ -117,7 +117,7 @@ export class NavbarComponent {
     }
     
     // Si es el item de usuarios, verificar roles O permisos
-    if (item.route && (item.route.includes('usuarios') || item.label === 'Usuarios')) {
+    if (item.route && (item.route.includes('users') || item.label === 'Users')) {
       return this.authorizationService.hasRole('Admin') || 
              this.authorizationService.hasPermission('VISUALIZADO_USUARIOS');
     }

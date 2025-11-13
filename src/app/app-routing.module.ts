@@ -56,8 +56,8 @@ const routes: Routes = [
 
       },
       {
-        path: 'usuarios',
-        loadChildren: () => import('./usuarios/usuarios.module').then(m => m.UsuariosModule),
+        path: 'users',
+        loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
         canActivate: [authGuard, RoleGuard],
         canMatch: [authGuard],
         data: { 

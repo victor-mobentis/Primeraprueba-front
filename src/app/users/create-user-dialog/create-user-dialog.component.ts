@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { UsuariosService } from '../../services/usuarios/usuarios.service';
+import { UsersService } from '../../services/users/users.service';
 import { AuthorizationService } from '../../services/auth/authorization.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { Md5 } from 'ts-md5';
@@ -45,7 +45,7 @@ export class CreateUserDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<CreateUserDialogComponent>,
-    private usuariosService: UsuariosService,
+    private UsersService: UsersService,
     private authorizationService: AuthorizationService,
     private notificationService: NotificationService
   ) {}
@@ -65,7 +65,7 @@ export class CreateUserDialogComponent implements OnInit {
       }
     });
 
-    this.usuariosService.getAllPermissions().subscribe({
+    this.UsersService.getAllPermissions().subscribe({
       next: (permissions: Permission[]) => {
         this.allPermissions = permissions;
       },
@@ -182,7 +182,7 @@ export class CreateUserDialogComponent implements OnInit {
       permissionIds: this.selectedPermissionIds
     };
 
-    this.usuariosService.createUser(userData).subscribe({
+    this.UsersService.createUser(userData).subscribe({
       next: (response: any) => {
         this.notificationService.showSuccess('Usuario creado exitosamente');
         this.dialogRef.close(response);
