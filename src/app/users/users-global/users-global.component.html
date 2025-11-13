@@ -8,25 +8,34 @@
   
   <div class="p-3">
     <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
-      <!-- Buscador -->
-      <div class="buscador">
-        <div class="search-input-wrapper">
-          <input 
-            type="text" 
-            class="form-control" 
-            placeholder="Buscar por nombre, email o cargo..." 
-            [(ngModel)]="searchTerm"
-            (keyup.enter)="onSearch(searchTerm)"
-            (input)="searchTerm.length === 0 && onSearch('')">
-          <button 
-            *ngIf="searchTerm.length > 0" 
-            class="clear-search-btn"
-            type="button"
-            (click)="clearSearch()"
-            title="Limpiar búsqueda">
-            <i class="bi bi-x-lg"></i>
-          </button>
+      <!-- Buscador y Filtros -->
+      <div class="d-flex align-items-center gap-2 flex-grow-1">
+        <div class="buscador flex-grow-1">
+          <div class="search-input-wrapper">
+            <input 
+              type="text" 
+              class="form-control" 
+              placeholder="Buscar por nombre, email o cargo..." 
+              [(ngModel)]="searchTerm"
+              (keyup.enter)="onSearch(searchTerm)"
+              (input)="searchTerm.length === 0 && onSearch('')">
+            <button 
+              *ngIf="searchTerm.length > 0" 
+              class="clear-search-btn"
+              type="button"
+              (click)="clearSearch()"
+              title="Limpiar búsqueda">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
         </div>
+
+        <!-- Contenedor de Filtros -->
+        <app-filter-container 
+          [componentId]="'users-global'"
+          [selectedFilters]="selectedFilters"
+          (filtersChanged)="onFiltersChanged($event)">
+        </app-filter-container>
       </div>
 
       <!-- Botón Crear user -->

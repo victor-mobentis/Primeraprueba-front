@@ -50,11 +50,10 @@ export class UsersGlobalComponent implements OnInit {
   // Búsqueda
   searchTerm: string = '';
 
-  allRoles: Permission[] = [
-    { id: 1, name: 'Admin', description: 'Administrador del sistema' },
-    { id: 2, name: 'Editor', description: 'Puede editar información' },
-    { id: 3, name: 'User', description: 'User estándar' }
-  ];
+  // Filtros
+  selectedFilters: any[] = [];
+
+  allRoles: Permission[] = [];
   allPermissions: Permission[] = [];
 
   constructor(
@@ -68,8 +67,30 @@ export class UsersGlobalComponent implements OnInit {
     this.canAssignRoles = this.authService.hasPermission('ASIGNACION_ROLES_USUARIOS');
     this.canAssignPermissions = this.authService.hasPermission('ASIGNACION_PERMISOS_USUARIOS');
     this.isAdmin = this.authService.hasRole('Admin');
+    this.loadRolesForDropdowns();
     this.loadUsers();
-    this.loadPermissions();
+  }
+
+  loadRolesForDropdowns(): void {
+    // Cargar roles para los dropdowns de la tabla
+    this.authService.getAllRoles().subscribe({
+      next: (roles: any[]) => {
+        this.allRoles = roles;
+      },
+      error: (error: any) => {
+        console.error('Error cargando roles:', error);
+      }
+    });
+
+    // Cargar permisos para los dropdowns de la tabla
+    this.usersService.getAllPermissions().subscribe({
+      next: (permissions: any[]) => {
+        this.allPermissions = permissions;
+      },
+      error: (error: any) => {
+        console.error('Error cargando permisos:', error);
+      }
+    });
   }
 
   get canCreateUser(): boolean {
@@ -79,6 +100,7 @@ export class UsersGlobalComponent implements OnInit {
   loadUsers(): void {
     this.loading = true;
     this.usersService.getUsersPaginated(
+      this.selectedFilters,
       this.searchTerm,
       this.currentPage,
       this.itemsPerPage,
@@ -95,6 +117,16 @@ export class UsersGlobalComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  onFiltersChanged(filters: { [key: string]: any }): void {
+    // Convertir el objeto de filtros a un array para el backend
+    this.selectedFilters = Object.keys(filters).map(key => ({
+      id: key,
+      ...filters[key]
+    }));
+    this.currentPage = 1;
+    this.loadUsers();
   }
 
   onPageChange(page: number): void {
@@ -128,13 +160,6 @@ export class UsersGlobalComponent implements OnInit {
       this.sortDirection = 'asc';
     }
     this.loadUsers();
-  }
-
-  loadPermissions(): void {
-    this.usersService.getAllPermissions().subscribe({
-      next: (permissions) => this.allPermissions = permissions,
-      error: () => console.error('Error al cargar permisos')
-    });
   }
 
   hasRole(user: User, roleId: number): boolean {

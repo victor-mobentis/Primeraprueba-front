@@ -48,6 +48,7 @@ export class UsersService {
   }
 
   getUsersPaginated(
+    selectedFilters: any[] = [],
     searchTerm: string = '',
     currentPage: number = 1,
     itemsPerPage: number = 10,
@@ -55,6 +56,7 @@ export class UsersService {
     sortDirection: string = 'asc'
   ): Observable<any> {
     const body = {
+      selectedFilters,
       searchTerm,
       currentPage,
       itemsPerPage,
