@@ -9,6 +9,7 @@ interface Role {
   id: number;
   name: string;
   description: string;
+  permissions: Permission[];
 }
 
 interface Permission {
@@ -91,6 +92,11 @@ export class CreateUserDialogComponent implements OnInit {
   }
 
   togglePermission(permissionId: number): void {
+    // No permitir desmarcar permisos heredados de roles
+    if (this.isPermissionFromRole(permissionId)) {
+      return;
+    }
+    
     const index = this.selectedPermissionIds.indexOf(permissionId);
     if (index > -1) {
       this.selectedPermissionIds.splice(index, 1);
@@ -105,6 +111,19 @@ export class CreateUserDialogComponent implements OnInit {
 
   hasPermission(permissionId: number): boolean {
     return this.selectedPermissionIds.includes(permissionId);
+  }
+
+  isPermissionFromRole(permissionId: number): boolean {
+    // Verificar si el permiso está incluido en alguno de los roles seleccionados
+    return this.selectedRoleIds.some(roleId => {
+      const role = this.allRoles.find(r => r.id === roleId);
+      return role?.permissions?.some(p => p.id === permissionId) || false;
+    });
+  }
+
+  isPermissionChecked(permissionId: number): boolean {
+    // Un permiso está marcado si está en la lista de permisos directos O heredado de un rol
+    return this.selectedPermissionIds.includes(permissionId) || this.isPermissionFromRole(permissionId);
   }
 
   onFileSelected(event: any): void {

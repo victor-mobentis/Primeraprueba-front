@@ -182,16 +182,15 @@
               class="form-check-input" 
               type="checkbox" 
               [id]="'perm_' + permission.id"
-              [checked]="hasPermission(permission.id)"
+              [checked]="isPermissionChecked(permission.id)"
               (change)="togglePermission(permission.id)"
-              [disabled]="loading || isPermissionInherited(permission.id)">
+              [disabled]="loading || isPermissionFromRole(permission.id)">
             <label 
               class="form-check-label" 
-              [for]="'perm_' + permission.id">
+              [for]="'perm_' + permission.id"
+              [class.text-muted]="isPermissionFromRole(permission.id)">
               {{ permission.description }}
-              <span *ngIf="isPermissionInherited(permission.id)" class="ms-1 text-muted" title="Heredado del rol">
-                <i class="bi bi-shield-check"></i>
-              </span>
+              <i *ngIf="isPermissionFromRole(permission.id)" class="bi bi-lock-fill ms-1 text-primary" title="Heredado del rol"></i>
             </label>
           </div>
         </div>

@@ -9,6 +9,7 @@ interface Role {
   id: number;
   name: string;
   description: string;
+  permissions: Permission[];
 }
 
 interface Permission {
@@ -81,11 +82,12 @@ export class EditUserDialogComponent implements OnInit {
     
     // Cargar solo permisos directos (no los heredados de roles)
     this.selectedPermissionIds = user.permissions
-      .filter(p => !this.isPermissionFromRole(user, p.id))
+      .filter(p => !this.wasPermissionFromRole(user, p.id))
       .map(p => p.id);
   }
 
-  isPermissionFromRole(user: User, permissionId: number): boolean {
+  // Verifica si un permiso estaba heredado del rol en el usuario original (solo para carga inicial)
+  wasPermissionFromRole(user: User, permissionId: number): boolean {
     return user.rolePermissions?.some(p => p.id === permissionId) || false;
   }
 
@@ -126,6 +128,11 @@ export class EditUserDialogComponent implements OnInit {
   }
 
   togglePermission(permissionId: number): void {
+    // No permitir desmarcar permisos heredados de roles
+    if (this.isPermissionFromRole(permissionId)) {
+      return;
+    }
+    
     const index = this.selectedPermissionIds.indexOf(permissionId);
     if (index > -1) {
       this.selectedPermissionIds.splice(index, 1);
@@ -142,8 +149,22 @@ export class EditUserDialogComponent implements OnInit {
     return this.selectedPermissionIds.includes(permissionId);
   }
 
+  // Verifica si el permiso está heredado de alguno de los roles ACTUALMENTE seleccionados
+  isPermissionFromRole(permissionId: number): boolean {
+    return this.selectedRoleIds.some(roleId => {
+      const role = this.allRoles.find(r => r.id === roleId);
+      return role?.permissions?.some(p => p.id === permissionId) || false;
+    });
+  }
+
+  // Verifica si el permiso debe estar marcado (directo o heredado)
+  isPermissionChecked(permissionId: number): boolean {
+    return this.selectedPermissionIds.includes(permissionId) || this.isPermissionFromRole(permissionId);
+  }
+
+  // DEPRECATED: Este método ya no se usa, mantenemos isPermissionFromRole
   isPermissionInherited(permissionId: number): boolean {
-    return this.data.user.rolePermissions?.some(p => p.id === permissionId) || false;
+    return this.isPermissionFromRole(permissionId);
   }
 
   onFileSelected(event: any): void {
