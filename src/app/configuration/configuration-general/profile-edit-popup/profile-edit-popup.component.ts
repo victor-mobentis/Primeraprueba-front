@@ -9,6 +9,14 @@ import { LoginService } from 'src/app/services/auth/login.service';
 import { Observable } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { AuthorizationService } from 'src/app/services/auth/authorization.service';
+import { UsersService } from 'src/app/services/users/users.service';
+
+interface Permission {
+  id: number;
+  name: string;
+  description: string;
+}
 
 @Component({
   selector: 'app-profile-edit-popup',
@@ -45,6 +53,11 @@ export class ProfileEditPopupComponent {
   mostrarErrorInfo: boolean = false;
   mostrarErrorPassword: boolean = false;
 
+  // Roles y permisos del usuario
+  userRoles: string[] = [];
+  userPermissions: Permission[] = [];
+  allPermissions: Permission[] = [];
+
   constructor(
     public dialogRef: MatDialogRef<ProfileEditPopupComponent>,
     private fb: FormBuilder,
@@ -52,7 +65,9 @@ export class ProfileEditPopupComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
     private _loginServices: LoginService,
-    private _notifactionService: NotificationService
+    private _notifactionService: NotificationService,
+    private _authorizationService: AuthorizationService,
+    private _usersService: UsersService
   ) {
     this.form = this.fb.group({
       usuario: [''],
@@ -73,6 +88,24 @@ export class ProfileEditPopupComponent {
     });
     this.email = localStorage.getItem('email') || '';
     this.img = localStorage.getItem('img');
+    
+    // Cargar roles
+    this.userRoles = this._authorizationService.getRoles();
+    
+    // Cargar permisos con descripciones desde el backend
+    const userPermissionNames = this._authorizationService.getPermissions();
+    this._usersService.getAllPermissions().subscribe({
+      next: (allPermissions: Permission[]) => {
+        this.allPermissions = allPermissions;
+        // Filtrar solo los permisos que el usuario tiene
+        this.userPermissions = allPermissions.filter(p => 
+          userPermissionNames.includes(p.name)
+        );
+      },
+      error: (err) => {
+        console.error('Error al cargar permisos:', err);
+      }
+    });
   }
 
   cancelar(): void {

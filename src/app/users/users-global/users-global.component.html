@@ -205,7 +205,6 @@
      <!-- Panel de información -->
     <div class="info-panel mt-3" *ngIf="!loading && users.length > 0">
       <div class="alert alert-info">
-        <p *ngIf="canAssignRoles"><i class="bi bi-info-circle"></i> Haz clic en los roles para asignar/quitar</p>
         <p *ngIf="canAssignPermissions"><i class="bi bi-info-circle"></i> Los permisos con 🔒 vienen del rol</p>
         <p *ngIf="!canAssignRoles && !canAssignPermissions"><i class="bi bi-exclamation-triangle"></i> Sin permisos para modificar</p>
       </div>
