@@ -153,13 +153,13 @@
 }
 
 .row_column_lg {
-  width: 200px;
-  min-width: 200px;
+  width: 150px;
+  min-width: 150px;
 }
 
 .row_column_xl {
-  width: 250px;
-  min-width: 250px;
+  width: 180px;
+  min-width: 180px;
 }
 
 .row_ficha {
@@ -171,9 +171,33 @@
 
 
 .dropdown {
+  // Limitar el ancho del dropdown
+  max-width: 100%;
+  
+  .form-select {
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    width: 100%; // Usar el 100% del contenedor dropdown, no de la celda
+    
+    &:hover:not(:disabled) {
+      border-color: #86b7fe;
+    }
+    
+    &:focus {
+      border-color: #86b7fe;
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    
+    &:disabled {
+      background-color: #e9ecef;
+      opacity: 1;
+    }
+  }
+  
   .dropdown-toggle {
     border: 1px solid #ced4da;
     background-color: #fff;
+    width: 100%; // Usar el 100% del contenedor dropdown, no de la celda
     
     &:hover:not(:disabled) {
       border-color: #86b7fe;
