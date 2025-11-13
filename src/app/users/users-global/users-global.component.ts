@@ -6,6 +6,7 @@ import { AuthorizationService } from '../../services/auth/authorization.service'
 import { NotificationService } from '../../services/notification/notification.service';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
 import { CreateUserDialogComponent } from '../create-user-dialog/create-user-dialog.component';
+import { EditUserDialogComponent } from '../edit-user-dialog/edit-user-dialog.component';
 
 interface User {
   id: number;
@@ -351,6 +352,27 @@ export class UsersGlobalComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // User creado exitosamente, recargar la lista
+        this.loadUsers();
+      }
+    });
+  }
+
+  openEditUserDialog(user: User): void {
+    if (!this.isAdmin && !this.canCreateUser) {
+      this.notification.showWarning('No tienes permisos para editar Users');
+      return;
+    }
+
+    const dialogRef = this.dialog.open(EditUserDialogComponent, {
+      width: '600px',
+      disableClose: true,
+      panelClass: 'custom-dialog-container',
+      data: { user: user }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // User actualizado exitosamente, recargar la lista
         this.loadUsers();
       }
     });

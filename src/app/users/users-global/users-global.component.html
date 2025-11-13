@@ -153,10 +153,16 @@
                 </div>
               </td>
               <td class="text-center">
-                <app-btn-icon-delete 
-                  *ngIf="isAdmin && !user.deleted"
-                  (btnClicked)="deleteUser(user)">
-                </app-btn-icon-delete>
+                <div class="d-flex justify-content-center gap-2">
+                  <app-btn-icon-edit 
+                    *ngIf="(isAdmin || canCreateUser) && !user.deleted"
+                    (btnClicked)="openEditUserDialog(user)">
+                  </app-btn-icon-edit>
+                  <app-btn-icon-delete 
+                    *ngIf="isAdmin && !user.deleted"
+                    (btnClicked)="deleteUser(user)">
+                  </app-btn-icon-delete>
+                </div>
               </td>
             </tr>
           </ng-container>

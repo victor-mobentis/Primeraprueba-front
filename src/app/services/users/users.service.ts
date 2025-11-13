@@ -97,4 +97,9 @@ export class UsersService {
   createUser(userData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/api/users`, userData, { headers: this.getHeaders() });
   }
+
+  updateUser(userData: any): Observable<any> {
+    const userId = userData.id;
+    return this.http.patch(`${this.apiUrl}/api/users/${userId}`, userData, { headers: this.getHeaders() });
+  }
 }
