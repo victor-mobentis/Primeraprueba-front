@@ -344,6 +344,9 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   }
 
   getCompetitorName(id: number, competitors: any[]): string {
+    if (!competitors || !Array.isArray(competitors)) {
+      return 'No encontrado';
+    }
     const competitor = competitors.find((c) => c.id == id);
     return competitor ? competitor.name : 'No encontrado';
   }
