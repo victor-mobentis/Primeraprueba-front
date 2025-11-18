@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 import { UsersService } from '../../services/users/users.service';
@@ -6,7 +6,7 @@ import { AuthorizationService } from '../../services/auth/authorization.service'
 import { NotificationService } from '../../services/notification/notification.service';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
 import { UserFormDialogComponent } from '../user-form-dialog/user-form-dialog.component';
-import { ConfigurationService } from '../../services/configuration.service';
+import { LicenseBadgeComponent } from '../../components/license-badge/license-badge.component';
 
 interface User {
   id: number;
@@ -57,21 +57,15 @@ export class UsersGlobalComponent implements OnInit {
   allPermissions: Permission[] = [];
 
   // Control de licencias
-  activeUsersCount: number = 0;
-  maxLicenses: number = 10;
   licenseReached: boolean = false;
-
-  // Getter para licencias restantes
-  get remainingLicenses(): number {
-    return Math.max(0, this.maxLicenses - this.activeUsersCount);
-  }
+  
+  @ViewChild('licenseBadge') licenseBadge!: LicenseBadgeComponent;
 
   constructor(
     private usersService: UsersService,
     private authService: AuthorizationService,
     private dialog: MatDialog,
-    private notification: NotificationService,
-    private configService: ConfigurationService
+    private notification: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -79,44 +73,11 @@ export class UsersGlobalComponent implements OnInit {
     this.canAssignPermissions = this.authService.hasPermission('ASIGNACION_PERMISOS_USUARIOS');
     this.isAdmin = this.authService.hasRole('Admin');
     this.loadRolesForDropdowns();
-    this.loadLicenseConfiguration();
-    this.loadActiveUsersCount();
     this.loadUsers();
   }
 
-  loadLicenseConfiguration(): void {
-    this.configService.getConfigurationByName('converterLICENCIAS_RESTANTES').subscribe({
-      next: (config) => {
-        this.maxLicenses = parseInt(config.Valor, 10) || 10;
-        console.log('📊 Configuración cargada - maxLicenses:', this.maxLicenses);
-        this.checkLicenseLimit();
-      },
-      error: (error) => {
-        console.error('Error cargando configuración de licencias:', error);
-        // Valor por defecto si hay error
-        this.maxLicenses = 10;
-      }
-    });
-  }
-
-  loadActiveUsersCount(): void {
-    this.usersService.getActiveUsersCount().subscribe({
-      next: (response) => {
-        this.activeUsersCount = response.count;
-        console.log('👥 Usuarios activos cargados:', this.activeUsersCount);
-        console.log('📈 Licencias restantes:', this.remainingLicenses);
-        this.checkLicenseLimit();
-      },
-      error: (error) => {
-        console.error('Error cargando conteo de usuarios activos:', error);
-      }
-    });
-  }
-
-  checkLicenseLimit(): void {
-    // Verificar si se alcanzó el límite de licencias
-    this.licenseReached = this.activeUsersCount >= this.maxLicenses;
-    console.log('🔒 Check límite - Activos:', this.activeUsersCount, 'Máximo:', this.maxLicenses, 'Alcanzado:', this.licenseReached);
+  onLicenseStatusChange(status: { canCreate: boolean, reached: boolean }): void {
+    this.licenseReached = status.reached;
   }
 
   loadRolesForDropdowns(): void {
@@ -147,12 +108,12 @@ export class UsersGlobalComponent implements OnInit {
 
   get createUserButtonTooltip(): string {
     if (this.licenseReached) {
-      return `No quedan licencias disponibles (0/${this.maxLicenses} restantes). Contrata más licencias o elimina usuarios.`;
+      return 'No quedan licencias disponibles. Contrata más licencias o elimina usuarios.';
     }
     if (!this.isAdmin && !this.authService.hasPermission('VISUALIZADO_USUARIOS')) {
       return 'No tienes permisos para crear usuarios';
     }
-    return `Crear nuevo usuario (${this.remainingLicenses} licencias disponibles)`;
+    return 'Crear nuevo usuario';
   }
 
   loadUsers(): void {
@@ -431,7 +392,7 @@ export class UsersGlobalComponent implements OnInit {
           next: () => {
             this.notification.showSuccess('User eliminado correctamente');
             this.updateSingleUser(user.id);
-            this.loadActiveUsersCount(); // Recargar conteo después de eliminar
+            this.licenseBadge?.refreshCount(); // Recargar conteo después de eliminar
           },
           error: () => this.notification.showError('Error al eliminar User')
         });
@@ -447,7 +408,7 @@ export class UsersGlobalComponent implements OnInit {
   openCreateUserDialog(): void {
     if (this.licenseReached) {
       this.notification.showWarning(
-        `Máximo de licencias alcanzado (${this.activeUsersCount}/${this.maxLicenses}). Contrata más licencias o elimina usuarios.`
+        'Máximo de licencias alcanzado. Contrata más licencias o elimina usuarios.'
       );
       return;
     }
@@ -469,8 +430,7 @@ export class UsersGlobalComponent implements OnInit {
       if (result) {
         // Usuario creado exitosamente, recargar la lista y verificar licencias
         this.loadUsers();
-        this.loadActiveUsersCount();
-        this.loadLicenseConfiguration();
+        this.licenseBadge?.refreshCount();
       }
     });
   }

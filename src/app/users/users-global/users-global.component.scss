@@ -82,43 +82,6 @@
   }
 }
 
-// Badge de licencias
-.license-badge {
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  background-color: #e7f3ff;
-  color: #0066cc;
-  display: inline-flex;
-  align-items: center;
-  font-weight: 500;
-  transition: all 0.3s ease;
-
-  &.license-warning {
-    background-color: #fff3cd;
-    color: #856404;
-  }
-
-  &.license-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    animation: pulse 2s infinite;
-  }
-
-  i {
-    font-size: 0.875rem;
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
 .table-responsive {
   background: white;
   border-radius: 8px;

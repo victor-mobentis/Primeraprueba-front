@@ -45,6 +45,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EmpresaDropdownComponent } from '../components/empresa-dropdown/empresa-dropdown.component';
 import { HasRoleDirective } from './directives/has-role.directive';
 import { HasPermissionDirective } from './directives/has-permission.directive';
+import { LicenseBadgeComponent } from '../components/license-badge/license-badge.component';
 
 
 
@@ -88,6 +89,7 @@ import { HasPermissionDirective } from './directives/has-permission.directive';
     EmpresaDropdownComponent,
     HasRoleDirective,
     HasPermissionDirective,
+    LicenseBadgeComponent,
   ],
   imports: [
     NgbModule,
@@ -140,6 +142,7 @@ import { HasPermissionDirective } from './directives/has-permission.directive';
     EmpresaDropdownComponent,
     HasRoleDirective,
     HasPermissionDirective,
+    LicenseBadgeComponent,
   ]
 })
 export class SharedModule { }

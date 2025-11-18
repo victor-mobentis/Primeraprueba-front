@@ -41,13 +41,10 @@
       <!-- Botón Crear usuario -->
       <div class="d-flex flex-column align-items-end gap-1">
         <!-- Indicador de licencias -->
-        <small 
-          class="license-badge"
-          [class.license-warning]="activeUsersCount >= maxLicenses * 0.8"
-          [class.license-danger]="licenseReached">
-          <i class="bi bi-person-check-fill me-1"></i>
-          Licencias restantes: {{ remainingLicenses }}/{{ maxLicenses }}
-        </small>
+        <mobentis-license-badge 
+          #licenseBadge
+          (licenseStatusChange)="onLicenseStatusChange($event)">
+        </mobentis-license-badge>
         <button 
           class="btn btn-primary"
           (click)="openCreateUserDialog()"
