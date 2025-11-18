@@ -160,17 +160,16 @@
               </td>
               <!-- Acción Correctora Column -->
               <td class="fondo_accionCorrectora">
-                <div class="d-flex align-items-center gap-1">
+                <!-- Mostrar como campos editables si tiene permisos -->
+                <div *ngIf="canEditAccionCorrectora" class="d-flex align-items-center gap-1">
                   <!-- Campo para precio de promoción -->
                   <input type="number" class="form-control form-control-sm accion_correctora_precio color-primary"
                     [(ngModel)]="row.corrective_action_value" placeholder="0" min="0"
-                    (input)="changeNumber($event, row)"
-                    [disabled]="!canEditAccionCorrectora" />
+                    (input)="changeNumber($event, row)" />
 
                   <!-- Campo para símbolo de promoción -->
                   <select class="form-select form-select-sm accion_correctora_simbolo"
-                    [(ngModel)]="row.corrective_action_symbol_id" (change)="changeSymbol($event, row)"
-                    [disabled]="!canEditAccionCorrectora">
+                    [(ngModel)]="row.corrective_action_symbol_id" (change)="changeSymbol($event, row)">
                     <option *ngFor="let simbolo of simbolos" [value]="simbolo.id">
                       {{ simbolo.symbol }}
                     </option>
@@ -180,11 +179,10 @@
                   <input type="text" class="truncate-text form-control form-control-sm color-primary"
                     [(ngModel)]="row.corrective_action_text" maxlength="50" placement="top" placeholder="Promoción"
                     (ngModelChange)="changeText($event, row)" [ngbTooltip]="tooltipText"
-                    (mouseover)="applyTooltipIfTruncated($event, row.corrective_action_text)"
-                    [disabled]="!canEditAccionCorrectora" />
+                    (mouseover)="applyTooltipIfTruncated($event, row.corrective_action_text)" />
 
                   <!-- campo de estado (siempre visible) -->
-                  <div class=" d-flex align-items-center justify-self-center">
+                  <div class="d-flex align-items-center justify-self-center">
                     <app-corrective-action-status [statusId]="row.corrective_action_status_id"
                       [statusText]="row.corrective_action_status" [rejectionId]="row.id"
                       (statusChange)="onStatusChange($event, row)" [correctiveActionValue]="row.corrective_action_value"
@@ -192,6 +190,30 @@
                       [correctiveActionText]="row.corrective_action_text"
                       [canEnviar]="canEnviarAccionCorrectora"></app-corrective-action-status>
                   </div>
+                </div>
+
+                <!-- Mostrar como texto plano si NO tiene permisos -->
+                <div *ngIf="!canEditAccionCorrectora" class="d-flex align-items-center justify-content-between gap-2 w-100">
+                  <!-- Valor y símbolo -->
+                  <span class="accion-correctora-readonly">
+                    <strong>{{ row.corrective_action_value || '-' }}</strong>
+                    <span>{{ row.corrective_action_symbol_id ? getSymbolText(row.corrective_action_symbol_id) : '' }}</span>
+                  </span>
+                  
+                  <!-- Texto de acción correctora -->
+                  <span class="accion-correctora-text" 
+                    [ngbTooltip]="row.corrective_action_text">
+                    {{ row.corrective_action_text || '-' }}
+                  </span>
+
+                  <!-- Estado de acción correctora -->
+                  <span class="accion-correctora-status" 
+                    [ngClass]="{
+                      'status-enviado': row.corrective_action_status_id === 2,
+                      'status-pendiente': row.corrective_action_status_id === 1
+                    }">
+                    {{ row.corrective_action_status || '-' }}
+                  </span>
                 </div>
               </td>
 
