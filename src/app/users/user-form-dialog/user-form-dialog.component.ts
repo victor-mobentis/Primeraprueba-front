@@ -55,6 +55,7 @@ export class UserFormDialogComponent implements OnInit {
   showConfirmPassword: boolean = false;
   imagePreview: string | null = null;
   changePassword: boolean = false;
+  permissionsExpanded: boolean = false; // Estado del dropdown de permisos
 
   // Modo del diálogo
   isEditMode: boolean = false;
@@ -170,6 +171,11 @@ export class UserFormDialogComponent implements OnInit {
   // Verifica si el permiso debe estar marcado (directo o heredado)
   isPermissionChecked(permissionId: number): boolean {
     return this.selectedPermissionIds.includes(permissionId) || this.isPermissionFromRole(permissionId);
+  }
+
+  // Cuenta cuántos permisos adicionales están seleccionados (solo los que NO vienen del rol)
+  getSelectedAdditionalPermissionsCount(): number {
+    return this.selectedPermissionIds.length;
   }
 
   onFileSelected(event: any): void {
