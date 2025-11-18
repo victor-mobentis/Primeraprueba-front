@@ -13,27 +13,15 @@
       <div class="row g-3">
         <!-- Columna izquierda: Imagen y roles -->
         <div class="col-12 col-lg-4">
-          <div class="background-light-gray p-3 h-100">
+          <div class="background-light-gray p-3">
             <!-- Imagen de perfil -->
             <div class="profile-image-container mb-3">
-              <div class="image-upload-wrapper">
-                <div class="image-preview" *ngIf="imagePreview">
-                  <img [src]="imagePreview" alt="Vista previa">
-                  <button type="button" class="btn-remove-image" (click)="removeImage()" title="Eliminar imagen">
-                    <i class="bi bi-x-circle-fill"></i>
-                  </button>
-                </div>
-                <div class="upload-placeholder" *ngIf="!imagePreview">
-                  <i class="bi bi-person-circle"></i>
-                  <p class="mb-0">Seleccionar imagen</p>
-                </div>
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  (change)="onFileSelected($event)"
-                  class="file-input"
-                  [disabled]="loading">
-              </div>
+              <mobentis-change-image 
+                [defaultImage]="'assets/images/user.png'" 
+                [preview]="imagePreview" 
+                (upload)="handleUpload($event)"
+                (fileSelected)="onImageFileSelected($event)">
+              </mobentis-change-image>
             </div>
 
             <!-- Roles -->
@@ -65,9 +53,11 @@
         <!-- Columna derecha: Información del usuario -->
         <div class="col-12 col-lg-8">
           <div class="d-flex flex-column gap-3">
-            <!-- Información general -->
-            <div class="background-light-gray p-3">
-              <h2 class="mb-3">Información general</h2>
+            <!-- Contenedor de formularios (sin botones) -->
+            <div class="forms-container">
+              <!-- Información general -->
+              <div class="background-light-gray p-3 mb-3">
+                <h2 class="mb-3">Información general</h2>
               <div class="row g-2">
                 <div class="col-12 col-md-6">
                   <label for="name" class="form-label-small required">Nombre completo</label>
@@ -112,12 +102,12 @@
             </div>
 
             <!-- Permisos adicionales (Dropdown colapsable) -->
-            <div class="background-light-gray p-3">
+            <div class="background-light-gray p-3 mb-3">
               <div class="d-flex justify-content-between align-items-center" 
                    style="cursor: pointer;" 
                    (click)="permissionsExpanded = !permissionsExpanded">
                 <h2 class="mb-0">
-                  <i class="bi bi-shield-lock-fill me-2"></i>Permisos adicionales
+                  Permisos adicionales
                   <small class="text-muted ms-2" style="font-size: 0.75rem; font-weight: normal;">
                     ({{ getSelectedAdditionalPermissionsCount() }} seleccionados)
                   </small>
@@ -232,6 +222,8 @@
                 <i class="bi bi-lock-fill me-2"></i>Active el cambio para modificar la contraseña
               </div>
             </div>
+            </div>
+            <!-- Fin del contenedor de formularios -->
 
             <!-- Botones de acción -->
             <div class="d-flex justify-content-end gap-2">

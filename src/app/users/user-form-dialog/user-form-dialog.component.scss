@@ -4,6 +4,40 @@
   padding: 1.5rem;
   min-height: 500px;
   overflow-y: auto;
+  
+  // Las columnas inician en la parte superior sin estirarse
+  .row {
+    align-items: flex-start;
+  }
+  
+  // Columna izquierda
+  .col-12.col-lg-4 {
+    > .background-light-gray {
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+    }
+  }
+  
+  // Columna derecha
+  .col-12.col-lg-8 {
+    > .d-flex.flex-column {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  
+  // Contenedor de formularios (Información + Permisos + Contraseña)
+  // Los botones quedan fuera
+  .forms-container {
+    display: flex;
+    flex-direction: column;
+    
+    > .background-light-gray {
+      margin-bottom: 0 !important; // Quitar el gap predeterminado
+    }
+  }
 }
 
 h2 {
@@ -25,88 +59,41 @@ h2 {
   justify-content: center;
   align-items: center;
   margin-bottom: 1rem;
-
-  .image-upload-wrapper {
-    position: relative;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid var(--border-color);
-    background-color: var(--background-color);
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
-    }
-
-    .image-preview {
-      width: 100%;
-      height: 100%;
-      position: relative;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+  max-height: 220px; // Limitar la altura del contenedor de imagen
+  
+  // Estilos específicos para el componente change-image
+  mobentis-change-image {
+    width: 100%;
+    max-height: 220px;
+    
+    ::ng-deep {
+      .contenedor {
+        max-height: 220px;
       }
-
-      .btn-remove-image {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        background-color: rgba(220, 53, 69, 0.9);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        font-size: 1.2rem;
-        padding: 0;
-
-        &:hover {
-          background-color: rgba(220, 53, 69, 1);
+      
+      .img-container {
+        max-height: 180px;
+        
+        img {
+          max-height: 180px;
+          width: auto;
+          object-fit: contain;
         }
       }
-    }
-
-    .upload-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      font-size: 0.875rem;
-
-      i {
-        font-size: 4rem;
-        margin-bottom: 0.5rem;
-      }
-    }
-
-    .file-input {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
-
-      &:disabled {
-        cursor: not-allowed;
+      
+      .btn {
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
       }
     }
   }
+}
+
+// Contenedor de roles con flex-grow para ocupar el espacio restante
+.mt-3 {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; // Ocupa el espacio disponible
 }
 
 .roles-scrollable,
@@ -114,6 +101,7 @@ h2 {
   max-height: 180px;
   overflow-y: auto;
   padding-right: 0.5rem;
+  flex-grow: 1; // Permite que crezca si hay espacio
 
   /* Custom scrollbar */
   &::-webkit-scrollbar {
@@ -221,11 +209,6 @@ h2 {
 @media (max-width: 991px) {
   .custom-dialog-content {
     padding: 1rem;
-  }
-
-  .profile-image-container .image-upload-wrapper {
-    width: 150px;
-    height: 150px;
   }
 
   h2 {

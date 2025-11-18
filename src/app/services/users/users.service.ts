@@ -47,6 +47,12 @@ export class UsersService {
     });
   }
 
+  getActiveUsersCount(): Observable<{ count: number }> {
+    return this.http.get<{ count: number }>(`${this.apiUrl}/api/users/active-count`, {
+      headers: this.getHeaders()
+    });
+  }
+
   getUsersPaginated(
     selectedFilters: any[] = [],
     searchTerm: string = '',

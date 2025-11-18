@@ -178,8 +178,14 @@ export class UserFormDialogComponent implements OnInit {
     return this.selectedPermissionIds.length;
   }
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
+  // Nuevo método para manejar el evento fileSelected del componente change-image
+  onImageFileSelected(selected: boolean): void {
+    // Este método es llamado cuando se selecciona/deselecciona un archivo
+    // Puedes usar esto para mostrar/ocultar botones o hacer validaciones
+  }
+
+  // Nuevo método para manejar el upload del componente change-image
+  handleUpload(file: File): void {
     if (file) {
       // Validar que sea una imagen
       if (!file.type.startsWith('image/')) {
@@ -200,11 +206,6 @@ export class UserFormDialogComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     }
-  }
-
-  removeImage(): void {
-    this.image = '';
-    this.imagePreview = null;
   }
 
   isFormValid(): boolean {
