@@ -59,6 +59,10 @@ export class UsersGlobalComponent implements OnInit {
   // Control de licencias
   licenseReached: boolean = false;
   
+  // Usuario actual logueado
+  currentUserId: number | null = null;
+  currentUser: User | null = null;
+  
   @ViewChild('licenseBadge') licenseBadge!: LicenseBadgeComponent;
 
   constructor(
@@ -72,8 +76,23 @@ export class UsersGlobalComponent implements OnInit {
     this.canAssignRoles = this.authService.hasPermission('ASIGNACION_ROLES_USUARIOS');
     this.canAssignPermissions = this.authService.hasPermission('ASIGNACION_PERMISOS_USUARIOS');
     this.isAdmin = this.authService.hasRole('Admin');
+    this.loadCurrentUser();
     this.loadRolesForDropdowns();
     this.loadUsers();
+  }
+
+  loadCurrentUser(): void {
+    this.authService.getCurrentUserInfo().subscribe({
+      next: (userInfo) => {
+        console.log('Respuesta completa de getCurrentUserInfo:', userInfo);
+        // Intentar obtener el ID de diferentes formas posibles
+        this.currentUserId = userInfo.id || userInfo.userId || userInfo.user?.id;
+        console.log('Usuario actual ID:', this.currentUserId);
+      },
+      error: (error) => {
+        console.error('Error obteniendo usuario actual:', error);
+      }
+    });
   }
 
   onLicenseStatusChange(status: { canCreate: boolean, reached: boolean }): void {
@@ -187,6 +206,10 @@ export class UsersGlobalComponent implements OnInit {
 
   getSelectedRolesCount(user: User): number {
     return user.roles.length;
+  }
+
+  isCurrentUser(user: User): boolean {
+    return this.currentUserId !== null && user.id === this.currentUserId;
   }
 
   getSelectedRoleName(user: User): string {
