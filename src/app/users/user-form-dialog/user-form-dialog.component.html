@@ -1,0 +1,245 @@
+<div>
+  <mobentis-popup-header 
+    [title]="getDialogTitle()" 
+    [icon]="isEditMode ? 'person-fill-gear' : 'person-plus-fill'" 
+    [isBootstrapIcon]="true"
+    (close)="onCancel()">
+  </mobentis-popup-header>
+</div>
+
+<mat-dialog-content class="custom-dialog-content">
+  <div class="container-fluid py-0">
+    <form (ngSubmit)="onSubmit()">
+      <div class="row g-3">
+        <!-- Columna izquierda: Imagen y roles -->
+        <div class="col-12 col-lg-4">
+          <div class="background-light-gray p-3">
+            <!-- Imagen de perfil -->
+            <div class="profile-image-container mb-3">
+              <mobentis-change-image 
+                [defaultImage]="'assets/images/user.png'" 
+                [preview]="imagePreview" 
+                (upload)="handleUpload($event)"
+                (fileSelected)="onImageFileSelected($event)">
+              </mobentis-change-image>
+            </div>
+
+            <!-- Roles -->
+            <div class="mt-3">
+              <h3 class="section-title"><i class="bi bi-people-fill me-2"></i>Rol *</h3>
+              <div class="roles-scrollable">
+                <div class="form-check mb-2" *ngFor="let role of allRoles">
+                  <input 
+                    class="form-check-input" 
+                    type="radio" 
+                    name="role"
+                    [id]="'role_' + role.id"
+                    [checked]="hasRole(role.id)"
+                    (change)="toggleRole(role.id)"
+                    [disabled]="loading">
+                  <label 
+                    class="form-check-label" 
+                    [for]="'role_' + role.id"
+                    [title]="role.description">
+                    {{ role.name }}
+                  </label>
+                </div>
+              </div>
+              <small class="text-muted d-block mt-1">Seleccione un rol</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna derecha: Información del usuario -->
+        <div class="col-12 col-lg-8">
+          <div class="d-flex flex-column gap-3">
+            <!-- Contenedor de formularios (sin botones) -->
+            <div class="forms-container">
+              <!-- Información general -->
+              <div class="background-light-gray p-3 mb-3">
+                <h2 class="mb-3">Información general</h2>
+              <div class="row g-2">
+                <div class="col-12 col-md-6">
+                  <label for="name" class="form-label-small required">Nombre completo</label>
+                  <input 
+                    type="text" 
+                    class="form-control form-control-sm" 
+                    id="name"
+                    [(ngModel)]="name"
+                    name="name"
+                    placeholder="Nombre del usuario"
+                    [disabled]="loading"
+                    required>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="position" class="form-label-small">Cargo</label>
+                  <input 
+                    type="text" 
+                    class="form-control form-control-sm" 
+                    id="position"
+                    [(ngModel)]="positionCompany"
+                    name="position"
+                    placeholder="Cargo en la empresa"
+                    [disabled]="loading">
+                </div>
+                <div class="col-12">
+                  <label for="email" class="form-label-small required">Email</label>
+                  <input 
+                    type="email" 
+                    class="form-control form-control-sm" 
+                    id="email"
+                    [(ngModel)]="email"
+                    name="email"
+                    placeholder="correo@ejemplo.com"
+                    [disabled]="loading"
+                    [class.is-invalid]="email.length > 0 && !isValidEmail(email)"
+                    required>
+                  <div class="invalid-feedback" *ngIf="email.length > 0 && !isValidEmail(email)">
+                    Por favor ingresa un email válido
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Permisos adicionales (Dropdown colapsable) -->
+            <div class="background-light-gray p-3 mb-3">
+              <div class="d-flex justify-content-between align-items-center" 
+                   style="cursor: pointer;" 
+                   (click)="permissionsExpanded = !permissionsExpanded">
+                <h2 class="mb-0">
+                  Permisos adicionales
+                  <small class="text-muted ms-2" style="font-size: 0.75rem; font-weight: normal;">
+                    ({{ getSelectedAdditionalPermissionsCount() }} seleccionados)
+                  </small>
+                </h2>
+                <i class="bi transition-icon" 
+                   [ngClass]="permissionsExpanded ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+              </div>
+              
+              <div class="collapse-content" [class.expanded]="permissionsExpanded">
+                <div class="permissions-grid mt-3">
+                  <div class="form-check mb-2" *ngFor="let permission of allPermissions">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      [id]="'perm_' + permission.id"
+                      [checked]="isPermissionChecked(permission.id)"
+                      (change)="togglePermission(permission.id)"
+                      [disabled]="loading || isPermissionFromRole(permission.id)">
+                    <label 
+                      class="form-check-label" 
+                      [for]="'perm_' + permission.id"
+                      [class.text-muted]="isPermissionFromRole(permission.id)">
+                      {{ permission.description }}
+                      <i *ngIf="isPermissionFromRole(permission.id)" 
+                         class="bi bi-lock-fill ms-1 text-primary" 
+                         title="Heredado del rol"></i>
+                    </label>
+                  </div>
+                </div>
+                <small class="text-muted d-block mt-2">
+                  <i class="bi bi-info-circle me-1"></i>Los permisos del rol se asignan automáticamente
+                </small>
+              </div>
+            </div>
+
+            <!-- Contraseña (siempre visible en crear, condicional en editar) -->
+            <div class="background-light-gray p-3">
+              <div class="d-flex justify-content-between align-items-center mb-3" *ngIf="isEditMode">
+                <h2 class="mb-0">Cambiar Contraseña</h2>
+                <div class="form-check form-switch">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    id="changePassword"
+                    [(ngModel)]="changePassword"
+                    name="changePassword"
+                    [disabled]="loading">
+                  <label class="form-check-label" for="changePassword">
+                    Activar cambio
+                  </label>
+                </div>
+              </div>
+              
+              <h2 class="mb-3" *ngIf="!isEditMode">Contraseña</h2>
+              
+              <div *ngIf="!isEditMode || changePassword">
+                <div class="row g-2">
+                  <div class="col-12 col-md-6">
+                    <label for="password" class="form-label-small required">{{ isEditMode ? 'Nueva contraseña' : 'Contraseña' }}</label>
+                    <div class="input-group input-group-sm">
+                      <input 
+                        [type]="showPassword ? 'text' : 'password'" 
+                        class="form-control" 
+                        id="password"
+                        [(ngModel)]="password"
+                        name="password"
+                        placeholder="Mínimo 6 caracteres"
+                        [disabled]="loading"
+                        [class.is-invalid]="password.length > 0 && password.length < 6"
+                        required>
+                      <button 
+                        class="btn border border-start-0 bg-white" 
+                        type="button"
+                        (click)="showPassword = !showPassword"
+                        [disabled]="loading">
+                        <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                      </button>
+                    </div>
+                    <div class="invalid-feedback d-block" *ngIf="password.length > 0 && password.length < 6">
+                      La contraseña debe tener al menos 6 caracteres
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label for="confirmPassword" class="form-label-small required">Confirmar contraseña</label>
+                    <div class="input-group input-group-sm">
+                      <input 
+                        [type]="showConfirmPassword ? 'text' : 'password'" 
+                        class="form-control" 
+                        id="confirmPassword"
+                        [(ngModel)]="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Repite la contraseña"
+                        [disabled]="loading"
+                        [class.is-invalid]="confirmPassword.length > 0 && !passwordsMatch()"
+                        required>
+                      <button 
+                        class="btn border border-start-0 bg-white" 
+                        type="button"
+                        (click)="showConfirmPassword = !showConfirmPassword"
+                        [disabled]="loading">
+                        <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                      </button>
+                    </div>
+                    <div class="invalid-feedback d-block" *ngIf="confirmPassword.length > 0 && !passwordsMatch()">
+                      Las contraseñas no coinciden
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div *ngIf="isEditMode && !changePassword" class="text-muted text-center py-3">
+                <i class="bi bi-lock-fill me-2"></i>Active el cambio para modificar la contraseña
+              </div>
+            </div>
+            </div>
+            <!-- Fin del contenedor de formularios -->
+
+            <!-- Botones de acción -->
+            <div class="d-flex justify-content-end gap-2">
+              
+              <button 
+                type="submit" 
+                class="btn btn-primary btn-sm"
+                [disabled]="!isFormValid() || loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                <i *ngIf="!loading" class="bi" [ngClass]="isEditMode ? 'bi-check-lg' : 'bi-plus-lg'" class="me-1"></i>
+                {{ getSubmitButtonText() }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</mat-dialog-content>

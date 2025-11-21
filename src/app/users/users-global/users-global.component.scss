@@ -1,0 +1,474 @@
+@import "src/styles.scss";
+
+.background-light-gray {
+  background-color: $light-gray;
+  min-height: 100vh;
+}
+
+.screen {
+  padding-bottom: 20px;
+}
+
+.page-title {
+  color: $title-dark-gray;
+  font-size: 24px;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.buscador {
+  min-width: 180px;
+  max-width: 300px;
+  
+  .search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .form-control {
+    font-size: 14px;
+    border-radius: 4px;
+    padding-right: 40px; // Espacio para el botón de limpiar
+  }
+
+  .clear-search-btn {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    color: $title-dark-gray;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: #495057;
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    i {
+      font-size: 16px;
+    }
+  }
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  white-space: nowrap;
+
+  i {
+    font-size: 18px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+// Tabla del usuario actual logeado
+.current-user-table {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  .current-user-header {
+    background: #6070b7 0%;
+    color: rgb(246, 241, 241);
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+
+    i {
+      font-size: 18px;
+    }
+  }
+
+  .table {
+    margin-bottom: 0;
+    font-size: 13px;
+
+    thead {
+      background-color: $light-gray;
+
+      th {
+        border-bottom: 2px solid #dee2e6;
+        font-weight: 600;
+        color: $title-dark-gray;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        padding: 12px;
+        white-space: nowrap;
+      }
+    }
+
+    tbody {
+      tr.current-user-row {
+        background-color: #f8f9fa;
+
+        td {
+          padding: 12px;
+          vertical-align: middle;
+          color: #6c757d;
+          font-style: italic;
+        }
+
+        .bi-lock-fill {
+          font-size: 1.2rem;
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+}
+
+.table-responsive {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  margin-bottom: 16px;
+  overflow: visible; // Permitir que los dropdowns salgan del contenedor
+}
+
+.table {
+  margin-bottom: 0;
+  font-size: 13px;
+  overflow: visible; // Permitir que los dropdowns salgan de la tabla
+
+  thead {
+    background-color: $light-gray;
+    position: relative;
+    z-index: 1;
+    
+    th {
+      font-weight: 600;
+      color: $color-primary;
+      border-bottom: 2px solid #dee2e6;
+      padding: 12px;
+      vertical-align: middle;
+
+      &.cursor {
+        cursor: pointer;
+        user-select: none;
+
+        &:hover {
+          background-color: darken($light-gray, 5%);
+        }
+      }
+
+      i.bi {
+        margin-left: 4px;
+        font-size: 12px;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background-color 0.2s ease;
+      position: relative; // Permitir posicionamiento de dropdowns
+      height: 53px; // Altura fija para todas las filas
+
+      &:hover {
+        background-color: lighten($light-gray, 3%);
+      }
+
+      td {
+        padding: 10px 12px;
+        vertical-align: middle;
+        overflow: visible; // Permitir que los dropdowns salgan de la celda
+        height: 53px; // Altura consistente
+      }
+      
+      // Filas vacías para mantener altura constante
+      &.empty-row {
+        background-color: transparent;
+        pointer-events: none;
+        height: 53px;
+        
+        &:hover {
+          background-color: transparent;
+        }
+        
+        td {
+          border-top: none;
+          padding: 10px 12px;
+          height: 53px; // Misma altura que filas normales
+        }
+      }
+    }
+  }
+}
+
+.row_column_sm {
+  width: 80px;
+  min-width: 80px;
+}
+
+.row_column_md {
+  width: 150px;
+  min-width: 150px;
+}
+
+.row_column_lg {
+  width: 75px;
+  min-width: 75px;
+}
+
+.row_column_xl {
+  width: 180px;
+  min-width: 180px;
+}
+
+.row_ficha {
+  width: 100px;
+  min-width: 100px;
+  text-align: center;
+}
+
+
+
+.dropdown {
+  // Limitar el ancho del dropdown
+  max-width: 100%;
+  
+  .form-select {
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    width: 100%; // Usar el 100% del contenedor dropdown, no de la celda
+    
+    &:hover:not(:disabled) {
+      border-color: #86b7fe;
+    }
+    
+    &:focus {
+      border-color: #86b7fe;
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    
+    &:disabled {
+      background-color: #e9ecef;
+      opacity: 1;
+    }
+  }
+  
+  .dropdown-toggle {
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    width: 100%; // Usar el 100% del contenedor dropdown, no de la celda
+    
+    &:hover:not(:disabled) {
+      border-color: #86b7fe;
+    }
+    
+    &:focus {
+      border-color: #86b7fe;
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    
+    &:disabled {
+      background-color: #e9ecef;
+      opacity: 1;
+    }
+  }
+
+  .dropdown-menu {
+    .dropdown-item {
+      cursor: pointer;
+      padding: 0.25rem 1rem;
+      
+      &:hover {
+        background-color: #f8f9fa;
+      }
+
+      .form-check {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0;
+
+        .form-check-input {
+          margin: 0;
+          cursor: pointer;
+          flex-shrink: 0;
+
+          &:disabled {
+            cursor: not-allowed;
+          }
+        }
+
+        .form-check-label {
+          cursor: pointer;
+          margin: 0;
+          display: flex;
+          align-items: center;
+          flex: 1;
+          
+          &.text-muted {
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}
+
+.btn-outline-danger {
+  font-size: 14px;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  margin: 50px 0;
+}
+
+.info-panel {
+  .alert {
+    margin-bottom: 0;
+    font-size: 13px;
+    
+    p {
+      margin: 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    i.bi {
+      font-size: 16px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .buscador {
+    min-width: auto;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table {
+    font-size: 10px;
+    min-width: 700px; // Forzar scroll horizontal en móvil
+
+    thead th,
+    tbody td {
+      padding: 6px 4px;
+      white-space: nowrap;
+    }
+  }
+
+  // Reducir anchos de columnas en móvil
+  .row_column_sm {
+    width: 60px;
+    min-width: 60px;
+  }
+
+  .row_column_md {
+    width: 100px;
+    min-width: 100px;
+  }
+
+  .row_column_lg {
+    width: 60px;
+    min-width: 60px;
+  }
+
+  .row_column_xl {
+    width: 140px;
+    min-width: 140px;
+  }
+
+  .row_ficha {
+    width: 80px;
+    min-width: 80px;
+  }
+
+  // Ajustar dropdowns en móvil
+  .dropdown {
+    .form-select {
+      font-size: 10px;
+      padding: 0.25rem 0.5rem;
+    }
+  }
+
+  .btn-primary {
+    font-size: 12px;
+    padding: 0.375rem 0.75rem;
+    
+    i {
+      font-size: 14px;
+    }
+  }
+
+  .btn-outline-danger {
+    font-size: 11px;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .roles-container .role-chip {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+}
+
+// Para pantallas muy pequeñas (móviles en vertical)
+@media (max-width: 576px) {
+  .page-title {
+    font-size: 18px;
+    letter-spacing: 0.1em;
+  }
+
+  .d-flex.align-items-center.justify-content-between {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .table {
+    font-size: 9px;
+    min-width: 650px;
+  }
+
+  .dropdown-menu {
+    font-size: 11px;
+  }
+}

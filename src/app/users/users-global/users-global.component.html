@@ -1,0 +1,210 @@
+<div class="background-light-gray screen">
+  <div class="p-3">
+    <h1 class="page-title">
+      <i class="bi bi-people-fill me-2"></i>
+      Gestión de Usuarios
+    </h1>
+  </div>
+  
+  <div class="p-3">
+    <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+      <!-- Buscador y Filtros -->
+      <div class="d-flex align-items-center gap-2 flex-grow-1">
+        <div class="buscador flex-grow-1">
+          <div class="search-input-wrapper">
+            <input 
+              type="text" 
+              class="form-control" 
+              placeholder="Buscar por nombre, email o cargo..." 
+              [(ngModel)]="searchTerm"
+              (keyup.enter)="onSearch(searchTerm)"
+              (input)="searchTerm.length === 0 && onSearch('')">
+            <button 
+              *ngIf="searchTerm.length > 0" 
+              class="clear-search-btn"
+              type="button"
+              (click)="clearSearch()"
+              title="Limpiar búsqueda">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Contenedor de Filtros -->
+        <mobentis-filter-container 
+          [componentId]="'users-global'"
+          [selectedFilters]="selectedFilters"
+          (filtersChanged)="onFiltersChanged($event)">
+        </mobentis-filter-container>
+      </div>
+
+      <!-- Botón Crear usuario -->
+      <div class="d-flex flex-column align-items-end gap-1">
+        <!-- Indicador de licencias -->
+        <mobentis-license-badge 
+          #licenseBadge
+          (licenseStatusChange)="onLicenseStatusChange($event)">
+        </mobentis-license-badge>
+        <button 
+          class="btn btn-primary"
+          (click)="openCreateUserDialog()"
+          [disabled]="!canCreateUser || licenseReached"
+          [title]="createUserButtonTooltip">
+          <i class="bi bi-person-plus-fill me-2"></i>
+          Nuevo usuario
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="table-responsive">
+      <table class="table table-hover table-sm w-100">
+        <thead>
+          <tr class="w-100">
+            <th scope="col" class="cursor row_column_md" (click)="sortData('name')">
+              Nombre
+              <i *ngIf="sortColumn === 'name'" class="bi"
+              [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+            </th>
+            <th scope="col" class="cursor row_column_lg" (click)="sortData('email')">
+              Email
+              <i *ngIf="sortColumn === 'email'" class="bi"
+              [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+            </th>
+            <th scope="col" class="cursor row_column_md" (click)="sortData('position_company')">
+              Cargo
+              <i *ngIf="sortColumn === 'position_company'" class="bi"
+                [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+            </th>
+            <th scope="col" class="row_column_lg">Rol</th>
+            <th scope="col" class="row_column_xl">Permisos</th>
+            <th scope="col" class="text-center row_ficha">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="w-100">
+          <ng-container *ngFor="let user of users">
+            <tr [class.current-user-row]="isCurrentUser(user)">
+              <td [class.text-muted]="isCurrentUser(user)" [class.font-italic]="isCurrentUser(user)">
+                {{ user.name }}
+                <small *ngIf="isCurrentUser(user)" class="badge bg-secondary ms-2">Tú</small>
+              </td>
+              <td [class.text-muted]="isCurrentUser(user)" [class.font-italic]="isCurrentUser(user)">{{ user.email }}</td>
+              <td [class.text-muted]="isCurrentUser(user)" [class.font-italic]="isCurrentUser(user)">{{ user.position_company || 'N/A' }}</td>
+              <td>
+                <div class="dropdown">
+                  <button 
+                    class="btn btn-sm form-select form-select-sm text-start" 
+                    type="button" 
+                    [id]="'dropdownRoles' + user.id"
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false"
+                    [disabled]="!canAssignRoles || isCurrentUser(user)">
+                    {{ getSelectedRoleName(user) }}
+                  </button>
+                <ul class="dropdown-menu" [attr.aria-labelledby]="'dropdownRoles' + user.id" (click)="$event.stopPropagation()">
+                    <li *ngFor="let role of allRoles">
+                      <div class="dropdown-item" (click)="toggleRoleCheckbox(user, role.id, $event)">
+                        <div class="form-check">
+                          <input 
+                          class="form-check-input" 
+                          type="radio" 
+                          [name]="'role_' + user.id"
+                          [id]="'role_' + user.id + '_' + role.id"
+                          [checked]="hasRole(user, role.id)"
+                          (click)="$event.stopPropagation()">
+                          <label 
+                          class="form-check-label w-100" 
+                          [for]="'role_' + user.id + '_' + role.id"
+                          [title]="role.description">
+                          {{ role.name }}
+                        </label>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                </div>
+              </td>
+              <td>
+                <div class="dropdown">
+                  <button 
+                  class="btn btn-sm form-select form-select-sm text-start" 
+                  type="button" 
+                  [id]="'dropdownPermissions' + user.id"
+                  data-bs-toggle="dropdown" 
+                  aria-expanded="false"
+                  [disabled]="!canAssignPermissions || isCurrentUser(user)">
+                  Permisos adicionales ({{ getSelectedPermissionsCount(user) }})
+                </button>
+                <ul class="dropdown-menu" [attr.aria-labelledby]="'dropdownPermissions' + user.id" (click)="$event.stopPropagation()">
+                  <li *ngFor="let permission of allPermissions">
+                      <div class="dropdown-item" (click)="togglePermission(user, permission.id, $event)">
+                        <div class="form-check">
+                          <input 
+                          class="form-check-input" 
+                          type="checkbox" 
+                          [id]="'perm_' + user.id + '_' + permission.id"
+                          [checked]="hasPermission(user, permission.id)"
+                          [disabled]="isPermissionFromRole(user, permission.id)"
+                          (click)="$event.stopPropagation()">
+                          <label 
+                          class="form-check-label w-100" 
+                          [for]="'perm_' + user.id + '_' + permission.id"
+                          [class.text-muted]="isPermissionFromRole(user, permission.id)">
+                          {{ permission.description }}
+                          <i *ngIf="isPermissionFromRole(user, permission.id)" class="bi bi-lock-fill ms-1 text-primary" title="Heredado del rol"></i>
+                        </label>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+              <td class="text-center">
+                <div class="d-flex justify-content-center gap-2">
+                  <!-- Icono de bloqueo para el usuario actual -->
+                  <i *ngIf="isCurrentUser(user)" class="bi bi-lock-fill text-muted" style="font-size: 1.2rem;" title="Edita tu usuario desde tu perfil"></i>
+                  
+                  <!-- Botones de edición/eliminación (ocultos para el usuario actual) -->
+                  <mobentis-btn-icon-edit 
+                    *ngIf="!isCurrentUser(user) && (isAdmin || canCreateUser) && !user.deleted"
+                    (btnClicked)="openEditUserDialog(user)">
+                  </mobentis-btn-icon-edit>
+                  <mobentis-btn-icon-delete 
+                    *ngIf="!isCurrentUser(user) && isAdmin && !user.deleted"
+                    (btnClicked)="deleteUser(user)">
+                  </mobentis-btn-icon-delete>
+                </div>
+          </td>
+        </tr>
+      </ng-container>
+      
+      <!-- Filas vacías para mantener altura constante -->
+      <tr *ngFor="let emptyRow of getEmptyRows()" class="empty-row">
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          
+          <tr *ngIf="users.length === 0">
+            <td colspan="6" class="text-center">
+              No hay users disponibles
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Paginación -->
+    <mobentis-pagination
+      [totalItems]="totalItems" 
+      [itemsPerPage]="itemsPerPage"
+      [currentPage]="currentPage" 
+      (pageChange)="onPageChange($event)"
+      (itemsPerPageChanged)="onItemsPerPageChanged($event)">
+    </mobentis-pagination>
+
+  </div>
+</div>

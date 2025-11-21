@@ -2,11 +2,13 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ITablaDashboard } from 'src/app/models/tablaDashboard.model';
 import { RechazadosService } from 'src/app/services/rechazados/rechazados.service';
+import { FilterService } from 'src/app/services/filter/filter.service';
 import { forkJoin } from 'rxjs';
 import { firstValueFrom } from 'rxjs';
+import { Empresa } from 'src/app/components/empresa-dropdown/empresa-dropdown.component';
 
 @Component({
-  selector: 'app-dashboard-general',
+  selector: 'mobentis-dashboard-general',
   templateUrl: './dashboard-general.component.html',
   styleUrls: ['./dashboard-general.component.scss'],
 })
@@ -14,11 +16,13 @@ export class DashboardGeneralComponent {
   //Filtros
   selectedFilters: { [key: string]: any } = {};
 
-  constructor(private rechazadosService: RechazadosService, private cdr: ChangeDetectorRef) {
-
+  constructor(
+    private rechazadosService: RechazadosService,
+    private cdr: ChangeDetectorRef,
+    private filterService: FilterService
+  ) {
     this.data = this.valoresTablas[0];
   }
-
 
   cargando_grafica_clientes: boolean = true;
   datos_grafica_clientes: any = null;
@@ -476,7 +480,21 @@ export class DashboardGeneralComponent {
   dataSource = new MatTableDataSource<ITablaDashboard>(this.data);
 
   ngOnInit(): void {
-    this.loadTableData();
+    // Obtener la configuración de filtros desde el backend
+    this.filterService.getFilterConfig('dashboard-general').subscribe(
+      (config) => {
+        this.empresaFieldName = config.empresaFieldName;
+        console.log('Configuración de filtros obtenida:', config);
+        this.applyEmpresaFilter(); // Aplicar filtro inicial con todas las empresas seleccionadas
+        this.loadTableData();
+      },
+      (error) => {
+        console.error('Error al obtener la configuración de filtros:', error);
+        // Si hay error, usar el valor por defecto y continuar
+        this.applyEmpresaFilter();
+        this.loadTableData();
+      }
+    );
   }
 
   ngAfterViewInit() {
@@ -747,5 +765,56 @@ export class DashboardGeneralComponent {
     this.cargarGraficos();
   }
 
+  selectedEmpresa: string | number = 'all';
 
+  // Campo dinámico de empresa que se obtiene del backend
+  empresaFieldName: string = 'r.empresa_id'; // valor por defecto
+
+  // Controlar visibilidad del dropdown de empresas
+  get isEmpresaDropdownVisible(): boolean {
+    const enabled = localStorage.getItem('empresaDropdownEnabled');
+    return enabled !== null ? enabled === 'true' : true;
+  }
+
+  // Lista de empresas para el selector múltiple
+  empresasList: Empresa[] = [
+    { id: 1, name: 'Sarigabo', selected: true },
+    { id: 2, name: 'Coca Cola', selected: true },
+    { id: 3, name: 'Mercadona', selected: true }
+  ];
+
+  // Método que se ejecuta cuando cambian las empresas seleccionadas
+  onEmpresasChange(empresas: Empresa[]): void {
+    this.empresasList = empresas;
+    this.applyEmpresaFilter();
+    this.cargarGraficos();
+    this.loadTableData();
+  }
+
+  private applyEmpresaFilter(): void {
+    // Usar el campo dinámico obtenido del backend
+    const filters = Array.isArray(this.selectedFilters)
+      ? [...this.selectedFilters]
+      : Object.values(this.selectedFilters || {});
+
+    const withoutEmpresa = filters.filter((f: any) => f?.id !== this.empresaFieldName);
+
+    // Obtener empresas seleccionadas
+    const empresasSeleccionadas = this.empresasList.filter(e => e.selected);
+
+    // Si no están todas seleccionadas, agregar el filtro
+    if (empresasSeleccionadas.length > 0 && empresasSeleccionadas.length < this.empresasList.length) {
+      withoutEmpresa.push({
+        id: this.empresaFieldName,
+        nombre: 'Empresa',
+        tipo: 'multi-select',
+        valor: empresasSeleccionadas.map(e => ({
+          id: e.id,
+          name: e.name
+        }))
+      });
+    }
+
+    this.selectedFilters = withoutEmpresa;
+  }
 }

@@ -4,7 +4,7 @@ import { NotificationService } from 'src/app/services/notification/notification.
 import { RechazadosService } from 'src/app/services/rechazados/rechazados.service';
 
 @Component({
-  selector: 'app-corrective-action-status',
+  selector: 'mobentis-corrective-action-status',
   templateUrl: './corrective-action-status.component.html',
   styleUrls: ['./corrective-action-status.component.scss'],
 })
@@ -16,6 +16,7 @@ export class CorrectiveActionStatusComponent {
   @Input() correctiveActionValue!: number; // Valor de la acción correctora
   @Input() correctiveActionSymbolId!: number; // Símbolo seleccionado
   @Input() correctiveActionText!: string; // Texto de la acción correctora
+  @Input() canEnviar: boolean = true; // Permiso para enviar acción correctora
 
   @Output() beforeStatusChange = new EventEmitter<void>();
   @Output() statusChange = new EventEmitter<{
@@ -29,10 +30,16 @@ export class CorrectiveActionStatusComponent {
   ) {}
 
   handleStatusClick() {
+    // Verificar si tiene permiso para enviar
+    if (!this.canEnviar) {
+      this._notifactionService.showWarning('No tiene permisos para enviar la acción correctora.');
+      return;
+    }
+
     // Validar los tres campos necesarios
     if (this.isRowComplete()) {
       if (this.statusId === 1) {
-        const newStatus = { statusId: 2, statusText: 'Enviado' };
+        const newStatus = { statusId: 2, statusText: 'Pendiente' };
         this.updateStatus(newStatus);
       } else {
         this._notifactionService.showWarning('El estado actual no permite cambios.');

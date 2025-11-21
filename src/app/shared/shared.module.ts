@@ -42,6 +42,10 @@ import { MessageUpdateComponent } from '../components/message-update/message-upd
 import { CorrectiveActionStatusComponent } from '../components/corrective-action-status/corrective-action-status.component';
 import { PageTitleComponent } from '../components/page-title/page-title.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { EmpresaDropdownComponent } from '../components/empresa-dropdown/empresa-dropdown.component';
+import { HasRoleDirective } from './directives/has-role.directive';
+import { HasPermissionDirective } from './directives/has-permission.directive';
+import { LicenseBadgeComponent } from '../components/license-badge/license-badge.component';
 
 
 
@@ -82,6 +86,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MessageUpdateComponent,
     CorrectiveActionStatusComponent,
     PageTitleComponent,
+    EmpresaDropdownComponent,
+    HasRoleDirective,
+    HasPermissionDirective,
+    LicenseBadgeComponent,
   ],
   imports: [
     NgbModule,
@@ -131,6 +139,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MessageUpdateComponent,
     CorrectiveActionStatusComponent,
     PageTitleComponent,
+    EmpresaDropdownComponent,
+    HasRoleDirective,
+    HasPermissionDirective,
+    LicenseBadgeComponent,
   ]
 })
 export class SharedModule { }

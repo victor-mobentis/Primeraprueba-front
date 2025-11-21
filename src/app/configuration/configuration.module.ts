@@ -35,6 +35,8 @@ import { ListItemComponent } from '../components/list-item/list-item.component';
 import { ConfigurationListItemContainerComponent } from '../components/configuration-list-item-container/configuration-list-item-container.component';
 import { SharedModule } from "../shared/shared.module";
 import { AddCompetitorComponent } from './configuration-general/add-competitor/add-competitor.component';
+import { FilterSettingsComponent } from './configuration-general/filter-settings/filter-settings.component';
+import { CompanySelectorConfigComponent } from './configuration-general/company-selector-config/company-selector-config.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,10 @@ import { AddCompetitorComponent } from './configuration-general/add-competitor/a
     ProfileEditPopupComponent,
     ReasonsRejectionsComponent,
     ListItemComponent, // A futuro igual mover a shared
-    ConfigurationListItemContainerComponent, AddCompetitorComponent,
+    ConfigurationListItemContainerComponent, 
+    AddCompetitorComponent, 
+    FilterSettingsComponent,
+    CompanySelectorConfigComponent,
   ],
   imports: [
     CommonModule,

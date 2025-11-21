@@ -1,10 +1,10 @@
 <div class="background-light-gray d-flex flex-column">
   <div class="d-flex flex-column gap-2 justify-content-between align-items-center p-2 titulo bg-white ">
     <!-- titulo y icono -->
-    <app-page-title [icon]="'columns-gap'" [isBootstrapIcon]="true" [title]="'Rechazos'"></app-page-title>
+    <mobentis-page-title [icon]="'columns-gap'" [isBootstrapIcon]="true" [title]="'Rechazos'"></mobentis-page-title>
     <!-- Info Rechazos -->
     <div class="max-w-kpi">
-      <app-kpi [selectedFilters]="selectedFilters" [searchTerm]="searchTerm"></app-kpi>
+      <mobentis-kpi [selectedFilters]="selectedFilters" [searchTerm]="searchTerm"></mobentis-kpi>
     </div>
     <!-- END Info Rechazos -->
   </div>
@@ -14,13 +14,19 @@
       <div class="d-flex flex-column flex-lg-row gap-3 align-items-center">
         <!-- buscado -->
         <div class="input-group">
-          <app-search-input [searchTerm]="searchTerm" (searchChange)="onSearch($event)"
-            (errorDeCaracteres)="mostrarError = $event"></app-search-input>
+          <mobentis-search-input [searchTerm]="searchTerm" (searchChange)="onSearch($event)"
+            (errorDeCaracteres)="mostrarError = $event"></mobentis-search-input>
         </div>
+
+        <!-- Selector de Empresas (Dropdown) -->
+          <mobentis-empresa-dropdown 
+            *ngIf="isEmpresaDropdownVisible"
+            (empresasChange)="onEmpresasChange($event)">
+          </mobentis-empresa-dropdown>            
         <!-- boton de filtros aplicados o limpiar -->
-        <app-filter-container [componentId]="'rechazos-general'" [selectedFilters]="selectedFilters"
+        <mobentis-filter-container [componentId]="'rechazos-general'" [selectedFilters]="selectedFilters"
           (filtersChanged)="onFiltersChanged($event)">
-        </app-filter-container>
+        </mobentis-filter-container>
       </div>
       <!-- boton de exportar y mapa -->
       <div class="d-flex align-items-center gap-2">
@@ -30,9 +36,9 @@
           </div>
         </div>
         <!-- Mensaje para actualizar -->
-        <app-message-update [isVisible]="hasUnsavedChanges" (saveChanges)="guardarCambios()"></app-message-update>
+        <mobentis-message-update [isVisible]="hasUnsavedChanges" (saveChanges)="guardarCambios()"></mobentis-message-update>
         <!-- boton de exportar -->
-        <app-btn-export (formatSelected)="exportData($event)"></app-btn-export>
+        <mobentis-btn-export (formatSelected)="exportData($event)"></mobentis-btn-export>
         <button class="btn btn-primary d-flex justify-content-center align-items-center" (click)="verEnMapa()">
           <i class="bi bi-geo-alt-fill"></i>
         </button>
@@ -43,7 +49,7 @@
       Caracteres no permitidos
     </div>
     <!-- TABLA -->
-    <div class="table-responsive {{cargando?'d-none':''}}">
+    <div class="table-responsive mt-3 {{cargando?'d-none':''}}">
       <table class="table table-sm table-hover" #tablaRechazos>
         <thead>
           <tr class="">
@@ -89,7 +95,7 @@
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <!-- Motivo Column -->
-            <th scope="col" (click)="sortData('reason_rejection')" class="cursor row_motivo color-primary">
+            <th scope="col" (click)="sortData('reason_rejection')" class="cursor row_motivo color-primary text-center">
               Motivo
               <i *ngIf="sortColumn === 'reason_rejection'" class="bi"
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
@@ -154,7 +160,8 @@
               </td>
               <!-- Acción Correctora Column -->
               <td class="fondo_accionCorrectora">
-                <div class="d-flex align-items-center gap-1">
+                <!-- Mostrar como campos editables si tiene permisos -->
+                <div *ngIf="canEditAccionCorrectora" class="d-flex align-items-center gap-1">
                   <!-- Campo para precio de promoción -->
                   <input type="number" class="form-control form-control-sm accion_correctora_precio color-primary"
                     [(ngModel)]="row.corrective_action_value" placeholder="0" min="0"
@@ -173,28 +180,62 @@
                     [(ngModel)]="row.corrective_action_text" maxlength="50" placement="top" placeholder="Promoción"
                     (ngModelChange)="changeText($event, row)" [ngbTooltip]="tooltipText"
                     (mouseover)="applyTooltipIfTruncated($event, row.corrective_action_text)" />
-                  <!-- campo de estado -->
-                  <div class=" d-flex align-items-center justify-self-center">
-                    <app-corrective-action-status [statusId]="row.corrective_action_status_id"
+
+                  <!-- campo de estado (siempre visible) -->
+                  <div class="d-flex align-items-center justify-self-center">
+                    <mobentis-corrective-action-status [statusId]="row.corrective_action_status_id"
                       [statusText]="row.corrective_action_status" [rejectionId]="row.id"
                       (statusChange)="onStatusChange($event, row)" [correctiveActionValue]="row.corrective_action_value"
                       [correctiveActionSymbolId]="row.corrective_action_symbol_id"
-                      [correctiveActionText]="row.corrective_action_text"></app-corrective-action-status>
+                      [correctiveActionText]="row.corrective_action_text"
+                      [canEnviar]="canEnviarAccionCorrectora"></mobentis-corrective-action-status>
                   </div>
+                </div>
+
+                <!-- Mostrar como texto plano si NO tiene permisos -->
+                <div *ngIf="!canEditAccionCorrectora" class="d-flex align-items-center justify-content-between gap-2 w-100">
+                  <!-- Valor y símbolo -->
+                  <span class="accion-correctora-readonly">
+                    <strong>{{ row.corrective_action_value || '-' }}</strong>
+                    <span>{{ row.corrective_action_symbol_id ? getSymbolText(row.corrective_action_symbol_id) : '' }}</span>
+                  </span>
+                  
+                  <!-- Texto de acción correctora -->
+                  <span class="accion-correctora-text" 
+                    [ngbTooltip]="row.corrective_action_text"
+                    container="body">
+                    {{ row.corrective_action_text || '-' }}
+                  </span>
+
+                  <!-- Estado de acción correctora -->
+                  <span class="accion-correctora-status" 
+                    [ngClass]="{
+                      'status-enviado': row.corrective_action_status_id === 2,
+                      'status-pendiente': row.corrective_action_status_id === 1
+                    }">
+                    {{ row.corrective_action_status || '-' }}
+                  </span>
                 </div>
               </td>
 
               <!-- Estado Column -->
-              <td class="text-center">
-                <div class="d-flex align-items-center gap-1 justify-content-center">
+              <td class="">
+                <!-- Mostrar como dropdown si tiene permisos -->
+                <div *ngIf="canEditEstado" class="d-flex align-items-center gap-1">
                   <img [src]="getOptionImage(row.status_id)" alt="{{ getEstado(row.status_id) }} Image"
                     class="option-image">
-                  <select (change)="changeEstado($event, row)" class="form-select form-select-sm "
+                  <select (change)="changeEstado($event, row)" class="form-select form-select-sm text-center"
                     [(ngModel)]="row.status_id">
                     <option *ngFor="let estado of estados" [value]="estado.id">
                       {{ estado.name }}
                     </option>
                   </select>
+                </div>
+                <!-- Mostrar como texto plano si NO tiene permisos -->
+                <div *ngIf="!canEditEstado" class="d-flex align-items-center gap-1">
+                  <img [src]="getOptionImage(row.status_id)" alt="{{ getEstado(row.status_id) }} Image"
+                    class="option-image">
+                  <span class="text-center flex-grow-1">{{ getEstado(row.status_id) }}</span>
                 </div>
               </td>
               <!-- Primer Rechazo Column -->
@@ -217,7 +258,8 @@
               </td>
               <!-- Motivo Column -->
               <td class="text-center">
-                <select (change)="changeMotivo($event, row)" (mousedown)="capturePreviousValueReasonId(row)"
+                <!-- Mostrar como dropdown si tiene permisos -->
+                <select *ngIf="canEditMotivos" (change)="changeMotivo($event, row)" (mousedown)="capturePreviousValueReasonId(row)"
                   class="form-select form-select-sm column_motivo select_rechazo color-quaternary truncate-select"
                   [(ngModel)]="row.reason_rejection_id" [ngbTooltip]="tooltipText"
                   (mouseenter)="showTooltipForSelect($event, motivos_rechazo, 'id', 'name')"
@@ -227,6 +269,10 @@
                   </option>
                   <option [value]="0">Añadir Motivo</option>
                 </select>
+                <!-- Mostrar como texto plano si NO tiene permisos -->
+                <span *ngIf="!canEditMotivos" [ngbTooltip]="getReasonName(row.reason_rejection_id)" class="truncate-text">
+                  {{ getReasonName(row.reason_rejection_id) }}
+                </span>
               </td>
               <!-- Fecha Interés Column -->
               <td class="text-success centrado_column row_fecha_interes">
@@ -248,7 +294,8 @@
               </td>
               <!-- Competidor Column -->
               <td>
-                <select (change)="changeCompetidor($event, row)" (mousedown)="capturePreviousValueCompetitorId(row)"
+                <!-- Mostrar como dropdown si tiene permisos -->
+                <select *ngIf="canEditCompetidor" (change)="changeCompetidor($event, row)" (mousedown)="capturePreviousValueCompetitorId(row)"
                   class="form-select form-select-sm row_select_competidor truncate-select"
                   [(ngModel)]="row.competitor_id" [ngbTooltip]="tooltipText"
                   (mouseenter)="showTooltipForSelect($event, row.competitors, 'id', 'name')"
@@ -258,19 +305,26 @@
                   </option>
                   <option value="0">Añadir Competidor</option>
                 </select>
+                <!-- Mostrar como texto plano si NO tiene permisos -->
+                <span *ngIf="!canEditCompetidor" [ngbTooltip]="getCompetitorName(row.competitor_id, row.competitors)" class="truncate-text">
+                  {{ getCompetitorName(row.competitor_id, row.competitors) }}
+                </span>
               </td>
               <!-- Propuesta Agente Column -->
               <td class="row_propuesta_agente">
-                <i *ngIf="row.salesman_proposal" [ngbTooltip]="row.salesman_proposal" placement="top"
-                  class="bi bi-card-text"></i>
+                <div class="propuesta-icon-wrapper">
+                  <i *ngIf="row.salesman_proposal" [ngbTooltip]="row.salesman_proposal" 
+                    placement="left" container="body"
+                    class="bi bi-card-text"></i>
+                </div>
               </td>
 
               <!-- Expand Column -->
               <td class="">
                 <div class="d-flex gap-2 align-items-center justify-content-center">
-                  <app-btn-icon-file (btnClicked)="viewRechazo(row.customer_id)"></app-btn-icon-file>
-                  <app-btn-icon-expand [isExpanded]="expandedElement === row"
-                    (toggle)="expandedElement = (expandedElement === row ? null : row)"></app-btn-icon-expand>
+                  <mobentis-btn-icon-file (btnClicked)="viewRechazo(row.customer_id)"></mobentis-btn-icon-file>
+                  <mobentis-btn-icon-expand [isExpanded]="expandedElement === row"
+                    (toggle)="expandedElement = (expandedElement === row ? null : row)"></mobentis-btn-icon-expand>
                 </div>
               </td>
             </tr>
@@ -319,9 +373,9 @@
       </div>
     </div>
     <!-- Paginador -->
-    <app-pagination [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
+    <mobentis-pagination [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
       (pageChange)="onPageChange($event)" (itemsPerPageChanged)="onItemsPerPageChanged($event)">
-    </app-pagination>
+    </mobentis-pagination>
   </div>
   <!-- END TABLA -->
 </div>

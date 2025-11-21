@@ -14,7 +14,7 @@ import { timeout } from 'rxjs';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 
 @Component({
-  selector: 'app-clients-general',
+  selector: 'mobentis-clients-general',
   templateUrl: './clients-general.component.html',
   styleUrls: ['./clients-general.component.scss'],
 })
@@ -141,7 +141,8 @@ export class ClientsGeneralComponent implements AfterViewInit, OnInit {
 
   editClient(id_Cliente?: number) {
     const dialogRef = this.dialog.open(PopupClientDetailComponent, {
-      /* width: '1120px', */
+      width: '1120px',
+      height: '700px',
       disableClose: false,
       data: { id: id_Cliente },
     });

@@ -8,6 +8,7 @@ import { ProfileEditPopupComponent } from 'src/app/configuration/configuration-g
 import { ReasonsRejectionsComponent } from 'src/app/configuration/configuration-general/reasons-rejections/reasons-rejections.component';
 import { ConfigurationContainer } from 'src/app/models/configurationContainer.model';
 import { AddCompetitorComponent } from 'src/app/configuration/configuration-general/add-competitor/add-competitor.component';
+import { CompanySelectorConfigComponent } from 'src/app/configuration/configuration-general/company-selector-config/company-selector-config.component';
 import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
@@ -34,6 +35,12 @@ export class ListItemService {
         width: 'auto',
         disableClose: true,
         data: { autoClose: false },
+      });
+    },
+    openSelectorConfig: () => {
+      const dialogRef = this.dialog.open(CompanySelectorConfigComponent, {
+        width: 'auto',
+        disableClose: true,
       });
     },
     openCompetitor: () => {

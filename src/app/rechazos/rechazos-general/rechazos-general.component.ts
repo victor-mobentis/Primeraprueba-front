@@ -19,10 +19,12 @@ import { NotificationService } from 'src/app/services/notification/notification.
 import { CompetidoresService } from 'src/app/services/competitors/competidores.service';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { css } from 'jquery';
+import { Empresa } from 'src/app/components/empresa-dropdown/empresa-dropdown.component';
+import { AuthorizationService } from 'src/app/services/auth/authorization.service';
 
 
 @Component({
-  selector: 'app-rechazos-general',
+  selector: 'mobentis-rechazos-general',
   templateUrl: './rechazos-general.component.html',
   styleUrls: ['./rechazos-general.component.scss'],
 })
@@ -91,6 +93,33 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   sortColumn: string = 'r.last_rejection_date';
   sortDirection: string = 'desc';
 
+  // Filtro local de Empresa (1-3 o 'all')
+  selectedEmpresa: number | 'all' = 'all';
+
+  // Campo dinámico de empresa, obtiene de backend filters.controller.ts
+  empresaFieldName: string = 'r.empresa_id'; // valor por defecto
+
+  // Controlar visibilidad del dropdown de empresas
+  get isEmpresaDropdownVisible(): boolean {
+    const enabled = localStorage.getItem('empresaDropdownEnabled');
+    return enabled !== null ? enabled === 'true' : true;
+  }
+
+  // Lista de empresas para el selector múltiple (dropdown)
+  empresasList: Empresa[] = [
+    { id: 1, name: 'Sarigabo', selected: true },
+    { id: 2, name: 'Coca Cola', selected: true },
+    { id: 3, name: 'Mercadona', selected: true }
+  ];
+
+  // Método que se ejecuta cuando cambian las empresas seleccionadas
+  onEmpresasChange(empresas: Empresa[]): void {
+    this.empresasList = empresas;
+    this.applyEmpresaFilter();
+    this.currentPage = 1;
+    this.loadRechazos();
+  }
+
   // Añadir motivos y competidores
   private previousReasonId?: number;
   private previousCompetitorId?: number;
@@ -109,6 +138,13 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
   private documentClickListener!: () => void;
 
+  // Permisos para edición de rechazos
+  canEditMotivos: boolean = false;
+  canEditEstado: boolean = false;
+  canEditCompetidor: boolean = false;
+  canEditAccionCorrectora: boolean = false;
+  canEnviarAccionCorrectora: boolean = false;
+
   constructor(
     private renderer: Renderer2,
     public dialog: MatDialog,
@@ -118,10 +154,30 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     private _notifactionService: NotificationService,
     private _competidoresService: CompetidoresService,
     private cdr: ChangeDetectorRef,
+    private authService: AuthorizationService
+
   ) { }
 
   ngOnInit() {
-    this.loadRechazos();
+    // Verificar permisos del usuario
+    this.checkUserPermissions();
+
+    // Obtener la configuración de filtros desde el backend
+    this.filterService.getFilterConfig('rechazos-general').subscribe(
+      (config) => {
+        this.empresaFieldName = config.empresaFieldName;
+        console.log('Configuración de filtros obtenida:', config);
+        this.applyEmpresaFilter(); // Aplicar filtro inicial con todas las empresas seleccionadas
+        this.loadRechazos();
+      },
+      (error) => {
+        console.error('Error al obtener la configuración de filtros:', error);
+        // Si hay error, usar el valor por defecto y continuar
+        this.applyEmpresaFilter();
+        this.loadRechazos();
+      }
+    );
+    
     this.loadEstados();
     this.loadProvincias();
     this.loadSimbolos();
@@ -130,9 +186,25 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.loadPoblacion();
     this.cargando = true;
 
+
     this.dataSource = this.dataSource.map(row => ({ ...row, modified: false }));
 
     this.documentClickListener = this.renderer.listen('document', 'click', (event) => this.onDocumentClick(event));
+  }
+
+  /**
+   * Verificar permisos del usuario para editar rechazos
+   */
+  checkUserPermissions(): void {
+    // Verificar si es Admin o Editor
+    const isAdminOrEditor = this.authService.isAdminOrEditor();
+    
+    // Verificar permisos específicos
+    this.canEditMotivos = isAdminOrEditor || this.authService.hasPermission('RECHAZOS_EDICION_MOTIVOS');
+    this.canEditEstado = isAdminOrEditor || this.authService.hasPermission('RECHAZOS_EDICION_ESTADO');
+    this.canEditCompetidor = isAdminOrEditor || this.authService.hasPermission('RECHAZOS_EDICION_COMPETIDOR');
+    this.canEditAccionCorrectora = isAdminOrEditor || this.authService.hasPermission('RECHAZOS_EDICION_ACCION_CORRECTORA');
+    this.canEnviarAccionCorrectora = isAdminOrEditor || this.authService.hasPermission('RECHAZOS_ENVIADO_ACCION_CORRECTORA');
   }
 
   ngOnDestroy() {
@@ -140,6 +212,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       this.documentClickListener(); // elimina el listener
     }
   }
+
+
 
   onDocumentClick(event: MouseEvent) {
     if (!this.tablaRechazos.nativeElement.contains(event.target)) {
@@ -177,7 +251,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
         this.currentPage,
         this.itemsPerPage,
         this.sortColumn,
-        this.sortDirection
+        this.sortDirection,
       )
       .subscribe((data: any) => {
         console.log('Rechazos cargados:', data.items);
@@ -262,6 +336,24 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   getEstado(id: number): string {
     const estado = this.estados.find((c) => c.id == id);
     return estado ? estado.name : 'No encontrado';
+  }
+
+  getReasonName(id: number): string {
+    const reason = this.motivos_rechazo.find((r) => r.id == id);
+    return reason ? reason.name : 'No encontrado';
+  }
+
+  getCompetitorName(id: number, competitors: any[]): string {
+    if (!competitors || !Array.isArray(competitors)) {
+      return 'No encontrado';
+    }
+    const competitor = competitors.find((c) => c.id == id);
+    return competitor ? competitor.name : 'No encontrado';
+  }
+
+  getSymbolText(id: number): string {
+    const symbol = this.simbolos.find((s) => s.id == id);
+    return symbol ? symbol.symbol : '';
   }
 
   ngAfterViewInit() {
@@ -710,9 +802,44 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     console.log('Filtros seleccionados:', selectedFilters);
     this.selectedFilters = Object.values(selectedFilters);
     console.log(selectedFilters)
+  // Garantiza que el filtro de empresa se mantenga cuando cambian otros filtros
+  this.applyEmpresaFilter();
+  // Fuerza nueva referencia para notificar a hijos (ej. KPI)
+  this.selectedFilters = Array.isArray(this.selectedFilters) ? [...this.selectedFilters] : Object.values(this.selectedFilters || {});
     this.currentPage = 1;
     this.loadRechazos();
   }
+
+
+  // Añade o elimina el filtro de empresa dentro de selectedFilters para que aplique en TODAS las consultas
+  private applyEmpresaFilter(): void {
+    // Normaliza selectedFilters como array
+    const filters = Array.isArray(this.selectedFilters) ? [...this.selectedFilters] : Object.values(this.selectedFilters || {});
+
+    // Usar el campo dinámico obtenido del backend
+    // Elimina cualquier filtro previo de empresa
+    const withoutEmpresa = filters.filter((f: any) => f?.id !== this.empresaFieldName);
+
+    // Obtener empresas seleccionadas
+    const empresasSeleccionadas = this.empresasList.filter(e => e.selected);
+
+    // Si no están todas seleccionadas, agregar el filtro
+    if (empresasSeleccionadas.length > 0 && empresasSeleccionadas.length < this.empresasList.length) {
+      // Inserta el filtro de empresa en formato multi-select esperado por el backend
+      withoutEmpresa.push({
+        id: this.empresaFieldName,
+        nombre: 'Empresa',
+        tipo: 'multi-select',
+        valor: empresasSeleccionadas.map(e => ({
+          id: e.id,
+          name: e.name
+        }))
+      });
+    }
+
+    this.selectedFilters = withoutEmpresa;
+  }
+
   /* logica para que aparezca tooltip cuando el texto es muy grande */
   isTextTruncated(element: HTMLElement): boolean {
     return element.offsetWidth < element.scrollWidth;
@@ -816,6 +943,8 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   trackByFn(item: any) {
     return item.value;
   }
+
+
 
 
 }

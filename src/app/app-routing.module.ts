@@ -8,6 +8,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import { codeGuard } from './auth/reset-password/change-password/codeGuard/codeGuard';
 import { ChangePasswordComponent } from './auth/reset-password/change-password/change-password.component';
+import { RoleGuard } from './services/auth/role.guard';
 
 const routes: Routes = [
 
@@ -46,9 +47,23 @@ const routes: Routes = [
       {
         path: 'configuracion',
         loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule),
-        canActivate: [authGuard],
-        canMatch: [authGuard]
+        canActivate: [authGuard, RoleGuard],
+        canMatch: [authGuard],
+        data: { 
+          roles: ['Admin', 'Editor'],
+          permissions: ['VISUALIZADO_CONFIGURACION']
+        }
 
+      },
+      {
+        path: 'users',
+        loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
+        canActivate: [authGuard, RoleGuard],
+        canMatch: [authGuard],
+        data: { 
+          roles: ['Admin'],
+          permissions: ['VISUALIZADO_USUARIOS']
+        }
       },
       {
         path: 'import',
