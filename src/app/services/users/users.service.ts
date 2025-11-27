@@ -13,6 +13,7 @@ interface User {
   roles: { id: number; name: string; description: string }[];
   permissions: { id: number; name: string; description: string }[];
   rolePermissions?: { id: number; name: string; description: string }[];
+  empresas?: { id: number; nombre: string }[];
 }
 
 interface Permission {
@@ -109,5 +110,14 @@ export class UsersService {
   updateUser(userData: any): Observable<any> {
     const userId = userData.id;
     return this.http.patch(`${this.apiUrl}/api/users/${userId}`, userData, { headers: this.getHeaders() });
+  }
+
+  /**
+   * Obtener perfil del usuario actual con empresas asignadas
+   */
+  getCurrentUserProfile(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/api/users/profile/me`, {
+      headers: this.getHeaders()
+    });
   }
 }

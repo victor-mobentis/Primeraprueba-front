@@ -15,6 +15,7 @@ export interface Empresa {
   styleUrls: ['./empresa-dropdown.component.scss']
 })
 export class EmpresaDropdownComponent implements OnInit {
+  @Input() empresasList?: Empresa[]; // Empresas filtradas desde el componente padre
   empresas: Empresa[] = [];
   @Output() empresasChange = new EventEmitter<Empresa[]>();
 
@@ -49,6 +50,15 @@ export class EmpresaDropdownComponent implements OnInit {
   }
 
   loadEmpresas(): void {
+    // Si se pasó una lista de empresas filtradas, usarla
+    if (this.empresasList && this.empresasList.length > 0) {
+      this.empresas = this.empresasList;
+      this.empresasChange.emit(this.empresas);
+      this.saveSelectionToStorage();
+      return;
+    }
+
+    // Si no, cargar todas las empresas desde el servicio
     this.empresasService.getEmpresas().subscribe({
       next: (data) => {
         const savedSelection = this.getSelectionFromStorage();

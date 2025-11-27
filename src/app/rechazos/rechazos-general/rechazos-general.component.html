@@ -20,7 +20,8 @@
 
         <!-- Selector de Empresas (Dropdown) -->
           <mobentis-empresa-dropdown 
-            *ngIf="isEmpresaDropdownVisible"
+            *ngIf="shouldShowEmpresaDropdown"
+            [empresasList]="empresasList"
             (empresasChange)="onEmpresasChange($event)">
           </mobentis-empresa-dropdown>            
         <!-- boton de filtros aplicados o limpiar -->

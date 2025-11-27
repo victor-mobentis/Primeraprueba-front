@@ -21,6 +21,7 @@ import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confir
 import { css } from 'jquery';
 import { Empresa } from 'src/app/components/empresa-dropdown/empresa-dropdown.component';
 import { AuthorizationService } from 'src/app/services/auth/authorization.service';
+import { UsersService } from 'src/app/services/users/users.service';
 
 
 @Component({
@@ -112,6 +113,11 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     { id: 3, name: 'Mercadona', selected: true }
   ];
 
+  // Empresas asignadas al usuario actual
+  userEmpresas: { id: number; nombre: string }[] = [];
+  // Control de visibilidad del dropdown según empresas del usuario
+  shouldShowEmpresaDropdown: boolean = true;
+
   // Método que se ejecuta cuando cambian las empresas seleccionadas
   onEmpresasChange(empresas: Empresa[]): void {
     this.empresasList = empresas;
@@ -154,30 +160,17 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     private _notifactionService: NotificationService,
     private _competidoresService: CompetidoresService,
     private cdr: ChangeDetectorRef,
-    private authService: AuthorizationService
-
+    private authService: AuthorizationService,
+    private usersService: UsersService
   ) { }
 
   ngOnInit() {
     // Verificar permisos del usuario
     this.checkUserPermissions();
 
-    // Obtener la configuración de filtros desde el backend
-    this.filterService.getFilterConfig('rechazos-general').subscribe(
-      (config) => {
-        this.empresaFieldName = config.empresaFieldName;
-        console.log('Configuración de filtros obtenida:', config);
-        this.applyEmpresaFilter(); // Aplicar filtro inicial con todas las empresas seleccionadas
-        this.loadRechazos();
-      },
-      (error) => {
-        console.error('Error al obtener la configuración de filtros:', error);
-        // Si hay error, usar el valor por defecto y continuar
-        this.applyEmpresaFilter();
-        this.loadRechazos();
-      }
-    );
-    
+    // Cargar empresas del usuario actual primero
+    this.loadUserEmpresas();
+
     this.loadEstados();
     this.loadProvincias();
     this.loadSimbolos();
@@ -205,6 +198,62 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.canEditCompetidor = isAdminOrEditor || this.authService.hasPermission('RECHAZOS_EDICION_COMPETIDOR');
     this.canEditAccionCorrectora = isAdminOrEditor || this.authService.hasPermission('RECHAZOS_EDICION_ACCION_CORRECTORA');
     this.canEnviarAccionCorrectora = isAdminOrEditor || this.authService.hasPermission('RECHAZOS_ENVIADO_ACCION_CORRECTORA');
+  }
+
+  /**
+   * Cargar empresas asignadas al usuario actual
+   */
+  loadUserEmpresas(): void {
+    this.usersService.getCurrentUserProfile().subscribe({
+      next: (userProfile) => {
+        this.userEmpresas = userProfile.empresas || [];
+        
+        // Si el usuario tiene empresas asignadas, filtrar el dropdown
+        if (this.userEmpresas.length > 0) {
+          // Filtrar empresasList para mostrar solo las asignadas
+          this.empresasList = this.empresasList.filter(empresa => 
+            this.userEmpresas.some(userEmp => userEmp.id === empresa.id)
+          );
+
+          // Si solo tiene una empresa, ocultar el dropdown y aplicar filtro directo
+          if (this.userEmpresas.length === 1) {
+            this.shouldShowEmpresaDropdown = false;
+            this.empresasList = [{
+              id: this.userEmpresas[0].id,
+              name: this.userEmpresas[0].nombre,
+              selected: true
+            }];
+          }
+        }
+
+        // Continuar con la carga de filtros y rechazos
+        this.loadFilterConfigAndRechazos();
+      },
+      error: (error) => {
+        console.error('Error al cargar empresas del usuario:', error);
+        // Si hay error, continuar con todas las empresas
+        this.loadFilterConfigAndRechazos();
+      }
+    });
+  }
+
+  /**
+   * Cargar configuración de filtros y rechazos
+   */
+  loadFilterConfigAndRechazos(): void {
+    this.filterService.getFilterConfig('rechazos-general').subscribe(
+      (config) => {
+        this.empresaFieldName = config.empresaFieldName;
+        console.log('Configuración de filtros obtenida:', config);
+        this.applyEmpresaFilter();
+        this.loadRechazos();
+      },
+      (error) => {
+        console.error('Error al obtener la configuración de filtros:', error);
+        this.applyEmpresaFilter();
+        this.loadRechazos();
+      }
+    );
   }
 
   ngOnDestroy() {
