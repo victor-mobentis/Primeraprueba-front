@@ -101,6 +101,12 @@ h2 {
     padding: 4px 8px;
     font-weight: 500;
   }
+  
+  // Badge específico para empresas
+  .bg-empresa {
+    background-color: #e9ecef !important;
+    color: #495057 !important;
+  }
 }
 
 // Estilos para el bocadillo flotante de permisos
