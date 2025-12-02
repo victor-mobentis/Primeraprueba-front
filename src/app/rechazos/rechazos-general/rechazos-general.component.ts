@@ -21,6 +21,7 @@ import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confir
 import { css } from 'jquery';
 import { Empresa } from 'src/app/components/empresa-dropdown/empresa-dropdown.component';
 import { AuthorizationService } from 'src/app/services/auth/authorization.service';
+import { TranslationService } from 'src/app/i18n/translation.service';
 
 
 @Component({
@@ -73,20 +74,7 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
   // Variable para manejar si el texto está truncado
   isTooltipVisible: boolean = false;
   tooltipText: string | null = null;
-  selectedFilters: { [key: string]: any } = [
-    {
-      id: 'r.status_id',
-      nombre: 'Estados',
-      valor: [
-        {
-          id: 5,
-          name: 'Pendiente',
-          selected: true,
-        },
-      ],
-      tipo: 'multi-select',
-    },
-  ];
+  selectedFilters: { [key: string]: any } = [];
   searchTerm: string = '';
   mostrarError: boolean = false;
   //ordeanacion
@@ -145,10 +133,27 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     private _notifactionService: NotificationService,
     private _competidoresService: CompetidoresService,
     private cdr: ChangeDetectorRef,
-    private authService: AuthorizationService
+    private authService: AuthorizationService,
+    private translationService: TranslationService
   ) { }
 
   ngOnInit() {
+    // Inicializar filtro de Estados con traducción
+    this.selectedFilters = [
+      {
+        id: 'r.status_id',
+        nombre: this.translationService.t('filters.status'),
+        valor: [
+          {
+            id: 5,
+            name: this.translationService.t('status.Pendiente'),
+            selected: true,
+          },
+        ],
+        tipo: 'multi-select',
+      },
+    ];
+    
     // Verificar permisos del usuario
     this.checkUserPermissions();
 
@@ -299,7 +304,11 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
 
   private loadEstados() {
     this.filterService.getEstados().subscribe((estados: IEstado[]) => {
-      this.estados = estados;
+      // Traducir los nombres de los estados
+      this.estados = estados.map(estado => ({
+        ...estado,
+        name: this.translationService.t(`status.${estado.name}`) || estado.name
+      }));
     });
   }
 
@@ -315,7 +324,11 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
     this.filterService
       .getMotivosRechazo()
       .subscribe((motivos_rechazo: IMotivoRechazo[]) => {
-        this.motivos_rechazo = motivos_rechazo;
+        // Traducir los nombres de los motivos de rechazo
+        this.motivos_rechazo = motivos_rechazo.map(motivo => ({
+          ...motivo,
+          name: this.translationService.t(`reason.${motivo.name}`) || motivo.name
+        }));
       });
   }
 

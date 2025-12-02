@@ -175,7 +175,7 @@
 
                   <!-- Campo para acción correctora -->
                   <input type="text" class="truncate-text form-control form-control-sm color-primary"
-                    [(ngModel)]="row.corrective_action_text" maxlength="50" placement="top" placeholder="Promoción"
+                    [(ngModel)]="row.corrective_action_text" maxlength="50" placement="top" [placeholder]="'correctiveAction.placeholder' | translate"
                     (ngModelChange)="changeText($event, row)" [ngbTooltip]="tooltipText"
                     (mouseover)="applyTooltipIfTruncated($event, row.corrective_action_text)" />
 
@@ -265,7 +265,7 @@
                   <option *ngFor="let motivo of motivos_rechazo;trackBy: trackByFn" [value]="motivo.id">
                     {{ motivo.name }}
                   </option>
-                  <option [value]="0">Añadir Motivo</option>
+                  <option [value]="0">{{ 'reason.addReason' | translate }}</option>
                 </select>
                 <!-- Mostrar como texto plano si NO tiene permisos -->
                 <span *ngIf="!canEditMotivos" [ngbTooltip]="getReasonName(row.reason_rejection_id)" class="truncate-text">
