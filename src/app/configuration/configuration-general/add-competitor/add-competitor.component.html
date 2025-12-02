@@ -1,6 +1,6 @@
 
     <div>
-        <mobentis-popup-header [title]="'Competidores'" [icon]="'/assets/images/iconos/configuracion-icon-dark.svg'"
+        <mobentis-popup-header [title]="translationService.t('competitorsConfig.title')" [icon]="'/assets/images/iconos/configuracion-icon-dark.svg'"
             (close)="cerrarPopup()"></mobentis-popup-header>
     </div>
     
@@ -19,8 +19,8 @@
                         <table *ngIf="!cargando" class="table table-sm m-0 table-hover">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="color-primary">Nombre</th>
-                                    <th scope="col" class="color-primary text-center">Acciones</th>
+                                    <th scope="col" class="color-primary">{{ 'competitorsConfig.table.name' | translate }}</th>
+                                    <th scope="col" class="color-primary text-center">{{ 'competitorsConfig.table.actions' | translate }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -30,7 +30,7 @@
                                         <input *ngIf="editingCompetitorId === row.id" [(ngModel)]="row.name"
                                             class="form-control" type="text" (keyup.enter)="saveChanges(row)"/>
                                         <div *ngIf="editingCompetitorId === row.id && showEditNameError" class="text-danger mt-1">
-                                            Caracteres no permitidos
+                                            {{ 'competitorsConfig.invalidCharacters' | translate }}
                                         </div>
                                         <p *ngIf="editingCompetitorId !== row.id" [ngbTooltip]="tooltipText"
                                             (mouseover)="applyTooltipIfTruncated($event, row.name)"
@@ -43,32 +43,32 @@
                                             <mobentis-btn-icon-edit *ngIf="editingCompetitorId !== row.id && row.id"
                                                 (btnClicked)="toggleEdit(row.id)"></mobentis-btn-icon-edit>
                                             <i *ngIf="editingCompetitorId === row.id" (click)="saveChanges(row)"
-                                                class="bi bi-check-lg btnSave fs-5 px-0" ngbTooltip="Guardar"></i>
+                                                class="bi bi-check-lg btnSave fs-5 px-0" [ngbTooltip]="'competitorsConfig.save' | translate"></i>
                                             <mobentis-btn-icon-delete
                                                 *ngIf="editingCompetitorId !== row.id && row.id !== undefined && canDeleteCompetitors"
                                                 (btnClicked)="deleteCompetidor(row.id)"></mobentis-btn-icon-delete>
                                             <i *ngIf="editingCompetitorId === row.id" (click)="cancelEdit()"
                                                 class="bi bi-x-lg btnClear color-quaternary fs-5 px-0"
-                                                ngbTooltip="Cancelar"></i>
+                                                [ngbTooltip]="'competitorsConfig.cancel' | translate"></i>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr *ngIf="!cargando && filteredCompetitorList.length === 0">
-                                    <td colspan="2" class="text-center">No se han encontrado datos</td>
+                                    <td colspan="2" class="text-center">{{ 'competitorsConfig.table.noData' | translate }}</td>
                                 </tr>
                                 <tr class="sticky-footer" *ngIf="canCreateCompetitors">
                                     <td>
                                         <input type="text" class="form-control form-control-sm"
-                                            [(ngModel)]="newCompetitonName" placeholder="Nombre" (keyup.enter)="insertCompetitor()"/>
+                                            [(ngModel)]="newCompetitonName" [placeholder]="'competitorsConfig.namePlaceholder' | translate" (keyup.enter)="insertCompetitor()"/>
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-1">
-                                            <button [ngbTooltip]="isButtonEnabled() ? 'Guardar' : null"
+                                            <button [ngbTooltip]="isButtonEnabled() ? ('competitorsConfig.save' | translate) : null"
                                                 (click)="insertCompetitor()"
                                                 [ngClass]="{'btnSave': true, 'disabled-icon': !isButtonEnabled()}">
                                                 <i class="bi bi-check-lg fs-5 px-0"></i>
                                             </button>
-                                            <button [ngbTooltip]="isButtonEnabled() ? 'Limpiar' : null"
+                                            <button [ngbTooltip]="isButtonEnabled() ? ('competitorsConfig.clear' | translate) : null"
                                                 (click)="clearNewCompetitor()"
                                                 [ngClass]="{'btnDelete':true, 'disabled-icon': !isButtonEnabled()}"
                                                 class="color-quaternary">
@@ -81,11 +81,11 @@
                         </table>
                         <div class="d-flex justify-content-center" *ngIf="cargando">
                             <div class="spinner-border" role="status">
-                                <span class="sr-only">Loading...</span>
+                                <span class="sr-only">{{ 'competitorsConfig.loading' | translate }}</span>
                             </div>
                         </div>
                         <div *ngIf="showNewNameError" class="text-danger" style="font-size: small;">
-                            Caracteres no permitidos
+                            {{ 'competitorsConfig.invalidCharacters' | translate }}
                         </div>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
                     <div *ngIf="!selectedCompetitor" class="h-100 d-flex align-items-center background-light-gray rounded-3">
                         <div class="d-flex flex-column text-center text-muted">
                             <i class="bi bi-buildings-fill" style="font-size: 30px;"></i>
-                            <h5>Selecciona un competidor para ver sus familias.</h5>
+                            <h5>{{ 'competitorsConfig.selectCompetitor' | translate }}</h5>
                         </div>
                     </div>
                     <!-- buscado -->
@@ -104,7 +104,7 @@
                             <mobentis-search-input [searchTerm]="searchTermFamily"
                                 (searchChange)="onSearchFamily($event)"></mobentis-search-input>
                         </div>
-                        <mobentis-message-update [isVisible]="hasUnsavedChanges" (saveChanges)="guardarCambios()" [buttonText]="'Guardar'"></mobentis-message-update>
+                        <mobentis-message-update [isVisible]="hasUnsavedChanges" (saveChanges)="guardarCambios()" [buttonText]="translationService.t('competitorsConfig.save')"></mobentis-message-update>
                     </div>
                     <div class="table-responsive w-100 my-3" *ngIf="selectedCompetitor" #familyTableContainer>
                         <table class="table table-sm m-0 table-hover">
@@ -115,7 +115,7 @@
                                         <input type="checkbox" [checked]="allFamiliesSelected"
                                             [indeterminate]="isSomeSelected" (change)="toggleSelectAll($event)" />
                                     </th>
-                                    <th scope="col" class="color-primary">Familia</th>
+                                    <th scope="col" class="color-primary">{{ 'competitorsConfig.table.family' | translate }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -133,7 +133,7 @@
                                     </td>
                                 </tr>
                                 <tr *ngIf="filteredFamilyList.length === 0">
-                                    <td colspan="2" class="text-center">No se han encontrado datos</td>
+                                    <td colspan="2" class="text-center">{{ 'competitorsConfig.table.noData' | translate }}</td>
                                 </tr>
                             </tbody>
                         </table>

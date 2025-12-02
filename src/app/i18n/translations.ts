@@ -175,7 +175,34 @@ export const dictionaries: { [lang: string]: Translations } = {
     
     // Paginación
     'pagination.total': 'Total:',
-    'pagination.itemsPerPage': 'Elementos por página:'
+    'pagination.itemsPerPage': 'Elementos por página:',
+    
+    // Configuración - Motivos de Rechazo
+    'reasonsConfig.title': 'Motivos de Rechazo',
+    'reasonsConfig.table.code': 'Código',
+    'reasonsConfig.table.name': 'Nombre',
+    'reasonsConfig.table.actions': 'Acciones',
+    'reasonsConfig.table.noData': 'No se han encontrado datos',
+    'reasonsConfig.codePlaceholder': 'Código',
+    'reasonsConfig.namePlaceholder': 'Nombre',
+    'reasonsConfig.invalidCharacters': 'Caracteres no permitidos',
+    'reasonsConfig.save': 'Guardar',
+    'reasonsConfig.cancel': 'Cancelar',
+    'reasonsConfig.clear': 'Limpiar',
+    
+    // Configuración - Competidores
+    'competitorsConfig.title': 'Competidores',
+    'competitorsConfig.table.name': 'Nombre',
+    'competitorsConfig.table.actions': 'Acciones',
+    'competitorsConfig.table.noData': 'No se han encontrado datos',
+    'competitorsConfig.namePlaceholder': 'Nombre',
+    'competitorsConfig.invalidCharacters': 'Caracteres no permitidos',
+    'competitorsConfig.save': 'Guardar',
+    'competitorsConfig.cancel': 'Cancelar',
+    'competitorsConfig.clear': 'Limpiar',
+    'competitorsConfig.selectCompetitor': 'Selecciona un competidor para ver sus familias.',
+    'competitorsConfig.table.family': 'Familia',
+    'competitorsConfig.loading': 'Loading...',
   },
   en: {
     // Dashboard
@@ -349,7 +376,34 @@ export const dictionaries: { [lang: string]: Translations } = {
     
     // Pagination
     'pagination.total': 'Total:',
-    'pagination.itemsPerPage': 'Items per page:'
+    'pagination.itemsPerPage': 'Items per page:',
+    
+    // Configuration - Rejection Reasons
+    'reasonsConfig.title': 'Rejection Reasons',
+    'reasonsConfig.table.code': 'Code',
+    'reasonsConfig.table.name': 'Name',
+    'reasonsConfig.table.actions': 'Actions',
+    'reasonsConfig.table.noData': 'No data found',
+    'reasonsConfig.codePlaceholder': 'Code',
+    'reasonsConfig.namePlaceholder': 'Name',
+    'reasonsConfig.invalidCharacters': 'Invalid characters',
+    'reasonsConfig.save': 'Save',
+    'reasonsConfig.cancel': 'Cancel',
+    'reasonsConfig.clear': 'Clear',
+    
+    // Configuration - Competitors
+    'competitorsConfig.title': 'Competitors',
+    'competitorsConfig.table.name': 'Name',
+    'competitorsConfig.table.actions': 'Actions',
+    'competitorsConfig.table.noData': 'No data found',
+    'competitorsConfig.namePlaceholder': 'Name',
+    'competitorsConfig.invalidCharacters': 'Invalid characters',
+    'competitorsConfig.save': 'Save',
+    'competitorsConfig.cancel': 'Cancel',
+    'competitorsConfig.clear': 'Clear',
+    'competitorsConfig.selectCompetitor': 'Select a competitor to view its families.',
+    'competitorsConfig.table.family': 'Family',
+    'competitorsConfig.loading': 'Loading...',
   },
   ca: {
     // Dashboard
@@ -523,6 +577,33 @@ export const dictionaries: { [lang: string]: Translations } = {
     
     // Paginació
     'pagination.total': 'Total:',
-    'pagination.itemsPerPage': 'Elements per pàgina:'
+    'pagination.itemsPerPage': 'Elements per pàgina:',
+    
+    // Configuració - Motius de Rebuig
+    'reasonsConfig.title': 'Motius de Rebuig',
+    'reasonsConfig.table.code': 'Codi',
+    'reasonsConfig.table.name': 'Nom',
+    'reasonsConfig.table.actions': 'Accions',
+    'reasonsConfig.table.noData': 'No s\'han trobat dades',
+    'reasonsConfig.codePlaceholder': 'Codi',
+    'reasonsConfig.namePlaceholder': 'Nom',
+    'reasonsConfig.invalidCharacters': 'Caràcters no permesos',
+    'reasonsConfig.save': 'Guardar',
+    'reasonsConfig.cancel': 'Cancel·lar',
+    'reasonsConfig.clear': 'Netejar',
+    
+    // Configuració - Competidors
+    'competitorsConfig.title': 'Competidors',
+    'competitorsConfig.table.name': 'Nom',
+    'competitorsConfig.table.actions': 'Accions',
+    'competitorsConfig.table.noData': 'No s\'han trobat dades',
+    'competitorsConfig.namePlaceholder': 'Nom',
+    'competitorsConfig.invalidCharacters': 'Caràcters no permesos',
+    'competitorsConfig.save': 'Guardar',
+    'competitorsConfig.cancel': 'Cancel·lar',
+    'competitorsConfig.clear': 'Netejar',
+    'competitorsConfig.selectCompetitor': 'Selecciona un competidor per veure les seves famílies.',
+    'competitorsConfig.table.family': 'Família',
+    'competitorsConfig.loading': 'Carregant...',
   }
 };

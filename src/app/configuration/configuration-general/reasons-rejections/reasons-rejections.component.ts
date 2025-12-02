@@ -11,6 +11,7 @@ import { MotivoRechazoService } from 'src/app/services/reasons_rejection/motivo-
 import { IMotivoRechazo } from 'src/app/models/motivoRechazo.model';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { AuthorizationService } from 'src/app/services/auth/authorization.service';
+import { TranslationService } from 'src/app/i18n/translation.service';
 
 @Component({
   selector: 'mobentis-reasons-rejections',
@@ -48,6 +49,7 @@ export class ReasonsRejectionsComponent {
     public dialog: MatDialog,
     private _notifactionService: NotificationService,
     private _authorizationService: AuthorizationService,
+    public translationService: TranslationService,
     @Inject(MAT_DIALOG_DATA) public data: { autoClose: boolean }
   ) {
   }

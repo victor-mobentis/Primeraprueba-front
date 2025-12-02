@@ -11,6 +11,7 @@ import { timeout } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { AuthorizationService } from 'src/app/services/auth/authorization.service';
+import { TranslationService } from 'src/app/i18n/translation.service';
 
 @Component({
   selector: 'mobentis-add-competitor',
@@ -67,6 +68,7 @@ export class AddCompetitorComponent {
     public dialog: MatDialog,
     private _notifactionService: NotificationService,
     private _authorizationService: AuthorizationService,
+    public translationService: TranslationService,
     @Inject(MAT_DIALOG_DATA) public data: { autoClose: boolean }
   ) { }
 
