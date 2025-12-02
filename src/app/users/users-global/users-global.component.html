@@ -51,7 +51,7 @@
           [disabled]="!canCreateUser || licenseReached"
           [title]="createUserButtonTooltip">
           <i class="bi bi-person-plus-fill me-2"></i>
-          Nuevo usuario
+          {{ 'users.newUser' | translate }}
         </button>
       </div>
     </div>
@@ -62,23 +62,23 @@
         <thead>
           <tr class="w-100">
             <th scope="col" class="cursor row_column_md" (click)="sortData('name')">
-              Nombre
+              {{ 'users.table.name' | translate }}
               <i *ngIf="sortColumn === 'name'" class="bi"
               [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <th scope="col" class="cursor row_column_lg" (click)="sortData('email')">
-              Email
+              {{ 'users.table.email' | translate }}
               <i *ngIf="sortColumn === 'email'" class="bi"
               [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
             <th scope="col" class="cursor row_column_md" (click)="sortData('position_company')">
-              Cargo
+              {{ 'users.table.position' | translate }}
               <i *ngIf="sortColumn === 'position_company'" class="bi"
                 [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
             </th>
-            <th scope="col" class="row_column_lg">Rol</th>
-            <th scope="col" class="row_column_xl">Permisos</th>
-            <th scope="col" class="text-center row_ficha">Acciones</th>
+            <th scope="col" class="row_column_lg">{{ 'users.table.role' | translate }}</th>
+            <th scope="col" class="row_column_xl">{{ 'users.table.permissions' | translate }}</th>
+            <th scope="col" class="text-center row_ficha">{{ 'users.table.actions' | translate }}</th>
           </tr>
         </thead>
         <tbody class="w-100">
@@ -86,7 +86,7 @@
             <tr [class.current-user-row]="isCurrentUser(user)">
               <td [class.text-muted]="isCurrentUser(user)" [class.font-italic]="isCurrentUser(user)">
                 {{ user.name }}
-                <small *ngIf="isCurrentUser(user)" class="badge bg-secondary ms-2">Tú</small>
+                <small *ngIf="isCurrentUser(user)" class="badge bg-secondary ms-2">{{ 'users.table.you' | translate }}</small>
               </td>
               <td [class.text-muted]="isCurrentUser(user)" [class.font-italic]="isCurrentUser(user)">{{ user.email }}</td>
               <td [class.text-muted]="isCurrentUser(user)" [class.font-italic]="isCurrentUser(user)">{{ user.position_company || 'N/A' }}</td>
@@ -133,7 +133,7 @@
                   data-bs-toggle="dropdown" 
                   aria-expanded="false"
                   [disabled]="!canAssignPermissions || isCurrentUser(user)">
-                  Permisos adicionales ({{ getSelectedPermissionsCount(user) }})
+                  {{ 'users.table.additionalPermissions' | translate }} ({{ getSelectedPermissionsCount(user) }})
                 </button>
                 <ul class="dropdown-menu" [attr.aria-labelledby]="'dropdownPermissions' + user.id" (click)="$event.stopPropagation()">
                   <li *ngFor="let permission of allPermissions">
@@ -151,7 +151,7 @@
                           [for]="'perm_' + user.id + '_' + permission.id"
                           [class.text-muted]="isPermissionFromRole(user, permission.id)">
                           {{ permission.description }}
-                          <i *ngIf="isPermissionFromRole(user, permission.id)" class="bi bi-lock-fill ms-1 text-primary" title="Heredado del rol"></i>
+                          <i *ngIf="isPermissionFromRole(user, permission.id)" class="bi bi-lock-fill ms-1 text-primary" [title]="'users.table.inheritedFromRole' | translate"></i>
                         </label>
                         </div>
                       </div>
@@ -162,7 +162,7 @@
               <td class="text-center">
                 <div class="d-flex justify-content-center gap-2">
                   <!-- Icono de bloqueo para el usuario actual -->
-                  <i *ngIf="isCurrentUser(user)" class="bi bi-lock-fill text-muted" style="font-size: 1.2rem;" title="Edita tu usuario desde tu perfil"></i>
+                  <i *ngIf="isCurrentUser(user)" class="bi bi-lock-fill text-muted" style="font-size: 1.2rem;" [title]="'users.table.editFromProfile' | translate"></i>
                   
                   <!-- Botones de edición/eliminación (ocultos para el usuario actual) -->
                   <mobentis-btn-icon-edit 
@@ -190,7 +190,7 @@
           
           <tr *ngIf="users.length === 0">
             <td colspan="6" class="text-center">
-              No hay users disponibles
+              {{ 'users.table.noUsers' | translate }}
             </td>
           </tr>
         </tbody>

@@ -6,6 +6,7 @@ import { IRechazo } from 'src/app/models/rechazos.model';
 import { IEstadosRechazoCount } from 'src/app/models/count.model';
 import { environment } from 'src/environments/environment';
 import { LanguageService } from '../language/language.service';
+import { TranslationService } from 'src/app/i18n/translation.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -16,7 +17,8 @@ export class RechazadosService {
   constructor(
     private _http: HttpClient,
     private _loginServices: LoginService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private translationService: TranslationService
   ) { }
 
   getRechazos(
@@ -124,7 +126,13 @@ export class RechazadosService {
       )
       .pipe(
         map((data: any) => {
-
+          // Traducir los nombres de los motivos de rechazo
+          if (Array.isArray(data)) {
+            data = data.map((item: any) => ({
+              ...item,
+              name: this.translationService.t(`reason.${item.name}`) || item.name
+            }));
+          }
           return data;
         })
       );
@@ -228,8 +236,7 @@ export class RechazadosService {
     };
     // Construcción del body sin valores vacíos
     let requestBody: any = {
-      ...(Object.keys(selectedFilters).length > 0 && { selectedFilters }),
-      idioma: this.languageService.getCurrentLanguage()
+      ...(Object.keys(selectedFilters).length > 0 && { selectedFilters })
     };
     console.log("Body enviado:", requestBody);
     return this._http
@@ -241,7 +248,12 @@ export class RechazadosService {
       )
       .pipe(
         map((data: any) => {
-
+          // Traducir las categorías (meses) recibidas como índices
+          if (data.categorias && Array.isArray(data.categorias)) {
+            data.categorias = data.categorias.map((index: number) => 
+              this.translationService.t(`month.${index}`)
+            );
+          }
           return data;
         })
       );
@@ -259,8 +271,7 @@ export class RechazadosService {
     };
     // Construcción del body sin valores vacíos
     let requestBody: any = {
-      ...(Object.keys(selectedFilters).length > 0 && { selectedFilters }),
-      idioma: this.languageService.getCurrentLanguage()
+      ...(Object.keys(selectedFilters).length > 0 && { selectedFilters })
     };
     console.log("Body enviado:", requestBody);
     return this._http
@@ -272,7 +283,12 @@ export class RechazadosService {
       )
       .pipe(
         map((data: any) => {
-
+          // Traducir las categorías (días) recibidas como índices
+          if (data.categorias && Array.isArray(data.categorias)) {
+            data.categorias = data.categorias.map((index: number) => 
+              this.translationService.t(`day.${index}`)
+            );
+          }
           return data;
         })
       );
@@ -289,8 +305,7 @@ export class RechazadosService {
     };
     // Construcción del body sin valores vacíos
     let requestBody: any = {
-      ...(Object.keys(selectedFilters).length > 0 && { selectedFilters }),
-      idioma: this.languageService.getCurrentLanguage()
+      ...(Object.keys(selectedFilters).length > 0 && { selectedFilters })
     };
     console.log("Body enviado:", requestBody);
     return this._http
@@ -302,7 +317,13 @@ export class RechazadosService {
       )
       .pipe(
         map((data: any) => {
-
+          // Traducir los nombres de las categorías
+          if (Array.isArray(data)) {
+            data = data.map((item: any) => ({
+              ...item,
+              name: this.translationService.t(`chart.clients.${item.name}`) || item.name
+            }));
+          }
           return data;
         })
       );

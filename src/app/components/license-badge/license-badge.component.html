@@ -4,11 +4,11 @@
   [class.license-danger]="isDangerLevel"
   *ngIf="!loading">
   <i class="bi bi-person-check-fill me-1"></i>
-  Licencias restantes: {{ remainingLicenses }}/{{ maxLicenses }}
+  {{ 'users.licenses.remaining' | translate }} {{ remainingLicenses }}/{{ maxLicenses }}
 </small>
 
 <!-- Skeleton loader mientras carga -->
 <small class="license-badge license-skeleton" *ngIf="loading">
   <i class="bi bi-person-check-fill me-1"></i>
-  <span class="skeleton-text">Cargando...</span>
+  <span class="skeleton-text">{{ 'users.licenses.loading' | translate }}</span>
 </small>

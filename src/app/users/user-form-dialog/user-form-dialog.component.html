@@ -26,7 +26,7 @@
 
             <!-- Roles -->
             <div class="mt-3">
-              <h3 class="section-title"><i class="bi bi-people-fill me-2"></i>Rol *</h3>
+              <h3 class="section-title"><i class="bi bi-people-fill me-2"></i>{{ 'userForm.role' | translate }} *</h3>
               <div class="roles-scrollable">
                 <div class="form-check mb-2" *ngFor="let role of allRoles">
                   <input 
@@ -45,7 +45,7 @@
                   </label>
                 </div>
               </div>
-              <small class="text-muted d-block mt-1">Seleccione un rol</small>
+              <small class="text-muted d-block mt-1">{{ 'userForm.roleRequired' | translate }}</small>
             </div>
           </div>
         </div>
@@ -57,45 +57,45 @@
             <div class="forms-container">
               <!-- Información general -->
               <div class="background-light-gray p-3 mb-3">
-                <h2 class="mb-3">Información general</h2>
+                <h2 class="mb-3">{{ 'userForm.generalInfo' | translate }}</h2>
               <div class="row g-2">
                 <div class="col-12 col-md-6">
-                  <label for="name" class="form-label-small required">Nombre completo</label>
+                  <label for="name" class="form-label-small required">{{ 'userForm.fullName' | translate }}</label>
                   <input 
                     type="text" 
                     class="form-control form-control-sm" 
                     id="name"
                     [(ngModel)]="name"
                     name="name"
-                    placeholder="Nombre del usuario"
+                    [placeholder]="'userForm.fullNamePlaceholder' | translate"
                     [disabled]="loading"
                     required>
                 </div>
                 <div class="col-12 col-md-6">
-                  <label for="position" class="form-label-small">Cargo</label>
+                  <label for="position" class="form-label-small">{{ 'userForm.position' | translate }}</label>
                   <input 
                     type="text" 
                     class="form-control form-control-sm" 
                     id="position"
                     [(ngModel)]="positionCompany"
                     name="position"
-                    placeholder="Cargo en la empresa"
+                    [placeholder]="'userForm.positionPlaceholder' | translate"
                     [disabled]="loading">
                 </div>
                 <div class="col-12">
-                  <label for="email" class="form-label-small required">Email</label>
+                  <label for="email" class="form-label-small required">{{ 'userForm.email' | translate }}</label>
                   <input 
                     type="email" 
                     class="form-control form-control-sm" 
                     id="email"
                     [(ngModel)]="email"
                     name="email"
-                    placeholder="correo@ejemplo.com"
+                    [placeholder]="'userForm.emailPlaceholder' | translate"
                     [disabled]="loading"
                     [class.is-invalid]="email.length > 0 && !isValidEmail(email)"
                     required>
                   <div class="invalid-feedback" *ngIf="email.length > 0 && !isValidEmail(email)">
-                    Por favor ingresa un email válido
+                    {{ 'userForm.emailInvalid' | translate }}
                   </div>
                 </div>
               </div>
@@ -107,9 +107,9 @@
                    style="cursor: pointer;" 
                    (click)="permissionsExpanded = !permissionsExpanded">
                 <h2 class="mb-0">
-                  Permisos adicionales
+                  {{ 'userForm.additionalPermissions' | translate }}
                   <small class="text-muted ms-2" style="font-size: 0.75rem; font-weight: normal;">
-                    ({{ getSelectedAdditionalPermissionsCount() }} seleccionados)
+                    ({{ getSelectedAdditionalPermissionsCount() }} {{ 'userForm.permissionsSelected' | translate }})
                   </small>
                 </h2>
                 <i class="bi transition-icon" 
@@ -133,12 +133,12 @@
                       {{ permission.description }}
                       <i *ngIf="isPermissionFromRole(permission.id)" 
                          class="bi bi-lock-fill ms-1 text-primary" 
-                         title="Heredado del rol"></i>
+                         [title]="'userForm.permissionsInherited' | translate"></i>
                     </label>
                   </div>
                 </div>
                 <small class="text-muted d-block mt-2">
-                  <i class="bi bi-info-circle me-1"></i>Los permisos del rol se asignan automáticamente
+                  <i class="bi bi-info-circle me-1"></i>{{ 'userForm.permissionsAutoAssigned' | translate }}
                 </small>
               </div>
             </div>
@@ -147,9 +147,9 @@
             <div class="background-light-gray p-3 mb-3">
               <div class="d-flex justify-content-between align-items-center">
                 <h2 class="mb-0">
-                  Empresas asignadas *
+                  {{ 'userForm.assignedCompanies' | translate }} *
                   <small class="text-muted ms-2" style="font-size: 0.75rem; font-weight: normal;">
-                    ({{ selectedEmpresaIds.length }} seleccionadas)
+                    ({{ selectedEmpresaIds.length }} {{ 'userForm.companiesSelected' | translate }})
                   </small>
                 </h2>
               </div>
@@ -172,10 +172,10 @@
                   </div>
                 </div>
                 <small class="text-danger d-block mt-2" *ngIf="selectedEmpresaIds.length === 0">
-                  <i class="bi bi-exclamation-circle me-1"></i>Debe seleccionar al menos una empresa
+                  <i class="bi bi-exclamation-circle me-1"></i>{{ 'userForm.companiesRequired' | translate }}
                 </small>
                 <small class="text-muted d-block mt-2" *ngIf="selectedEmpresaIds.length > 0">
-                  <i class="bi bi-info-circle me-1"></i>Selecciona las empresas a las que tendrá acceso el usuario
+                  <i class="bi bi-info-circle me-1"></i>{{ 'userForm.companiesInfo' | translate }}
                 </small>
               </div>
             </div>
@@ -183,7 +183,7 @@
             <!-- Contraseña (siempre visible en crear, condicional en editar) -->
             <div class="background-light-gray p-3">
               <div class="d-flex justify-content-between align-items-center mb-3" *ngIf="isEditMode">
-                <h2 class="mb-0">Cambiar Contraseña</h2>
+                <h2 class="mb-0">{{ 'userForm.changePassword' | translate }}</h2>
                 <div class="form-check form-switch">
                   <input 
                     class="form-check-input" 
@@ -193,17 +193,17 @@
                     name="changePassword"
                     [disabled]="loading">
                   <label class="form-check-label" for="changePassword">
-                    Activar cambio
+                    {{ 'userForm.activateChange' | translate }}
                   </label>
                 </div>
               </div>
               
-              <h2 class="mb-3" *ngIf="!isEditMode">Contraseña</h2>
+              <h2 class="mb-3" *ngIf="!isEditMode">{{ 'userForm.password' | translate }}</h2>
               
               <div *ngIf="!isEditMode || changePassword">
                 <div class="row g-2">
                   <div class="col-12 col-md-6">
-                    <label for="password" class="form-label-small required">{{ isEditMode ? 'Nueva contraseña' : 'Contraseña' }}</label>
+                    <label for="password" class="form-label-small required">{{ isEditMode ? ('userForm.newPassword' | translate) : ('userForm.password' | translate) }}</label>
                     <div class="input-group input-group-sm">
                       <input 
                         [type]="showPassword ? 'text' : 'password'" 
@@ -211,7 +211,7 @@
                         id="password"
                         [(ngModel)]="password"
                         name="password"
-                        placeholder="Mínimo 6 caracteres"
+                        [placeholder]="'userForm.passwordPlaceholder' | translate"
                         [disabled]="loading"
                         [class.is-invalid]="password.length > 0 && password.length < 6"
                         required>
@@ -224,11 +224,11 @@
                       </button>
                     </div>
                     <div class="invalid-feedback d-block" *ngIf="password.length > 0 && password.length < 6">
-                      La contraseña debe tener al menos 6 caracteres
+                      {{ 'userForm.passwordMinLength' | translate }}
                     </div>
                   </div>
                   <div class="col-12 col-md-6">
-                    <label for="confirmPassword" class="form-label-small required">Confirmar contraseña</label>
+                    <label for="confirmPassword" class="form-label-small required">{{ 'userForm.confirmPassword' | translate }}</label>
                     <div class="input-group input-group-sm">
                       <input 
                         [type]="showConfirmPassword ? 'text' : 'password'" 
@@ -236,7 +236,7 @@
                         id="confirmPassword"
                         [(ngModel)]="confirmPassword"
                         name="confirmPassword"
-                        placeholder="Repite la contraseña"
+                        [placeholder]="'userForm.confirmPasswordPlaceholder' | translate"
                         [disabled]="loading"
                         [class.is-invalid]="confirmPassword.length > 0 && !passwordsMatch()"
                         required>
@@ -249,14 +249,14 @@
                       </button>
                     </div>
                     <div class="invalid-feedback d-block" *ngIf="confirmPassword.length > 0 && !passwordsMatch()">
-                      Las contraseñas no coinciden
+                      {{ 'userForm.passwordsMismatch' | translate }}
                     </div>
                   </div>
                 </div>
               </div>
               
               <div *ngIf="isEditMode && !changePassword" class="text-muted text-center py-3">
-                <i class="bi bi-lock-fill me-2"></i>Active el cambio para modificar la contraseña
+                <i class="bi bi-lock-fill me-2"></i>{{ 'userForm.passwordChangeDisabled' | translate }}
               </div>
             </div>
             </div>

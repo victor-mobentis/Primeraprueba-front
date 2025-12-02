@@ -40,6 +40,54 @@ export const dictionaries: { [lang: string]: Translations } = {
     'users.search.placeholder': 'Buscar por nombre, email o cargo...',
     'users.createUser': 'Crear Usuario',
     'users.clearSearch': 'Limpiar búsqueda',
+    'users.newUser': 'Nuevo usuario',
+    'users.table.name': 'Nombre',
+    'users.table.email': 'Email',
+    'users.table.position': 'Cargo',
+    'users.table.role': 'Rol',
+    'users.table.permissions': 'Permisos',
+    'users.table.actions': 'Acciones',
+    'users.table.you': 'Tú',
+    'users.table.noUsers': 'No hay usuarios disponibles',
+    'users.table.editFromProfile': 'Edita tu usuario desde tu perfil',
+    'users.table.inheritedFromRole': 'Heredado del rol',
+    'users.table.additionalPermissions': 'Permisos adicionales',
+    'users.licenses.remaining': 'Licencias restantes:',
+    'users.licenses.loading': 'Cargando...',
+    
+    // Formulario de usuario
+    'userForm.createTitle': 'Crear Nuevo Usuario',
+    'userForm.editTitle': 'Editar Usuario',
+    'userForm.role': 'Rol',
+    'userForm.roleRequired': 'Seleccione un rol',
+    'userForm.generalInfo': 'Información general',
+    'userForm.fullName': 'Nombre completo',
+    'userForm.fullNamePlaceholder': 'Nombre del usuario',
+    'userForm.position': 'Cargo',
+    'userForm.positionPlaceholder': 'Cargo en la empresa',
+    'userForm.email': 'Email',
+    'userForm.emailPlaceholder': 'correo@ejemplo.com',
+    'userForm.emailInvalid': 'Por favor ingresa un email válido',
+    'userForm.additionalPermissions': 'Permisos adicionales',
+    'userForm.permissionsSelected': 'seleccionados',
+    'userForm.permissionsInherited': 'Heredado del rol',
+    'userForm.permissionsAutoAssigned': 'Los permisos del rol se asignan automáticamente',
+    'userForm.assignedCompanies': 'Empresas asignadas',
+    'userForm.companiesSelected': 'seleccionadas',
+    'userForm.companiesRequired': 'Debe seleccionar al menos una empresa',
+    'userForm.companiesInfo': 'Selecciona las empresas a las que tendrá acceso el usuario',
+    'userForm.changePassword': 'Cambiar Contraseña',
+    'userForm.activateChange': 'Activar cambio',
+    'userForm.password': 'Contraseña',
+    'userForm.newPassword': 'Nueva contraseña',
+    'userForm.passwordPlaceholder': 'Mínimo 6 caracteres',
+    'userForm.passwordMinLength': 'La contraseña debe tener al menos 6 caracteres',
+    'userForm.confirmPassword': 'Confirmar contraseña',
+    'userForm.confirmPasswordPlaceholder': 'Repite la contraseña',
+    'userForm.passwordsMismatch': 'Las contraseñas no coinciden',
+    'userForm.passwordChangeDisabled': 'Active el cambio para modificar la contraseña',
+    'userForm.saveChanges': 'Guardar cambios',
+    'userForm.createUser': 'Crear Usuario',
     
     // Empresa Dropdown
     'empresaDropdown.selectAll': 'Seleccionar todas',
@@ -123,7 +171,11 @@ export const dictionaries: { [lang: string]: Translations } = {
     
     // Etiquetas de gráficas
     'chart.clients.withRejections': 'Con rechazos',
-    'chart.clients.withoutRejections': 'Sin rechazos'
+    'chart.clients.withoutRejections': 'Sin rechazos',
+    
+    // Paginación
+    'pagination.total': 'Total:',
+    'pagination.itemsPerPage': 'Elementos por página:'
   },
   en: {
     // Dashboard
@@ -162,6 +214,54 @@ export const dictionaries: { [lang: string]: Translations } = {
     'users.search.placeholder': 'Search by name, email or position...',
     'users.createUser': 'Create User',
     'users.clearSearch': 'Clear search',
+    'users.newUser': 'New user',
+    'users.table.name': 'Name',
+    'users.table.email': 'Email',
+    'users.table.position': 'Position',
+    'users.table.role': 'Role',
+    'users.table.permissions': 'Permissions',
+    'users.table.actions': 'Actions',
+    'users.table.you': 'You',
+    'users.table.noUsers': 'No users available',
+    'users.table.editFromProfile': 'Edit your user from your profile',
+    'users.table.inheritedFromRole': 'Inherited from role',
+    'users.table.additionalPermissions': 'Additional permissions',
+    'users.licenses.remaining': 'Licenses remaining:',
+    'users.licenses.loading': 'Loading...',
+    
+    // User Form
+    'userForm.createTitle': 'Create New User',
+    'userForm.editTitle': 'Edit User',
+    'userForm.role': 'Role',
+    'userForm.roleRequired': 'Select a role',
+    'userForm.generalInfo': 'General information',
+    'userForm.fullName': 'Full name',
+    'userForm.fullNamePlaceholder': 'User name',
+    'userForm.position': 'Position',
+    'userForm.positionPlaceholder': 'Position in the company',
+    'userForm.email': 'Email',
+    'userForm.emailPlaceholder': 'email@example.com',
+    'userForm.emailInvalid': 'Please enter a valid email',
+    'userForm.additionalPermissions': 'Additional permissions',
+    'userForm.permissionsSelected': 'selected',
+    'userForm.permissionsInherited': 'Inherited from role',
+    'userForm.permissionsAutoAssigned': 'Role permissions are automatically assigned',
+    'userForm.assignedCompanies': 'Assigned companies',
+    'userForm.companiesSelected': 'selected',
+    'userForm.companiesRequired': 'You must select at least one company',
+    'userForm.companiesInfo': 'Select the companies the user will have access to',
+    'userForm.changePassword': 'Change Password',
+    'userForm.activateChange': 'Enable change',
+    'userForm.password': 'Password',
+    'userForm.newPassword': 'New password',
+    'userForm.passwordPlaceholder': 'Minimum 6 characters',
+    'userForm.passwordMinLength': 'Password must be at least 6 characters',
+    'userForm.confirmPassword': 'Confirm password',
+    'userForm.confirmPasswordPlaceholder': 'Repeat password',
+    'userForm.passwordsMismatch': 'Passwords do not match',
+    'userForm.passwordChangeDisabled': 'Enable change to modify password',
+    'userForm.saveChanges': 'Save changes',
+    'userForm.createUser': 'Create User',
     
     // Company Dropdown
     'empresaDropdown.selectAll': 'Select all',
@@ -245,7 +345,11 @@ export const dictionaries: { [lang: string]: Translations } = {
     
     // Chart labels
     'chart.clients.withRejections': 'With rejections',
-    'chart.clients.withoutRejections': 'Without rejections'
+    'chart.clients.withoutRejections': 'Without rejections',
+    
+    // Pagination
+    'pagination.total': 'Total:',
+    'pagination.itemsPerPage': 'Items per page:'
   },
   ca: {
     // Dashboard
@@ -284,6 +388,54 @@ export const dictionaries: { [lang: string]: Translations } = {
     'users.search.placeholder': 'Cercar per nom, email o càrrec...',
     'users.createUser': 'Crear Usuari',
     'users.clearSearch': 'Netejar cerca',
+    'users.newUser': 'Nou usuari',
+    'users.table.name': 'Nom',
+    'users.table.email': 'Email',
+    'users.table.position': 'Càrrec',
+    'users.table.role': 'Rol',
+    'users.table.permissions': 'Permisos',
+    'users.table.actions': 'Accions',
+    'users.table.you': 'Tu',
+    'users.table.noUsers': 'No hi ha usuaris disponibles',
+    'users.table.editFromProfile': 'Edita el teu usuari des del teu perfil',
+    'users.table.inheritedFromRole': 'Heretat del rol',
+    'users.table.additionalPermissions': 'Permisos addicionals',
+    'users.licenses.remaining': 'Llicències restants:',
+    'users.licenses.loading': 'Carregant...',
+    
+    // Formulari d'usuari
+    'userForm.createTitle': 'Crear Nou Usuari',
+    'userForm.editTitle': 'Editar Usuari',
+    'userForm.role': 'Rol',
+    'userForm.roleRequired': 'Selecciona un rol',
+    'userForm.generalInfo': 'Informació general',
+    'userForm.fullName': 'Nom complet',
+    'userForm.fullNamePlaceholder': 'Nom de l\'usuari',
+    'userForm.position': 'Càrrec',
+    'userForm.positionPlaceholder': 'Càrrec a l\'empresa',
+    'userForm.email': 'Email',
+    'userForm.emailPlaceholder': 'correu@exemple.com',
+    'userForm.emailInvalid': 'Si us plau introdueix un email vàlid',
+    'userForm.additionalPermissions': 'Permisos addicionals',
+    'userForm.permissionsSelected': 'seleccionats',
+    'userForm.permissionsInherited': 'Heretat del rol',
+    'userForm.permissionsAutoAssigned': 'Els permisos del rol s\'assignen automàticament',
+    'userForm.assignedCompanies': 'Empreses assignades',
+    'userForm.companiesSelected': 'seleccionades',
+    'userForm.companiesRequired': 'Heu de seleccionar almenys una empresa',
+    'userForm.companiesInfo': 'Selecciona les empreses a les quals tindrà accés l\'usuari',
+    'userForm.changePassword': 'Canviar Contrasenya',
+    'userForm.activateChange': 'Activar canvi',
+    'userForm.password': 'Contrasenya',
+    'userForm.newPassword': 'Nova contrasenya',
+    'userForm.passwordPlaceholder': 'Mínim 6 caràcters',
+    'userForm.passwordMinLength': 'La contrasenya ha de tenir almenys 6 caràcters',
+    'userForm.confirmPassword': 'Confirmar contrasenya',
+    'userForm.confirmPasswordPlaceholder': 'Repeteix la contrasenya',
+    'userForm.passwordsMismatch': 'Les contrasenyes no coincideixen',
+    'userForm.passwordChangeDisabled': 'Activa el canvi per modificar la contrasenya',
+    'userForm.saveChanges': 'Guardar canvis',
+    'userForm.createUser': 'Crear Usuari',
     
     // Desplegable d'Empresa
     'empresaDropdown.selectAll': 'Seleccionar totes',
@@ -367,6 +519,10 @@ export const dictionaries: { [lang: string]: Translations } = {
     
     // Etiquetes de gràfiques
     'chart.clients.withRejections': 'Amb rebutjos',
-    'chart.clients.withoutRejections': 'Sense rebutjos'
+    'chart.clients.withoutRejections': 'Sense rebutjos',
+    
+    // Paginació
+    'pagination.total': 'Total:',
+    'pagination.itemsPerPage': 'Elements per pàgina:'
   }
 };

@@ -4,6 +4,7 @@ import { UsersService } from '../../services/users/users.service';
 import { AuthorizationService } from '../../services/auth/authorization.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { EmpresasService } from '../../services/empresas.service';
+import { TranslationService } from '../../i18n/translation.service';
 import { Md5 } from 'ts-md5';
 
 interface Role {
@@ -76,7 +77,8 @@ export class UserFormDialogComponent implements OnInit {
     private usersService: UsersService,
     private authorizationService: AuthorizationService,
     private notificationService: NotificationService,
-    private empresasService: EmpresasService
+    private empresasService: EmpresasService,
+    private translationService: TranslationService
   ) {}
 
   ngOnInit(): void {
@@ -372,10 +374,14 @@ export class UserFormDialogComponent implements OnInit {
   }
 
   getDialogTitle(): string {
-    return this.isEditMode ? 'Editar Usuario' : 'Crear Nuevo Usuario';
+    return this.isEditMode 
+      ? this.translationService.t('userForm.editTitle')
+      : this.translationService.t('userForm.createTitle');
   }
 
   getSubmitButtonText(): string {
-    return this.isEditMode ? 'Guardar cambios' : 'Crear Usuario';
+    return this.isEditMode 
+      ? this.translationService.t('userForm.saveChanges')
+      : this.translationService.t('userForm.createUser');
   }
 }

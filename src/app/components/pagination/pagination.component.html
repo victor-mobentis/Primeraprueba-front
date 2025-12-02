@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col d-flex align-items-center">
         <div class="d-flex gap-3">
-          <label class="color-primary" for="totalElementos">Total: </label>
+          <label class="color-primary" for="totalElementos">{{ 'pagination.total' | translate }} </label>
           <span id="totalElementos">{{totalItems}}</span>
         </div>
       </div>
@@ -26,7 +26,7 @@
         </ul>
       </div>
       <div class="items-per-page d-inline-flex align-items-center justify-content-end col ">
-        <label id="label_itemsPerPageSelect" for="itemsPerPageSelect">Elementos por página:</label>
+        <label id="label_itemsPerPageSelect" for="itemsPerPageSelect">{{ 'pagination.itemsPerPage' | translate }}</label>
         <select id="itemsPerPageSelect" class="form-select form-select-sm ms-2" [(ngModel)]="itemsPerPage"
           (change)="onItemsPerPageChange($event)">
           <option *ngFor="let option of itemsPerPageOptions" [value]="option">{{ option }}</option>
