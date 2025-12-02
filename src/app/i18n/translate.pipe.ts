@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { TranslationService } from './translation.service';
 
-@Pipe({ name: 'translate', pure: false })
+// Pure pipe ya que recargamos la página al cambiar idioma
+@Pipe({ name: 'translate', pure: true })
 export class TranslatePipe implements PipeTransform {
   constructor(private translation: TranslationService) {}
   transform(key: string, params?: { [k: string]: any }): string {

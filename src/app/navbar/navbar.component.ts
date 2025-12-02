@@ -49,8 +49,8 @@ export class NavbarComponent {
     this.usersService.updateUserLanguage(langCode).subscribe({
       next: (response) => {
         console.log('Idioma actualizado en BD:', response);
-        // Recargar menús con el nuevo idioma
-        this.loadMenuItems(langCode);
+        // Recargar la página para aplicar todas las traducciones
+        window.location.reload();
       },
       error: (error) => {
         console.error('Error al actualizar idioma:', error);

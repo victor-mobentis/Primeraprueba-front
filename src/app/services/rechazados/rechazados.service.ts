@@ -5,6 +5,7 @@ import { Observable, map } from 'rxjs';
 import { IRechazo } from 'src/app/models/rechazos.model';
 import { IEstadosRechazoCount } from 'src/app/models/count.model';
 import { environment } from 'src/environments/environment';
+import { LanguageService } from '../language/language.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -14,7 +15,8 @@ export class RechazadosService {
 
   constructor(
     private _http: HttpClient,
-    private _loginServices: LoginService
+    private _loginServices: LoginService,
+    private languageService: LanguageService
   ) { }
 
   getRechazos(
@@ -226,7 +228,8 @@ export class RechazadosService {
     };
     // Construcción del body sin valores vacíos
     let requestBody: any = {
-      ...(Object.keys(selectedFilters).length > 0 && { selectedFilters })
+      ...(Object.keys(selectedFilters).length > 0 && { selectedFilters }),
+      idioma: this.languageService.getCurrentLanguage()
     };
     console.log("Body enviado:", requestBody);
     return this._http
@@ -256,7 +259,8 @@ export class RechazadosService {
     };
     // Construcción del body sin valores vacíos
     let requestBody: any = {
-      ...(Object.keys(selectedFilters).length > 0 && { selectedFilters })
+      ...(Object.keys(selectedFilters).length > 0 && { selectedFilters }),
+      idioma: this.languageService.getCurrentLanguage()
     };
     console.log("Body enviado:", requestBody);
     return this._http
@@ -285,7 +289,8 @@ export class RechazadosService {
     };
     // Construcción del body sin valores vacíos
     let requestBody: any = {
-      ...(Object.keys(selectedFilters).length > 0 && { selectedFilters })
+      ...(Object.keys(selectedFilters).length > 0 && { selectedFilters }),
+      idioma: this.languageService.getCurrentLanguage()
     };
     console.log("Body enviado:", requestBody);
     return this._http

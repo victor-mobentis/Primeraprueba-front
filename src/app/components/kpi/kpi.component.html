@@ -1,7 +1,7 @@
 <div class="d-flex flex-column flex-lg-row gap-2 align-items-center ">
     <div id="graficas_izquierda" class="d-flex min-w-reasonReject bg-color-kpi-element ps-1">
         <div class="d-flex justify-content-center align-items-center">
-            <span class="vertical-text dark-gray ">Rechazos</span>
+            <span class="vertical-text dark-gray ">{{ 'kpi.rejections' | translate }}</span>
             <div class="h-90"></div>
         </div>
         <!-- El primer div que tiene scroll horizontal y quiero que funcione con la rueda del rato o arrastrando de izquierda a derecha  -->
@@ -18,7 +18,7 @@
             class="text-center rounded-3 d-flex padding-rechazos-kpi justify-content-evenly align-items-center gap-2 px-2">
             <div class="d-flex flex-column m-1 dark-gray">
                 <h3 class="m-0 fw-bold">{{ kpiData.totalRejections | bigInt }}</h3>
-                <span class="smaller">Rechazos</span>
+                <span class="smaller">{{ 'kpi.rejections' | translate }}</span>
             </div>
         </div>
     </div>
@@ -30,20 +30,20 @@
     <div id="kpis_centrales" class="d-flex gap-2 bg-color-kpi-element ps-1">
         <!-- Contenedor que contendra  Pendiente y oportunidad -->
         <div class="d-flex justify-content-center align-items-center">
-            <span class="vertical-text dark-gray">A Convertir</span>
+            <span class="vertical-text dark-gray">{{ 'kpi.toConvert' | translate }}</span>
             <div class="h-90"></div>
         </div>
         <div class=" text-center rounded-3 d-flex justify-content-evenly align-items-center gap-2 px-2">
             <div class="d-flex flex-column m-1 orange">
                 <h3 class="m-0 fw-bold">{{kpiData.pendingRejections| bigInt}}</h3>
-                <span class="smaller">Conversiones Pendientes</span>
+                <span class="smaller">{{ 'kpi.pendingConversions' | translate }}</span>
             </div>
             <div class="d-flex align-items-center my-2" style="height: 45px;">
                 <i class="bi bi-caret-right-fill gray"></i>
             </div>
             <div class="d-flex flex-column m-1 color-primary">
                 <h3 class="m-0 fw-bold">{{kpiData.opportunityRejections| bigInt}}</h3>
-                <span class="smaller">Oportunidades Activas</span>
+                <span class="smaller">{{ 'kpi.activeOpportunities' | translate }}</span>
             </div>
         </div>
     </div>
@@ -54,14 +54,14 @@
 
     <div id="graficas_derecha" class="d-flex bg-color-kpi-element ps-1 py-1 min-w-convertidor">
         <div class="d-flex justify-content-center align-items-center ">
-            <span class="vertical-text dark-gray">Convertido</span>
+            <span class="vertical-text dark-gray">{{ 'kpi.converted' | translate }}</span>
             <div class="h-90"></div>
         </div>
         <div
             class="text-center rounded-3 d-flex padding-rechazos-kpi justify-content-evenly align-items-center gap-2 px-2 ">
             <div class="d-flex flex-column m-1 dark-gray">
                 <h3 class="m-0 fw-bold"> {{kpiData.totalGroupedConversions | bigInt}}</h3>
-                <span class="smaller">Oportunidades</span>
+                <span class="smaller">{{ 'kpi.opportunities' | translate }}</span>
             </div>
         </div>
         <!-- El segundo div que tiene scroll horizontal y quiero que funcione con la rueda del rato o arrastrando de izquierda a derecha  -->

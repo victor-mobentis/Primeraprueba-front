@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, ElementRef, ViewChild, SimpleChanges, Input } from '@angular/core';
 import { RejectionKPIs } from 'src/app/models/RejectionKPI.model';
 import { RechazadosService } from 'src/app/services/rechazados/rechazados.service';
+import { TranslationService } from 'src/app/i18n/translation.service';
 
 @Component({
   selector: 'mobentis-kpi',
@@ -18,13 +19,14 @@ export class KPIComponent implements AfterViewInit {
     totalGroupedConversions: 0,
     conversionsByStatus: []
   };
+  
   @Input() selectedFilters!: { [key: string]: any };
   @Input() searchTerm!: string;
   @Input() empresasList: any[] = []; // Lista de empresas del dropdown
 
 constructor(
     private rejectionService: RechazadosService,
-   
+    private translationService: TranslationService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -39,11 +41,9 @@ constructor(
     let selectedEmpresa: number | 'all' = 'all';
     const empresasSeleccionadas = this.empresasList.filter((e: any) => e.selected);
     
-    // Si solo hay una empresa seleccionada, enviar su ID
     if (empresasSeleccionadas.length === 1) {
       selectedEmpresa = empresasSeleccionadas[0].id;
     } else if (empresasSeleccionadas.length > 1 || empresasSeleccionadas.length === 0) {
-      // Si hay múltiples o ninguna, enviar 'all' y el backend filtrará por las del usuario
       selectedEmpresa = 'all';
     }
     
@@ -51,16 +51,38 @@ constructor(
           .getKPIs(
             this.selectedFilters,
             this.searchTerm,
-            selectedEmpresa // Añadir parámetro selectedEmpresa
+            selectedEmpresa
           )
           .subscribe((data: any) => {
             console.log('KPIS cargados:', data);
-            this.kpiData = data;
-    
             
-    
-           
+            // Traducir los motivos de rechazo
+            if (data.rejectionByReason) {
+              data.rejectionByReason = data.rejectionByReason.map((item: any) => ({
+                ...item,
+                reason: this.translateDynamicValue('rejection.reason', item.reason)
+              }));
+            }
+            
+            // Traducir los estados de conversión
+            if (data.conversionsByStatus) {
+              data.conversionsByStatus = data.conversionsByStatus.map((item: any) => ({
+                ...item,
+                status: this.translateDynamicValue('conversion.status', item.status)
+              }));
+            }
+            
+            this.kpiData = data;
           });
+  }
+  
+  // Método auxiliar para traducir valores dinámicos
+  private translateDynamicValue(prefix: string, value: string): string {
+    if (!value) return value;
+    const key = `${prefix}.${value}`;
+    const translated = this.translationService.t(key);
+    // Si no hay traducción, devolver el valor original
+    return translated === key ? value : translated;
   }
   
   ngOnInit(){

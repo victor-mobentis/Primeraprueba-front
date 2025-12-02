@@ -7,10 +7,9 @@ export class TranslationService {
   private currentLang: string = 'es';
 
   constructor(private languageService: LanguageService) {
+    // Solo obtener el idioma actual una vez, sin suscripción
+    // Ya que la página se recarga al cambiar de idioma
     this.currentLang = this.languageService.getCurrentLanguage();
-    this.languageService.currentLanguage$.subscribe(lang => {
-      this.currentLang = lang;
-    });
   }
 
   t(key: string, params?: { [k: string]: any }): string {

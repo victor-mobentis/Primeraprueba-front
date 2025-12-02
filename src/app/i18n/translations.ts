@@ -47,7 +47,25 @@ export const dictionaries: { [lang: string]: Translations } = {
     'empresaDropdown.companies': 'empresas',
     'empresaDropdown.noCompany': 'Ninguna empresa',
     'empresaDropdown.of': 'de',
-    'empresaDropdown.warning.minOneRequired': 'Debes seleccionar al menos una empresa.'
+    'empresaDropdown.warning.minOneRequired': 'Debes seleccionar al menos una empresa.',
+    
+    // KPI
+    'kpi.rejections': 'Rechazos',
+    'kpi.toConvert': 'A Convertir',
+    'kpi.pendingConversions': 'Conversiones Pendientes',
+    'kpi.activeOpportunities': 'Oportunidades Activas',
+    'kpi.converted': 'Convertido',
+    'kpi.opportunities': 'Oportunidades',
+    
+    // Motivos de Rechazo (valores dinámicos de BD)
+    'rejection.reason.No aplica': 'No aplica',
+    'rejection.reason.Otros': 'Otros',
+    'rejection.reason.Precio': 'Precio',
+    
+    // Estados de Conversión (valores dinámicos de BD)
+    'conversion.status.No aplica': 'No aplica',
+    'conversion.status.Otros': 'Otros',
+    'conversion.status.Precio': 'Precio'
   },
   en: {
     // Dashboard
@@ -93,7 +111,25 @@ export const dictionaries: { [lang: string]: Translations } = {
     'empresaDropdown.companies': 'companies',
     'empresaDropdown.noCompany': 'No company',
     'empresaDropdown.of': 'of',
-    'empresaDropdown.warning.minOneRequired': 'You must select at least one company.'
+    'empresaDropdown.warning.minOneRequired': 'You must select at least one company.',
+    
+    // KPI
+    'kpi.rejections': 'Rejections',
+    'kpi.toConvert': 'To Convert',
+    'kpi.pendingConversions': 'Pending Conversions',
+    'kpi.activeOpportunities': 'Active Opportunities',
+    'kpi.converted': 'Converted',
+    'kpi.opportunities': 'Opportunities',
+    
+    // Rejection Reasons (dynamic values from DB)
+    'rejection.reason.No aplica': 'Not applicable',
+    'rejection.reason.Otros': 'Others',
+    'rejection.reason.Precio': 'Price',
+    
+    // Conversion Status (dynamic values from DB)
+    'conversion.status.No aplica': 'Not applicable',
+    'conversion.status.Otros': 'Others',
+    'conversion.status.Precio': 'Price'
   },
   ca: {
     // Dashboard
@@ -139,6 +175,24 @@ export const dictionaries: { [lang: string]: Translations } = {
     'empresaDropdown.companies': 'empreses',
     'empresaDropdown.noCompany': 'Cap empresa',
     'empresaDropdown.of': 'de',
-    'empresaDropdown.warning.minOneRequired': 'Has de seleccionar almenys una empresa.'
+    'empresaDropdown.warning.minOneRequired': 'Has de seleccionar almenys una empresa.',
+    
+    // KPI
+    'kpi.rejections': 'Rebutjos',
+    'kpi.toConvert': 'A Convertir',
+    'kpi.pendingConversions': 'Conversions Pendents',
+    'kpi.activeOpportunities': 'Oportunitats Actives',
+    'kpi.converted': 'Convertit',
+    'kpi.opportunities': 'Oportunitats',
+    
+    // Motius de Rebuig (valors dinàmics de BD)
+    'rejection.reason.No aplica': 'No aplica',
+    'rejection.reason.Otros': 'Altres',
+    'rejection.reason.Precio': 'Preu',
+    
+    // Estats de Conversió (valors dinàmics de BD)
+    'conversion.status.No aplica': 'No aplica',
+    'conversion.status.Otros': 'Altres',
+    'conversion.status.Precio': 'Preu'
   }
 };
