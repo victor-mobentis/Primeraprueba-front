@@ -12,6 +12,7 @@ import { IClient } from 'src/app/models/clients.model';
 import { ClientsService } from 'src/app/services/clients/clients.service';
 import { PopupMapClientsComponent } from '../popup-map-clients/popup-map-clients.component';
 import { MapData } from 'src/app/models/mapData.model';
+import { TranslationService } from 'src/app/i18n/translation.service';
 @Component({
   selector: 'mobentis-popup-client-detail',
   templateUrl: './popup-client-detail.component.html',
@@ -35,6 +36,7 @@ export class PopupClientDetailComponent {
     public dialogRef: MatDialogRef<PopupClientDetailComponent>,
     private fb: FormBuilder,
     private _clientsServices: ClientsService,
+    public translationService: TranslationService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.form = this.fb.group({

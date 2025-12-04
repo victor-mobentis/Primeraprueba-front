@@ -1,46 +1,46 @@
 <div class="container background-light-gray px-4">
-    <h2 class="m-0">Generales</h2>
+    <h2 class="m-0">{{ 'clientData.general' | translate }}</h2>
     
     <div class="row">
         <div class="col-lg-6 ">
-            <h3 class="m-0">Información</h3>
+            <h3 class="m-0">{{ 'clientData.information' | translate }}</h3>
             <hr class="mt-0 mx-0 mb-2">
             <div class="row mb-3 rounded w-100 mx-0">
                 <div class="rounded bg-content-ficha-client p-1 ">
                     <div class="col-12">
-                        <mobentis-etiqueta-valor [etiqueta]="'Código'" [valor]=" cliente?.customer_ERP_id "></mobentis-etiqueta-valor>
+                        <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.code')" [valor]=" cliente?.customer_ERP_id "></mobentis-etiqueta-valor>
                     </div>
                     <div class="col-12">
-                        <mobentis-etiqueta-valor [etiqueta]="'Nombre'" [valor]=" cliente?.name"></mobentis-etiqueta-valor>
+                        <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.name')" [valor]=" cliente?.name"></mobentis-etiqueta-valor>
                     </div>
                     <div class="col-12">
-                        <mobentis-etiqueta-valor [etiqueta]="'CIF'" [valor]=" cliente?.cif"></mobentis-etiqueta-valor>
+                        <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.cif')" [valor]=" cliente?.cif"></mobentis-etiqueta-valor>
                     </div>
                     <div class="col-12">
-                        <mobentis-etiqueta-valor [etiqueta]="'Nombre fiscal'" [valor]=" cliente?.tax_name "></mobentis-etiqueta-valor>
+                        <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.taxName')" [valor]=" cliente?.tax_name "></mobentis-etiqueta-valor>
                     </div>
                 </div>
             </div>
-            <h3 class="m-0">Dirección:</h3>
+            <h3 class="m-0">{{ 'clientData.address' | translate }}:</h3>
             <hr class="mt-0 mx-0 mb-2">
             <div class="row mb-3 rounded bg-content-ficha-client w-100 mx-0">
                 <div class="col-12">
-                    <mobentis-etiqueta-valor [etiqueta]="'País'" [valor]="'ESPAÑA' "></mobentis-etiqueta-valor>
+                    <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.country')" [valor]="translationService.t('clientData.spain') "></mobentis-etiqueta-valor>
                 </div>
                 <div class="col-12">
-                    <mobentis-etiqueta-valor [etiqueta]="'Dirección'" [valor]=" cliente?.address "></mobentis-etiqueta-valor>
+                    <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.address')" [valor]=" cliente?.address "></mobentis-etiqueta-valor>
                 </div>
                 <div class="col-12">
-                    <mobentis-etiqueta-valor [etiqueta]="'CP'" [valor]="  cliente?.pc "></mobentis-etiqueta-valor>
+                    <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.postalCode')" [valor]="  cliente?.pc "></mobentis-etiqueta-valor>
                 </div>
                 <div class="col-12">
-                    <mobentis-etiqueta-valor [etiqueta]="'Población'" [valor]=" cliente?.city "></mobentis-etiqueta-valor>
+                    <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.city')" [valor]=" cliente?.city "></mobentis-etiqueta-valor>
                 </div>
                 <div class="col-12">
-                    <mobentis-etiqueta-valor [etiqueta]="'Provincia'" [valor]=" cliente?.province "></mobentis-etiqueta-valor>
+                    <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.province')" [valor]=" cliente?.province "></mobentis-etiqueta-valor>
                 </div>
             </div>
-            <h3 class="m-0">Segementación:</h3>
+            <h3 class="m-0">{{ 'clientData.segmentation' | translate }}:</h3>
             <hr class="mt-0 mx-0 mb-2">
             <div class="row rounded bg-content-ficha-client w-100 mx-0">
                 <div *ngIf="cliente?.nsegmentacion_1" class="col-12">
@@ -58,34 +58,34 @@
             </div>
         </div>
         <div class="col-lg-6 px-4">
-            <h3 class="m-0">Contacto:</h3>
+            <h3 class="m-0">{{ 'clientData.contact' | translate }}:</h3>
             <hr class="mt-0 mx-0 mb-2">
             <div class="row mb-3 rounded bg-content-ficha-client w-100 mx-0">
                 <div class="col-12">
-                    <mobentis-etiqueta-valor [etiqueta]="'Tel. 1'" [valor]=" cliente?.phone_1 "></mobentis-etiqueta-valor>
+                    <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.phone1')" [valor]=" cliente?.phone_1 "></mobentis-etiqueta-valor>
                 </div>
                 <div class="col-12">
-                    <mobentis-etiqueta-valor [etiqueta]="'Tel. 2'" [valor]=" cliente?.phone_2 "></mobentis-etiqueta-valor>
+                    <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.phone2')" [valor]=" cliente?.phone_2 "></mobentis-etiqueta-valor>
                 </div>
                 <div class="col-12">
-                    <mobentis-etiqueta-valor [etiqueta]="'Fax'" [valor]=" 'Sin especificar' "></mobentis-etiqueta-valor>
+                    <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.fax')" [valor]="translationService.t('clientData.notSpecified') "></mobentis-etiqueta-valor>
                 </div>
                 <div class="col-12">
-                    <mobentis-etiqueta-valor [etiqueta]="'Email'" [valor]=" cliente?.email "></mobentis-etiqueta-valor>
+                    <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.email')" [valor]=" cliente?.email "></mobentis-etiqueta-valor>
                 </div>
             </div>
-            <h3 class="m-0">Otros:</h3>
+            <h3 class="m-0">{{ 'clientData.others' | translate }}:</h3>
             <hr class="mt-0 mx-0 mb-2">
             <div class="row mb-3 rounded bg-content-ficha-client w-100 mx-0">
                 <div class="col-12">
-                    <mobentis-etiqueta-valor [etiqueta]="'Web'" [valor]="'Sin especificar'"></mobentis-etiqueta-valor>
+                    <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.web')" [valor]="translationService.t('clientData.notSpecified')"></mobentis-etiqueta-valor>
                 </div>
                 <div class="col-12">
-                    <mobentis-etiqueta-valor [etiqueta]="'Agencia'" [valor]="'Sin especificar'"></mobentis-etiqueta-valor>
+                    <mobentis-etiqueta-valor [etiqueta]="translationService.t('clientData.agency')" [valor]="translationService.t('clientData.notSpecified')"></mobentis-etiqueta-valor>
                     <div class="form-check mt-1">
                         <input class="form-check-input" type="checkbox" id="potencialCheck" disabled>
                         <label class="form-check-label" for="potencialCheck">
-                            Potencial
+                            {{ 'clientData.potential' | translate }}
                         </label>
                     </div>
                 </div>

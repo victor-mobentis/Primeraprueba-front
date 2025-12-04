@@ -65,11 +65,11 @@ export class DashboardGeneralComponent {
     this.nombre_s1,
     this.nombre_s2,
     this.nombre_s3,
-    'Clientes',
-    'Provincias',
-    'Poblaciones',
-    'Familias',
-    'Vendedores',
+    this.translationService.t('dashboard.table.clients'),
+    this.translationService.t('dashboard.table.provinces'),
+    this.translationService.t('dashboard.table.cities'),
+    this.translationService.t('dashboard.table.families'),
+    this.translationService.t('dashboard.table.salespeople'),
   ];
   /*
   valoresTablas: ITablaDashboard[][] = [

@@ -1,5 +1,5 @@
 <div>
-  <mobentis-popup-header [title]="'Cliente'" [icon]="'/assets/images/iconos/clientes-icon-dark.svg'"
+  <mobentis-popup-header [title]="translationService.t('clientDetail.title')" [icon]="'/assets/images/iconos/clientes-icon-dark.svg'"
     (close)="cerrarPopup()"></mobentis-popup-header>
  <!-- <div class="d-flex justify-content-start mb-2 flex-wrap py-1 px-4">
      <button class="btn btn-sm btn-outline-secondary me-2 mb-2">
@@ -42,23 +42,23 @@
   <ul class="nav nav-tabs" id="clienteTabs" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active" id="datos-tab" data-bs-toggle="tab" data-bs-target="#datos" type="button"
-        role="tab">Datos</button>
+        role="tab">{{ 'clientDetail.tabs.data' | translate }}</button>
     </li>
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="horarios-tab" data-bs-toggle="tab" data-bs-target="#horarios" type="button"
-        role="tab">Horarios de Visita</button>
+        role="tab">{{ 'clientDetail.tabs.schedules' | translate }}</button>
     </li>
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="contactos-tab" data-bs-toggle="tab" data-bs-target="#contactos" type="button"
-        role="tab">Contactos y Direcciones</button>
+        role="tab">{{ 'clientDetail.tabs.contacts' | translate }}</button>
     </li>
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="crm-tab" data-bs-toggle="tab" data-bs-target="#crm" type="button"
-        role="tab">CRM</button>
+        role="tab">{{ 'clientDetail.tabs.crm' | translate }}</button>
     </li>
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="mapa-tab" data-bs-toggle="tab" data-bs-target="#mapa" type="button"
-        role="tab">Mapa</button>
+        role="tab">{{ 'clientDetail.tabs.map' | translate }}</button>
     </li>
   </ul>
 
@@ -82,7 +82,7 @@
 
     <!-- Otros tabs (vacíos por ahora) -->
     <div class="tab-pane fade" id="horarios" role="tabpanel">
-      <p>Contenido de Horarios de Visita</p>
+      <p>{{ 'clientDetail.schedules.content' | translate }}</p>
     </div>
     <div class="tab-pane fade" id="contactos" role="tabpanel">
       <div>
@@ -93,7 +93,7 @@
       </div>
     </div>
     <div class="tab-pane fade" id="crm" role="tabpanel">
-      <p>Contenido de CRM</p>
+      <p>{{ 'clientDetail.crm.content' | translate }}</p>
     </div>
     <div class="tab-pane fade" id="mapa" role="tabpanel">
       <div class="map-container" *ngIf="mapCenter && markersData.length > 0">
@@ -102,7 +102,7 @@
       <div *ngIf="!mapCenter || markersData.length === 0" class="d-flex justify-content-center align-items-center h-100">
         <div class="text-muted">
           <i class="bi bi-geo-alt-fill me-2"></i>
-          No hay coordenadas disponibles para mostrar el mapa
+          {{ 'clientDetail.map.noCoordinates' | translate }}
         </div>
       </div>
     </div>

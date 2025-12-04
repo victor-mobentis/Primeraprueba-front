@@ -325,10 +325,15 @@ export class RechazosGeneralComponent implements AfterViewInit, OnInit {
       .getMotivosRechazo()
       .subscribe((motivos_rechazo: IMotivoRechazo[]) => {
         // Traducir los nombres de los motivos de rechazo
-        this.motivos_rechazo = motivos_rechazo.map(motivo => ({
-          ...motivo,
-          name: this.translationService.t(`reason.${motivo.name}`) || motivo.name
-        }));
+        this.motivos_rechazo = motivos_rechazo.map(motivo => {
+          const translationKey = `reason.${motivo.name}`;
+          const translated = this.translationService.t(translationKey);
+          // Solo usar la traducción si existe (no es igual a la clave)
+          return {
+            ...motivo,
+            name: translated !== translationKey ? translated : motivo.name
+          };
+        });
       });
   }
 
