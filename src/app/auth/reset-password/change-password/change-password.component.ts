@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { LoginService } from 'src/app/services/auth/login.service';
 import { FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { NotificationService } from 'src/app/services/notification/notification.service';
+import { NotificationService } from 'src/app/core/services/notification/notification.service';
 import { timeout } from 'rxjs';
+import { LoginService } from 'src/app/core/services/auth/login.service';
 
 
 @Component({

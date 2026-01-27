@@ -17,8 +17,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { SharedModule } from "./shared/shared.module";
-import { SessionInterceptor } from './services/auth/session.interceptor';
+import { SessionInterceptor } from './core/services/auth/session.interceptor';
+import { SharedModule } from './core/shared/shared.module';
 
 @NgModule({
   declarations: [

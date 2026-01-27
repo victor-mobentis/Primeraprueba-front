@@ -8,7 +8,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import { codeGuard } from './auth/reset-password/change-password/codeGuard/codeGuard';
 import { ChangePasswordComponent } from './auth/reset-password/change-password/change-password.component';
-import { RoleGuard } from './services/auth/role.guard';
+import { RoleGuard } from './core/services/auth/role.guard';
 
 const routes: Routes = [
 
@@ -25,26 +25,6 @@ const routes: Routes = [
     path: 'mobentis', component: NavbarComponent, 
     children:[
       {
-        path: 'rechazos',
-        loadChildren: () => import('./rechazos/rechazos.module').then(m => m.RechazosModule),
-        canActivate: [authGuard],
-        canMatch: [authGuard]
-
-      },
-      {
-        path: 'dashboard',
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DahsboardModule),
-        canActivate: [authGuard],
-        canMatch: [authGuard]
-
-      },
-      {
-        path: 'clientes',
-        loadChildren: () => import('./clients/clients.module').then(m => m.ClientsModule),
-        canActivate: [authGuard],
-        canMatch: [authGuard]
-      },
-      {
         path: 'configuracion',
         loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule),
         canActivate: [authGuard, RoleGuard],
@@ -57,7 +37,7 @@ const routes: Routes = [
       },
       {
         path: 'users',
-        loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
+        loadChildren: () => import('./core/users/users.module').then(m => m.UsersModule),
         canActivate: [authGuard, RoleGuard],
         canMatch: [authGuard],
         data: { 
@@ -65,12 +45,6 @@ const routes: Routes = [
           permissions: ['VISUALIZADO_USUARIOS']
         }
       },
-      {
-        path: 'import',
-        loadChildren: () => import('./import/import.module').then(m => m.ImportModule),
-        canActivate: [authGuard],
-        canMatch: [authGuard]
-      }
     ]
   },
   {path:'**', redirectTo:'/login',pathMatch:'full'}

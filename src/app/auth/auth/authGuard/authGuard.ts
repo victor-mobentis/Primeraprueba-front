@@ -9,7 +9,7 @@ import {
   Router,
 } from '@angular/router';
 import { Observable, tap } from 'rxjs';
-import { LoginService } from 'src/app/services/auth/login.service';
+import { LoginService } from 'src/app/core/services/auth/login.service';
 @Injectable({ providedIn: 'root' })
 export class authGuard implements CanMatch, CanActivate {
   constructor(private _loginServices: LoginService, private router: Router) { }

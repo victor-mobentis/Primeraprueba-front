@@ -5,13 +5,15 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { LoginService } from 'src/app/services/auth/login.service';
+
 import { Observable } from 'rxjs';
-import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
-import { NotificationService } from 'src/app/services/notification/notification.service';
-import { AuthorizationService } from 'src/app/services/auth/authorization.service';
-import { UsersService } from 'src/app/services/users/users.service';
-import { TranslationService } from 'src/app/i18n/translation.service';
+import { ConfirmDialogComponent } from 'src/app/core/components/confirm-dialog/confirm-dialog.component';
+import { AuthorizationService } from 'src/app/core/services/auth/authorization.service';
+import { LoginService } from 'src/app/core/services/auth/login.service';
+import { TranslationService } from 'src/app/core/services/i18n/translation.service';
+import { NotificationService } from 'src/app/core/services/notification/notification.service';
+import { UsersService } from 'src/app/core/services/users/users.service';
+
 
 interface Permission {
   id: number;

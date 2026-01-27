@@ -1,13 +1,14 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService } from '../services/auth/login.service';
+
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileEditPopupComponent } from '../configuration/configuration-general/profile-edit-popup/profile-edit-popup.component';
-import { MenuService } from '../services/menu/menu.service';
+import { MenuService } from '../core/services/menu/menu.service';
 import { MenuItem } from 'src/app/models/menuItem.model';
-import { AuthorizationService } from '../services/auth/authorization.service';
-import { LanguageService } from '../services/language/language.service';
-import { UsersService } from '../services/users/users.service';
+import { LanguageService } from '../core/services/language/language.service';
+import { LoginService } from '../core/services/auth/login.service';
+import { AuthorizationService } from '../core/services/auth/authorization.service';
+import { UsersService } from '../core/services/users/users.service';
 
 @Component({
   selector: 'mobentis-navbar',

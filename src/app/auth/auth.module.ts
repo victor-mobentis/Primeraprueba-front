@@ -14,9 +14,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
+
+import { RouterModule } from '@angular/router';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ChangePasswordComponent } from './reset-password/change-password/change-password.component';
-import { RouterModule } from '@angular/router';
 
 
 

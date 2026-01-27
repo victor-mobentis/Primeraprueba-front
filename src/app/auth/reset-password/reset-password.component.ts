@@ -6,8 +6,8 @@ import {
   NgForm,
   Validators,
 } from '@angular/forms';
-import { LoginService } from 'src/app/services/auth/login.service';
 import { Router } from '@angular/router';
+import { LoginService } from 'src/app/core/services/auth/login.service';
 
 @Component({
   selector: 'mobentis-reset-password',

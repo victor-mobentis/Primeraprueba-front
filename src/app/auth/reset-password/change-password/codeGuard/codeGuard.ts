@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanMatch, Route, UrlSegment, UrlTree, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { LoginService } from 'src/app/services/auth/login.service';
+import { LoginService } from 'src/app/core/services/auth/login.service';
 
 @Injectable({providedIn: 'root'})
 export class codeGuard implements CanMatch {

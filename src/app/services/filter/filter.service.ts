@@ -1,16 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { LoginService } from '../auth/login.service';
+
 import { Observable, map, of } from 'rxjs';
-import { IPoblacion } from 'src/app/models/poblaciones.model';
-import { IProvincia } from 'src/app/models/provincias.model';
-import { IEstado } from 'src/app/models/estados.model';
-import { ISimbolo } from 'src/app/models/simbolos.model';
-import { ICompetidor } from 'src/app/models/competidor.model';
-import { IMotivoRechazo } from 'src/app/models/motivoRechazo.model';
-import { IFamilia } from 'src/app/models/familia.mode';
-import { ISubFamilia } from 'src/app/models/subFamilia.model';
 import { environment } from 'src/environments/environment';
+import { LoginService } from 'src/app/core/services/auth/login.service';
 
 @Injectable({
   providedIn: 'root',
@@ -104,99 +97,6 @@ export class FilterService {
       );
   }
 
-  getProvincias(): Observable<IProvincia[]> {
-
-    let options = {
-      headers: new HttpHeaders().set(
-        'Authorization',
-        `Bearer ${this._loginServices.getToken()}`
-      ),
-    };
-    return this._http
-      .get<IProvincia[]>(`${this.apiUrl}/api/filters/provinces`, options)
-      .pipe(
-        map((data: any) => {
-          return data;
-        })
-      );
-  }
-  getPoblaciones(): Observable<IPoblacion[]> {
-    let options = {
-      headers: new HttpHeaders().set(
-        'Authorization',
-        `Bearer ${this._loginServices.getToken()}`
-      ),
-    };
-    return this._http
-      .get<IPoblacion[]>(`${this.apiUrl}/api/filters/cities`, options)
-      
-  }
-
-  getEstados(): Observable<IEstado[]> {
-    let options = {
-      headers: new HttpHeaders().set(
-        'Authorization',
-        `Bearer ${this._loginServices.getToken()}`
-      ),
-    };
-    return this._http.get<IEstado[]>(
-      `${this.apiUrl}/api/filters/status`,
-      options
-    ).pipe(
-      map((data: any) => {
-        return data;
-      })
-    );
-  }
-  /* eliminar esta funcion porque se repite en competidores.service.ts */
-  getCompetidores(): Observable<ICompetidor[]> {
-    let options = {
-      headers: new HttpHeaders().set(
-        'Authorization',
-        `Bearer ${this._loginServices.getToken()}`
-      ),
-    };
-    return this._http.get<ICompetidor[]>(
-      `${this.apiUrl}/api/filters/competitors`,
-      options
-    );
-  }
-
-  getSimbolos(): Observable<ISimbolo[]> {
-    let options = {
-      headers: new HttpHeaders().set(
-        'Authorization',
-        `Bearer ${this._loginServices.getToken()}`
-      ),
-    };
-    return this._http.get<ISimbolo[]>(
-      `${this.apiUrl}/api/filters/symbol`,
-      options
-    ).pipe(
-      map((data: any) => {
-        console.log(data)
-        return data;
-      })
-    );
-  }
-
-  getMotivosRechazo(): Observable<IMotivoRechazo[]> {
-    let options = {
-      headers: new HttpHeaders().set(
-        'Authorization',
-        `Bearer ${this._loginServices.getToken()}`
-      ),
-    };
-    return this._http.get<IMotivoRechazo[]>(
-      `${this.apiUrl}/api/filters/reasons-rejection`,
-      options
-    ).pipe(
-      map((data: any) => {
-        console.log(data)
-        return data;
-      })
-    );
-  }
 
   /**
    * Obtiene la configuración de filtros para un componente específico

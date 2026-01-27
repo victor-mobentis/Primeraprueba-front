@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginService } from 'src/app/services/auth/login.service';
-import { LoginRequest } from 'src/app/services/auth/login.request';
+
 import { MatDialog } from '@angular/material/dialog';
+import { LoginService } from 'src/app/core/services/auth/login.service';
+import { LoginRequest } from 'src/app/core/services/auth/login.request';
 
 @Component({
   selector: 'mobentis-auth',
