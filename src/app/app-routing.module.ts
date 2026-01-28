@@ -25,6 +25,16 @@ const routes: Routes = [
     path: 'mobentis', component: NavbarComponent, 
     children:[
       {
+        path: 'dashboard',
+        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DahsboardModule),
+        canActivate: [authGuard, RoleGuard],
+        canMatch: [authGuard],
+        data: { 
+          roles: ['Admin', 'Editor','Usuario'],
+        }
+
+      },
+      {
         path: 'configuracion',
         loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule),
         canActivate: [authGuard, RoleGuard],
