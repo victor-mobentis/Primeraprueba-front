@@ -27,11 +27,8 @@ const routes: Routes = [
       {
         path: 'dashboard',
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DahsboardModule),
-        canActivate: [authGuard, RoleGuard],
+        canActivate: [authGuard],
         canMatch: [authGuard],
-        data: { 
-          roles: ['Admin', 'Editor','Usuario'],
-        }
 
       },
       {
