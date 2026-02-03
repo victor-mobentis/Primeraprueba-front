@@ -1,7 +1,64 @@
-<div class="background-light-gray">
-  <div class="d-flex flex-column gap-2 justify-content-between align-items-center p-2 titulo bg-white">
-    <!-- titulo y icono -->
-    <mobentis-page-title [icon]="'assets/images/iconos/dashboard-icon-dark.svg'" [title]="'dashboard.title' | translate"></mobentis-page-title>
+<div class="dashboard-wrapper">
+  <div class="header-section">
+    <mobentis-page-title [icon]="'speedometer2'" [isBootstrapIcon]="true"
+      [title]="'dashboard.title' | translate"></mobentis-page-title>
   </div>
-  
+
+  <div class="menu-container">
+    <div class="menu-section" *ngFor="let block of menuBlocks">
+      <div class="section-header">
+        <h3 class="section-title">{{ block.title }}</h3>
+        <div class="scroll-actions" *ngIf="block.items.length > 6">
+          <button class="scroll-btn" (click)="scrollLeft(block.title)"
+            [disabled]="blockScrollIndices[block.title] === 0">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <button class="scroll-btn" (click)="scrollRight(block.title, block.items.length)"
+            [disabled]="blockScrollIndices[block.title] + 6 >= block.items.length">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+      <div class="cards-grid">
+        <div class="menu-card" *ngFor="let item of getVisibleItems(block)" (click)="onItemClick(item, $event)">
+          <div class="card-content">
+            <div class="icon-wrapper">
+              <i [class]="'bi ' + item.icon"></i>
+            </div>
+            <span class="card-label">{{ item.label }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full Screen Radial Menu Overlay -->
+  <div class="radial-menu-overlay" *ngIf="activeItem" (click)="closeMenu()">
+    <!-- Circle Decoration Background -->
+    <div class="orbit-circles">
+      <div class="orbit orbit-1"></div>
+      <div class="orbit orbit-2"></div>
+      <div class="orbit orbit-3"></div>
+    </div>
+
+    <div class="radial-menu-container" (click)="$event.stopPropagation()">
+
+      <!-- Center Main Item -->
+      <div class="radial-center-item">
+        <i [class]="'bi ' + activeItem.icon"></i>
+        <span class="radial-center-label">{{ activeItem.label }}</span>
+      </div>
+
+      <!-- Satellite Items -->
+      <div class="radial-item" *ngFor="let sub of activeItem.subOptions; let i = index"
+        [style.transform]="getTransform(i, activeItem.subOptions.length)" [routerLink]="sub.route"
+        (click)="closeMenu()">
+        <div class="radial-content">
+          <i class="bi bi-file-earmark-text"></i>
+          <span>{{ sub.label }}</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>

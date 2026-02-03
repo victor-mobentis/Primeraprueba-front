@@ -25,9 +25,8 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-end language-dropdown" aria-labelledby="languageDropdown">
             <li *ngFor="let lang of availableLanguages">
-              <a class="dropdown-item language-option" 
-                 (click)="changeLanguage(lang.code)"
-                 [class.active]="selectedLanguage === lang.code">
+              <a class="dropdown-item language-option" (click)="changeLanguage(lang.code)"
+                [class.active]="selectedLanguage === lang.code">
                 <span class="language-flag-option">{{ lang.flag }}</span>
                 <span class="language-text">{{ lang.name }}</span>
                 <i class="bi bi-check-lg check-icon" *ngIf="selectedLanguage === lang.code"></i>
@@ -35,7 +34,7 @@
             </li>
           </ul>
         </li>
-        
+
         <!-- Perfil de usuario -->
         <li class="dropdown">
           <a class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown"
@@ -67,36 +66,56 @@
     <div id="sidebar-wrapper" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()"
       [attr.aria-expanded]="isToggled || isHovered" [class.hovering]="isHovering && !isToggled">
       <ul class="sidebar-nav">
-        <div>
-          <li id="sidenav" class="sidebar-brand">
-            <a [routerLink]="['/']" class="title-navbar">
-              <img src="../../assets/images/mobentisLogo.png" alt="logo" width="20" height="24" />
-              <h4 class="m-0" *ngIf="isToggled || isHovered">Converter</h4>
-            </a>
-          </li>
-          <hr class="m-0" />
-          <li *ngFor="let item of menuItems">
-            <a [routerLink]="item.route" class="navLink">
-              <i [class]="item.icon"></i>
-              <span *ngIf="isToggled || isHovered">{{ item.label }}</span>
-            </a>
-          </li>
+        <!-- Brand fixed at top -->
+        <li id="sidenav" class="sidebar-brand">
+          <a [routerLink]="['/']" class="title-navbar">
+            <img src="../../assets/images/mobentisLogo.png" alt="logo" width="20" height="24" />
+            <h4 class="m-0" *ngIf="isToggled || isHovered">Converter</h4>
+          </a>
+        </li>
+        <hr class="m-0" />
+
+        <!-- Scrollable middle section for items -->
+        <div class="menu-scroll-container">
+          <ng-container *ngFor="let item of menuItems">
+            <ng-container *ngTemplateOutlet="menuRecursive; context: { $implicit: item, level: 0 }"></ng-container>
+          </ng-container>
+
+          <ng-template #menuRecursive let-item let-level="level">
+            <li class="menu-item-nested">
+              <a [routerLink]="item.submenuItems?.length ? null : item.route" class="navLink"
+                (click)="toggleSubmenu(item, $event)" [style.padding-left.px]="20 + (level * 15)">
+                <i [class]="item.icon"></i>
+                <span *ngIf="isToggled || isHovered">{{ item.label }}</span>
+                <i class="bi" [ngClass]="item.isSubmenuOpen ? 'bi-chevron-up' : 'bi-chevron-down'"
+                  *ngIf="(isToggled || isHovered) && item.submenuItems?.length"
+                  style="font-size: 0.8rem; margin-left: auto;"></i>
+              </a>
+              <ul class="submenu-list"
+                *ngIf="item.isSubmenuOpen && (isToggled || isHovered) && item.submenuItems?.length">
+                <ng-container *ngFor="let sub of item.submenuItems">
+                  <ng-container
+                    *ngTemplateOutlet="menuRecursive; context: { $implicit: sub, level: level + 1 }"></ng-container>
+                </ng-container>
+              </ul>
+            </li>
+          </ng-template>
         </div>
-        <div>
+
+        <!-- Fixed bottom section -->
+        <div class="bottom-actions">
           <hr class="m-0" />
           <!-- Dropdown de idiomas -->
           <li class="nav-item dropdown dropend language-selector">
             <a class="navLink dropdown-toggle" id="languageDropdownVertical" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               <span class="language-flag">{{ getSelectedLanguage()?.flag }}</span>
-              <span class="language-name" *ngIf="!isToggled && !isHovered">{{ getSelectedLanguage()?.code?.toUpperCase() }}</span>
               <span class="language-name" *ngIf="isToggled || isHovered">{{ getSelectedLanguage()?.name }}</span>
             </a>
             <ul class="dropdown-menu language-dropdown" aria-labelledby="languageDropdownVertical">
               <li *ngFor="let lang of availableLanguages">
-                <a class="dropdown-item language-option" 
-                   (click)="changeLanguage(lang.code)"
-                   [class.active]="selectedLanguage === lang.code">
+                <a class="dropdown-item language-option" (click)="changeLanguage(lang.code)"
+                  [class.active]="selectedLanguage === lang.code">
                   <span class="language-flag-option">{{ lang.flag }}</span>
                   <span class="language-text">{{ lang.name }}</span>
                   <i class="bi bi-check-lg check-icon" *ngIf="selectedLanguage === lang.code"></i>
@@ -109,9 +128,7 @@
             <a class="navLink dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown"
               [attr.aria-expanded]="profileMenuOpen">
               <i class="bi bi-person-circle"></i>
-              <span *ngIf="isToggled || isHovered">{{
-                _loginServices.user
-                }}</span>
+              <span *ngIf="isToggled || isHovered">{{ _loginServices.user }}</span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="profileDropdown">
               <li>
@@ -120,9 +137,7 @@
               <li>
                 <hr class="dropdown-divider m-1" />
               </li>
-              <li>
-                <a class="dropdown-item" (click)="logout()">{{ 'navbar.logout' | translate }}</a>
-              </li>
+              <li><a class="dropdown-item" (click)="logout()">{{ 'navbar.logout' | translate }}</a></li>
             </ul>
           </li>
         </div>

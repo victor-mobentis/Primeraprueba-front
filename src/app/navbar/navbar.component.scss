@@ -3,6 +3,7 @@
 /* Navbar horizontal (solo para tablets y móviles) */
 .header {
   background-color: #353e40;
+  z-index: 20;
 
   .navbar-toggler {
     display: block;
@@ -56,43 +57,52 @@
   position: fixed;
   top: 0;
   left: 0;
-  height: 100%;
+  height: 100vh;
   background: #343a40;
   color: #fff;
-  z-index: 16;
+  z-index: 1000;
   transition: width 0.3s ease;
+  /* overflow: hidden;  REMOVED: This was clipping the dropdowns */
+  display: flex;
+  flex-direction: column;
 
   &[aria-expanded="true"] {
     width: 250px;
 
     .sidebar-brand h4,
-    .sidebar-nav li a.navLink span {
+    .sidebar-nav .navLink span,
+    .language-name {
       opacity: 1;
       visibility: visible;
-    }
-
-    .sidebar-brand img {
-      margin-right: 0.5rem;
     }
   }
 
   .sidebar-nav {
     list-style: none;
     padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
     height: 100%;
-    justify-content: space-between;
+    width: 100%;
+    overflow: visible;
+    /* Ensure nested dropdowns can be seen */
 
+    /* Brand section (Fixed at top) */
     .sidebar-brand {
+      flex: 0 0 auto;
       font-size: 1.5rem;
       padding: 1rem 1.2rem;
       display: flex;
       align-items: center;
+      background: #343a40;
+      z-index: 2;
 
       .title-navbar {
         text-decoration: none;
         display: flex;
+        align-items: center;
+        color: white;
       }
 
       img {
@@ -100,29 +110,86 @@
       }
 
       h4 {
-        color: white;
+        margin: 0 0 0 0.5rem;
         font-weight: 600;
+        white-space: nowrap;
+        font-size: 1.2rem;
       }
     }
 
-    li {
-      a.navLink {
+    /* Scrollable middle section */
+    .menu-scroll-container {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+
+      /* Firefox */
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Chrome/Safari */
+      z-index: 1;
+    }
+
+    /* Bottom section (Fixed at bottom) */
+    .bottom-actions {
+      flex: 0 0 auto;
+      background: #343a40;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 2;
+      position: relative;
+      overflow: visible;
+      /* Critical for dropdowns */
+    }
+
+    li,
+    .menu-item-nested {
+      display: block;
+      width: 100%;
+      position: relative;
+      /* Context for absolute dropdowns */
+
+      .navLink {
         display: flex;
         align-items: center;
         color: #fff;
         padding: 0.75rem 20px;
         text-decoration: none;
-        transition: background 0.3s;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        width: 100%;
+        box-sizing: border-box;
 
-        i {
-          margin-right: 0.5rem;
-          font-size: large;
+        i:first-child,
+        .language-flag {
+          margin-right: 0.8rem;
+          font-size: 1.2rem;
+          min-width: 24px;
+          text-align: center;
+        }
+
+        span {
+          font-size: 0.95rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         &:hover {
           background: #495057;
         }
       }
+    }
+
+    .submenu-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      background: rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      animation: slideDown 0.3s ease-out;
     }
   }
 }
@@ -132,21 +199,21 @@
   position: fixed;
   left: 50px;
   top: 15px;
-  z-index: 17;
+  z-index: 1001;
   padding: 1px 5px;
   background-color: #fff;
   border: 1px solid #ddd;
-  transition: left 0.2s ease, opacity 0.5s ease;
+  transition: left 0.3s ease, opacity 0.5s ease;
   opacity: 0;
 
   &[aria-expanded="true"] {
-    left: 235px;
+    left: 240px;
   }
 
   &:hover {
     background-color: #f8f9fa;
     border-color: #ccc;
-    opacity: 1;
+    opacity: 1 !important;
   }
 
   &.visible {
@@ -159,7 +226,7 @@
 @media (min-width: 992px) {
   #page-content-wrapper {
     margin-left: 60px;
-    transition: margin-left 0.2s ease;
+    transition: margin-left 0.3s ease;
     min-height: 100vh;
 
     &[aria-expanded="true"] {
@@ -168,11 +235,19 @@
   }
 }
 
-/* Dropdown */
+/* Dropdown styling */
 .dropdown-menu {
   background-color: #343a40;
-  border: none;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  margin-left: 5px !important;
+  z-index: 2000 !important;
+  position: static;
+  /* Let popper handle it if needed, or keep it in flow for colapsed sidebar */
+
+  &.show {
+    display: block;
+  }
 
   .dropdown-item {
     color: #fff;
@@ -181,5 +256,17 @@
     &:hover {
       background-color: #495057;
     }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  to {
+    max-height: 2000px;
+    opacity: 1;
   }
 }

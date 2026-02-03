@@ -28,7 +28,7 @@ export class NavbarComponent {
   isCollapsed = true; /* Indica si el navbar está colapsado */
   isHovering = false;
   isButtonHovered = false;
-  
+
   // Idiomas disponibles
   selectedLanguage: string = 'es';
   availableLanguages: any[] = []; // Idiomas cargados desde BD
@@ -42,7 +42,7 @@ export class NavbarComponent {
   changeLanguage(langCode: string) {
     console.log('🌐 Cambiando idioma a:', langCode);
     this.selectedLanguage = langCode;
-    
+
     // Usar el TranslationService que maneja todo el proceso
     this.translationService.setLanguage(langCode);
   }
@@ -113,7 +113,7 @@ export class NavbarComponent {
   ) {
     // Inicializar idioma desde TranslationService
     this.selectedLanguage = this.translationService.getCurrentLanguage();
-    
+
     // Suscribirse a cambios de idioma
     this.translationService.currentLang$.subscribe(lang => {
       this.selectedLanguage = lang;
@@ -127,7 +127,7 @@ export class NavbarComponent {
     // Cargar idioma guardado al iniciar
     const savedLang = this.translationService.getCurrentLanguage();
     this.selectedLanguage = savedLang;
-    
+
     // Cargar idiomas disponibles desde la base de datos
     this.translationService.getAvailableLanguages().subscribe({
       next: (languages) => {
@@ -142,7 +142,7 @@ export class NavbarComponent {
         ];
       }
     });
-    
+
     // Cargar menús con el idioma actual del usuario
     const currentLanguage = this.languageService.getCurrentLanguage();
     this.loadMenuItems(currentLanguage);
@@ -154,13 +154,96 @@ export class NavbarComponent {
     );
 
     // Recursión para submenús con filtrado por roles
-    return filteredItems
+    const mappedItems = filteredItems
       .filter(item => this.shouldShowMenuItem(item))
-      .map((item) => ({
-        ...item,
+      .map((item) => {
+        let submenuItems = this.mapItems(items, item.id);
+
+        // Enrich Dashboard with submenus if it's the top level item
+        if (item.label === 'Dashboard' && parentId === null) {
+          submenuItems = this.getDashboardSubmenus();
+        }
+
+        return {
+          ...item,
+          isSubmenuOpen: false,
+          submenuItems: submenuItems,
+        };
+      });
+
+    return mappedItems;
+  }
+
+  getDashboardSubmenus(): any[] {
+    return [
+      {
+        label: 'Aplicaciones',
+        icon: 'bi-grid-fill',
         isSubmenuOpen: false,
-        submenuItems: this.mapItems(items, item.id),
-      }));
+        submenuItems: [
+          {
+            label: 'Ventas',
+            icon: 'bi-cart-check-fill',
+            route: '/sales',
+            submenuItems: [
+              { label: 'Presupuestos', route: '/sales/budgets' },
+              { label: 'Pedidos', route: '/sales/orders' },
+              { label: 'Albaranes', route: '/sales/delivery-notes' },
+              { label: 'Facturas', route: '/sales/invoices' }
+            ]
+          },
+          { label: 'Agenda', icon: 'bi-calendar-event-fill', route: '/agenda' },
+          { label: 'Tesoreria', icon: 'bi-wallet-fill', route: '/treasury' },
+          { label: 'Clientes', icon: 'bi-people-fill', route: '/clients' },
+          { label: 'Catalogo', icon: 'bi-journal-bookmark-fill', route: '/catalog' }
+        ]
+      },
+      {
+        label: 'Mantenimientos',
+        icon: 'bi-tools',
+        isSubmenuOpen: false,
+        submenuItems: [
+          { label: 'M. Ventas', icon: 'bi-receipt', route: '/maintenance/sales' },
+          { label: 'M. Tesoreria', icon: 'bi-cash-coin', route: '/maintenance/treasury' },
+          { label: 'M. Clientes', icon: 'bi-person-gear', route: '/maintenance/clients' },
+          { label: 'Equipos', icon: 'bi-display', route: '/maintenance/equipment' },
+          { label: 'Miscelaneo', icon: 'bi-gear-wide-connected', route: '/maintenance/misc' }
+        ]
+      },
+      {
+        label: 'Informes',
+        icon: 'bi-file-earmark-bar-graph',
+        isSubmenuOpen: false,
+        submenuItems: [
+          { label: 'Ventas', icon: 'bi-bar-chart-line-fill', route: '/reports/sales' },
+          { label: 'Tesoreria', icon: 'bi-pie-chart-fill', route: '/reports/treasury' },
+          { label: 'Agenda', icon: 'bi-calendar-check-fill', route: '/reports/agenda' },
+          { label: 'Clientes', icon: 'bi-person-lines-fill', route: '/reports/clients' }
+        ]
+      },
+      {
+        label: 'Modulos adicionales',
+        icon: 'bi-puzzle-fill',
+        isSubmenuOpen: false,
+        submenuItems: [
+          { label: 'Actions', icon: 'bi-lightning-fill', route: '/modules/actions' },
+          { label: 'Forms', icon: 'bi-ui-checks', route: '/modules/forms' },
+          { label: 'Delivery', icon: 'bi-truck', route: '/modules/delivery' },
+          { label: 'Interest', icon: 'bi-bookmark-star-fill', route: '/modules/interest' },
+          { label: 'Docs', icon: 'bi-file-earmark-text-fill', route: '/modules/docs' },
+          { label: 'Goals', icon: 'bi-bullseye', route: '/modules/goals' },
+          { label: 'Services', icon: 'bi-briefcase-fill', route: '/modules/services' }
+        ]
+      }
+    ];
+  }
+
+  toggleSubmenu(item: any, event: Event) {
+    if (item.submenuItems && item.submenuItems.length > 0) {
+      event.preventDefault();
+      event.stopPropagation();
+      item.isSubmenuOpen = !item.isSubmenuOpen;
+    }
   }
 
   /**
@@ -169,16 +252,16 @@ export class NavbarComponent {
   shouldShowMenuItem(item: any): boolean {
     // Si es el item de configuración, verificar roles O permisos
     if (item.route && (item.route.includes('configuracion') || item.label === 'Configuración')) {
-      return this.authorizationService.isAdminOrEditor() || 
-             this.authorizationService.hasPermission('VISUALIZADO_CONFIGURACION');
+      return this.authorizationService.isAdminOrEditor() ||
+        this.authorizationService.hasPermission('VISUALIZADO_CONFIGURACION');
     }
-    
+
     // Si es el item de usuarios, verificar roles O permisos
     if (item.route && (item.route.includes('users') || item.label === 'Users')) {
-      return this.authorizationService.hasRole('Admin') || 
-             this.authorizationService.hasPermission('VISUALIZADO_USUARIOS');
+      return this.authorizationService.hasRole('Admin') ||
+        this.authorizationService.hasPermission('VISUALIZADO_USUARIOS');
     }
-    
+
     // Por defecto, mostrar el item
     return true;
   }
